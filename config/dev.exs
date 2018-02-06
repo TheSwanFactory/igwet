@@ -51,8 +51,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :gigalixir_getting_started, GigalixirGettingStarted.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "phx",
+  password: "elixir",
   database: "gigalixir_getting_started_dev",
   hostname: "localhost",
   pool_size: 10
