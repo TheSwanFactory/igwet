@@ -6,15 +6,15 @@
 use Mix.Config
 
 # General application configuration
-config :gigalixir_getting_started,
-  ecto_repos: [GigalixirGettingStarted.Repo]
+config :igwet,
+  ecto_repos: [Igwet.Repo]
 
 # Configures the endpoint
-config :gigalixir_getting_started, GigalixirGettingStartedWeb.Endpoint,
+config :igwet, IgwetWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "YbvTQa/w6m9GwiFuVEp76H8MgaXGqh0G/1aMI+3w+QEqMM9Emilm3OKhEWPOXnfc",
-  render_errors: [view: GigalixirGettingStartedWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: GigalixirGettingStarted.PubSub,
+  render_errors: [view: IgwetWeb.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: Igwet.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger

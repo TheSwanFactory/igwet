@@ -1,9 +1,9 @@
-defmodule GigalixirGettingStarted.Mixfile do
+defmodule Igwet.Mixfile do
   use Mix.Project
 
   def project do
     [
-      app: :gigalixir_getting_started,
+      app: :igwet,
       version: "0.0.1",
       elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env),
@@ -19,7 +19,7 @@ defmodule GigalixirGettingStarted.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {GigalixirGettingStarted.Application, []},
+      mod: {Igwet.Application, []},
       extra_applications: [:logger, :runtime_tools, :ssl]
     ]
   end

@@ -1,3 +1,3 @@
-defmodule GigalixirGettingStartedWeb.PageViewTest do
-  use GigalixirGettingStartedWeb.ConnCase, async: true
+defmodule IgwetWeb.PageViewTest do
+  use IgwetWeb.ConnCase, async: true
 end

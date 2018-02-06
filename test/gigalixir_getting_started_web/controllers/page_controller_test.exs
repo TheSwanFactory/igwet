@@ -1,5 +1,5 @@
-defmodule GigalixirGettingStartedWeb.PageControllerTest do
-  use GigalixirGettingStartedWeb.ConnCase
+defmodule IgwetWeb.PageControllerTest do
+  use IgwetWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"
