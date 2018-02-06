@@ -1,5 +1,5 @@
-defmodule GigalixirGettingStartedWeb.ErrorView do
-  use GigalixirGettingStartedWeb, :view
+defmodule IgwetWeb.ErrorView do
+  use IgwetWeb, :view
 
   def render("404.html", _assigns) do
     "Page not found"

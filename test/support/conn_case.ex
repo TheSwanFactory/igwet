@@ -1,4 +1,4 @@
-defmodule GigalixirGettingStartedWeb.ConnCase do
+defmodule IgwetWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -19,18 +19,18 @@ defmodule GigalixirGettingStartedWeb.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import GigalixirGettingStartedWeb.Router.Helpers
+      import IgwetWeb.Router.Helpers
 
       # The default endpoint for testing
-      @endpoint GigalixirGettingStartedWeb.Endpoint
+      @endpoint IgwetWeb.Endpoint
     end
   end
 
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(GigalixirGettingStarted.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Igwet.Repo)
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(GigalixirGettingStarted.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Igwet.Repo, {:shared, self()})
     end
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end

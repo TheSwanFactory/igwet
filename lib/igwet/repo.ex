@@ -1,5 +1,5 @@
-defmodule GigalixirGettingStarted.Repo do
-  use Ecto.Repo, otp_app: :gigalixir_getting_started
+defmodule Igwet.Repo do
+  use Ecto.Repo, otp_app: :igwet
 
   @doc """
   Dynamically loads the repository url from the
