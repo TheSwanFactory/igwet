@@ -1,6 +1,9 @@
 <div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
+  <h2><%= gettext "Welcome to %{name}!", name: "IGWET" %></h2>
+  <p class="lead">
+    IGWET <em>(Intra-Group Web/Email/Text)</em>, the secure messaging directory,
+    is an inside-out social network for turning anonymous crowds into
+    passion-driven communities.</p>
 </div>
 
 <div class="row marketing">
@@ -19,18 +22,13 @@
     </ul>
   </div>
 
-  <div class="col-lg-6">
-    <h4>Help</h4>
-    <ul>
-      <li>
-        <a href="http://groups.google.com/group/phoenix-talk">Mailing list</a>
-      </li>
-      <li>
-        <a href="http://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
-      </li>
-    </ul>
+  <div id="footer" class="small">
+    <span id="version"><%= gettext "Version %{version}", version: "0.1" %></span>
+    |
+    <span id="copyright">Copyright (C) 2018 <a href="http://www.theswanfactory.com">The Swan Factory, Inc.</a></span>
+    |
+    <span id="source"><a href="https://github.com/TheSwanFactory/igwet">View Source</a></span>
+    |
+    <span id="contact"><a href="http://www.theswanfactory.com/contact/">Contact Us</a></span>
   </div>
 </div>
