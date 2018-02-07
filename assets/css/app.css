@@ -1,1 +1,13 @@
 /* This file is for your main application css. */
+h3 {
+  font-style: oblique;
+}
+span.author {
+  font-style: italic;
+}
+.row.footer {
+  text-align: center;
+}
+div#footer.small {
+  display: inline-block;
+}
