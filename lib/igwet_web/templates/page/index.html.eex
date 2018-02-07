@@ -1,36 +1,53 @@
 <div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
+  <h2><%= gettext "Welcome to %{name}!", name: "IGWET" %></h2>
+  <h3>Intra-Group Web/Email/Text</h3>
 </div>
+  <h4>IGWET: The Secure Messaging Directory</h4>
+  <p class="lead">
+    An inside-out social network<br/>
+    for turning anonymous crowds<br/>
+    into passion-driven communities</p>
 
 <div class="row marketing">
-  <div class="col-lg-6">
+  <div class="col-lg-6 resources">
     <h4>Resources</h4>
     <ul>
-      <li>
-        <a href="http://phoenixframework.org/docs/overview">Guides</a>
+      <li><span class="author">Joe Edelman</span>,
+        <a href="https://medium.com/what-to-build/how-to-design-social-systems-without-causing-depression-and-war-3c3f8e0226d1">
+          How to Design Social Systems</a>  (Without Causing Depression and War)
       </li>
-      <li>
-        <a href="https://hexdocs.pm/phoenix">Docs</a>
+      <li><span class="author">Ryan Derfler</span>,
+        <a href="https://www.ryanderfler.com/blog/worldcup">
+          God Spoke to Me Using Soccer Metaphor and It Changed My Life</a>
       </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
+      <li><span class="author">Ernest Prabhakar</span>,
+        <a href="https://theswanfactory.com/2017/09/30/passiongroups-the-pitch/">PassionGroups</a>: The Pitch
+      </li>
+      <li><span class="author">Ernest Prabhakar</span>,
+        <a href="https://theswanfactory.com/2015/04/24/like-uber-for-projects-volunteer-empowerment-systems/">
+          Like Uber for Projects</a>: Volunteer Empowerment Systems
+      </li>
+      <li><span class="author">Ernest Prabhakar</span>,
+        <a href="https://theswanfactory.com/2015/03/08/how-to-disrupt-facebook/">How to Disrupt Facebook</a>
+      </li>
+      <li><span class="author">Joe Edelman</a>,
+        <a href="http://livable.media/">Livable Media</a>: Four Ideas for Better Human Systems
+      </li>
+      <li><span class="author">Tristan Harris</a>,
+        <a href="hhttp://humanetech.com/">Center for Humane Technology</a>
       </li>
     </ul>
   </div>
 
-  <div class="col-lg-6">
-    <h4>Help</h4>
-    <ul>
-      <li>
-        <a href="http://groups.google.com/group/phoenix-talk">Mailing list</a>
-      </li>
-      <li>
-        <a href="http://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
-      </li>
-    </ul>
-  </div>
+  <div class="row footer">
+    <div id="footer" class="small">
+      <span id="version"><%= gettext "Version %{version}", version: "0.1" %></span>
+      |
+      <span id="copyright">Copyright (C) 2018 <a href="http://www.theswanfactory.com">The Swan Factory, Inc.</a></span>
+      |
+      <span id="source"><a href="https://github.com/TheSwanFactory/igwet">View Source</a></span>
+      |
+      <span id="contact"><a href="http://www.theswanfactory.com/contact/">Contact Us</a></span>
+    </div>
+</div>
 </div>
