@@ -1,3 +1,5 @@
+[![Build Status](https://semaphoreci.com/api/v1/drernie/igwet/branches/02-testing/badge.svg)](https://semaphoreci.com/drernie/igwet)
+
 # igwet
 Intra-Group Web/Email/Text Network Messaging Directory
 
