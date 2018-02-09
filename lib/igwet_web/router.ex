@@ -1,5 +1,6 @@
 defmodule IgwetWeb.Router do
   use IgwetWeb, :router
+  require Ueberauth
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -17,12 +18,17 @@ defmodule IgwetWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    get "/logout", AuthController, :logout
     resources "/nodes", NodeController
     resources "/users", UserController
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", IgwetWeb do
-  #   pipe_through :api
-  # end
+  scope "/auth", CountdownWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+    post "/:provider/callback", AuthController, :callback
+  end
+
 end
