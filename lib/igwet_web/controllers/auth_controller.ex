@@ -1,10 +1,8 @@
 defmodule IgwetWeb.AuthController do
   use IgwetWeb, :controller
-  alias IgwetWeb.Router.Helpers
 
   plug Ueberauth
 
-  alias Ueberauth.Strategy.Helpers
   alias Igwet.Admin.User.FromAuth
 
   def logout(conn, _params) do

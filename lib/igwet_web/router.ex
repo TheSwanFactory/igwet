@@ -23,7 +23,7 @@ defmodule IgwetWeb.Router do
     resources "/users", UserController
   end
 
-  scope "/auth", CountdownWeb do
+  scope "/auth", IgwetWeb do
     pipe_through :browser
 
     get "/:provider", AuthController, :request
