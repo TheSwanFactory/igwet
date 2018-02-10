@@ -1,5 +1,6 @@
 defmodule Igwet.AdminTest do
   use Igwet.DataCase
+  doctest Igwet.Admin, only: [create_user: 1]
 
   alias Igwet.Admin
 

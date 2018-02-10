@@ -1,5 +1,6 @@
 defmodule IgwetWeb.NodeControllerTest do
   use IgwetWeb.ConnCase
+  doctest IgwetWeb.NodeController
 
   alias Igwet.Network
 

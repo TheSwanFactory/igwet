@@ -13,8 +13,9 @@ defmodule Igwet.Admin do
 
   ## Examples
 
-      iex> list_users()
-      [%User{}, ...]
+      iex> Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
+      iex> Igwet.Admin.list_users()
+      [%Igwet.Admin.User{}]
 
   """
   def list_users do
@@ -28,10 +29,11 @@ defmodule Igwet.Admin do
 
   ## Examples
 
-      iex> get_user!(123)
-      %User{}
-
-      iex> get_user!(456)
+      iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
+      %Igwet.Admin.User{}
+      iex> Igwet.Admin.get_user!(user.id)
+      %Igwet.Admin.User{}
+      iex> Igwet.Admin.get_user!(456)
       ** (Ecto.NoResultsError)
 
   """
@@ -42,11 +44,12 @@ defmodule Igwet.Admin do
 
   ## Examples
 
-      iex> create_user(%{field: value})
-      {:ok, %User{}}
-
-      iex> create_user(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+      iex> {:ok, user} = Igwet.Admin.create_user(%{authid: "1", name: "I"})
+      iex> user.__struct__
+      Igwet.Admin.User
+      iex> {:error, error} = Igwet.Admin.create_user(%{name: "I"})
+      iex> elem(error.errors[:authid],0)
+      "can't be blank"
 
   """
   def create_user(attrs \\ %{}) do
@@ -61,8 +64,8 @@ defmodule Igwet.Admin do
 
   ## Examples
 
-      iex> find_or_create_user(user)
-      %User{}
+      iex> Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
+      %Igwet.Admin.User{name: "I"}
 
 
   """
@@ -79,10 +82,12 @@ defmodule Igwet.Admin do
 
   ## Examples
 
-      iex> update_user(user, %{field: new_value})
-      {:ok, %User{}}
+      iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
+      iex> Igwet.Admin.update_user(user, %{name: "Jane"})
+      {:ok, %Igwet.Admin.User{name: "Jane"}}
 
-      iex> update_user(user, %{field: bad_value})
+      iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
+      iex> Igwet.Admin.update_user(user, %{field: 456})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -97,10 +102,10 @@ defmodule Igwet.Admin do
 
   ## Examples
 
-      iex> delete_user(user)
-      {:ok, %User{}}
-
-      iex> delete_user(user)
+      iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
+      iex> Igwet.Admin.delete_user(user)
+      {:ok, %Igwet.Admin.User{}}
+      iex> Igwet.Admin.delete_user(user)
       {:error, %Ecto.Changeset{}}
 
   """
@@ -113,8 +118,9 @@ defmodule Igwet.Admin do
 
   ## Examples
 
-      iex> change_user(user)
-      %Ecto.Changeset{source: %User{}}
+      iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
+      iex> Igwet.Admin.change_user(user)
+      %Ecto.Changeset{changes: %{authid: "1", name: "I"}}
 
   """
   def change_user(%User{} = user) do

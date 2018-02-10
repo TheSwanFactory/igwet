@@ -1,5 +1,6 @@
 defmodule IgwetWeb.UserControllerTest do
   use IgwetWeb.ConnCase
+  doctest IgwetWeb.UserController
 
   alias Igwet.Admin
 

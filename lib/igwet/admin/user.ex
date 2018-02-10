@@ -17,6 +17,6 @@ defmodule Igwet.Admin.User do
   def changeset(%User{} = user, attrs) do
     user
     |> cast(attrs, [:authid, :name, :avatar, :last_login])
-    |> validate_required([:authid, :name, :avatar, :last_login])
+    |> validate_required([:authid, :name])
   end
 end
