@@ -1,9 +1,7 @@
 defmodule Igwet.Admin.User do
   use Ecto.Schema
   import Ecto.Changeset
-  import Ecto.Query
   alias Igwet.Admin.User
-  alias Igwet.Repo
 
 
   schema "users" do
@@ -13,15 +11,6 @@ defmodule Igwet.Admin.User do
     field :name, :string
 
     timestamps()
-  end
-
-  @doc "Return user, creating it if it does not exist"
-  def find_or_create(%User{} = user) do
-    query = User |> where([u], u.authid == ^user.authid)
-    if !Repo.one(query)  do
-      Repo.insert(user)
-    end
-    Repo.one(query)
   end
 
   @doc false

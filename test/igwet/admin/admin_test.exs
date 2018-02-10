@@ -9,6 +9,7 @@ defmodule Igwet.AdminTest do
     @valid_attrs %{authid: "some authid", avatar: "some avatar", last_login: ~N[2010-04-17 14:00:00.000000], name: "some name"}
     @update_attrs %{authid: "some updated authid", avatar: "some updated avatar", last_login: ~N[2011-05-18 15:01:01.000000], name: "some updated name"}
     @invalid_attrs %{authid: nil, avatar: nil, last_login: nil, name: nil}
+    @next_attrs %{authid: "next authid", avatar: "next avatar", last_login: ~N[2010-04-17 14:00:00.000000], name: "next name"}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -19,6 +20,11 @@ defmodule Igwet.AdminTest do
       user
     end
 
+    def first() do
+      user = user_fixture()
+      Admin.get_user!(user.id)
+    end
+
     test "list_users/0 returns all users" do
       user = user_fixture()
       assert Admin.list_users() == [user]
@@ -27,6 +33,20 @@ defmodule Igwet.AdminTest do
     test "get_user!/1 returns the user with given id" do
       user = user_fixture()
       assert Admin.get_user!(user.id) == user
+    end
+
+    test "find_or_create_user/1 with existing data returns that user" do
+      first = first()
+      assert user = Admin.find_or_create_user(@valid_attrs)
+      assert %User{} = user
+      assert user.id == first.id
+    end
+
+    test "find_or_create_user/1 with new data creates user" do
+      first = first()
+      assert user = Admin.find_or_create_user(@next_attrs)
+      assert %User{} = user
+      assert user.id != first.id
     end
 
     test "create_user/1 with valid data creates a user" do

@@ -55,6 +55,25 @@ defmodule Igwet.Admin do
     |> Repo.insert()
   end
 
+
+  @doc """
+  Return user, creating it if it does not exist.
+
+  ## Examples
+
+      iex> find_or_create_user(user)
+      %User{}
+
+
+  """
+  def find_or_create_user(attrs) do
+    query = User |> where([u], u.authid == ^attrs.authid)
+    if !Repo.one(query)  do
+      create_user(attrs)
+    end
+    Repo.one(query)
+  end
+
   @doc """
   Updates a user.
 

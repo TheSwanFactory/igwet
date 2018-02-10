@@ -6,7 +6,7 @@ defmodule Igwet.Admin.User.FromAuth do
   require Poison
 
   alias Ueberauth.Auth
-  alias Igwet.Admin.User
+  alias Igwet.Admin
 
   def find_or_create(%Auth{provider: :identity} = auth) do
     case validate_pass(auth.credentials) do
@@ -39,7 +39,7 @@ defmodule Igwet.Admin.User.FromAuth do
 
   defp auth_user(auth) do
     info = basic_info(auth)
-    User.find_or_create(info)
+    Admin.find_or_create_user(info)
   end
 
   defp name_from_auth(auth) do
