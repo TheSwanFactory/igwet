@@ -13,16 +13,18 @@ defmodule Igwet.Admin do
 
   ## Examples
 
+      iex> length(Igwet.Admin.list_users())
+      0
       iex> Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
-      iex> Igwet.Admin.list_users()
-      [%Igwet.Admin.User{}]
+      iex> length(Igwet.Admin.list_users())
+      1
 
   """
   def list_users do
     Repo.all(User)
   end
 
-  @doc """
+  @doc ~S"""
   Gets a single user.
 
   Raises `Ecto.NoResultsError` if the User does not exist.
@@ -30,12 +32,9 @@ defmodule Igwet.Admin do
   ## Examples
 
       iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
-      %Igwet.Admin.User{}
-      iex> Igwet.Admin.get_user!(user.id)
-      %Igwet.Admin.User{}
-      iex> Igwet.Admin.get_user!(456)
-      ** (Ecto.NoResultsError)
-
+      iex> got = Igwet.Admin.get_user!(user.id)
+      iex> got == user
+      true
   """
   def get_user!(id), do: Repo.get!(User, id)
 
@@ -64,8 +63,9 @@ defmodule Igwet.Admin do
 
   ## Examples
 
-      iex> Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
-      %Igwet.Admin.User{name: "I"}
+      iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
+      iex> user.__struct__
+      Igwet.Admin.User
 
 
   """
@@ -83,12 +83,15 @@ defmodule Igwet.Admin do
   ## Examples
 
       iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
-      iex> Igwet.Admin.update_user(user, %{name: "Jane"})
-      {:ok, %Igwet.Admin.User{name: "Jane"}}
+      iex> Igwet.Admin.update_user(user, %{name: "U"})
+      iex> {:ok, updated} = Igwet.Admin.get_user!(user.id)
+      iex> updated[:name]
+      "U"
 
       iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
-      iex> Igwet.Admin.update_user(user, %{field: 456})
-      {:error, %Ecto.Changeset{}}
+      iex> {:error, error} = Igwet.Admin.update_user(user, %{name: 456})
+      iex> elem(error.errors[:name],0)
+      "is invalid"
 
   """
   def update_user(%User{} = user, attrs) do
@@ -97,16 +100,15 @@ defmodule Igwet.Admin do
     |> Repo.update()
   end
 
-  @doc """
+  @doc ~S"""
   Deletes a User.
 
   ## Examples
 
       iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
-      iex> Igwet.Admin.delete_user(user)
-      {:ok, %Igwet.Admin.User{}}
-      iex> Igwet.Admin.delete_user(user)
-      {:error, %Ecto.Changeset{}}
+      iex> {:ok, deleted} = Igwet.Admin.delete_user(user)
+      iex> deleted.id == user.id
+      true
 
   """
   def delete_user(%User{} = user) do
@@ -119,8 +121,9 @@ defmodule Igwet.Admin do
   ## Examples
 
       iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
-      iex> Igwet.Admin.change_user(user)
-      %Ecto.Changeset{changes: %{authid: "1", name: "I"}}
+      iex> set = Igwet.Admin.change_user(user)
+      iex> set.changes
+      %{authid: "1", name: "I"}
 
   """
   def change_user(%User{} = user) do
