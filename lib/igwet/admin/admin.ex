@@ -84,8 +84,8 @@ defmodule Igwet.Admin do
 
       iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
       iex> Igwet.Admin.update_user(user, %{name: "U"})
-      iex> {:ok, updated} = Igwet.Admin.get_user!(user.id)
-      iex> updated[:name]
+      iex> updated = Igwet.Admin.get_user!(user.id)
+      iex> updated.name
       "U"
 
       iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
@@ -121,9 +121,10 @@ defmodule Igwet.Admin do
   ## Examples
 
       iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
-      iex> set = Igwet.Admin.change_user(user)
-      iex> set.changes
-      %{authid: "1", name: "I"}
+      iex> diff = Igwet.Admin.change_user(user)
+      iex> %Ecto.Changeset{changes: changes} = diff
+      iex> changes
+      %{}
 
   """
   def change_user(%User{} = user) do

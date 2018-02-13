@@ -1,6 +1,6 @@
 defmodule Igwet.AdminTest do
   use Igwet.DataCase
-  doctest Igwet.Admin, except: [[get_user!: 1], [update_user: 2]]
+  doctest Igwet.Admin
 
   alias Igwet.Admin
 
