@@ -21,14 +21,6 @@ body, form, ul, table {
 .header {
   border-bottom: 1px solid #e5e5e5;
 }
-.logo {
-  width: 78px;
-  height: 78px;
-  display: inline-block;
-  margin-bottom: 1em;
-  background-image: url("/images/igwet_logo.png");
-  background-size: 78px 78px;
-}
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,

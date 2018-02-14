@@ -1,0 +1,33 @@
+<h2>Show Node</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @node.name %>
+  </li>
+
+  <li>
+    <strong>About:</strong>
+    <%= @node.about %>
+  </li>
+
+  <li>
+    <strong>Email:</strong>
+    <%= @node.email %>
+  </li>
+
+  <li>
+    <strong>Phone:</strong>
+    <%= @node.phone %>
+  </li>
+
+  <li>
+    <strong>Key:</strong>
+    <%= @node.key %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: node_path(@conn, :edit, @node) %></span>
+<span><%= link "Back", to: node_path(@conn, :index) %></span>

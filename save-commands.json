@@ -1,0 +1,6 @@
+{
+    "commands": [
+        "lib/**/*.ex : mix test --stale",
+        "test/**/*.exs : mix test --stale"
+    ]
+}

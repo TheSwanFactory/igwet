@@ -4,8 +4,8 @@ defmodule Igwet.Mixfile do
   def project do
     [
       app: :igwet,
-      version: "0.0.1",
-      elixir: "~> 1.4",
+      version: "0.0.2",
+      elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env),
       compilers: [:phoenix, :gettext] ++ Mix.compilers,
       start_permanent: Mix.env == :prod,
@@ -20,7 +20,7 @@ defmodule Igwet.Mixfile do
   def application do
     [
       mod: {Igwet.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ssl]
+      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ssl]
     ]
   end
 
@@ -42,7 +42,9 @@ defmodule Igwet.Mixfile do
       {:libcluster, "~> 2.1"},
       {:distillery, "~> 1.5", runtime: false},
       {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"}
+      {:cowboy, "~> 1.0"},
+      {:ueberauth, "~> 0.4"},
+      {:ueberauth_auth0, "~> 0.3"}
     ]
   end
 

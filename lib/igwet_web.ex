@@ -23,6 +23,7 @@ defmodule IgwetWeb do
       import Plug.Conn
       import IgwetWeb.Router.Helpers
       import IgwetWeb.Gettext
+      import IgwetWeb.ControllerHelper
     end
   end
 
