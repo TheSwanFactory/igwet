@@ -4,7 +4,6 @@ defmodule IgwetWeb.NodeController do
   alias Igwet.Network
   alias Igwet.Network.Node
 
-  import IgwetWeb.ControllerHelper
   plug :require_auth
 
   def index(conn, _params) do
