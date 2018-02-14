@@ -1,4 +1,5 @@
 defmodule Igwet.Admin.User.FromAuth do
+  # @compile if Mix.env == :test, do: :export_all
   @moduledoc """
   Retrieve the user information from an auth request
   """
@@ -8,16 +9,30 @@ defmodule Igwet.Admin.User.FromAuth do
   alias Ueberauth.Auth
   alias Igwet.Admin
 
+  @doc """
+  Generates user from provider response if valid password
+  """
   def find_or_create(%Auth{provider: :identity} = auth) do
     case validate_pass(auth.credentials) do
-      :ok ->
-        {:ok, auth_user(auth)}
+      :ok -> {:ok, auth_user(auth)}
       {:error, reason} -> {:error, reason}
     end
   end
 
+  @doc """
+  Generates user from anonymous auth data
+  """
   def find_or_create(%Auth{} = auth) do
     {:ok, auth_user(auth)}
+  end
+
+  defp auth_user(auth) do
+    info = basic_info(auth)
+    Admin.find_or_create_user(info)
+  end
+
+  defp basic_info(auth) do
+    %{authid: auth.uid, name: name_from_auth(auth), avatar: avatar_from_auth(auth)}
   end
 
   # github does it this way
@@ -31,15 +46,6 @@ defmodule Igwet.Admin.User.FromAuth do
     Logger.warn auth.provider <> " needs to find an avatar URL!"
     Logger.debug(Poison.encode!(auth))
     nil
-  end
-
-  defp basic_info(auth) do
-    %{authid: auth.uid, name: name_from_auth(auth), avatar: avatar_from_auth(auth)}
-  end
-
-  defp auth_user(auth) do
-    info = basic_info(auth)
-    Admin.find_or_create_user(info)
   end
 
   defp name_from_auth(auth) do
