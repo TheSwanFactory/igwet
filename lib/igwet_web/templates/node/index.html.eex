@@ -1,0 +1,34 @@
+<h2>Listing Nodes</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>About</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Key</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for node <- @nodes do %>
+    <tr>
+      <td><%= node.name %></td>
+      <td><%= node.about %></td>
+      <td><%= node.email %></td>
+      <td><%= node.phone %></td>
+      <td><%= node.key %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: node_path(@conn, :show, node), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: node_path(@conn, :edit, node), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: node_path(@conn, :delete, node), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Node", to: node_path(@conn, :new) %></span>

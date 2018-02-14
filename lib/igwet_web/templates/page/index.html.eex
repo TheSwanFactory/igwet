@@ -1,5 +1,5 @@
 <div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}!", name: "IGWET" %></h2>
+  <h2><%= "Welcome to #{@name}!"%></h2>
   <h3>Intra-Group Web/Email/Text</h3>
 </div>
   <h4>IGWET: The Secure Messaging Directory</h4>
@@ -12,13 +12,16 @@
   <div class="col-lg-6 resources">
     <h4>Resources</h4>
     <ul>
+      <li><span class="author">Tristan Harris</a>,
+        <a href="hhttp://humanetech.com/">Center for Humane Technology</a>
+      </li>
       <li><span class="author">Joe Edelman</span>,
         <a href="https://medium.com/what-to-build/how-to-design-social-systems-without-causing-depression-and-war-3c3f8e0226d1">
           How to Design Social Systems</a>  (Without Causing Depression and War)
       </li>
       <li><span class="author">Ryan Derfler</span>,
         <a href="https://www.ryanderfler.com/blog/worldcup">
-          God Spoke to Me Using Soccer Metaphor and It Changed My Life</a>
+          Hands on Christianity</a>: A 30-day Discipleship Startup
       </li>
       <li><span class="author">Ernest Prabhakar</span>,
         <a href="https://theswanfactory.com/2017/09/30/passiongroups-the-pitch/">PassionGroups</a>: The Pitch
@@ -33,15 +36,12 @@
       <li><span class="author">Joe Edelman</a>,
         <a href="http://livable.media/">Livable Media</a>: Four Ideas for Better Human Systems
       </li>
-      <li><span class="author">Tristan Harris</a>,
-        <a href="hhttp://humanetech.com/">Center for Humane Technology</a>
-      </li>
     </ul>
   </div>
 
   <div class="row footer">
     <div id="footer" class="small">
-      <span id="version"><%= gettext "Version %{version}", version: "0.1" %></span>
+      <span id="version"><%= "Version #{@version}" %></span>
       |
       <span id="copyright">Copyright (C) 2018 <a href="http://www.theswanfactory.com">The Swan Factory, Inc.</a></span>
       |

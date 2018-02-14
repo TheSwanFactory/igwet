@@ -1,0 +1,5 @@
+<h2>Edit Node</h2>
+
+<%= render "form.html", Map.put(assigns, :action, node_path(@conn, :update, @node)) %>
+
+<span><%= link "Back", to: node_path(@conn, :index) %></span>
