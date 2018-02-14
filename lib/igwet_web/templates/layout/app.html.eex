@@ -16,7 +16,15 @@
       <header class="header">
         <nav role="navigation">
           <ul class="nav nav-pills pull-right">
+          <%= if @current_user do %>
+            <li><a href="/">Home</a></li>
             <li><a href="/nodes">Nodes</a></li>
+            <li><a href="/users">Users</a></li>
+            <li class="active"><a href="/logout">Logout</a></li>
+          <% else %>
+            <li><a href="/">Home</a></li>
+            <li><a href="/auth/auth0">Login</a></li>
+          <% end %>
           </ul>
         </nav>
         <span class="igwet-logo"></span>

@@ -5,8 +5,9 @@ defmodule IgwetWeb.PageController do
     project = Igwet.Mixfile.project
 
     conn
-    |> assign(:version, project[:version])
     |> assign(:name, "IGWET")
+    |> assign(:version, project[:version])
+    |> assign(:current_user, get_session(conn, :current_user))
     |> render("index.html")
   end
 end
