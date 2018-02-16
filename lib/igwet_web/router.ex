@@ -22,6 +22,7 @@ defmodule IgwetWeb.Router do
     resources "/users", UserController
     resources "/nodes", NodeController
     resources "/edges", EdgeController
+    resources "/addresses", AddressController
   end
 
   scope "/auth", IgwetWeb do

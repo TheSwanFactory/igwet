@@ -1,0 +1,93 @@
+<h2>Show Address</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @address.name %>
+  </li>
+
+  <li>
+    <strong>House number:</strong>
+    <%= @address.house_number %>
+  </li>
+
+  <li>
+    <strong>Road:</strong>
+    <%= @address.road %>
+  </li>
+
+  <li>
+    <strong>Unit:</strong>
+    <%= @address.unit %>
+  </li>
+
+  <li>
+    <strong>City:</strong>
+    <%= @address.city %>
+  </li>
+
+  <li>
+    <strong>State:</strong>
+    <%= @address.state %>
+  </li>
+
+  <li>
+    <strong>Postcode:</strong>
+    <%= @address.postcode %>
+  </li>
+
+  <li>
+    <strong>Country:</strong>
+    <%= @address.country %>
+  </li>
+
+  <li>
+    <strong>Level:</strong>
+    <%= @address.level %>
+  </li>
+
+  <li>
+    <strong>Staircase:</strong>
+    <%= @address.staircase %>
+  </li>
+
+  <li>
+    <strong>Entrance:</strong>
+    <%= @address.entrance %>
+  </li>
+
+  <li>
+    <strong>Suburb:</strong>
+    <%= @address.suburb %>
+  </li>
+
+  <li>
+    <strong>City district:</strong>
+    <%= @address.city_district %>
+  </li>
+
+  <li>
+    <strong>Island:</strong>
+    <%= @address.island %>
+  </li>
+
+  <li>
+    <strong>State district:</strong>
+    <%= @address.state_district %>
+  </li>
+
+  <li>
+    <strong>Country region:</strong>
+    <%= @address.country_region %>
+  </li>
+
+  <li>
+    <strong>World region:</strong>
+    <%= @address.world_region %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: address_path(@conn, :edit, @address) %></span>
+<span><%= link "Back", to: address_path(@conn, :index) %></span>

@@ -3,7 +3,7 @@ defmodule Igwet.Repo.Migrations.LinkUsersToNodes do
 
   def change do
     alter table(:users) do
-      add :node_id, references(:node)
+      add :node_id, references(:nodes, on_delete: :nothing)
     end
   end
 end

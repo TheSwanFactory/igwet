@@ -128,4 +128,96 @@ defmodule Igwet.NetworkTest do
       assert %Ecto.Changeset{} = Network.change_edge(edge)
     end
   end
+
+  describe "addresses" do
+    alias Igwet.Network.Address
+
+    @valid_attrs %{city: "some city", city_district: "some city_district", country: "some country", country_region: "some country_region", entrance: "some entrance", house_number: "some house_number", island: "some island", level: "some level", name: "some name", postcode: "some postcode", road: "some road", staircase: "some staircase", state: "some state", state_district: "some state_district", suburb: "some suburb", unit: "some unit", world_region: "some world_region"}
+    @update_attrs %{city: "some updated city", city_district: "some updated city_district", country: "some updated country", country_region: "some updated country_region", entrance: "some updated entrance", house_number: "some updated house_number", island: "some updated island", level: "some updated level", name: "some updated name", postcode: "some updated postcode", road: "some updated road", staircase: "some updated staircase", state: "some updated state", state_district: "some updated state_district", suburb: "some updated suburb", unit: "some updated unit", world_region: "some updated world_region"}
+    @invalid_attrs %{city: nil, city_district: nil, country: nil, country_region: nil, entrance: nil, house_number: nil, island: nil, level: nil, name: nil, postcode: nil, road: nil, staircase: nil, state: nil, state_district: nil, suburb: nil, unit: nil, world_region: nil}
+
+    def address_fixture(attrs \\ %{}) do
+      {:ok, address} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Network.create_address()
+
+      address
+    end
+
+    test "list_addresses/0 returns all addresses" do
+      address = address_fixture()
+      assert Network.list_addresses() == [address]
+    end
+
+    test "get_address!/1 returns the address with given id" do
+      address = address_fixture()
+      assert Network.get_address!(address.id) == address
+    end
+
+    test "create_address/1 with valid data creates a address" do
+      assert {:ok, %Address{} = address} = Network.create_address(@valid_attrs)
+      assert address.city == "some city"
+      assert address.city_district == "some city_district"
+      assert address.country == "some country"
+      assert address.country_region == "some country_region"
+      assert address.entrance == "some entrance"
+      assert address.house_number == "some house_number"
+      assert address.island == "some island"
+      assert address.level == "some level"
+      assert address.name == "some name"
+      assert address.postcode == "some postcode"
+      assert address.road == "some road"
+      assert address.staircase == "some staircase"
+      assert address.state == "some state"
+      assert address.state_district == "some state_district"
+      assert address.suburb == "some suburb"
+      assert address.unit == "some unit"
+      assert address.world_region == "some world_region"
+    end
+
+    test "create_address/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Network.create_address(@invalid_attrs)
+    end
+
+    test "update_address/2 with valid data updates the address" do
+      address = address_fixture()
+      assert {:ok, address} = Network.update_address(address, @update_attrs)
+      assert %Address{} = address
+      assert address.city == "some updated city"
+      assert address.city_district == "some updated city_district"
+      assert address.country == "some updated country"
+      assert address.country_region == "some updated country_region"
+      assert address.entrance == "some updated entrance"
+      assert address.house_number == "some updated house_number"
+      assert address.island == "some updated island"
+      assert address.level == "some updated level"
+      assert address.name == "some updated name"
+      assert address.postcode == "some updated postcode"
+      assert address.road == "some updated road"
+      assert address.staircase == "some updated staircase"
+      assert address.state == "some updated state"
+      assert address.state_district == "some updated state_district"
+      assert address.suburb == "some updated suburb"
+      assert address.unit == "some updated unit"
+      assert address.world_region == "some updated world_region"
+    end
+
+    test "update_address/2 with invalid data returns error changeset" do
+      address = address_fixture()
+      assert {:error, %Ecto.Changeset{}} = Network.update_address(address, @invalid_attrs)
+      assert address == Network.get_address!(address.id)
+    end
+
+    test "delete_address/1 deletes the address" do
+      address = address_fixture()
+      assert {:ok, %Address{}} = Network.delete_address(address)
+      assert_raise Ecto.NoResultsError, fn -> Network.get_address!(address.id) end
+    end
+
+    test "change_address/1 returns a address changeset" do
+      address = address_fixture()
+      assert %Ecto.Changeset{} = Network.change_address(address)
+    end
+  end
 end
