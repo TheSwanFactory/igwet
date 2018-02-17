@@ -5,8 +5,12 @@ defmodule Igwet.Repo.Migrations.CreateAddresses do
     create table(:addresses) do
       add :name, :string
       add :house_number, :string
-      add :road, :string
-      add :unit, :string
+      add :road_prefix, :string
+      add :road_base, :string
+      add :road_type, :string
+      add :road_suffix, :string
+      add :unit_type, :string
+      add :unit_base, :string
       add :city, :string
       add :state, :string
       add :postcode, :string
@@ -21,6 +25,7 @@ defmodule Igwet.Repo.Migrations.CreateAddresses do
       add :country_region, :string
       add :world_region, :string
       add :category_id, references(:nodes, on_delete: :nothing)
+      add :key, :string
 
       timestamps()
     end
