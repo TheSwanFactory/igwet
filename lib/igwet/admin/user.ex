@@ -2,6 +2,7 @@ defmodule Igwet.Admin.User do
   use Ecto.Schema
   import Ecto.Changeset
   alias Igwet.Admin.User
+  alias Igwet.Network.Node
 
   schema "users" do
     field :authid, :string

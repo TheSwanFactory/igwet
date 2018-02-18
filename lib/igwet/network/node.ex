@@ -1,8 +1,10 @@
 defmodule Igwet.Network.Node do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Igwet.Admin.User
+  alias Igwet.Network.Address
+  alias Igwet.Network.Edge
   alias Igwet.Network.Node
-
 
   schema "nodes" do
     field :about, :string
@@ -14,6 +16,8 @@ defmodule Igwet.Network.Node do
     field :url, :string
 
     belongs_to :address, Address
+    has_many :edges, Edge, foreign_key: :subject_id
+    has_one :user, User
 
     timestamps()
   end

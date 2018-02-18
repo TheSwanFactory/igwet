@@ -2,6 +2,7 @@ defmodule Igwet.Network.Address do
   use Ecto.Schema
   import Ecto.Changeset
   alias Igwet.Network.Address
+  alias Igwet.Network.Node
 
 
   schema "addresses" do
@@ -27,7 +28,9 @@ defmodule Igwet.Network.Address do
     field :unit_type, :string
     field :unit_base, :string
     field :world_region, :string
-    field :category_id, :id
+
+    belongs_to :category, Node
+    has_many :nodes, Node
 
     timestamps()
   end

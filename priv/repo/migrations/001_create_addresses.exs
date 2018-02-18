@@ -26,10 +26,7 @@ defmodule Igwet.Repo.Migrations.CreateAddresses do
       add :unit_type, :string
       add :world_region, :string
 
-      add :category_id, references(:nodes, on_delete: :nothing)
       timestamps()
     end
-
-    create index(:addresses, [:category_id])
   end
 end
