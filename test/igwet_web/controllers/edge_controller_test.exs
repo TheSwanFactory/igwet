@@ -3,13 +3,23 @@ defmodule IgwetWeb.EdgeControllerTest do
 
   alias Igwet.Network
 
-  @create_attrs %{}
-  @update_attrs %{}
-  @invalid_attrs %{}
+  @invalid_attrs %{subject_id: nil, predicate_id: nil, object_id: nil}
+
+  def edge_attrs(name \\ "name") do
+    {:ok, subject} = Network.create_node(%{name: "from.#{name}"})
+    {:ok, predicate} = Network.create_node(%{name: "by.#{name}"})
+    {:ok, object} = Network.create_node(%{name: "to.#{name}"})
+    %{subject_id: subject.id, predicate_id: predicate.id, object_id: object.id}
+  end
+
+  def edge_fixture(name \\ "fixture") do
+    attrs = edge_attrs(name)
+    {:ok, edge} = Network.create_edge(attrs)
+    edge
+  end
 
   def fixture(:edge) do
-    {:ok, edge} = Network.create_edge(@create_attrs)
-    edge
+    edge_fixture("ctrl")
   end
 
   describe "index" do
@@ -28,7 +38,7 @@ defmodule IgwetWeb.EdgeControllerTest do
 
   describe "create edge" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post conn, edge_path(conn, :create), edge: @create_attrs
+      conn = post conn, edge_path(conn, :create), edge: edge_attrs()
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == edge_path(conn, :show, id)
@@ -56,7 +66,7 @@ defmodule IgwetWeb.EdgeControllerTest do
     setup [:create_edge]
 
     test "redirects when data is valid", %{conn: conn, edge: edge} do
-      conn = put conn, edge_path(conn, :update, edge), edge: @update_attrs
+      conn = put conn, edge_path(conn, :update, edge), edge: edge_attrs("update")
       assert redirected_to(conn) == edge_path(conn, :show, edge)
 
       conn = get conn, edge_path(conn, :show, edge)
