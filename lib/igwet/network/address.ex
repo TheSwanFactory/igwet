@@ -12,15 +12,20 @@ defmodule Igwet.Network.Address do
     field :entrance, :string
     field :house_number, :string
     field :island, :string
+    field :key, :string
     field :level, :string
     field :name, :string
     field :postcode, :string
-    field :road, :string
+    field :road_prefix, :string
+    field :road_base, :string
+    field :road_type, :string
+    field :road_suffix, :string
     field :staircase, :string
     field :state, :string
     field :state_district, :string
     field :suburb, :string
-    field :unit, :string
+    field :unit_type, :string
+    field :unit_base, :string
     field :world_region, :string
     field :category_id, :id
 

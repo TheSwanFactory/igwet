@@ -18,13 +18,37 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :road, class: "control-label" %>
+    <%= label f, :road_prefix, class: "control-label" %>
     <%= text_input f, :road, class: "form-control" %>
     <%= error_tag f, :road %>
   </div>
 
   <div class="form-group">
-    <%= label f, :unit, class: "control-label" %>
+    <%= label f, :road_base, class: "control-label" %>
+    <%= text_input f, :road, class: "form-control" %>
+    <%= error_tag f, :road %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :road_type, class: "control-label" %>
+    <%= text_input f, :road, class: "form-control" %>
+    <%= error_tag f, :road %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :road_suffix, class: "control-label" %>
+    <%= text_input f, :road, class: "form-control" %>
+    <%= error_tag f, :road %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :unit_type, class: "control-label" %>
+    <%= text_input f, :unit, class: "form-control" %>
+    <%= error_tag f, :unit %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :unit_base, class: "control-label" %>
     <%= text_input f, :unit, class: "form-control" %>
     <%= error_tag f, :unit %>
   </div>
