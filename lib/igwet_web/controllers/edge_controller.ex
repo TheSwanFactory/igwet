@@ -4,6 +4,8 @@ defmodule IgwetWeb.EdgeController do
   alias Igwet.Network
   alias Igwet.Network.Edge
 
+  plug :require_auth
+
   def index(conn, _params) do
     edges = Network.list_edges()
     render(conn, "index.html", edges: edges)

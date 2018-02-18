@@ -4,6 +4,8 @@ defmodule IgwetWeb.AddressController do
   alias Igwet.Network
   alias Igwet.Network.Address
 
+  plug :require_auth
+
   def index(conn, _params) do
     addresses = Network.list_addresses()
     render(conn, "index.html", addresses: addresses)

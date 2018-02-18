@@ -9,17 +9,17 @@
 
   <li>
     <strong>Street Address:</strong>
-    <%= address.house_number %>
-    <%= address.road_prefix %>
-    <%= address.road_base %>
-    <%= address.road_type %>
-    <%= address.road_suffix %>
+    <%= @address.house_number %>
+    <%= @address.road_prefix %>
+    <%= @address.road_base %>
+    <%= @address.road_type %>
+    <%= @address.road_suffix %>
   </li>
 
   <li>
     <strong>Unit:</strong>
-    <%= address.unit_type %>
-    <%= address.unit_base %>
+    <%= @address.unit_type %>
+    <%= @address.unit_base %>
   </li>
 
   <li>
