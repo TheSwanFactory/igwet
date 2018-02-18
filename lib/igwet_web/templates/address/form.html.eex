@@ -43,14 +43,14 @@
 
   <div class="form-group">
     <%= label f, :unit_type, class: "control-label" %>
-    <%= text_input f, :unit, class: "form-control" %>
-    <%= error_tag f, :unit %>
+    <%= text_input f, :unit_type, class: "form-control" %>
+    <%= error_tag f, :unit_type %>
   </div>
 
   <div class="form-group">
     <%= label f, :unit_base, class: "control-label" %>
-    <%= text_input f, :unit, class: "form-control" %>
-    <%= error_tag f, :unit %>
+    <%= text_input f, :unit_base, class: "form-control" %>
+    <%= error_tag f, :unit_base %>
   </div>
 
   <div class="form-group">

@@ -38,7 +38,7 @@ defmodule Igwet.Network.Address do
   @doc false
   def changeset(%Address{} = address, attrs) do
     address
-    |> cast(attrs, [:name, :house_number, :road_base, :unit, :city, :state, :postcode, :country])
+    |> cast(attrs, [:name, :house_number, :road_prefix, :road_base, :road_type, :road_suffix, :unit_type, :unit_base, :city, :state, :postcode, :country])
     |> validate_required([:name, :house_number, :road_base, :city, :state, :postcode, :country])
   end
 end

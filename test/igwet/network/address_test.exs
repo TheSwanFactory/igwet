@@ -1,7 +1,7 @@
 defmodule Igwet.NetworkTest.Address do
   use Igwet.DataCase
-
   alias Igwet.Network
+  doctest Igwet.Network.Address
 
   describe "addresses" do
     alias Igwet.Network.Address
