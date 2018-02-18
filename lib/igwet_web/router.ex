@@ -19,8 +19,10 @@ defmodule IgwetWeb.Router do
 
     get "/", PageController, :index
     get "/logout", AuthController, :logout
-    resources "/nodes", NodeController
     resources "/users", UserController
+    resources "/nodes", NodeController
+    resources "/edges", EdgeController
+    resources "/addresses", AddressController
   end
 
   scope "/auth", IgwetWeb do
