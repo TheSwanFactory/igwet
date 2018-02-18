@@ -7,7 +7,7 @@ defmodule Igwet.NetworkTest do
     alias Igwet.Network.Node
 
     @valid_attrs %{about: "some about", email: "some email", key: "some key", name: "some name", phone: "some phone"}
-    @update_attrs %{about: "some updated about", email: "some updated email", key: "some updated key", name: "some updated name", phone: "some updated phone"}
+    @update_attrs %{about: "next about", email: "next email", key: "next key", name: "next name", phone: "next phone"}
     @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
 
     def node_fixture(attrs \\ %{}) do
@@ -46,11 +46,11 @@ defmodule Igwet.NetworkTest do
       node = node_fixture()
       assert {:ok, node} = Network.update_node(node, @update_attrs)
       assert %Node{} = node
-      assert node.about == "some updated about"
-      assert node.email == "some updated email"
-      assert node.key == "some updated key"
-      assert node.name == "some updated name"
-      assert node.phone == "some updated phone"
+      assert node.about == "next about"
+      assert node.email == "next email"
+      assert node.key == "next key"
+      assert node.name == "next name"
+      assert node.phone == "next phone"
     end
 
     test "update_node/2 with invalid data returns error changeset" do
@@ -132,9 +132,9 @@ defmodule Igwet.NetworkTest do
   describe "addresses" do
     alias Igwet.Network.Address
 
-    @valid_attrs %{city: "some city", city_district: "some city_district", country: "some country", country_region: "some country_region", entrance: "some entrance", house_number: "some house_number", island: "some island", level: "some level", name: "some name", postcode: "some postcode", road: "some road", staircase: "some staircase", state: "some state", state_district: "some state_district", suburb: "some suburb", unit: "some unit", world_region: "some world_region"}
-    @update_attrs %{city: "some updated city", city_district: "some updated city_district", country: "some updated country", country_region: "some updated country_region", entrance: "some updated entrance", house_number: "some updated house_number", island: "some updated island", level: "some updated level", name: "some updated name", postcode: "some updated postcode", road: "some updated road", staircase: "some updated staircase", state: "some updated state", state_district: "some updated state_district", suburb: "some updated suburb", unit: "some updated unit", world_region: "some updated world_region"}
-    @invalid_attrs %{city: nil, city_district: nil, country: nil, country_region: nil, entrance: nil, house_number: nil, island: nil, level: nil, name: nil, postcode: nil, road: nil, staircase: nil, state: nil, state_district: nil, suburb: nil, unit: nil, world_region: nil}
+    @valid_attrs %{city: "some city", country: "some country", house_number: "some house_number", name: "some name", postcode: "some postcode", road_base: "some road", state: "some state",  unit_base: "some unit_base", unit_type: "some unit_type"}
+    @update_attrs %{city: "next city", country: "next country", house_number: "next house_number", name: "next name", postcode: "next postcode", road_base: "next road", state: "next state",  unit_base: "next unit_base", unit_type: "next unit_type"}
+    @invalid_attrs %{city: nil, name: nil, postcode: nil, state: nil, state_district: nil, suburb: nil, world_region: nil}
 
     def address_fixture(attrs \\ %{}) do
       {:ok, address} =
@@ -158,22 +158,13 @@ defmodule Igwet.NetworkTest do
     test "create_address/1 with valid data creates a address" do
       assert {:ok, %Address{} = address} = Network.create_address(@valid_attrs)
       assert address.city == "some city"
-      assert address.city_district == "some city_district"
       assert address.country == "some country"
-      assert address.country_region == "some country_region"
-      assert address.entrance == "some entrance"
       assert address.house_number == "some house_number"
-      assert address.island == "some island"
-      assert address.level == "some level"
       assert address.name == "some name"
       assert address.postcode == "some postcode"
-      assert address.road == "some road"
-      assert address.staircase == "some staircase"
+      assert address.road_base == "some road"
       assert address.state == "some state"
-      assert address.state_district == "some state_district"
-      assert address.suburb == "some suburb"
-      assert address.unit == "some unit"
-      assert address.world_region == "some world_region"
+      assert address.unit_base == "some unit_base"
     end
 
     test "create_address/1 with invalid data returns error changeset" do
@@ -184,23 +175,14 @@ defmodule Igwet.NetworkTest do
       address = address_fixture()
       assert {:ok, address} = Network.update_address(address, @update_attrs)
       assert %Address{} = address
-      assert address.city == "some updated city"
-      assert address.city_district == "some updated city_district"
-      assert address.country == "some updated country"
-      assert address.country_region == "some updated country_region"
-      assert address.entrance == "some updated entrance"
-      assert address.house_number == "some updated house_number"
-      assert address.island == "some updated island"
-      assert address.level == "some updated level"
-      assert address.name == "some updated name"
-      assert address.postcode == "some updated postcode"
-      assert address.road == "some updated road"
-      assert address.staircase == "some updated staircase"
-      assert address.state == "some updated state"
-      assert address.state_district == "some updated state_district"
-      assert address.suburb == "some updated suburb"
-      assert address.unit == "some updated unit"
-      assert address.world_region == "some updated world_region"
+      assert address.city == "next city"
+      assert address.country == "next country"
+      assert address.house_number == "next house_number"
+      assert address.name == "next name"
+      assert address.postcode == "next postcode"
+      assert address.road_base == "next road"
+      assert address.state == "next state"
+      assert address.unit_base == "next unit_base"
     end
 
     test "update_address/2 with invalid data returns error changeset" do
