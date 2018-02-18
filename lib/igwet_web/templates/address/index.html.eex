@@ -1,0 +1,48 @@
+<h2>Listing Addresses</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Streed Address</th>
+      <th>Road</th>
+      <th>Unit</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Postcode</th>
+      <th>Country</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for address <- @addresses do %>
+    <tr>
+      <td><%= address.name %></td>
+      <td>
+        <%= address.house_number %>
+        <%= address.road_prefix %>
+        <%= address.road_base %>
+        <%= address.road_type %>
+        <%= address.road_suffix %>
+      </td>
+      <td>
+        <%= address.unit_type %>
+        <%= address.unit_base %>
+      </td>
+      <td><%= address.city %></td>
+      <td><%= address.state %></td>
+      <td><%= address.postcode %></td>
+      <td><%= address.country %></td>
+
+      <td class="text-right">
+        <span><%= link "Show", to: address_path(@conn, :show, address), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: address_path(@conn, :edit, address), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: address_path(@conn, :delete, address), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Address", to: address_path(@conn, :new) %></span>

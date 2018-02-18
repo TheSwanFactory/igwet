@@ -1,0 +1,24 @@
+<h2>Listing Edges</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for edge <- @edges do %>
+    <tr>
+
+      <td class="text-right">
+        <span><%= link "Show", to: edge_path(@conn, :show, edge), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: edge_path(@conn, :edit, edge), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: edge_path(@conn, :delete, edge), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Edge", to: edge_path(@conn, :new) %></span>
