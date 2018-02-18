@@ -1,21 +1,23 @@
 defmodule Igwet.NetworkTest.Edge do
   use Igwet.DataCase
-
   alias Igwet.Network
+  doctest Igwet.Network.Edge
 
   describe "edges" do
     alias Igwet.Network.Edge
 
-    @valid_attrs %{}
-    @update_attrs %{}
-    @invalid_attrs %{}
+    @invalid_attrs %{subject_id: nil, predicate_id: nil, object_id: nil}
 
-    def edge_fixture(attrs \\ %{}) do
-      {:ok, edge} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Network.create_edge()
+    def edge_attrs(name \\ "name") do
+      {:ok, subject} = Network.create_node(%{name: "from.#{name}"})
+      {:ok, predicate} = Network.create_node(%{name: "by.#{name}"})
+      {:ok, object} = Network.create_node(%{name: "to.#{name}"})
+      %{subject_id: subject.id, predicate_id: predicate.id, object_id: object.id}
+    end
 
+    def edge_fixture(name \\ "fixture") do
+      attrs = edge_attrs(name)
+      {:ok, edge} = Network.create_edge(attrs)
       edge
     end
 
@@ -30,7 +32,10 @@ defmodule Igwet.NetworkTest.Edge do
     end
 
     test "create_edge/1 with valid data creates a edge" do
-      assert {:ok, %Edge{} = edge} = Network.create_edge(@valid_attrs)
+      attrs = edge_attrs()
+      assert {:ok, %Edge{} = edge} = Network.create_edge(attrs)
+      subject = assoc(edge, :subject) |> Repo.one
+      assert subject.id == attrs.subject_id
     end
 
     test "create_edge/1 with invalid data returns error changeset" do
@@ -39,8 +44,14 @@ defmodule Igwet.NetworkTest.Edge do
 
     test "update_edge/2 with valid data updates the edge" do
       edge = edge_fixture()
-      assert {:ok, edge} = Network.update_edge(edge, @update_attrs)
-      assert %Edge{} = edge
+      update_attrs = edge_attrs("update")
+      assert {:ok, edge2} = Network.update_edge(edge, update_attrs)
+      assert %Edge{} = edge2
+
+      subject = assoc(edge, :subject) |> Repo.one
+      subject2 = assoc(edge2, :subject) |> Repo.one
+      assert subject != subject2
+      assert %{name: "from.update"} = subject2
     end
 
     test "update_edge/2 with invalid data returns error changeset" do

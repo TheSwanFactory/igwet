@@ -1,7 +1,7 @@
 defmodule Igwet.NetworkTest.Node do
   use Igwet.DataCase
-
   alias Igwet.Network
+  doctest Igwet.Network.Node
 
   describe "nodes" do
     alias Igwet.Network.Node
