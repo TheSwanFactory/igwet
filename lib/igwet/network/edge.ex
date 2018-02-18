@@ -2,12 +2,13 @@ defmodule Igwet.Network.Edge do
   use Ecto.Schema
   import Ecto.Changeset
   alias Igwet.Network.Edge
+  alias Igwet.Network.Node
 
 
   schema "edges" do
-    field :subject_id, :id
-    field :predicate_id, :id
-    field :object_id, :id
+    belongs_to :subject, Node
+    belongs_to :predicate, Node
+    belongs_to :object, Node
 
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule Igwet.Network.Edge do
   @doc false
   def changeset(%Edge{} = edge, attrs) do
     edge
-    |> cast(attrs, [])
-    |> validate_required([])
+    |> cast(attrs, [:subject_id, :predicate_id, :object_id])
+    |> validate_required([:subject_id, :predicate_id, :object_id])
   end
 end

@@ -8,8 +8,12 @@ defmodule Igwet.Network.Node do
     field :about, :string
     field :email, :string
     field :key, :string
+    field :meta, :string
     field :name, :string
     field :phone, :string
+    field :url, :string
+
+    belongs_to :address, Address
 
     timestamps()
   end
@@ -18,6 +22,6 @@ defmodule Igwet.Network.Node do
   def changeset(%Node{} = node, attrs) do
     node
     |> cast(attrs, [:name, :about, :email, :phone, :key])
-    |> validate_required([:name, :about, :email, :phone, :key])
+    |> validate_required([:name])
   end
 end
