@@ -1,5 +1,4 @@
 defmodule Igwet.NetworkTest.Edge do
-  #require IEx; IEx.py
   use Igwet.DataCase
   alias Igwet.Network
   doctest Igwet.Network.Edge

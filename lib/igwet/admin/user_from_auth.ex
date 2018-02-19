@@ -34,7 +34,7 @@ defmodule Igwet.Admin.User.FromAuth do
     user = Admin.find_or_create_user(info)
     node = Node |> where([n], n.email == ^user.email) |> Repo.one()
     if node do
-       %User{ user| node_id: node}
+       %User{ user| node: node}
     else
       user
     end
