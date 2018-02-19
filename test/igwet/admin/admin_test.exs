@@ -7,7 +7,7 @@ defmodule Igwet.AdminTest do
   describe "users" do
     alias Igwet.Admin.User
 
-    @valid_attrs %{authid: "some authid", avatar: "some avatar", last_login: ~N[2010-04-17 14:00:00.000000], name: "some name"}
+    @valid_attrs %{authid: "some authid", avatar: "some avatar", last_login: ~N[2010-04-17 14:00:00.000000], name: "some name", email: "me@me.com"}
     @update_attrs %{authid: "some updated authid", avatar: "some updated avatar", last_login: ~N[2011-05-18 15:01:01.000000], name: "some updated name"}
     @invalid_attrs %{authid: nil, avatar: nil, last_login: nil, name: nil}
     @next_attrs %{authid: "next authid", avatar: "next avatar", last_login: ~N[2010-04-17 14:00:00.000000], name: "next name"}
@@ -41,6 +41,7 @@ defmodule Igwet.AdminTest do
       assert user = Admin.find_or_create_user(@valid_attrs)
       assert %User{} = user
       assert user.id == first.id
+      assert user.email == "me@me.com"
     end
 
     test "find_or_create_user/1 with new data creates user" do

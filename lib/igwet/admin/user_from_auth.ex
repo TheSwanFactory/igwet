@@ -1,4 +1,5 @@
 defmodule Igwet.Admin.User.FromAuth do
+  require IEx;
   # @compile if Mix.env == :test, do: :export_all
   @moduledoc """
   Retrieve the user information from an auth request
@@ -32,7 +33,17 @@ defmodule Igwet.Admin.User.FromAuth do
   end
 
   defp basic_info(auth) do
-    %{authid: auth.uid, name: name_from_auth(auth), avatar: avatar_from_auth(auth)}
+    info = auth.info
+    %{
+      authid: auth.uid,
+      avatar: avatar_from_auth(auth),
+      email: Map.get(info, :email),
+      email_verified: Map.get(info, :email_verified),
+      family_name: Map.get(info, :family_name),
+      given_name: Map.get(info, :given_name),
+      name: name_from_auth(auth),
+      nickname: Map.get(info, :nickname)
+    }
   end
 
   # github does it this way

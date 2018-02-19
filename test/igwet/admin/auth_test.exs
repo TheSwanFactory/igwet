@@ -11,7 +11,7 @@ defmodule Igwet.AuthTest do
 
     @invalid_cred %{@valid_cred | other: %{}}
 
-    @valid_info %{name: "My Name", image: "url"}
+    @valid_info %{name: "My Name", image: "url", email: "email@me.com"}
 
     @valid_auth %Auth{credentials: @valid_cred, info: @valid_info, uid: "me"}
 
@@ -19,10 +19,11 @@ defmodule Igwet.AuthTest do
 
     test "find_or_create/1 returns %User" do
       {:ok, user} = FromAuth.find_or_create(@valid_auth)
-      %User{authid: uid, name: name, avatar: url} = user
+      %User{authid: uid, name: name, avatar: url, email: email} = user
       assert uid === "me"
       assert name === "My Name"
       assert url === "url"
+      assert email == "email@me.com"
     end
 
     test "find_or_create/1 errors if provider" do
