@@ -4,6 +4,7 @@ defmodule Igwet.Network.Edge do
   alias Igwet.Network.Edge
   alias Igwet.Network.Node
 
+  @foreign_key_type Ecto.UUID
 
   schema "edges" do
     belongs_to :subject, Node

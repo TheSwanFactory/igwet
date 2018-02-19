@@ -12,8 +12,8 @@ defmodule Igwet.Repo.Migrations.CreateUser do
       add :last_login, :naive_datetime
       add :name, :string
       add :nickname, :string
-      
-      add :node_id, references(:nodes, on_delete: :nothing)
+
+      add :node_id, references(:nodes, on_delete: :nothing, type: :uuid)
 
       timestamps()
     end
