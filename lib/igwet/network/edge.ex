@@ -15,9 +15,12 @@ defmodule Igwet.Network.Edge do
 
   @doc false
   def changeset(%Edge{} = edge, attrs) do
+    relations = [:subject_id, :predicate_id, :object_id]
     edge
-    |> cast(attrs, [:subject_id])
-    |> validate_required([:subject_id])
+    |> cast(attrs, relations)
+    |> validate_required(relations)
     |> assoc_constraint(:subject)
+    |> assoc_constraint(:predicate)
+    |> assoc_constraint(:object)
   end
 end
