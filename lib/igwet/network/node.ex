@@ -6,7 +6,10 @@ defmodule Igwet.Network.Node do
   alias Igwet.Network.Edge
   alias Igwet.Network.Node
 
-  schema "nodes" do
+    @primary_key {:id, :binary_id, autogenerate: true}
+    @derive {Phoenix.Param, key: :id}
+
+    schema "nodes" do
     field :about, :string
     field :email, :string
     field :key, :string
@@ -25,7 +28,7 @@ defmodule Igwet.Network.Node do
   @doc false
   def changeset(%Node{} = node, attrs) do
     node
-    |> cast(attrs, [:name, :about, :email, :phone, :key])
+    |> cast(attrs, [:about, :email, :key, :meta, :name, :phone, :url])
     |> validate_required([:name])
   end
 end
