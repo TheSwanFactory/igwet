@@ -1,14 +1,16 @@
 defmodule Igwet.Admin.User.FromAuth do
-  require IEx;
   # @compile if Mix.env == :test, do: :export_all
-  @moduledoc """
-  Retrieve the user information from an auth request
-  """
+  require IEx;
   require Logger
   require Poison
 
+  import Ecto.Query, warn: false
+
   alias Ueberauth.Auth
   alias Igwet.Admin
+  alias Igwet.Admin.User
+  alias Igwet.Network.Node
+  alias Igwet.Repo
 
   @doc """
   Generates user from provider response if valid password
@@ -29,7 +31,13 @@ defmodule Igwet.Admin.User.FromAuth do
 
   defp auth_user(auth) do
     info = basic_info(auth)
-    Admin.find_or_create_user(info)
+    user = Admin.find_or_create_user(info)
+    node = Node |> where([n], n.email == ^user.email) |> Repo.one()
+    if node do
+       %User{ user| node_id: node}
+    else
+      user
+    end
   end
 
   defp basic_info(auth) do
