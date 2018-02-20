@@ -51,7 +51,6 @@ defmodule Igwet.Seeds do
   end
 
   def reset do
-    Repo.delete_all(Edge)
     Repo.delete_all(Node)
 
     Enum.each @nodes, fn node ->
