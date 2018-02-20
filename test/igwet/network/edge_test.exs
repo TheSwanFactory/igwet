@@ -27,7 +27,7 @@ defmodule Igwet.NetworkTest.Edge do
 
     test "list_edges/0 returns all edges" do
       edge = edge_fixture()
-      assert Network.list_edges() == [edge]
+      assert Enum.member?(Network.list_edges(), edge)
     end
 
     test "get_edge!/1 returns the edge with given id" do
