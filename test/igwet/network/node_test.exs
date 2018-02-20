@@ -21,7 +21,7 @@ defmodule Igwet.NetworkTest.Node do
 
     test "list_nodes/0 returns all nodes" do
       node = node_fixture()
-      assert Network.list_nodes() == [node]
+      assert Enum.member?(Network.list_nodes(), node)
     end
 
     test "get_node!/1 returns the node with given id" do
