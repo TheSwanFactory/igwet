@@ -5,10 +5,14 @@ defmodule IgwetWeb.EdgeControllerTest do
 
   @invalid_attrs %{subject_id: nil, predicate_id: nil, object_id: nil}
 
+  def make_node(name) do
+    Network.create_node(%{name: name, key: "key.#{name}"})
+  end
+
   def edge_attrs(name \\ "name") do
-    {:ok, subject} = Network.create_node(%{name: "from.#{name}"})
-    {:ok, predicate} = Network.create_node(%{name: "by.#{name}"})
-    {:ok, object} = Network.create_node(%{name: "to.#{name}"})
+    {:ok, subject} = make_node("from.#{name}")
+    {:ok, predicate} = make_node("by.#{name}")
+    {:ok, object} = make_node("to.#{name}")
     %{subject_id: subject.id, predicate_id: predicate.id, object_id: object.id}
   end
 

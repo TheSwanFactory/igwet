@@ -29,6 +29,7 @@ defmodule Igwet.Network.Node do
   def changeset(%Node{} = node, attrs) do
     node
     |> cast(attrs, [:about, :email, :key, :meta, :name, :phone, :url])
-    |> validate_required([:name])
+    |> validate_required([:key, :name])
+    |> unique_constraint(:key)
   end
 end

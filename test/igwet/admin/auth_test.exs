@@ -13,7 +13,7 @@ defmodule Igwet.AuthTest do
 
     @invalid_cred %{@valid_cred | other: %{}}
 
-    @valid_info %{name: "My Name", image: "url", email: "email@me.com"}
+    @valid_info %{name: "My Name", image: "url", email: "email@me.com", key: "key"}
 
     @valid_auth %Auth{credentials: @valid_cred, info: @valid_info, uid: "me"}
 
