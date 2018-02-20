@@ -25,5 +25,6 @@ defmodule Igwet.Admin.User do
     user
     |> cast(attrs, [:authid, :avatar, :email, :email_verified, :family_name, :given_name, :last_login, :name, :nickname])
     |> validate_required([:authid, :name])
+    |> unique_constraint(:authid)
   end
 end
