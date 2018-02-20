@@ -11,6 +11,8 @@
 # and so on) as they will fail if something goes wrong.
 
 defmodule Igwet.Seeds do
+  import Ecto.Query
+
   alias Igwet.Repo
   alias Igwet.Network.Node
   alias Igwet.Network.Edge
@@ -28,28 +30,36 @@ defmodule Igwet.Seeds do
     }
   ]
 
-  @edges [
+  @triples [
     %{
       from: "com.igwet.contact.Ernest-Prabhakar",
-      via: "com.igwet.predicate.in",
+      by: "com.igwet.predicate.in",
       to: "com.igwet.group.Site-Administrators"
     }
   ]
 
+  def node_for_key(key) do
+    Node |> where([n], n.key == ^key) |> Repo.one!()
+  end
+
+  def edge_from_triple(triple) do
+    %Edge{
+      subject: node_for_key(triple.from),
+      predicate: node_for_key(triple.by),
+      object: node_for_key(triple.to)
+    }
+  end
+
   def reset do
-    Repo.delete_all(Node)
     Repo.delete_all(Edge)
+    Repo.delete_all(Node)
 
     Enum.each @nodes, fn node ->
       Repo.insert! node
     end
 
-    Enum.each @edges, fn edge ->
-      %Edge{
-        subject: edge.from,
-        predicate: edge.via,
-        object: edge.to
-      }
+    Enum.each @triples, fn triple ->
+      Repo.insert! edge_from_triple(triple)
     end
   end
 end
