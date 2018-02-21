@@ -6,6 +6,23 @@ defmodule Igwet.Admin do
   import Ecto.Query, warn: false
   alias Igwet.Repo
 
+  @doc """
+  Check whether this user is a Site Administrator.
+
+  ## Examples
+
+      iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
+      iex> Igwet.Admin.is_admin(user)
+      nil
+
+  """
+  def is_admin(user) do
+    if user do
+      false
+    end
+    nil
+  end
+
   alias Igwet.Admin.User
 
   @doc """

@@ -2,6 +2,7 @@ defmodule IgwetWeb.ControllerHelper do
   import Plug.Conn
   import Phoenix.Controller
   alias Igwet.Admin.User
+  alias Igwet.Admin
 
   def require_auth(conn, _params) do
     if Mix.env == :test do
@@ -19,16 +20,17 @@ defmodule IgwetWeb.ControllerHelper do
   def require_admin(conn, params) do
     conn = require_auth(conn, params)
     user = get_session(conn, :current_user)
-    node = user.node
-    if !node do
-      conn
-      |> put_status(401)
-      |> render(ErrorView, :"401", message: "The email for this login is not associated with an active contact")
-    else if !Node.is_admin(node) do
-      conn
-      |> put_status(401)
-      |> render(ErrorView, :"401", message: "The contact for this login does not have the Administrator privilege necessary to view this page")
+    case Admin.is_admin(user) do
+      true -> conn
+      nil ->
+        conn
+        |> put_status(401)
+        |> render(ErrorView, :"401", message: "The email for this login is not associated with an active contact")
+      false ->
+        conn
+        |> put_status(401)
+        |> render(ErrorView, :"401", message: "The contact for this login does not have the Administrator privilege necessary to view this page")
     end
-    conn
   end
+
 end
