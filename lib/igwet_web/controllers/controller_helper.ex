@@ -15,4 +15,9 @@ defmodule IgwetWeb.ControllerHelper do
       end
     end
   end
+
+  def require_admin(conn, params) do
+    conn = require_auth(conn, params)
+    conn
+  end
 end
