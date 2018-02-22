@@ -38,6 +38,26 @@ defmodule Igwet.Network do
   def get_node!(id), do: Repo.get!(Node, id)
 
   @doc """
+  Gets a single node based on its unique key
+
+  Raises `Ecto.NoResultsError` if the Node does not exist.
+
+  ## Examples
+
+      iex> keys = Application.get_env(:iget, :seed_keys)
+      iex> get_node_by_key!(keys[:in])
+      %Node{}
+
+      iex> Network.get_node_by_key!("")
+      ** (Ecto.NoResultsError)
+
+  """
+
+  def get_node_by_key!(key) do
+    Node |> where([n], n.key == ^key) |> Repo.one!()
+  end
+
+  @doc """
   Creates a node.
 
   ## Examples

@@ -14,6 +14,7 @@ defmodule Igwet.Seeds do
   import Ecto.Query
 
   alias Igwet.Repo
+  alias Igwet.Network
   alias Igwet.Network.Node
   alias Igwet.Network.Edge
 
@@ -41,15 +42,11 @@ defmodule Igwet.Seeds do
     }
   ]
 
-  def node_for_key(key) do
-    Node |> where([n], n.key == ^key) |> Repo.one!()
-  end
-
   def edge_from_triple(triple) do
     %Edge{
-      subject: node_for_key(triple.from),
-      predicate: node_for_key(triple.by),
-      object: node_for_key(triple.to)
+      subject: Network.get_node_by_key!(triple.from),
+      predicate: Network.get_node_by_key!(triple.by),
+      object: Network.get_node_by_key!(triple.to)
     }
   end
 
