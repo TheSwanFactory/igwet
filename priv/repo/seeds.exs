@@ -11,8 +11,6 @@
 # and so on) as they will fail if something goes wrong.
 
 defmodule Igwet.Seeds do
-  import Ecto.Query
-
   alias Igwet.Repo
   alias Igwet.Network
   alias Igwet.Network.Node
