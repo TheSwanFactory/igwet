@@ -3,10 +3,16 @@ defmodule IgwetWeb.ControllerHelper do
   import Phoenix.Controller
   alias IgwetWeb.ErrorView
   alias Igwet.Admin
+  alias Igwet.Admin.User
+  alias Igwet.Network
+
+  def test_user(key) do
+    %User{name: "Test #{key} User", node: Network.seed_node(key)}
+  end
 
   def get_user(conn) do
     case Mix.env do
-      :test -> Admin.admin_user()
+      :test -> test_user(:superuser)
       _ -> get_session(conn, :current_user)
     end
   end

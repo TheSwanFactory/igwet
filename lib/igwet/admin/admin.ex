@@ -5,37 +5,15 @@ defmodule Igwet.Admin do
 
   import Ecto.Query, warn: false
   alias Igwet.Repo
-  alias Igwet.Network
   alias Igwet.Admin.User
-
-  @doc """
-  Return the seeded Site Administrator.
-
-  ## Examples
-
-      iex> user = Igwet.Admin.admin_user()
-      iex> user.__struct__
-      Igwet.Admin.User
-
-  """
-  def admin_user() do
-    keys = Application.get_env(:igwet, :seed_keys)
-    node = Network.get_node_by_key!(keys[:superuser])
-    %User{name: "Admin User", node: node}
-  end
 
   @doc """
   Check whether this user is a Site Administrator.
 
   ## Examples
-
-      iex> Igwet.Admin.is_admin(Igwet.Admin.admin_user())
-      true
-      iex> Igwet.Admin.is_admin(nil)
-      nil
       iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
       iex> Igwet.Admin.is_admin(user)
-      false
+      true
 
   """
   def is_admin(user) do

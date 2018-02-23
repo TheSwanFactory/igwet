@@ -5,8 +5,21 @@ defmodule Igwet.Network do
 
   import Ecto.Query, warn: false
   alias Igwet.Repo
-
   alias Igwet.Network.Node
+
+  @doc """
+  Return one of the pre-created seed nodes.
+
+  ## Examples
+
+      iex> seed_node(:in)
+      %Node{}
+
+  """
+  def seed_node(key) do
+    keys = Application.get_env(:igwet, :seed_keys)
+    get_node_by_key!(keys[key])
+  end
 
   @doc """
   Returns the list of nodes.
