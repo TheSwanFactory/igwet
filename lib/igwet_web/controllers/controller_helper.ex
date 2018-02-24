@@ -6,13 +6,9 @@ defmodule IgwetWeb.ControllerHelper do
   alias Igwet.Admin.User
   alias Igwet.Network
 
-  def test_user(key) do
-    %User{name: "Test #{key} User", node: Network.seed_node(key)}
-  end
-
   def get_user(conn) do
     case Mix.env do
-      :test -> test_user(:superuser)
+      :test -> Admin.test_user(:superuser)
       _ -> get_session(conn, :current_user)
     end
   end

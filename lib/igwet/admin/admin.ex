@@ -6,6 +6,11 @@ defmodule Igwet.Admin do
   import Ecto.Query, warn: false
   alias Igwet.Repo
   alias Igwet.Admin.User
+  alias Igwet.Network
+
+  def test_user(key) do
+    %User{name: "Test #{key} User", node: Network.seed_node(key)}
+  end
 
   @doc """
   Check whether this user is a Site Administrator.
@@ -13,14 +18,14 @@ defmodule Igwet.Admin do
   ## Examples
       iex> user = Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
       iex> Igwet.Admin.is_admin(user)
-      true
+      nil
 
   """
   def is_admin(user) do
     cond do
       user == nil -> nil
-      user.node == nil -> nil
-      true -> Network.node_is_admin(user.node)
+      !Ecto.assoc_loaded?(user.node) -> nil
+      true -> Network.node_is_admin?(user.node)
     end
   end
 
