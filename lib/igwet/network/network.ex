@@ -23,6 +23,20 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Check if node is in site admin group.
+
+  ## Examples
+
+      iex> node_is_admin?(node)
+      true
+
+  """
+  def node_is_admin?(node) do
+    group = seed_node(:admin_group)
+    node_in_group?(node, group)
+  end
+
+  @doc """
   Check if nodes have an in-relation.
 
   ## Examples
@@ -36,6 +50,15 @@ defmodule Igwet.Network do
     edge_exists?(node, in_node, group)
   end
 
+  @doc """
+  Check if subject and object related via predicate.
+
+  ## Examples
+
+      iex> edge_exists?(subject, predicate, object)
+      true
+
+  """
   def edge_exists?(subject, predicate, object) do
     edge = Edge |> where([e],
       e.subject_id == ^subject.id and

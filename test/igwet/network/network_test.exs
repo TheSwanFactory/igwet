@@ -11,6 +11,11 @@ defmodule Igwet.NetworkTest do
       assert user.key == keys[:superuser]
     end
 
+    test "node_is_admin?" do
+      user = Network.seed_node(:superuser)
+      assert Network.node_is_admin?(user)
+    end
+
     test "node_in_group?" do
       user = Network.seed_node(:superuser)
       group = Network.seed_node(:admin_group)

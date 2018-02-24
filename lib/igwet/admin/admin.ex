@@ -17,8 +17,10 @@ defmodule Igwet.Admin do
 
   """
   def is_admin(user) do
-    if user do
-      true
+    cond do
+      user == nil -> nil
+      user.node == nil -> nil
+      true -> Network.node_is_admin(user.node)
     end
   end
 
