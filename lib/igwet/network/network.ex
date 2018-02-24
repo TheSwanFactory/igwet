@@ -6,6 +6,7 @@ defmodule Igwet.Network do
   import Ecto.Query, warn: false
   alias Igwet.Repo
   alias Igwet.Network.Node
+  alias Igwet.Network.Edge
 
   @doc """
   Return one of the pre-created seed nodes.
@@ -19,6 +20,31 @@ defmodule Igwet.Network do
   def seed_node(key) do
     keys = Application.get_env(:igwet, :seed_keys)
     get_node_by_key!(keys[key])
+  end
+
+  @doc """
+  Check if nodes have an in-relation.
+
+  ## Examples
+
+      iex> node_in_group?(node, group)
+      true
+
+  """
+  def node_in_group?(node, group) do
+    in_node = seed_node(:in)
+    edge_exists?(node, in_node, group)
+  end
+
+  def edge_exists?(subject, predicate, object) do
+    case Edge |> where([e],
+      e.subject == ^subject and
+      e.predicate == ^predicate and
+      e.object == ^object
+    ) |> Repo.one() do
+      {:ok, _} -> true
+      {:error, _} -> false
+    end
   end
 
   @doc """
@@ -134,8 +160,6 @@ defmodule Igwet.Network do
   def change_node(%Node{} = node) do
     Node.changeset(node, %{})
   end
-
-  alias Igwet.Network.Edge
 
   @doc """
   Returns the list of edges.
