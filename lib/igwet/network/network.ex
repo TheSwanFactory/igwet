@@ -37,14 +37,12 @@ defmodule Igwet.Network do
   end
 
   def edge_exists?(subject, predicate, object) do
-    case Edge |> where([e],
-      e.subject == ^subject and
-      e.predicate == ^predicate and
-      e.object == ^object
-    ) |> Repo.one() do
-      {:ok, _} -> true
-      {:error, _} -> false
-    end
+    edge = Edge |> where([e],
+      e.subject_id == ^subject.id and
+      e.predicate_id == ^predicate.id and
+      e.object_id == ^object.id
+    ) |> Repo.one()
+    edge != nil
   end
 
   @doc """
