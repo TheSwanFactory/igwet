@@ -29,7 +29,9 @@ defmodule IgwetWeb.NodeController do
 
   def show(conn, %{"id" => id}) do
     node = Network.get_node!(id)
-    render(conn, "show.html", node: node)
+    groups = []
+    members = []
+    render(conn, "show.html", node: node, groups: groups, members: members)
   end
 
   def edit(conn, %{"id" => id}) do

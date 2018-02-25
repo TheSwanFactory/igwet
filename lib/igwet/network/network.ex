@@ -68,6 +68,26 @@ defmodule Igwet.Network do
     edge != nil
   end
 
+
+  @doc """
+  Return all group nodes this node is in.
+
+  ## Examples
+
+      iex> node_groups(node)
+      [%Node{},...]
+
+  """
+  def node_groups(node) do
+    in_node = seed_node(:in)
+    edges = Edge
+    |> where([e], e.subject_id == ^node.id and e.predicate_id == ^in_node.id)
+    |> preload([:object])
+    |> Repo.all()
+    Enum.map(edges, &(&1.object))
+  end
+
+
   @doc """
   Returns the list of nodes.
 

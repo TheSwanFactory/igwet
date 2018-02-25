@@ -31,6 +31,15 @@ defmodule Igwet.NetworkTest do
       assert !Network.edge_exists?(group, member, user)
     end
 
+    test "node_groups" do
+      user = Network.seed_node(:superuser)
+      group = Network.seed_node(:admin_group)
+      groups = Network.node_groups(user)
+      assert Enum.count(groups) == 1
+
+      first = List.first(groups)
+      assert first.name == group.name
+    end
   end
 
 end
