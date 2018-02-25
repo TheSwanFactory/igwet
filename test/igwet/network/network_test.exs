@@ -40,6 +40,16 @@ defmodule Igwet.NetworkTest do
       first = List.first(groups)
       assert first.name == group.name
     end
+
+    test "node_members" do
+      user = Network.seed_node(:superuser)
+      group = Network.seed_node(:admin_group)
+      members = Network.node_members(group)
+      assert Enum.count(members) == 1
+
+      first = List.first(members)
+      assert first.name == user.name
+    end
   end
 
 end
