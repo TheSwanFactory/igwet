@@ -4,7 +4,7 @@ defmodule IgwetWeb.UserController do
   alias Igwet.Admin
   alias Igwet.Admin.User
 
-  plug :require_auth
+  plug :require_admin
 
   def index(conn, _params) do
     users = Admin.list_users()

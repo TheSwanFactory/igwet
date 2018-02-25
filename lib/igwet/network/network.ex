@@ -5,8 +5,68 @@ defmodule Igwet.Network do
 
   import Ecto.Query, warn: false
   alias Igwet.Repo
-
   alias Igwet.Network.Node
+  alias Igwet.Network.Edge
+
+  @doc """
+  Return one of the pre-created seed nodes.
+
+  ## Examples
+
+      iex> seed_node(:in)
+      %Node{}
+
+  """
+  def seed_node(key) do
+    keys = Application.get_env(:igwet, :seed_keys)
+    get_node_by_key!(keys[key])
+  end
+
+  @doc """
+  Check if node is in site admin group.
+
+  ## Examples
+
+      iex> node_is_admin?(node)
+      true
+
+  """
+  def node_is_admin?(node) do
+    group = seed_node(:admin_group)
+    node_in_group?(node, group)
+  end
+
+  @doc """
+  Check if nodes have an in-relation.
+
+  ## Examples
+
+      iex> node_in_group?(node, group)
+      true
+
+  """
+  def node_in_group?(node, group) do
+    in_node = seed_node(:in)
+    edge_exists?(node, in_node, group)
+  end
+
+  @doc """
+  Check if subject and object related via predicate.
+
+  ## Examples
+
+      iex> edge_exists?(subject, predicate, object)
+      true
+
+  """
+  def edge_exists?(subject, predicate, object) do
+    edge = Edge |> where([e],
+      e.subject_id == ^subject.id and
+      e.predicate_id == ^predicate.id and
+      e.object_id == ^object.id
+    ) |> Repo.one()
+    edge != nil
+  end
 
   @doc """
   Returns the list of nodes.
@@ -36,6 +96,26 @@ defmodule Igwet.Network do
 
   """
   def get_node!(id), do: Repo.get!(Node, id)
+
+  @doc """
+  Gets a single node based on its unique key
+
+  Raises `Ecto.NoResultsError` if the Node does not exist.
+
+  ## Examples
+
+      iex> keys = Application.get_env(:iget, :seed_keys)
+      iex> get_node_by_key!(keys[:in])
+      %Node{}
+
+      iex> Network.get_node_by_key!("")
+      ** (Ecto.NoResultsError)
+
+  """
+
+  def get_node_by_key!(key) do
+    Node |> where([n], n.key == ^key) |> Repo.one!()
+  end
 
   @doc """
   Creates a node.
@@ -101,8 +181,6 @@ defmodule Igwet.Network do
   def change_node(%Node{} = node) do
     Node.changeset(node, %{})
   end
-
-  alias Igwet.Network.Edge
 
   @doc """
   Returns the list of edges.

@@ -3,10 +3,15 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Authid</th>
-      <th>Name</th>
-      <th>Avatar</th>
       <th>Last login</th>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Nickname</th>
+      <th>Given Name</th>
+      <th>Family Name</th>
+      <th>Verified?</th>
+      <th>Avatar</th>
+      <th>Authid</th>
 
       <th></th>
     </tr>
@@ -14,10 +19,15 @@
   <tbody>
 <%= for user <- @users do %>
     <tr>
-      <td><%= user.authid %></td>
-      <td><%= user.name %></td>
-      <td><%= user.avatar %></td>
       <td><%= user.last_login %></td>
+      <td><%= user.email %></td>
+      <td><%= user.name %></td>
+      <td><%= user.nickname %></td>
+      <td><%= user.given_name %></td>
+      <td><%= user.family_name %></td>
+      <td><%= user.email_verified %></td>
+      <td><%= user.avatar %></td>
+      <td><%= user.authid %></td>
 
       <td class="text-right">
         <span><%= link "Show", to: user_path(@conn, :show, user), class: "btn btn-default btn-xs" %></span>

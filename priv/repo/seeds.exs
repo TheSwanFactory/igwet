@@ -11,42 +11,40 @@
 # and so on) as they will fail if something goes wrong.
 
 defmodule Igwet.Seeds do
-  import Ecto.Query
-
   alias Igwet.Repo
+  alias Igwet.Network
   alias Igwet.Network.Node
   alias Igwet.Network.Edge
 
+  @seed_keys Application.get_env(:igwet, :seed_keys)
+
   @nodes [
-    %Node{name: "in", key: "com.igwet.predicate.in"},
+    %Node{name: "type", key: @seed_keys[:type]},
+    %Node{name: "in", key: @seed_keys[:in]},
     %Node{
       name: "Site Administrators",
-      key: "com.igwet.group.Site-Administrators"
+      key: @seed_keys[:admin_group]
     },
     %Node{
       name: "Ernest Prabhakar",
       email: "info@theswanfactory.com",
-      key: "com.igwet.contact.Ernest-Prabhakar"
+      key: @seed_keys[:superuser]
     }
   ]
 
   @triples [
     %{
-      from: "com.igwet.contact.Ernest-Prabhakar",
-      by: "com.igwet.predicate.in",
-      to: "com.igwet.group.Site-Administrators"
+      from: @seed_keys[:superuser],
+      by: @seed_keys[:in],
+      to: @seed_keys[:admin_group]
     }
   ]
 
-  def node_for_key(key) do
-    Node |> where([n], n.key == ^key) |> Repo.one!()
-  end
-
   def edge_from_triple(triple) do
     %Edge{
-      subject: node_for_key(triple.from),
-      predicate: node_for_key(triple.by),
-      object: node_for_key(triple.to)
+      subject: Network.get_node_by_key!(triple.from),
+      predicate: Network.get_node_by_key!(triple.by),
+      object: Network.get_node_by_key!(triple.to)
     }
   end
 
