@@ -1,5 +1,8 @@
 <h2>Show Node</h2>
 
+<span><%= link "Edit", to: node_path(@conn, :edit, @node) %></span>
+<span><%= link "Back", to: node_path(@conn, :index) %></span>
+
 <ul>
 
   <li>
@@ -27,7 +30,23 @@
     <%= @node.key %>
   </li>
 
-</ul>
 
-<span><%= link "Edit", to: node_path(@conn, :edit, @node) %></span>
-<span><%= link "Back", to: node_path(@conn, :index) %></span>
+  <ul>
+    <h3>Groups</h3>
+    <%= for group <- @groups do %>
+      <li>
+        <%= link(group.name, to: node_path(@conn, :show, group)) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <ul>
+    <h3>Members</h3>
+    <%= for member <- @members do %>
+      <li>
+        <%= link(member.name, to: node_path(@conn, :show, member)) %>
+      </li>
+    <% end %>
+  </ul>
+
+</ul>
