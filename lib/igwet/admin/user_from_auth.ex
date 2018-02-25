@@ -33,11 +33,9 @@ defmodule Igwet.Admin.User.FromAuth do
     info = basic_info(auth)
     user = Admin.find_or_create_user(info)
     node = Node |> where([n], n.email == ^user.email) |> Repo.one()
-    if node do
-       %User{ user| node: node}
-    else
-      user
-    end
+    params = %{node: node, last_login: NaiveDateTime.utc_now}
+    {:ok, updated} = Admin.update_user(user, params)
+    %User{ updated | node: node} # Preload
   end
 
   defp basic_info(auth) do

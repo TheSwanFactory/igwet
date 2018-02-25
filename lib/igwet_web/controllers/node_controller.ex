@@ -4,7 +4,7 @@ defmodule IgwetWeb.NodeController do
   alias Igwet.Network
   alias Igwet.Network.Node
 
-  plug :require_auth
+  plug :require_admin
 
   def index(conn, _params) do
     nodes = Network.list_nodes()
