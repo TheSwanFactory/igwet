@@ -45,7 +45,8 @@ defmodule Igwet.Mixfile do
       {:cowboy, "~> 1.0"},
       {:ueberauth, "~> 0.4"},
       {:ueberauth_auth0, "~> 0.3"},
-      {:address_us, "~> 0.2.1"}
+      {:address_us, "~> 0.2.1"},
+      {:csv, "~> 2.0.0"}
     ]
   end
 
