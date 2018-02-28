@@ -11,6 +11,7 @@
 # and so on) as they will fail if something goes wrong.
 
 defmodule Igwet.Seeds do
+  require IEx;
   alias Igwet.Repo
   alias Igwet.Network
   alias Igwet.Network.Node
@@ -53,12 +54,26 @@ defmodule Igwet.Seeds do
   def create_node(row) do
     changeset = Node.changeset(%Node{}, row)
     Repo.insert!(changeset)
+    row
+  end
+
+  def create_edge(row, predicate) do
+    triple = %{
+      from: row[:key],
+      by: @seed_keys[predicate],
+      to: row[predicate]
+    }
+    IEx.pry
+    Repo.insert! edge_from_triple(triple)
+    row
   end
 
   def csv_create() do
     File.stream!(@seed_csv)
       |> CSV.decode!(headers: true)
       |> Enum.each(&create_node/1)
+      |> Enum.each(&create_edge(&1, :in))
+      |> Enum.each(&create_edge(&1, :type))
   end
 
   def create do
@@ -73,7 +88,8 @@ defmodule Igwet.Seeds do
 
   def reset do
     Repo.delete_all(Node)
-    csv_create()
+
+    create()
   end
 end
 
