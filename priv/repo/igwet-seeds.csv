@@ -1,0 +1,8 @@
+name,type,key,in,email,about,date,phone,url,address
+predicate,com.igwet.predicate,com.igwet.predicate,,,,,,,
+type,com.igwet.predicate,com.igwet.predicate.type,,,,,,,
+in,com.igwet.predicate,com.igwet.predicate.in,,,,,,,
+group,com.igwet.predicate.type,com.igwet.group,,,,,,,
+contact,com.igwet.predicate.type,com.igwet.contact,,,,,,,
+Site Administrators,com.igwet.group,com.igwet.group.Site-Administrators,,,,,,,
+Ernest Prabhakar,com.igwet.contact,com.igwet.contact.Ernest-Prabhakar,com.igwet.group.Site-Administrators,info@theswanfactory.com,,,,,
