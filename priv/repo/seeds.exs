@@ -17,6 +17,8 @@ defmodule Igwet.Seeds do
   alias Igwet.Network.Edge
 
   @seed_keys Application.get_env(:igwet, :seed_keys)
+  @priv_dir Application.app_dir(:igwet, "priv")
+  @seed_csv Path.absname("repo/igwet-seeds.csv", @priv_dir)
 
   @nodes [
     %Node{name: "type", key: @seed_keys[:type]},
@@ -48,9 +50,18 @@ defmodule Igwet.Seeds do
     }
   end
 
-  def reset do
-    Repo.delete_all(Node)
+  def create_node(row) do
+    changeset = Node.changeset(%Node{}, row)
+    Repo.insert!(changeset)
+  end
 
+  def csv_create() do
+    File.stream!(@seed_csv)
+      |> CSV.decode!(headers: true)
+      |> Enum.each(&create_node/1)
+  end
+
+  def create do
     Enum.each @nodes, fn node ->
       Repo.insert! node
     end
@@ -58,6 +69,11 @@ defmodule Igwet.Seeds do
     Enum.each @triples, fn triple ->
       Repo.insert! edge_from_triple(triple)
     end
+  end
+
+  def reset do
+    Repo.delete_all(Node)
+    csv_create()
   end
 end
 
