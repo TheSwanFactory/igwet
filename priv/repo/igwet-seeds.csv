@@ -1,8 +1,8 @@
-name,type,key,in,email,about,date,phone,url,address
-predicate,com.igwet.predicate,com.igwet.predicate,,,,,,,
-type,com.igwet.predicate,com.igwet.predicate.type,,,,,,,
-in,com.igwet.predicate,com.igwet.predicate.in,,,,,,,
-group,com.igwet.predicate.type,com.igwet.group,,,,,,,
-contact,com.igwet.predicate.type,com.igwet.contact,,,,,,,
-Site Administrators,com.igwet.group,com.igwet.group.Site-Administrators,,,,,,,
-Ernest Prabhakar,com.igwet.contact,com.igwet.contact.Ernest-Prabhakar,com.igwet.group.Site-Administrators,info@theswanfactory.com,,,,,
+name,key,type,in,email,about,date,phone,url,address
+predicate,com.igwet.predicate,,,,,,,,
+type,com.igwet.predicate.type,com.igwet.predicate,,,,,,,
+in,com.igwet.predicate.in,com.igwet.predicate,,,,,,,
+group,com.igwet.group,com.igwet.predicate.type,,,,,,,
+contact,com.igwet.contact,com.igwet.predicate.type,,,,,,,
+Site Administrators,com.igwet.group.Site-Administrators,com.igwet.group,,,,,,,
+Ernest Prabhakar,com.igwet.contact.Ernest-Prabhakar,com.igwet.contact,com.igwet.group.Site-Administrators,info@theswanfactory.com,,,,,
