@@ -6,22 +6,22 @@ defmodule Igwet.Network.Node do
   alias Igwet.Network.Edge
   alias Igwet.Network.Node
 
-    @primary_key {:id, :binary_id, autogenerate: true}
-    @derive {Phoenix.Param, key: :id}
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @derive {Phoenix.Param, key: :id}
 
-    schema "nodes" do
-    field :about, :string
-    field :date, :utc_datetime
-    field :email, :string
-    field :key, :string
-    field :meta, :string
-    field :name, :string
-    field :phone, :string
-    field :url, :string
+  schema "nodes" do
+    field(:about, :string)
+    field(:date, :utc_datetime)
+    field(:email, :string)
+    field(:key, :string)
+    field(:meta, :string)
+    field(:name, :string)
+    field(:phone, :string)
+    field(:url, :string)
 
-    belongs_to :address, Address
-    has_many :edges, Edge, foreign_key: :subject_id
-    has_one :user, User
+    belongs_to(:address, Address)
+    has_many(:edges, Edge, foreign_key: :subject_id)
+    has_one(:user, User)
 
     timestamps()
   end

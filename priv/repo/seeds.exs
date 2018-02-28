@@ -11,7 +11,6 @@
 # and so on) as they will fail if something goes wrong.
 
 defmodule Igwet.Seeds do
-  require IEx;
   alias Igwet.Repo
   alias Igwet.Network
   alias Igwet.Network.Node
@@ -63,7 +62,12 @@ defmodule Igwet.Seeds do
       by: @seed_keys[predicate],
       to: row[predicate]
     }
-    IEx.pry
+
+    IO.puts("~n create_edge ~n")
+
+    IO.inspect predicate
+    IO.inspect triple
+
     Repo.insert! edge_from_triple(triple)
     row
   end

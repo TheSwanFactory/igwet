@@ -4,7 +4,7 @@ defmodule IgwetWeb.UserController do
   alias Igwet.Admin
   alias Igwet.Admin.User
 
-  plug :require_admin
+  plug(:require_admin)
 
   def index(conn, _params) do
     users = Admin.list_users()
@@ -22,6 +22,7 @@ defmodule IgwetWeb.UserController do
         conn
         |> put_flash(:info, "User created successfully.")
         |> redirect(to: user_path(conn, :show, user))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -46,6 +47,7 @@ defmodule IgwetWeb.UserController do
         conn
         |> put_flash(:info, "User updated successfully.")
         |> redirect(to: user_path(conn, :show, user))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", user: user, changeset: changeset)
     end

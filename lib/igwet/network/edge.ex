@@ -7,9 +7,9 @@ defmodule Igwet.Network.Edge do
   @foreign_key_type Ecto.UUID
 
   schema "edges" do
-    belongs_to :subject, Node
-    belongs_to :predicate, Node
-    belongs_to :object, Node
+    belongs_to(:subject, Node)
+    belongs_to(:predicate, Node)
+    belongs_to(:object, Node)
 
     timestamps()
   end
@@ -17,6 +17,7 @@ defmodule Igwet.Network.Edge do
   @doc false
   def changeset(%Edge{} = edge, attrs) do
     relations = [:subject_id, :predicate_id, :object_id]
+
     edge
     |> cast(attrs, relations)
     |> validate_required(relations)
