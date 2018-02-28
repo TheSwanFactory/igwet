@@ -11,6 +11,7 @@ defmodule Igwet.Network.Node do
 
     schema "nodes" do
     field :about, :string
+    field :date, :utc_datetime
     field :email, :string
     field :key, :string
     field :meta, :string
@@ -28,7 +29,7 @@ defmodule Igwet.Network.Node do
   @doc false
   def changeset(%Node{} = node, attrs) do
     node
-    |> cast(attrs, [:about, :email, :key, :meta, :name, :phone, :url])
+    |> cast(attrs, [:about, :date, :email, :key, :meta, :name, :phone, :url])
     |> validate_required([:key, :name])
     |> unique_constraint(:key)
   end

@@ -3,8 +3,6 @@ defmodule IgwetWeb.ControllerHelper do
   import Phoenix.Controller
   alias IgwetWeb.ErrorView
   alias Igwet.Admin
-  alias Igwet.Admin.User
-  alias Igwet.Network
 
   def get_user(conn) do
     case Mix.env do
