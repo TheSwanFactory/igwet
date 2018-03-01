@@ -1,7 +1,7 @@
 defmodule IgwetWeb.AuthController do
   use IgwetWeb, :controller
 
-  plug Ueberauth
+  plug(Ueberauth)
 
   alias Igwet.Admin.User.FromAuth
 
@@ -25,6 +25,7 @@ defmodule IgwetWeb.AuthController do
         |> put_flash(:info, "Successfully authenticated as " <> user.name <> ".")
         |> put_session(:current_user, user)
         |> redirect(to: "/")
+
       {:error, reason} ->
         conn
         |> put_flash(:error, reason)

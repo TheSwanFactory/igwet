@@ -11,34 +11,16 @@
 # and so on) as they will fail if something goes wrong.
 
 defmodule Igwet.Seeds do
+  require IEx; #IEx.pry
   alias Igwet.Repo
   alias Igwet.Network
   alias Igwet.Network.Node
   alias Igwet.Network.Edge
 
   @seed_keys Application.get_env(:igwet, :seed_keys)
+  @priv_dir Application.app_dir(:igwet, "priv")
+  @seed_csv Path.absname("repo/igwet-seeds.csv", @priv_dir)
 
-  @nodes [
-    %Node{name: "type", key: @seed_keys[:type]},
-    %Node{name: "in", key: @seed_keys[:in]},
-    %Node{
-      name: "Site Administrators",
-      key: @seed_keys[:admin_group]
-    },
-    %Node{
-      name: "Ernest Prabhakar",
-      email: "info@theswanfactory.com",
-      key: @seed_keys[:superuser]
-    }
-  ]
-
-  @triples [
-    %{
-      from: @seed_keys[:superuser],
-      by: @seed_keys[:in],
-      to: @seed_keys[:admin_group]
-    }
-  ]
 
   def edge_from_triple(triple) do
     %Edge{
@@ -48,16 +30,35 @@ defmodule Igwet.Seeds do
     }
   end
 
-  def reset do
-    Repo.delete_all(Node)
+  def create_node(row) do
+    changeset = Node.changeset(%Node{}, row)
+    Repo.insert!(changeset)
+    create_edge(row, :in)
+    create_edge(row, :type)
+  end
 
-    Enum.each @nodes, fn node ->
-      Repo.insert! node
-    end
-
-    Enum.each @triples, fn triple ->
+  def create_edge(row, predicate) do
+    object = row[to_string predicate]
+    if object != "" do
+      triple = %{
+        from: row["key"],
+        by: @seed_keys[predicate],
+        to: object
+      }
+      IEx.pry
       Repo.insert! edge_from_triple(triple)
     end
+  end
+
+  def csv_create() do
+    File.stream!(@seed_csv)
+      |> CSV.decode!(headers: true)
+      |> Enum.each(&create_node/1)
+  end
+
+  def reset do
+    Repo.delete_all(Node)
+    csv_create()
   end
 end
 

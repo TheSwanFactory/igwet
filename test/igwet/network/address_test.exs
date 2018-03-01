@@ -6,9 +6,37 @@ defmodule Igwet.NetworkTest.Address do
   describe "addresses" do
     alias Igwet.Network.Address
 
-    @valid_attrs %{city: "some city", country: "some country", house_number: "some house_number", name: "some name", postcode: "some postcode", road_base: "some road", state: "some state",  unit_base: "some unit_base", unit_type: "some unit_type"}
-    @update_attrs %{city: "next city", country: "next country", house_number: "next house_number", name: "next name", postcode: "next postcode", road_base: "next road", state: "next state",  unit_base: "next unit_base", unit_type: "next unit_type"}
-    @invalid_attrs %{city: nil, name: nil, postcode: nil, state: nil, state_district: nil, suburb: nil, world_region: nil}
+    @valid_attrs %{
+      city: "some city",
+      country: "some country",
+      house_number: "some house_number",
+      name: "some name",
+      postcode: "some postcode",
+      road_base: "some road",
+      state: "some state",
+      unit_base: "some unit_base",
+      unit_type: "some unit_type"
+    }
+    @update_attrs %{
+      city: "next city",
+      country: "next country",
+      house_number: "next house_number",
+      name: "next name",
+      postcode: "next postcode",
+      road_base: "next road",
+      state: "next state",
+      unit_base: "next unit_base",
+      unit_type: "next unit_type"
+    }
+    @invalid_attrs %{
+      city: nil,
+      name: nil,
+      postcode: nil,
+      state: nil,
+      state_district: nil,
+      suburb: nil,
+      world_region: nil
+    }
 
     def address_fixture(attrs \\ %{}) do
       {:ok, address} =

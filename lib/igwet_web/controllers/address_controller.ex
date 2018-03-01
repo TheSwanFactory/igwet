@@ -4,7 +4,7 @@ defmodule IgwetWeb.AddressController do
   alias Igwet.Network
   alias Igwet.Network.Address
 
-  plug :require_admin
+  plug(:require_admin)
 
   def index(conn, _params) do
     addresses = Network.list_addresses()
@@ -22,6 +22,7 @@ defmodule IgwetWeb.AddressController do
         conn
         |> put_flash(:info, "Address created successfully.")
         |> redirect(to: address_path(conn, :show, address))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -46,6 +47,7 @@ defmodule IgwetWeb.AddressController do
         conn
         |> put_flash(:info, "Address updated successfully.")
         |> redirect(to: address_path(conn, :show, address))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", address: address, changeset: changeset)
     end

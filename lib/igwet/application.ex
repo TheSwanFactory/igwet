@@ -11,7 +11,7 @@ defmodule Igwet.Application do
       # Start the Ecto repository
       supervisor(Igwet.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(IgwetWeb.Endpoint, []),
+      supervisor(IgwetWeb.Endpoint, [])
       # Start your own worker by calling: Igwet.Worker.start_link(arg1, arg2, arg3)
       # worker(Igwet.Worker, [arg1, arg2, arg3]),
     ]
