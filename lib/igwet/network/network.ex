@@ -145,11 +145,13 @@ defmodule Igwet.Network do
   """
 
   def get_first_node_named!(name) do
-    q = from Node,
+    from(
+      Node,
       where: [name: ^name],
       order_by: [asc: :inserted_at],
       limit: 1
-    Repo.one!(q)
+    )
+    |> Repo.one!()
   end
 
   @doc """

@@ -43,7 +43,6 @@ defmodule Igwet.AdminTest do
     end
 
     test "is_admin" do
-
       user = user_fixture()
       assert nil == Admin.is_admin(user)
       assert true == Admin.is_admin(Admin.test_admin_user(true))

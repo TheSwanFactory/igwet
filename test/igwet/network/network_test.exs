@@ -5,6 +5,7 @@ defmodule Igwet.NetworkTest do
 
   setup do
     admin_name = Application.get_env(:igwet, :admin_user)
+
     {
       :ok,
       in: Network.get_first_node_named!("in"),
@@ -14,7 +15,6 @@ defmodule Igwet.NetworkTest do
   end
 
   describe "seeds" do
-
     test "node_is_admin?", context do
       assert Network.node_is_admin?(context[:admin_node])
     end
