@@ -144,6 +144,29 @@ defmodule Igwet.Network do
   def get_node!(id), do: Repo.get!(Node, id)
 
   @doc """
+  Gets the first node with a given 'name'
+
+  Raises `Ecto.NoResultsError` if the Node does not exist.
+
+  ## Examples
+
+      iex> Network.get_first_node_named!("in")
+      %Node{}
+
+      iex> Network.get_first_node_named!("out")
+      ** (Ecto.NoResultsError)
+
+  """
+
+  def get_first_node_named!(name) do
+    q = from Node,
+      where: [name: ^name],
+      order_by: [asc: :inserted_at],
+      limit: 1
+    Repo.one!(q)
+  end
+
+  @doc """
   Gets a single node based on its unique key
 
   Raises `Ecto.NoResultsError` if the Node does not exist.
