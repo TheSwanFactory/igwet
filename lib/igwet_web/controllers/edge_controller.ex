@@ -4,7 +4,7 @@ defmodule IgwetWeb.EdgeController do
   alias Igwet.Network
   alias Igwet.Network.Edge
 
-  plug :require_admin
+  plug(:require_admin)
 
   def index(conn, _params) do
     edges = Network.list_edges()
@@ -22,6 +22,7 @@ defmodule IgwetWeb.EdgeController do
         conn
         |> put_flash(:info, "Edge created successfully.")
         |> redirect(to: edge_path(conn, :show, edge))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -46,6 +47,7 @@ defmodule IgwetWeb.EdgeController do
         conn
         |> put_flash(:info, "Edge updated successfully.")
         |> redirect(to: edge_path(conn, :show, edge))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", edge: edge, changeset: changeset)
     end

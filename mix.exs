@@ -4,11 +4,11 @@ defmodule Igwet.Mixfile do
   def project do
     [
       app: :igwet,
-      version: "0.0.2",
+      version: "0.0.12",
       elixir: "~> 1.5",
-      elixirc_paths: elixirc_paths(Mix.env),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers,
-      start_permanent: Mix.env == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
     ]
@@ -26,7 +26,7 @@ defmodule Igwet.Mixfile do
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
   #
@@ -45,7 +45,8 @@ defmodule Igwet.Mixfile do
       {:cowboy, "~> 1.0"},
       {:ueberauth, "~> 0.4"},
       {:ueberauth_auth0, "~> 0.3"},
-      {:address_us, "~> 0.2.1"}
+      {:address_us, "~> 0.2.1"},
+      {:csv, "~> 2.0.0"}
     ]
   end
 
@@ -59,7 +60,7 @@ defmodule Igwet.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate","run priv/repo/seeds.exs", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "run priv/repo/seeds.exs", "test"]
     ]
   end
 end

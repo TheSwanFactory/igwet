@@ -60,14 +60,17 @@ defmodule Igwet.Network do
 
   """
   def edge_exists?(subject, predicate, object) do
-    edge = Edge |> where([e],
-      e.subject_id == ^subject.id and
-      e.predicate_id == ^predicate.id and
-      e.object_id == ^object.id
-    ) |> Repo.one()
+    edge =
+      Edge
+      |> where(
+        [e],
+        e.subject_id == ^subject.id and e.predicate_id == ^predicate.id and
+          e.object_id == ^object.id
+      )
+      |> Repo.one()
+
     edge != nil
   end
-
 
   @doc """
   Return all group nodes this node is in.
@@ -80,11 +83,14 @@ defmodule Igwet.Network do
   """
   def node_groups(node) do
     in_node = seed_node(:in)
-    edges = Edge
-    |> where([e], e.subject_id == ^node.id and e.predicate_id == ^in_node.id)
-    |> preload([:object])
-    |> Repo.all()
-    Enum.map(edges, &(&1.object))
+
+    edges =
+      Edge
+      |> where([e], e.subject_id == ^node.id and e.predicate_id == ^in_node.id)
+      |> preload([:object])
+      |> Repo.all()
+
+    Enum.map(edges, & &1.object)
   end
 
   @doc """
@@ -98,11 +104,14 @@ defmodule Igwet.Network do
   """
   def node_members(node) do
     in_node = seed_node(:in)
-    edges = Edge
-    |> where([e], e.object_id == ^node.id and e.predicate_id == ^in_node.id)
-    |> preload([:subject])
-    |> Repo.all()
-    Enum.map(edges, &(&1.subject))
+
+    edges =
+      Edge
+      |> where([e], e.object_id == ^node.id and e.predicate_id == ^in_node.id)
+      |> preload([:subject])
+      |> Repo.all()
+
+    Enum.map(edges, & &1.subject)
   end
 
   @doc """

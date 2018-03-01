@@ -78,7 +78,6 @@ defmodule Igwet.Admin do
     |> Repo.insert()
   end
 
-
   @doc """
   Return user, creating it if it does not exist.
 
@@ -92,9 +91,11 @@ defmodule Igwet.Admin do
   """
   def find_or_create_user(attrs) do
     query = User |> where([u], u.authid == ^attrs.authid)
-    if !Repo.one(query)  do
+
+    if !Repo.one(query) do
       create_user(attrs)
     end
+
     Repo.one(query)
   end
 

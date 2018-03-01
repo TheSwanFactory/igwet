@@ -6,8 +6,20 @@ defmodule Igwet.NetworkTest.Node do
   describe "nodes" do
     alias Igwet.Network.Node
 
-    @valid_attrs %{about: "some about", email: "some email", key: "some key", name: "some name", phone: "some phone"}
-    @update_attrs %{about: "next about", email: "next email", key: "next key", name: "next name", phone: "next phone"}
+    @valid_attrs %{
+      about: "some about",
+      email: "some email",
+      key: "some key",
+      name: "some name",
+      phone: "some phone"
+    }
+    @update_attrs %{
+      about: "next about",
+      email: "next email",
+      key: "next key",
+      name: "next name",
+      phone: "next phone"
+    }
     @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
 
     def node_fixture(attrs \\ %{}) do
@@ -70,5 +82,4 @@ defmodule Igwet.NetworkTest.Node do
       assert %Ecto.Changeset{} = Network.change_node(node)
     end
   end
-
 end

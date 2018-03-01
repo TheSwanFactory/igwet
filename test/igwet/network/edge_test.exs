@@ -38,7 +38,7 @@ defmodule Igwet.NetworkTest.Edge do
     test "create_edge/1 with valid data creates a edge" do
       attrs = edge_attrs()
       assert {:ok, %Edge{} = edge} = Network.create_edge(attrs)
-      subject = assoc(edge, :subject) |> Repo.one
+      subject = assoc(edge, :subject) |> Repo.one()
       assert subject.id == attrs.subject_id
     end
 
@@ -52,8 +52,8 @@ defmodule Igwet.NetworkTest.Edge do
       assert {:ok, edge2} = Network.update_edge(edge, update_attrs)
       assert %Edge{} = edge2
 
-      subject = assoc(edge, :subject) |> Repo.one
-      subject2 = assoc(edge2, :subject) |> Repo.one
+      subject = assoc(edge, :subject) |> Repo.one()
+      subject2 = assoc(edge2, :subject) |> Repo.one()
       assert subject != subject2
       assert %{name: "from.update"} = subject2
     end

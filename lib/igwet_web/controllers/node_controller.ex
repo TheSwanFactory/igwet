@@ -4,7 +4,7 @@ defmodule IgwetWeb.NodeController do
   alias Igwet.Network
   alias Igwet.Network.Node
 
-  plug :require_admin
+  plug(:require_admin)
 
   def index(conn, _params) do
     nodes = Network.list_nodes()
@@ -22,6 +22,7 @@ defmodule IgwetWeb.NodeController do
         conn
         |> put_flash(:info, "Node created successfully.")
         |> redirect(to: node_path(conn, :show, node))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -48,6 +49,7 @@ defmodule IgwetWeb.NodeController do
         conn
         |> put_flash(:info, "Node updated successfully.")
         |> redirect(to: node_path(conn, :show, node))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", node: node, changeset: changeset)
     end

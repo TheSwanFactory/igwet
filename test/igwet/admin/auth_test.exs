@@ -1,5 +1,5 @@
 defmodule Igwet.AuthTest do
-  #require IEx; #IEx.pry
+  # require IEx; #IEx.pry
   use Igwet.DataCase
   doctest Igwet.Admin.User.FromAuth
 

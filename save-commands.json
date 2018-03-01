@@ -1,5 +1,6 @@
 {
     "commands": [
+        "mix.exs : mix format mix.exs lib/**/*.{ex,exs} test/**/*.{ex,exs}",
         "lib/**/*.ex : mix test --stale",
         "test/**/*.exs : mix test --stale"
     ]

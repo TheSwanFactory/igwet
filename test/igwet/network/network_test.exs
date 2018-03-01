@@ -1,10 +1,9 @@
 defmodule Igwet.NetworkTest do
   use Igwet.DataCase
   alias Igwet.Network
-  #doctest Igwet.Network
+  # doctest Igwet.Network
 
   describe "seeds" do
-
     test "seed_node" do
       keys = Application.get_env(:igwet, :seed_keys)
       user = Network.seed_node(:superuser)
@@ -51,5 +50,4 @@ defmodule Igwet.NetworkTest do
       assert first.name == user.name
     end
   end
-
 end
