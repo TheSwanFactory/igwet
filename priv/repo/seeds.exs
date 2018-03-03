@@ -30,8 +30,7 @@ defmodule Igwet.Seeds do
   end
 
   def create_node(row) do
-    changeset = Node.changeset(%Node{}, row)
-    Repo.insert!(changeset)
+    Network.create_node(row)
     create_edge(row, :in)
     create_edge(row, :type)
   end
