@@ -45,8 +45,8 @@ defmodule Igwet.AdminTest do
     test "is_admin" do
       user = user_fixture()
       assert nil == Admin.is_admin(user)
-      assert true == Admin.is_admin(Admin.test_user(:superuser))
-      assert false == Admin.is_admin(Admin.test_user(:in))
+      assert true == Admin.is_admin(Admin.test_admin_user(true))
+      assert false == Admin.is_admin(Admin.test_admin_user(false))
     end
 
     test "list_users/0 returns all users" do

@@ -3,51 +3,49 @@ defmodule Igwet.NetworkTest do
   alias Igwet.Network
   # doctest Igwet.Network
 
+  setup do
+    admin_name = Application.get_env(:igwet, :admin_user)
+
+    {
+      :ok,
+      in: Network.get_first_node_named!("in"),
+      admin_group: Network.get_first_node_named!("admin"),
+      admin_node: Network.get_first_node_named!(admin_name)
+    }
+  end
+
   describe "seeds" do
-    test "seed_node" do
-      keys = Application.get_env(:igwet, :seed_keys)
-      user = Network.seed_node(:superuser)
-      assert user.key == keys[:superuser]
+    test "node_is_admin?", context do
+      assert Network.node_is_admin?(context[:admin_node])
     end
 
-    test "node_is_admin?" do
-      user = Network.seed_node(:superuser)
-      assert Network.node_is_admin?(user)
+    test "node_in_group?", context do
+      assert Network.node_in_group?(context[:admin_node], context[:admin_group])
+      assert !Network.node_in_group?(context[:admin_group], context[:admin_node])
     end
 
-    test "node_in_group?" do
-      user = Network.seed_node(:superuser)
-      group = Network.seed_node(:admin_group)
-      assert Network.node_in_group?(user, group)
-      assert !Network.node_in_group?(group, user)
+    test "edge_exists?", context do
+      user = context[:admin_node]
+      is_in = context[:in]
+      group = context[:admin_group]
+      assert Network.edge_exists?(user, is_in, group)
+      assert !Network.edge_exists?(group, is_in, user)
     end
 
-    test "edge_exists?" do
-      user = Network.seed_node(:superuser)
-      member = Network.seed_node(:in)
-      group = Network.seed_node(:admin_group)
-      assert Network.edge_exists?(user, member, group)
-      assert !Network.edge_exists?(group, member, user)
-    end
-
-    test "node_groups" do
-      user = Network.seed_node(:superuser)
-      group = Network.seed_node(:admin_group)
-      groups = Network.node_groups(user)
+    test "node_groups", context do
+      groups = Network.node_groups(context[:admin_node])
       assert Enum.count(groups) == 1
 
       first = List.first(groups)
-      assert first.name == group.name
+      assert first.name == context[:admin_group].name
     end
 
-    test "node_members" do
-      user = Network.seed_node(:superuser)
-      group = Network.seed_node(:admin_group)
-      members = Network.node_members(group)
+    test "node_members", context do
+      members = Network.node_members(context[:admin_group])
       assert Enum.count(members) == 1
 
       first = List.first(members)
-      assert first.name == user.name
+      assert first.name == context[:admin_node].name
     end
   end
 end
