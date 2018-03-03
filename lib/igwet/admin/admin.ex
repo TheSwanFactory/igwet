@@ -8,8 +8,13 @@ defmodule Igwet.Admin do
   alias Igwet.Admin.User
   alias Igwet.Network
 
-  def test_user(key) do
-    %User{name: "Test #{key} User", node: Network.seed_node(key)}
+  def test_admin_user(is_admin) do
+    if is_admin do
+      admin_name = Application.get_env(:igwet, :admin_user)
+      %User{name: "Test Admin User", node: Network.get_first_node_named!(admin_name)}
+    else
+      %User{name: "Test Non-Admin User", node: Network.get_first_node_named!("group")}
+    end
   end
 
   @doc """

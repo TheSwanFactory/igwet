@@ -9,20 +9,6 @@ defmodule Igwet.Network do
   alias Igwet.Network.Edge
 
   @doc """
-  Return one of the pre-created seed nodes.
-
-  ## Examples
-
-      iex> seed_node(:in)
-      %Node{}
-
-  """
-  def seed_node(key) do
-    keys = Application.get_env(:igwet, :seed_keys)
-    get_node_by_key!(keys[key])
-  end
-
-  @doc """
   Check if node is in site admin group.
 
   ## Examples
@@ -32,7 +18,7 @@ defmodule Igwet.Network do
 
   """
   def node_is_admin?(node) do
-    group = seed_node(:admin_group)
+    group = get_first_node_named!("admin")
     node_in_group?(node, group)
   end
 
@@ -46,7 +32,7 @@ defmodule Igwet.Network do
 
   """
   def node_in_group?(node, group) do
-    in_node = seed_node(:in)
+    in_node = get_first_node_named!("in")
     edge_exists?(node, in_node, group)
   end
 
@@ -82,7 +68,7 @@ defmodule Igwet.Network do
 
   """
   def node_groups(node) do
-    in_node = seed_node(:in)
+    in_node = get_first_node_named!("in")
 
     edges =
       Edge
@@ -103,7 +89,7 @@ defmodule Igwet.Network do
 
   """
   def node_members(node) do
-    in_node = seed_node(:in)
+    in_node = get_first_node_named!("in")
 
     edges =
       Edge
@@ -142,6 +128,31 @@ defmodule Igwet.Network do
 
   """
   def get_node!(id), do: Repo.get!(Node, id)
+
+  @doc """
+  Gets the first node with a given 'name'
+
+  Raises `Ecto.NoResultsError` if the Node does not exist.
+
+  ## Examples
+
+      iex> Network.get_first_node_named!("in")
+      %Node{}
+
+      iex> Network.get_first_node_named!("out")
+      ** (Ecto.NoResultsError)
+
+  """
+
+  def get_first_node_named!(name) do
+    from(
+      Node,
+      where: [name: ^name],
+      order_by: [asc: :inserted_at],
+      limit: 1
+    )
+    |> Repo.one!()
+  end
 
   @doc """
   Gets a single node based on its unique key

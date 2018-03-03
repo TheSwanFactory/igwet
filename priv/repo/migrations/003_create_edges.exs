@@ -3,15 +3,15 @@ defmodule Igwet.Repo.Migrations.CreateEdges do
 
   def change do
     create table(:edges) do
-      add :subject_id, references(:nodes, on_delete: :delete_all, type: :uuid)
-      add :predicate_id, references(:nodes, on_delete: :delete_all, type: :uuid)
-      add :object_id, references(:nodes, on_delete: :delete_all, type: :uuid)
+      add(:subject_id, references(:nodes, on_delete: :delete_all, type: :uuid))
+      add(:predicate_id, references(:nodes, on_delete: :delete_all, type: :uuid))
+      add(:object_id, references(:nodes, on_delete: :delete_all, type: :uuid))
 
       timestamps()
     end
 
-    create index(:edges, [:subject_id])
-    create index(:edges, [:predicate_id])
-    create index(:edges, [:object_id])
+    create(index(:edges, [:subject_id]))
+    create(index(:edges, [:predicate_id]))
+    create(index(:edges, [:object_id]))
   end
 end

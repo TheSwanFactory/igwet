@@ -3,9 +3,9 @@ defmodule Igwet.Repo.Migrations.CategorizeAddresses do
 
   def change do
     alter table(:addresses) do
-      add :category_id, references(:nodes, on_delete: :nothing, type: :uuid)
+      add(:category_id, references(:nodes, on_delete: :nothing, type: :uuid))
     end
 
-    create index(:addresses, [:category_id])
+    create(index(:addresses, [:category_id]))
   end
 end
