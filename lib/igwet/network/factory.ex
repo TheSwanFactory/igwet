@@ -28,6 +28,28 @@ defmodule Igwet.Network.Factory do
   end
 
   @doc """
+  Converts url into a reverse-dns name
+
+  ## Examples
+      iex> alias Igwet.Network.Factory
+      iex> Factory.key_from_url("https://www.igwet.com")
+      ".com.igwet"
+
+  """
+
+  def key_from_url(string) do
+    %{host: host} = URI.parse(string)
+    host
+    |> String.split(".")
+    |> Enum.reject(fn(w) -> w == "www" end)
+    |> Enum.concat([" "])
+    |> Enum.reverse
+    |> Enum.join(".")
+    |> String.trim
+  end
+
+
+  @doc """
   Creates a node of a given type, generating key if necessary
 
   ## Examples
