@@ -3,11 +3,10 @@ defmodule Igwet.Network.Factory do
   Helper methods for creating Nodes and Edges using appropriate keys
   """
 
-  import Ecto.Query, warn: false
-  alias Igwet.Repo, warn: false
-  alias Igwet.Network, warn: false
-  alias Igwet.Network.Node, warn: false
-  alias Igwet.Network.Edge, warn: false
+  #require IEx; #IEx.pry
+  alias Igwet.Repo
+  alias Igwet.Network
+  alias Igwet.Network.Edge
 
   @doc """
   Converts an arbitrary string into a suitable key
@@ -48,6 +47,18 @@ defmodule Igwet.Network.Factory do
     |> String.trim
   end
 
+  @doc """
+  Creates edge using keyword for predicate
+
+  """
+
+  def create_relation!(subject, object, keyword) do
+    Repo.insert! %Edge{
+      subject: subject,
+      object: object,
+      predicate: Network.get_first_node_named!(keyword)
+    }
+  end
 
   @doc """
   Creates a node of a given type, generating key if necessary
@@ -77,16 +88,12 @@ defmodule Igwet.Network.Factory do
     in_node = if Map.has_key?(attrs, :in) do
       Network.get_first_node_named!(attrs.in)
     end
-    in_key = if in_node do
-      in_node.key
-    else
-      "sys"
-    end
+    in_key = if in_node, do: in_node.key, else: "sys"
     key = "#{in_key}+#{key_from_string(attrs.name)}"
     attrs = Map.put attrs, :key, key
     {:ok, node} = Network.create_node(attrs)
-    if in_node do
-    end
+    if in_node, do: create_relation!(node, in_node, "in")
+    if type_node, do: create_relation!(node, type_node, "type")
     node
   end
 
