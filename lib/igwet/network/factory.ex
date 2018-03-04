@@ -55,15 +55,27 @@ defmodule Igwet.Network.Factory do
   ## Examples
 
       iex> alias Igwet.Network.Factory
-      iex> Factory.create_typed_node!(%{key: "none"})
-      {:error,  "missing type"}
+      iex> Factory.create_typed_node!(%{})
+      ** (KeyError) key :name not found in: %{}
 
 
   """
   def create_typed_node!(attrs \\ %{}) do
-    if !Map.has_key?(attrs, :type) do
-      {:error,  "missing type"}
+    type_node = if Map.has_key?(attrs, :type) do
+      Network.get_first_node_named!(attrs.type)
     end
+    in_node = if Map.has_key?(attrs, :in) do
+      Network.get_first_node_named!(attrs.in)
+    end
+    in_key = if in_node do
+      in_node.key
+    else
+      "sys"
+    end
+    key = "#{in_key}+#{key_from_string(attrs.name)}"
+    attrs = %{attrs | key: key}
+    {:ok, node} = Network.create_node(attrs)
+    node
   end
 
 end
