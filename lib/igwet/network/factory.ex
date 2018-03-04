@@ -55,20 +55,22 @@ defmodule Igwet.Network.Factory do
   ## Examples
 
       iex> alias Igwet.Network.Factory
-      iex> Factory.create_typed_node!(%{})
+      iex> Factory.create_child_node!(%{})
       ** (KeyError) key :name not found in: %{}
 
       iex> alias Igwet.Network.Factory
-      iex> node = Factory.create_typed_node!(%{name: "me"})
+      iex> node = Factory.create_child_node!(%{name: "me"})
       iex> node.key
       "sys+me"
-      iex> next = Factory.create_typed_node!(%{name: "u", in: "me"})
+      iex> next = Factory.create_child_node!(%{name: "u", in: "me"})
       iex> next.key
       "sys+me+u"
+      iex> Igwet.Network.node_in_group?(next, node)
+      true
 
 
   """
-  def create_typed_node!(attrs \\ %{}) do
+  def create_child_node!(attrs \\ %{}) do
     type_node = if Map.has_key?(attrs, :type) do
       Network.get_first_node_named!(attrs.type)
     end
@@ -83,6 +85,8 @@ defmodule Igwet.Network.Factory do
     key = "#{in_key}+#{key_from_string(attrs.name)}"
     attrs = Map.put attrs, :key, key
     {:ok, node} = Network.create_node(attrs)
+    if in_node do
+    end
     node
   end
 
