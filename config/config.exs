@@ -9,13 +9,7 @@ use Mix.Config
 config :igwet,
   ecto_repos: [Igwet.Repo],
   admin_key: "com.igwet",
-  admin_user: "Ernest Prabhakar",
-  seed_keys: [
-    type: "com.igwet.predicate.type",
-    in: "com.igwet.predicate.in",
-    admin_group: "com.igwet.group.Site-Administrators",
-    superuser: "com.igwet.contact.Ernest-Prabhakar"
-  ]
+  admin_user: "operator"
 
 # Configures the endpoint
 config :igwet, IgwetWeb.Endpoint,
