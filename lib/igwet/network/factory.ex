@@ -3,7 +3,7 @@ defmodule Igwet.Network.Factory do
   Helper methods for creating Nodes and Edges using appropriate keys
   """
 
-  #require IEx; #IEx.pry
+  # require IEx; #IEx.pry
   alias Igwet.Repo
   alias Igwet.Network
   alias Igwet.Network.Edge
@@ -20,8 +20,8 @@ defmodule Igwet.Network.Factory do
 
   def key_from_string(string) do
     string
-    |> String.trim
-    |> String.downcase
+    |> String.trim()
+    |> String.downcase()
     |> String.replace(~r/\W+/, "_")
     |> String.trim("_")
   end
@@ -38,13 +38,14 @@ defmodule Igwet.Network.Factory do
 
   def key_from_url(string) do
     %{host: host} = URI.parse(string)
+
     host
     |> String.split(".")
-    |> Enum.reject(fn(w) -> w == "www" end)
+    |> Enum.reject(fn w -> w == "www" end)
     |> Enum.concat([" "])
-    |> Enum.reverse
+    |> Enum.reverse()
     |> Enum.join(".")
-    |> String.trim
+    |> String.trim()
   end
 
   @doc """
@@ -58,9 +59,8 @@ defmodule Igwet.Network.Factory do
   """
 
   def key_from_attrs(attrs) do
-    if (Map.has_key?(attrs, :type) and Map.has_key?(attrs, :url)) and
-       attrs.type == "host" do
-         key_from_url(attrs.url)
+    if Map.has_key?(attrs, :type) and Map.has_key?(attrs, :url) and attrs.type == "host" do
+      key_from_url(attrs.url)
     else
       key_from_string(attrs.name)
     end
@@ -72,11 +72,11 @@ defmodule Igwet.Network.Factory do
   """
 
   def create_relation!(subject, object, keyword) do
-    Repo.insert! %Edge{
+    Repo.insert!(%Edge{
       subject: subject,
       object: object,
       predicate: Network.get_first_node_named!(keyword)
-    }
+    })
   end
 
   @doc """
@@ -101,19 +101,22 @@ defmodule Igwet.Network.Factory do
 
   """
   def create_child_node!(attrs \\ %{}) do
-    type_node = if Map.has_key?(attrs, :type) do
-      Network.get_first_node_named!(attrs.type)
-    end
-    in_node = if Map.has_key?(attrs, :in) do
-      Network.get_first_node_named!(attrs.in)
-    end
+    type_node =
+      if Map.has_key?(attrs, :type) do
+        Network.get_first_node_named!(attrs.type)
+      end
+
+    in_node =
+      if Map.has_key?(attrs, :in) do
+        Network.get_first_node_named!(attrs.in)
+      end
+
     in_key = if in_node, do: in_node.key, else: "sys"
     key = "#{in_key}+#{key_from_attrs(attrs)}"
-    attrs = Map.put attrs, :key, key
+    attrs = Map.put(attrs, :key, key)
     {:ok, node} = Network.create_node(attrs)
     if in_node, do: create_relation!(node, in_node, "in")
     if type_node, do: create_relation!(node, type_node, "type")
     node
   end
-
 end

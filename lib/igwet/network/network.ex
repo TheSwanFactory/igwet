@@ -204,20 +204,24 @@ defmodule Igwet.Network do
   """
   def create_typed_node!(attrs \\ %{}) do
     %{key: key, type: type} = attrs
-    if (type == nil) do
-      {:error,  %Ecto.Changeset{}}
+
+    if type == nil do
+      {:error, %Ecto.Changeset{}}
     else
       type_node = get_first_node_named!(type)
-      new_attrs = if (key == nil) do
-        type_key = type_node.key
-        name_key = key_from_string(attrs["name"])
-        key = "#{type_key}.#{name_key}"
-         %{attrs | key: key}
-      else
-        attrs
-      end
+
+      new_attrs =
+        if key == nil do
+          type_key = type_node.key
+          name_key = key_from_string(attrs["name"])
+          key = "#{type_key}.#{name_key}"
+          %{attrs | key: key}
+        else
+          attrs
+        end
+
       {:ok, node} = create_node(new_attrs)
-      node    
+      node
     end
   end
 

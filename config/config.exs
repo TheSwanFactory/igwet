@@ -32,7 +32,7 @@ config :logger, :console,
 # Configures Ueberauth
 config :ueberauth, Ueberauth,
   providers: [
-    auth0: { Ueberauth.Strategy.Auth0, [] },
+    auth0: {Ueberauth.Strategy.Auth0, []}
   ]
 
 # Configures Ueberauth's Auth0 auth provider
@@ -43,4 +43,4 @@ config :ueberauth, Ueberauth.Strategy.Auth0.OAuth,
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"
