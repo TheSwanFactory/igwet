@@ -48,6 +48,25 @@ defmodule Igwet.Network.Factory do
   end
 
   @doc """
+  Generates appropriate key from list of attributes
+
+  ## Examples
+      iex> alias Igwet.Network.Factory
+      iex> Factory.key_from_attrs(%{name: "me", url: "https://www.igwet.com", type: "host"})
+      ".com.igwet"
+
+  """
+
+  def key_from_attrs(attrs) do
+    if (Map.has_key?(attrs, :type) and Map.has_key?(attrs, :url)) and
+       attrs.type == "host" do
+         key_from_url(attrs.url)
+    else
+      key_from_string(attrs.name)
+    end
+  end
+
+  @doc """
   Creates edge using keyword for predicate
 
   """
@@ -89,7 +108,7 @@ defmodule Igwet.Network.Factory do
       Network.get_first_node_named!(attrs.in)
     end
     in_key = if in_node, do: in_node.key, else: "sys"
-    key = "#{in_key}+#{key_from_string(attrs.name)}"
+    key = "#{in_key}+#{key_from_attrs(attrs)}"
     attrs = Map.put attrs, :key, key
     {:ok, node} = Network.create_node(attrs)
     if in_node, do: create_relation!(node, in_node, "in")
