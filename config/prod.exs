@@ -38,7 +38,10 @@ config :libcluster,
       strategy: Cluster.Strategy.Kubernetes,
       config: [
         kubernetes_selector: "${LIBCLUSTER_KUBERNETES_SELECTOR}",
-        kubernetes_node_basename: "${LIBCLUSTER_KUBERNETES_NODE_BASENAME}"]]]
+        kubernetes_node_basename: "${LIBCLUSTER_KUBERNETES_NODE_BASENAME}"
+      ]
+    ]
+  ]
 
 # ## SSL Support
 #

@@ -193,6 +193,43 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Creates a node of a given type, generating key if necessary
+
+  ## Examples
+
+      iex> create_typed_node(%{field: value})
+      {:ok, %Node{}}
+
+
+  """
+  def create_typed_node!(attrs \\ %{}) do
+    %{key: key, type: type} = attrs
+
+    if type == nil do
+      {:error, %Ecto.Changeset{}}
+    else
+      type_node = get_first_node_named!(type)
+
+      new_attrs =
+        if key == nil do
+          type_key = type_node.key
+          name_key = key_from_string(attrs["name"])
+          key = "#{type_key}.#{name_key}"
+          %{attrs | key: key}
+        else
+          attrs
+        end
+
+      {:ok, node} = create_node(new_attrs)
+      node
+    end
+  end
+
+  defp key_from_string(string) do
+    String.replace(string, ~r/\W+/, "_")
+  end
+
+  @doc """
   Updates a node.
 
   ## Examples
