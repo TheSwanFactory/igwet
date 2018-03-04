@@ -8,6 +8,7 @@ use Mix.Config
 # General application configuration
 config :igwet,
   ecto_repos: [Igwet.Repo],
+  admin_key: "com.igwet",
   admin_user: "Ernest Prabhakar",
   seed_keys: [
     type: "com.igwet.predicate.type",
