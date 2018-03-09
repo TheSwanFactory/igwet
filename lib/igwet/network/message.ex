@@ -14,7 +14,7 @@ defmodule Igwet.Network.Message do
   ## Examples
       iex> alias Igwet.Network.Message
       iex> Message.test_email() |> Igwet.Admin.Mailer.deliver_now
-      ["info@theswanfactory.com"]
+      %Bamboo.Email{}
 
   """
 
@@ -25,6 +25,24 @@ defmodule Igwet.Network.Message do
     |> subject("Igwet.Admin.Mailer test")
     |> html_body("<strong>Welcome</strong>")
     |> text_body("welcome")
+  end
+
+  @doc """
+  Returns a list of email for for members of a given node
+
+  ## Examples
+      iex> user = Igwet.Network.get_first_node_named!("operator")
+      iex> Igwet.Network.Message.emails_for_node(user)
+      ["info@theswanfactory.com"]
+
+      iex> group = Igwet.Network.get_first_node_named!("admin")
+      iex> Igwet.Network.Message.emails_for_node(group)
+      ["info@theswanfactory.com"]
+
+  """
+
+  def member_emails(node) do
+    Enum.map(Network.node_members(node), fn x -> x.email end)
   end
 
   @doc """
@@ -43,7 +61,7 @@ defmodule Igwet.Network.Message do
 
   def emails_for_node(node) do
     case node.email do
-      nil -> Enum.map(Network.node_members(node), fn x -> x.email end)
+      nil -> member_emails(node)
       _ -> [node.email]
     end
   end
