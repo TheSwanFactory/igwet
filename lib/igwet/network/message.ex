@@ -26,5 +26,4 @@ defmodule Igwet.Network.Message do
       _ -> [node.email]
     end
   end
-
 end
