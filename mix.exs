@@ -47,7 +47,7 @@ defmodule Igwet.Mixfile do
       {:ueberauth_auth0, "~> 0.3"},
       {:address_us, "~> 0.2.1"},
       {:csv, "~> 2.0.0"},
-      {:swoosh, "~> 0.13.0"}
+      {:bamboo, "~> 0.8"}
     ]
   end
 

@@ -6,6 +6,27 @@ defmodule Igwet.Network.Message do
   # require IEx; #IEx.pry
   alias Igwet.Network
 
+  import Bamboo.Email
+
+  @doc """
+  Verify Mailgun Configuration
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> Message.test_email() |> Igwet.Admin.Mailer.deliver_now
+      ["info@theswanfactory.com"]
+
+  """
+
+  def test_email() do
+    new_email()
+    |> to("ernest.prabhakar@gmail.com")
+    |> from("ernest@drernie.com")
+    |> subject("Igwet.Admin.Mailer test")
+    |> html_body("<strong>Welcome</strong>")
+    |> text_body("welcome")
+  end
+
   @doc """
   Returns a list of email addreses for a given node
 
