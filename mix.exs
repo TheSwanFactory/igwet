@@ -4,7 +4,7 @@ defmodule Igwet.Mixfile do
   def project do
     [
       app: :igwet,
-      version: "0.0.14",
+      version: "0.0.15",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -46,7 +46,8 @@ defmodule Igwet.Mixfile do
       {:ueberauth, "~> 0.4"},
       {:ueberauth_auth0, "~> 0.3"},
       {:address_us, "~> 0.2.1"},
-      {:csv, "~> 2.0.0"}
+      {:csv, "~> 2.0.0"},
+      {:bamboo, "~> 0.8"}
     ]
   end
 

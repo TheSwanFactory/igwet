@@ -18,6 +18,12 @@ config :igwet, IgwetWeb.Endpoint,
   render_errors: [view: IgwetWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Igwet.PubSub, adapter: Phoenix.PubSub.PG2]
 
+# Configure Bamboo for Mailgun
+config :igwet, Igwet.Admin.Mailer,
+  adapter: Bamboo.MailgunAdapter,
+  domain: System.get_env("MG_DOMAIN"),
+  api_key: System.get_env("MG_API_KEY")
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
