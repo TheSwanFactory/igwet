@@ -17,3 +17,7 @@ config :igwet, Igwet.Repo,
   database: "igwet_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Configure Bamboo for Test
+config :igwet, Igwet.Admin.Mailer,
+  adapter: Bamboo.TestAdapter
