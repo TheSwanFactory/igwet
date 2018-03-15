@@ -33,4 +33,9 @@ defmodule IgwetWeb.Router do
     get("/:provider/callback", AuthController, :callback)
     post("/:provider/callback", AuthController, :callback)
   end
+
+  if Mix.env == :dev do
+    # If using Phoenix
+    forward "/sent_emails", Bamboo.EmailPreviewPlug
+  end
 end
