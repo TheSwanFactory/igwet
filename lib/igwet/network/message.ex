@@ -8,20 +8,32 @@ defmodule Igwet.Network.Message do
 
   import Bamboo.Email
 
+  defimpl Bamboo.Formatter, for: Igwet.Network.Node do
+    # Used by `to`, `bcc`, `cc` and `from`
+    def format_email_address(node, _opts) do
+      {node.name, node.email}
+    end
+  end
+  
   @doc """
   Verify Mailgun Configuration
 
   ## Examples
+      iex> node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
       iex> alias Igwet.Network.Message
-      iex> Message.test_email() |> Igwet.Admin.Mailer.deliver_now
-      %Bamboo.Email{}
+      iex> result = Message.test_email(node) |> Igwet.Admin.Mailer.deliver_now
+      iex> result.text_body
+      "welcome"
+      iex> result.to
+      [{node.name, node.email}]
 
   """
 
-  def test_email() do
+  def test_email(node) do
+    user = Igwet.Network.get_first_node_named!("operator")
     new_email()
-    |> to("ernest.prabhakar@gmail.com")
-    |> from("ernest@drernie.com")
+    |> to(node)
+    |> from(user)
     |> subject("Igwet.Admin.Mailer test")
     |> html_body("<strong>Welcome</strong>")
     |> text_body("welcome")
