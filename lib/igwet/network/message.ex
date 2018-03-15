@@ -14,7 +14,7 @@ defmodule Igwet.Network.Message do
       {node.name, node.email}
     end
   end
-  
+
   @doc """
   Verify Mailgun Configuration
 
@@ -22,6 +22,8 @@ defmodule Igwet.Network.Message do
       iex> node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
       iex> alias Igwet.Network.Message
       iex> result = Message.test_email(node) |> Igwet.Admin.Mailer.deliver_now
+      iex> result.headers["Sender"]
+      "list@igwet.com"
       iex> result.text_body
       "welcome"
       iex> result.to
@@ -37,6 +39,8 @@ defmodule Igwet.Network.Message do
     |> subject("Igwet.Admin.Mailer test")
     |> html_body("<strong>Welcome</strong>")
     |> text_body("welcome")
+    |> put_header("Sender","list@igwet.com")
+    |> put_header("List-Archive","<https://www.igwet.com/network/node/operator")
   end
 
   @doc """
