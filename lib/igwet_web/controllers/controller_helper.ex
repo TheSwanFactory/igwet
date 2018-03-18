@@ -5,7 +5,7 @@ defmodule IgwetWeb.ControllerHelper do
   alias Igwet.Admin
 
   def get_user(conn) do
-    case Mix.env() do
+    case Application.get_env(:igwet, :env) do
       :test -> Admin.test_admin_user(true)
       _ -> get_session(conn, :current_user)
     end
