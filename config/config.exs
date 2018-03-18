@@ -9,7 +9,8 @@ use Mix.Config
 config :igwet,
   ecto_repos: [Igwet.Repo],
   admin_key: "com.igwet",
-  admin_user: "operator"
+  admin_user: "operator",
+  env: Mix.env()
 
 # Configures the endpoint
 config :igwet, IgwetWeb.Endpoint,
