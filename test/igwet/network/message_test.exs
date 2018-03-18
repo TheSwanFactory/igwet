@@ -8,8 +8,8 @@ defmodule Igwet.NetworkTest.Message do
   describe "message" do
     test "email delivery" do
       node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
-      Message.test_email(node) |> Igwet.Admin.Mailer.deliver_now
-      assert_delivered_email Message.test_email(node)
+      Message.test_email(node) |> Igwet.Admin.Mailer.deliver_now()
+      assert_delivered_email(Message.test_email(node))
     end
   end
 end
