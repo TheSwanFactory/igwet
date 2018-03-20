@@ -26,6 +26,16 @@
   </li>
 
   <li>
+    <strong>URL:</strong>
+    <%= @node.url %>
+  </li>
+
+  <li>
+    <strong>Date:</strong>
+    <%= @node.date %>
+  </li>
+
+  <li>
     <strong>Key:</strong>
     <%= @node.key %>
   </li>

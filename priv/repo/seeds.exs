@@ -22,7 +22,12 @@ defmodule Igwet.Seeds do
   def map_strings_to_atoms(string_key_map) do
     # https://stackoverflow.com/questions/31990134/how-to-convert-map-keys-from-strings-to-atoms-in-elixir
     map = for {key, val} <- string_key_map, into: %{}, do: {String.to_atom(key), val}
-    filtered = :maps.filter(fn _, v -> v != "" end, map)
+    date = if map.date != "" do
+      {:ok, datetime, 0} = DateTime.from_iso8601(map.date <> "T00:00:00Z")
+      datetime
+    end
+    dated = Map.put(map, :date, date)
+    filtered = :maps.filter(fn _, v -> v != "" end, dated)
     Factory.create_child_node!(filtered)
   end
 
