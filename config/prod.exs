@@ -21,7 +21,7 @@ config :igwet, IgwetWeb.Endpoint,
 config :igwet, IgwetWeb.Endpoint,
   server: true,
   secret_key_base: "${SECRET_KEY_BASE}"
-  
+
 # Configure Bamboo for Mailgun
 config :igwet, Igwet.Admin.Mailer,
   adapter: Bamboo.MailgunAdapter,

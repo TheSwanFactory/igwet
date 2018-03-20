@@ -7,6 +7,8 @@
       <th>About</th>
       <th>Email</th>
       <th>Phone</th>
+      <th>URL</th>
+      <th>Date</th>
       <th>Key</th>
 
       <th></th>
@@ -19,6 +21,8 @@
       <td><%= node.about %></td>
       <td><%= node.email %></td>
       <td><%= node.phone %></td>
+      <td><%= node.url %></td>
+      <td><%= node.date %></td>
       <td><%= node.key %></td>
 
       <td class="text-right">
