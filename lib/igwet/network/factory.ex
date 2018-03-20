@@ -8,6 +8,10 @@ defmodule Igwet.Network.Factory do
   alias Igwet.Network
   alias Igwet.Network.Edge
 
+  @sys_key ".sys"
+  @in_key "in"
+  @type_key "type"
+
   @doc """
   Converts an arbitrary string into a suitable key
 
@@ -32,7 +36,7 @@ defmodule Igwet.Network.Factory do
   ## Examples
       iex> alias Igwet.Network.Factory
       iex> Factory.key_from_url("https://www.igwet.com")
-      ".com.igwet"
+      "com.igwet"
 
   """
 
@@ -42,7 +46,6 @@ defmodule Igwet.Network.Factory do
     host
     |> String.split(".")
     |> Enum.reject(fn w -> w == "www" end)
-    |> Enum.concat([" "])
     |> Enum.reverse()
     |> Enum.join(".")
     |> String.trim()
@@ -54,7 +57,7 @@ defmodule Igwet.Network.Factory do
   ## Examples
       iex> alias Igwet.Network.Factory
       iex> Factory.key_from_attrs(%{name: "me", url: "https://www.igwet.com", type: "host"})
-      ".com.igwet"
+      "com.igwet"
 
   """
 
@@ -91,10 +94,10 @@ defmodule Igwet.Network.Factory do
       iex> alias Igwet.Network.Factory
       iex> node = Factory.create_child_node!(%{name: "me"})
       iex> node.key
-      "sys+me"
+      ".sys+me"
       iex> next = Factory.create_child_node!(%{name: "u", in: "me"})
       iex> next.key
-      "sys+me+u"
+      ".sys+me+u"
       iex> Igwet.Network.node_in_group?(next, node)
       true
 
@@ -111,12 +114,12 @@ defmodule Igwet.Network.Factory do
         Network.get_first_node_named!(attrs.in)
       end
 
-    in_key = if in_node, do: in_node.key, else: "sys"
+    in_key = if in_node, do: in_node.key, else: @sys_key
     key = "#{in_key}+#{key_from_attrs(attrs)}"
     attrs = Map.put(attrs, :key, key)
     {:ok, node} = Network.create_node(attrs)
-    if in_node, do: create_relation!(node, in_node, "in")
-    if type_node, do: create_relation!(node, type_node, "type")
+    if in_node, do: create_relation!(node, in_node, @in_key)
+    if type_node, do: create_relation!(node, type_node, @type_key)
     node
   end
 end
