@@ -23,3 +23,15 @@ To start your Phoenix server:
   * Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+
+## Production
+
+We recommend Gigalixir
+
+### Seeds
+To update the seeds in production use:
+```
+$ source .env
+$ gigalixir remote_console $APP_NAME
+$ Path.join(["#{:code.priv_dir(:igwet)}", "repo", "seeds.exs"]) |> Code.eval_file
+```
