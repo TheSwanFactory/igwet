@@ -9,6 +9,5 @@ defmodule Igwet.NetworkTest.Factory do
       node = Network.get_first_node_named!("IGWET")
       assert "com.igwet" == node.key
     end
-
   end
 end
