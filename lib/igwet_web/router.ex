@@ -36,6 +36,6 @@ defmodule IgwetWeb.Router do
 
   if Application.get_env(:igwet, :env) == :dev do
     # If using Phoenix
-    forward "/sent_emails", Bamboo.EmailPreviewPlug
+    forward("/sent_emails", Bamboo.EmailPreviewPlug)
   end
 end

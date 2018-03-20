@@ -64,8 +64,7 @@ config :igwet, Igwet.Repo,
   pool_size: 10
 
 # Configure Bamboo to store instead of send emails
-config :igwet, Igwet.Admin.Mailer,
-  adapter: Bamboo.LocalAdapter
+config :igwet, Igwet.Admin.Mailer, adapter: Bamboo.LocalAdapter
 
 # Configures Ueberauth's Auth0 auth provider
 config :ueberauth, Ueberauth.Strategy.Auth0.OAuth,

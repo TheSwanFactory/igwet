@@ -33,14 +33,15 @@ defmodule Igwet.Network.Message do
 
   def test_email(node) do
     user = Igwet.Network.get_first_node_named!("operator")
+
     new_email()
     |> to(node)
     |> from(user)
     |> subject("Igwet.Admin.Mailer test")
     |> html_body("<strong>Welcome</strong>")
     |> text_body("welcome")
-    |> put_header("Sender","list@igwet.com")
-    |> put_header("List-Archive","<https://www.igwet.com/network/node/operator")
+    |> put_header("Sender", "list@igwet.com")
+    |> put_header("List-Archive", "<https://www.igwet.com/network/node/operator")
   end
 
   @doc """
