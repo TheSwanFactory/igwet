@@ -7,7 +7,7 @@ defmodule Igwet.NetworkTest.Factory do
   describe "factory" do
     test "IGWET has its own key" do
       node = Network.get_first_node_named!("IGWET")
-      assert node.key == "com.igwet"
+      assert "com.igwet" == node.key
     end
 
   end

@@ -8,8 +8,9 @@ defmodule Igwet.Network.Factory do
   alias Igwet.Network
   alias Igwet.Network.Edge
 
-  @sys_key ".sys"
+  @host_key "host"
   @in_key "in"
+  @sys_key ".sys"
   @type_key "type"
 
   @doc """
@@ -115,7 +116,12 @@ defmodule Igwet.Network.Factory do
       end
 
     in_key = if in_node, do: in_node.key, else: @sys_key
-    key = "#{in_key}+#{key_from_attrs(attrs)}"
+    node_key = key_from_attrs(attrs)
+    key = if attrs[:type] == @host_key do
+      node_key
+    else
+      "#{in_key}+#{node_key}"
+    end
     attrs = Map.put(attrs, :key, key)
     {:ok, node} = Network.create_node(attrs)
     if in_node, do: create_relation!(node, in_node, @in_key)
