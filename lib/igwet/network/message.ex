@@ -14,6 +14,48 @@ defmodule Igwet.Network.Message do
       {node.name, node.email}
     end
   end
+  @doc """
+  Replace Recipient and Sender with IGWET aliases
+
+  ## Examples
+      iex> params = %{"Sender" => "test@example.com", "Recipient" => "info@theswanfactory.com"}
+      iex> alias Igwet.Network.Message
+      iex> {:ok, aliased} = Message.alias_addresses(params)
+      iex> aliased["Recipient"]
+      "com.igwet.operator"
+  """
+
+  def alias_addresses(params) do
+  end
+
+
+  @doc """
+  Create a node of type Message from the aliased headers
+
+  ## Examples
+      iex> params = %{"Sender" => "com.igwet.operator", "Recipient" => "com.igwet.operator"}
+      iex> alias Igwet.Network.Message
+      iex> node = Message.create_node_from_email(params)
+      %Igwet.Network.Node{}
+  """
+
+  def create_node_from_email(aliased) do
+  end
+
+
+  @doc """
+  Create Bamboo email from Mailgun Headers
+
+  ## Examples
+      iex> params = %{"Sender" => "com.igwet.operator", "Recipient" => "com.igwet.operator"}
+      iex> alias Igwet.Network.Message
+      iex> email = Message.email_from_headers(params)
+      %Bamboo.Email{}
+  """
+
+  def email_from_headers(aliased) do
+  end
+
 
   @doc """
   Verify Mailgun Configuration

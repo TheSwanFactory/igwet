@@ -5,9 +5,11 @@ defmodule IgwetWeb.WebhookController do
 
   alias Igwet.Network.Message
 
-  def forward_email(_conn, params) do
-    node = Message.create_node_from_email(params)
-    email = Message.alias_email(node, params)
+  def forward_email(conn, params) do
+    aliased = Message.alias_addresses(params)
+    node = Message.create_node_from_email(aliased)
+    email = Message.email_from_headers(aliased)
     email |> Igwet.Admin.Mailer.deliver_now
+    conn
   end
 end
