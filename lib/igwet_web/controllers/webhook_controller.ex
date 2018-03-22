@@ -3,10 +3,11 @@
 defmodule IgwetWeb.WebhookController do
   use IgwetWeb, :controller
 
-  alias Igwet.Network
+  alias Igwet.Network.Message
 
-  def receive_email(_conn, params) do
-    message = Network.create_message_from_email(params)
-    Network.forward_message_securely(message, params)
+  def forward_email(_conn, params) do
+    node = Message.create_node_from_email(params)
+    email = Message.alias_email(node, params)
+    email |> Igwet.Admin.Mailer.deliver_now
   end
 end
