@@ -15,13 +15,24 @@ defmodule Igwet.Network.Message do
     end
   end
 
+  def downcase_map(params) do
+    for {key, val} <- params, into: %{}, do: {String.to_atom(String.downcase(key)), val}
+  end
+
+  def downcase_emails(params) do
+    struct!(params,
+        sender: String.downcase(params.sender),
+        recipient: String.downcase (params.recipient)
+        )
+  end
+
   @doc """
   Sample message params
 
   ## Examples
       iex> alias Igwet.Network.Message
       iex> params = Message.test_webhook
-      iex> params["recipient"]
+      iex> params.recipient
       "monica@mg.igwet.com"
   """
 
@@ -44,7 +55,33 @@ defmodule Igwet.Network.Message do
       "stripped-text" => "Hi Alice, This is Bob. I also attached a file.",
       "stripped-signature"	=> "Thanks, Bob",
     }
+    |> downcase_map
+    #|> downcase_emails
+
   end
+
+  @doc """
+  Convert params into a map for use with Bamboo
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> params = Message.test_webhook |> Message.for_bamboo
+      iex> params.from
+      "Bob <bob@mg.igwet.com>"
+
+  """
+
+  def for_bamboo(params) do
+    %{
+      to: params.to,
+      from: params.from,
+      subject: params.subject,
+      text_body: params[:"body-plain"],
+      html_body: params[:"body-html"]
+    }
+  end
+
+
 
   @doc """
   Verify Mailgun Configuration
