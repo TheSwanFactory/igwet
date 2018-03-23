@@ -14,48 +14,37 @@ defmodule Igwet.Network.Message do
       {node.name, node.email}
     end
   end
-  @doc """
-  Replace Recipient and Sender with IGWET aliases
-
-  ## Examples
-      iex> params = %{"Sender" => "test@example.com", "Recipient" => "info@theswanfactory.com"}
-      iex> alias Igwet.Network.Message
-      iex> {:ok, aliased} = Message.alias_addresses(params)
-      iex> aliased["Recipient"]
-      "com.igwet.operator"
-  """
-
-  def alias_addresses(params) do
-  end
-
 
   @doc """
-  Create a node of type Message from the aliased headers
+  Sample message params
 
   ## Examples
-      iex> params = %{"Sender" => "com.igwet.operator", "Recipient" => "com.igwet.operator"}
       iex> alias Igwet.Network.Message
-      iex> node = Message.create_node_from_email(params)
-      %Igwet.Network.Node{}
+      iex> params = Message.test_webhook
+      iex> params["recipient"]
+      "monica@mg.igwet.com"
   """
 
-  def create_node_from_email(aliased) do
+  def test_webhook() do
+    %{
+      "recipient"	=> "monica@mg.igwet.com",
+      "sender"	=> "chandler@mg.igwet.com",
+      "subject"	=> "Re: Sample POST request",
+      "from"	=>"Bob <bob@mg.igwet.com>",
+      "Message-Id" => "<517ACC75.5010709@mg.igwet.com>",
+      "Date"	=> "Fri, 26 Apr 2013 11:50:29 -0700",
+      "To"	=> "Alice <alice@mg.igwet.com>",
+      "Subject"	=> "Re: Sample POST request",
+      "Sender"	=> "bob@mg.igwet.com",
+      "message-headers"	=> [["Received", "by luna.mailgun.net with SMTP mgrt 8788212249833; Fri, 26 Apr 2013 18:50:30 +0000"], ["Received", "from [10.20.76.69] (Unknown [50.56.129.169]) by mxa.mailgun.org with ESMTP id 517acc75.4b341f0-worker2; Fri, 26 Apr 2013 18:50:29 -0000 (UTC)"], ["Message-Id", "<517ACC75.5010709@mg.igwet.com>"], ["Date", "Fri, 26 Apr 2013 11:50:29 -0700"], ["From", "Bob <bob@mg.igwet.com>"], ["User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20130308 Thunderbird/17.0.4"], ["Mime-Version", "1.0"], ["To", "Alice <alice@mg.igwet.com>"], ["Subject", "Re: Sample POST request"], ["References", "<517AC78B.5060404@mg.igwet.com>"], ["In-Reply-To", "<517AC78B.5060404@mg.igwet.com>"], ["Content-Type", "multipart/mixed; boundary=\"------------020601070403020003080006\""], ["Sender", "bob@mg.igwet.com"]],
+      "timestamp" => "1521723603",
+      "body-plain" => "Hi Alice, This is Bob. I also attached a file. Thanks, Bob On 04/26/2013 11:29 AM, Alice wrote: > Hi Bob, > > This is Alice. How are you doing? > > Thanks, > Alice",
+      "body-html" =>  "<html> <body ><br> I also attached a file.<br> <br> </div> <blockquote>Hi Bob, <br> <br> This is Alice. How are you doing? <br> <br> Thanks, <br> Alice <br> </blockquote> <br> </body> </html>",
+      "stripped-html" =>  "<html> <body ><br> I also attached a file.<br> <br> </div> </body> </html>",
+      "stripped-text" => "Hi Alice, This is Bob. I also attached a file.",
+      "stripped-signature"	=> "Thanks, Bob",
+    }
   end
-
-
-  @doc """
-  Create Bamboo email from Mailgun Headers
-
-  ## Examples
-      iex> params = %{"Sender" => "com.igwet.operator", "Recipient" => "com.igwet.operator"}
-      iex> alias Igwet.Network.Message
-      iex> email = Message.email_from_headers(params)
-      %Bamboo.Email{}
-  """
-
-  def email_from_headers(aliased) do
-  end
-
 
   @doc """
   Verify Mailgun Configuration
