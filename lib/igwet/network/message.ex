@@ -16,25 +16,39 @@ defmodule Igwet.Network.Message do
   end
 
   def downcase_map(params) do
-    for {key, val} <- params, into: %{}, do: {String.to_atom(String.downcase(key)), val}
+    for {key, val} <- params, into: %{}, do: {String.downcase(key), val}
   end
 
   @doc """
-  Sample message params
+  Normalize sender and recipient email addresess
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.downcase_emails %{recipient: "M@igwet.com", sender: "Bob@IGWET.COM"}
-      iex> params.recipient
+      iex> params = Message.downcase_addresses %{"recipient" => "M@igwet.com", "sender" => "Bob@IGWET.COM"}
+      iex> params["recipient"]
       "m@igwet.com"
   """
 
-  def downcase_emails(params) do
+  def downcase_addresses(params) do
     %{
       params
-      | sender: String.downcase(params.sender),
-        recipient: String.downcase(params.recipient)
+      | "sender" => String.downcase(params["sender"]),
+        "recipient" => String.downcase(params["recipient"])
     }
+  end
+
+  @doc """
+  Normalize webhook parameters
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> params = Message.normalize_params %{"RECIPIENT" => "M@igwet.com", "sender" => "Bob@IGWET.COM"}
+      iex> params["recipient"]
+      "m@igwet.com"
+  """
+
+  def normalize_params(params) do
+    params |> downcase_map |> downcase_addresses
   end
 
   @doc """
@@ -43,10 +57,8 @@ defmodule Igwet.Network.Message do
   ## Examples
       iex> alias Igwet.Network.Message
       iex> params = Message.test_webhook
-      iex> params.sender
-      "chandler@mg.igwet.com"
-      iex> params.recipient
-      "monica@mg.igwet.com"
+      iex> params["recipient"]
+      "Monica@mg.igwet.com"
   """
 
   def test_webhook() do
@@ -94,8 +106,6 @@ defmodule Igwet.Network.Message do
       "stripped-text" => "Hi Alice, This is Bob. I also attached a file.",
       "stripped-signature" => "Thanks, Bob"
     }
-    |> downcase_map
-    |> downcase_emails
   end
 
   @doc """
@@ -111,12 +121,12 @@ defmodule Igwet.Network.Message do
 
   def params_to_email(params) do
     new_email(
-      to: params.to,
-      cc: params[:cc],
-      from: params.from,
-      subject: params.subject,
-      text_body: params[:"body-plain"],
-      html_body: params[:"body-html"]
+      to: params["to"],
+      cc: params["cc"],
+      from: params["from"],
+      subject: params["subject"],
+      text_body: params["body-plain"],
+      html_body: params["body-html"]
     )
   end
 
