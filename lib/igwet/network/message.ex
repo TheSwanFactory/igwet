@@ -93,7 +93,7 @@ defmodule Igwet.Network.Message do
         ["Subject", "Re: Sample POST request"],
         ["References", "<517AC78B.5060404@mg.igwet.com>"],
         ["In-Reply-To", "<517AC78B.5060404@mg.igwet.com>"],
-        ["Content-Type", "multipart/mixed; boundary=\"------------020601070403020003080006\""],
+        ["Content-Type", "multipart/mixed"],
         ["Sender", "bob@mg.igwet.com"]
       ],
       "timestamp" => "1521723603",
