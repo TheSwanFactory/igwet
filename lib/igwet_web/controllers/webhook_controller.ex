@@ -7,7 +7,8 @@ defmodule IgwetWeb.WebhookController do
 
   def forward_email(conn, params) do
     params
-    |> Igwet.Admin.Mailer.deliver_now
+    |> Igwet.Admin.Mailer.deliver_now()
+
     conn
   end
 end
