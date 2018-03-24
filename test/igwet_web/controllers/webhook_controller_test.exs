@@ -9,9 +9,15 @@ defmodule IgwetWeb.WebhookControllerTest do
     {:ok, %{conn: conn}}
   end
 
-  test "POST /webhook", %{conn: conn} do
+  test "POST /webhook -> 201", %{conn: conn} do
     conn
     |> post("/webhook", Message.test_webhook())
     |> response(201)
+  end
+
+  test "POST /webhook -> 422", %{conn: conn} do
+    conn
+    |> post("/webhook", %{})
+    |> response(422)
   end
 end

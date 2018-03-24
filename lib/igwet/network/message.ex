@@ -30,11 +30,18 @@ defmodule Igwet.Network.Message do
   """
 
   def downcase_addresses(params) do
+    ensure_parameter!(params, "sender")
+    ensure_parameter!(params, "recipient")
     %{
-      params
-      | "sender" => String.downcase(params["sender"]),
-        "recipient" => String.downcase(params["recipient"])
+        params
+        | "sender" => String.downcase(params["sender"]),
+          "recipient" => String.downcase(params["recipient"])
     }
+  end
+
+  # Should probably do this with function clauses
+  defp ensure_parameter!(params, key) do
+   if (!Map.has_key?(params, key)), do: throw "No parameter named '#{key}'"
   end
 
   @doc """
