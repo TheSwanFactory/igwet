@@ -9,6 +9,20 @@ defmodule Igwet.Network do
   alias Igwet.Network.Edge
 
   @doc """
+  Find node matching that real email address.
+
+  ## Examples
+
+      iex> find_node_for_email("info@theswanfactory.com")
+      %Node{}
+
+  """
+  def find_node_for_email(email) do
+    {:ok, %{email: email}}
+  end
+
+
+  @doc """
   Check if node is in site admin group.
 
   ## Examples

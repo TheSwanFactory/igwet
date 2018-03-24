@@ -8,11 +8,21 @@ defmodule Igwet.Network.Message do
 
   import Bamboo.Email
 
+  @sender "sender"
+  @recipient "recipient"
+  @from "from"
+  @to "to"
+
   defimpl Bamboo.Formatter, for: Igwet.Network.Node do
     # Used by `to`, `bcc`, `cc` and `from`
     def format_email_address(node, _opts) do
       {node.name, node.email}
     end
+  end
+
+  # Should probably do this with function clauses
+  defp ensure_parameter!(params, key) do
+   if (!Map.has_key?(params, key)), do: throw "No parameter named '#{key}'"
   end
 
   def downcase_map(params) do
@@ -30,18 +40,13 @@ defmodule Igwet.Network.Message do
   """
 
   def downcase_addresses(params) do
-    ensure_parameter!(params, "sender")
-    ensure_parameter!(params, "recipient")
+    ensure_parameter!(params, @sender)
+    ensure_parameter!(params, @recipient)
     %{
         params
-        | "sender" => String.downcase(params["sender"]),
-          "recipient" => String.downcase(params["recipient"])
+        | @sender => String.downcase(params[@sender]),
+          @recipient => String.downcase(params[@recipient])
     }
-  end
-
-  # Should probably do this with function clauses
-  defp ensure_parameter!(params, key) do
-   if (!Map.has_key?(params, key)), do: throw "No parameter named '#{key}'"
   end
 
   @doc """
@@ -49,13 +54,33 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.normalize_params %{"RECIPIENT" => "M@igwet.com", "sender" => "Bob@IGWET.COM"}
+      iex> params = Message.normalize_params %{"recipient" => "M@igwet.com", "sender" => "Bob@IGWET.COM"}
       iex> params["recipient"]
       "m@igwet.com"
   """
 
   def normalize_params(params) do
     params |> downcase_map |> downcase_addresses
+  end
+
+  @doc """
+  Replace Sender and From information with a node
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> params = Message.mask_sender %{"sender" => "info@theswanfactory.com"}
+      iex> params["sender"]
+      "operator@igwet.com"
+  """
+
+  def mask_sender(params) do
+    ensure_parameter!(params, @sender)
+    sender_email = params[@sender]
+    result = Network.find_node_for_email(sender_email)
+    case result do
+      {:ok, node} -> %{params| @sender => node.email, @from => node}
+      {:error, e} -> throw e
+    end
   end
 
   @doc """
@@ -70,15 +95,15 @@ defmodule Igwet.Network.Message do
 
   def test_webhook() do
     %{
-      "recipient" => "Monica@mg.igwet.com",
-      "sender" => "chandler@mg.igwet.com",
+      @recipient => "Monica@mg.igwet.com",
+      @sender => "chandler@mg.igwet.com",
       "subject" => "Re: Sample POST request",
-      "from" => "Bob <bob@mg.igwet.com>",
+      @from => "Bob <bob@mg.igwet.com>",
       "Message-Id" => "<517ACC75.5010709@mg.igwet.com>",
       "Date" => "Fri, 26 Apr 2013 11:50:29 -0700",
-      "To" => "Alice <alice@mg.igwet.com>",
+      @to => "Alice <alice@mg.igwet.com>",
       "Subject" => "Re: Sample POST request",
-      "Sender" => "bob@mg.igwet.com",
+      "Sender"=> "bob@mg.igwet.com",
       "message-headers" => [
         [
           "Received",
@@ -90,18 +115,18 @@ defmodule Igwet.Network.Message do
         ],
         ["Message-Id", "<517ACC75.5010709@mg.igwet.com>"],
         ["Date", "Fri, 26 Apr 2013 11:50:29 -0700"],
-        ["From", "Bob <bob@mg.igwet.com>"],
+        [@from, "Bob <bob@mg.igwet.com>"],
         [
           "User-Agent",
           "Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20130308 Thunderbird/17.0.4"
         ],
         ["Mime-Version", "1.0"],
-        ["To", "Alice <alice@mg.igwet.com>"],
+        [@to, "Alice <alice@mg.igwet.com>"],
         ["Subject", "Re: Sample POST request"],
         ["References", "<517AC78B.5060404@mg.igwet.com>"],
         ["In-Reply-To", "<517AC78B.5060404@mg.igwet.com>"],
         ["Content-Type", "multipart/mixed"],
-        ["Sender", "bob@mg.igwet.com"]
+        [@sender, "bob@mg.igwet.com"]
       ],
       "timestamp" => "1521723603",
       "body-plain" =>
@@ -128,9 +153,9 @@ defmodule Igwet.Network.Message do
 
   def params_to_email(params) do
     new_email(
-      to: params["to"],
+      to: params[@to],
       cc: params["cc"],
-      from: params["from"],
+      from: params[@from],
       subject: params["subject"],
       text_body: params["body-plain"],
       html_body: params["body-html"]
@@ -144,7 +169,7 @@ defmodule Igwet.Network.Message do
       iex> node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
       iex> alias Igwet.Network.Message
       iex> result = Message.test_email(node) |> Igwet.Admin.Mailer.deliver_now
-      iex> result.headers["Sender"]
+      iex> result.headers["sender"]
       "list@igwet.com"
       iex> result.text_body
       "welcome"
@@ -162,7 +187,7 @@ defmodule Igwet.Network.Message do
     |> subject("Igwet.Admin.Mailer test")
     |> html_body("<strong>Welcome</strong>")
     |> text_body("welcome")
-    |> put_header("Sender", "list@igwet.com")
+    |> put_header(@sender, "list@igwet.com")
     |> put_header("List-Archive", "<https://www.igwet.com/network/node/operator")
   end
 
