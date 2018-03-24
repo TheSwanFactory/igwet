@@ -15,7 +15,7 @@ defmodule IgwetWeb.WebhookController do
       conn
       |> put_status(:created)
       |> json(%{created_at: params["timestamp"]})
-    catch
+    rescue
       e ->
       conn
       |> put_status(:unprocessable_entity)

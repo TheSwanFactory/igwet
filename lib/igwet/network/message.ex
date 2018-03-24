@@ -22,7 +22,7 @@ defmodule Igwet.Network.Message do
 
   # Should probably do this with function clauses
   defp ensure_parameter!(params, key) do
-   if (!Map.has_key?(params, key)), do: throw "No parameter named '#{key}'"
+   if (!Map.has_key?(params, key)), do: raise "No parameter named '#{key}'"
   end
 
   def downcase_map(params) do
@@ -68,13 +68,14 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.mask_sender %{"sender" => "info@theswanfactory.com"}
+      iex> params = Message.mask_sender %{"sender" => "info@theswanfactory.com", "from" => ""}
       iex> params["sender"]
       "operator@igwet.com"
   """
 
   def mask_sender(params) do
     ensure_parameter!(params, @sender)
+    ensure_parameter!(params, @from)
     sender_email = params[@sender]
     result = Network.find_node_for_email(sender_email)
     case result do
