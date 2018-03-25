@@ -13,12 +13,18 @@ defmodule Igwet.Network do
 
   ## Examples
 
-      iex> find_node_for_email("info@theswanfactory.com")
+      iex> find_node_for_email!("info@theswanfactory.com")
       %Node{}
 
   """
-  def find_node_for_email(email) do
-    {:ok, %{email: email}}
+  def find_node_for_email!(email) do
+      from(
+        Node,
+        where: [email: ^email],
+        order_by: [asc: :inserted_at],
+        limit: 1
+      )
+      |> Repo.one!()
   end
 
 
