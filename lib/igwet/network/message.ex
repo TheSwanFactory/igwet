@@ -5,6 +5,7 @@ defmodule Igwet.Network.Message do
 
   # require IEx; #IEx.pry
   alias Igwet.Network
+  alias Igwet.Admin.Mailer
 
   import Bamboo.Email
 
@@ -70,18 +71,18 @@ defmodule Igwet.Network.Message do
       iex> alias Igwet.Network.Message
       iex> params = Message.mask_sender %{"sender" => "info@theswanfactory.com", "from" => ""}
       iex> params["sender"]
-      "operator@igwet.com"
+      "com.igwet+admin+operator@example.com"
   """
 
   def mask_sender(params) do
     ensure_parameter!(params, @sender)
     ensure_parameter!(params, @from)
     sender_email = params[@sender]
-    result = Network.find_node_for_email(sender_email)
-    case result do
-      {:ok, node} -> %{params| @sender => node.email, @from => node}
-      {:error, e} -> throw e
-    end
+    node = Network.find_node_for_email!(sender_email)
+    updates = %{
+      @sender => Mailer.keyed_email(node)#,      @from => Mailer.email_named_from_key(node)
+    }
+    Map.merge(params, updates)
   end
 
   @doc """
