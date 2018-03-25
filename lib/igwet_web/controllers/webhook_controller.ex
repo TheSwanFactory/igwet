@@ -9,6 +9,7 @@ defmodule IgwetWeb.WebhookController do
     try do
       params
       |> Message.normalize_params()
+      |> Message.mask_sender()
       |> Message.params_to_email()
       |> Igwet.Admin.Mailer.deliver_now()
 

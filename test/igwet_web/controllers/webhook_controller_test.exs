@@ -28,6 +28,6 @@ defmodule IgwetWeb.WebhookControllerTest do
     |> post("/webhook", %{sender: "missing-email", recipient: "none", from: "none"})
     |> json_response(422)
 
-    assert message =~ "sender not found"
+    assert message =~ "Unrecognized sender"
   end
 end

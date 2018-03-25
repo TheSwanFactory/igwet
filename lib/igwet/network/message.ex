@@ -78,11 +78,16 @@ defmodule Igwet.Network.Message do
     ensure_parameter!(params, @sender)
     ensure_parameter!(params, @from)
     sender_email = params[@sender]
-    node = Network.find_node_for_email!(sender_email)
-    updates = %{
-      @sender => Mailer.keyed_email(node)#,      @from => Mailer.email_named_from_key(node)
-    }
-    Map.merge(params, updates)
+    try do
+      node = Network.find_node_for_email!(sender_email)
+      updates = %{
+        @sender => Mailer.keyed_email(node)#,      @from => Mailer.email_named_from_key(node)
+      }
+      Map.merge(params, updates)
+    rescue
+      _ ->
+      raise "Unrecognized sender `#{sender_email}`}"
+    end
   end
 
   @doc """
@@ -98,7 +103,7 @@ defmodule Igwet.Network.Message do
   def test_webhook() do
     %{
       @recipient => "Monica@mg.igwet.com",
-      @sender => "chandler@mg.igwet.com",
+      @sender => "info@theswanfactory.com",
       "subject" => "Re: Sample POST request",
       @from => "Bob <bob@mg.igwet.com>",
       "Message-Id" => "<517ACC75.5010709@mg.igwet.com>",
