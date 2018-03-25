@@ -15,9 +15,19 @@ defmodule IgwetWeb.WebhookControllerTest do
     |> response(201)
   end
 
-  test "POST /webhook -> 422", %{conn: conn} do
-    conn
+  test "POST /webhook -> 422 missing data", %{conn: conn} do
+    %{"error" => %{"message" => message}} = conn
     |> post("/webhook", %{})
-    |> response(422)
+    |> json_response(422)
+
+    assert message =~ "No parameter named"
+  end
+
+  test "POST /webhook -> 422 unknown sender", %{conn: conn} do
+    %{"error" => %{"message" => message}} = conn
+    |> post("/webhook", %{sender: "missing-email", recipient: "none", from: "none"})
+    |> json_response(422)
+
+    assert message =~ "sender not found"
   end
 end
