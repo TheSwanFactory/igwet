@@ -91,6 +91,21 @@ defmodule Igwet.Network.Message do
   end
 
   @doc """
+  Replace the recipient with a list of actual email addresses
+  Expands params into a list of params
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> params_list = Message.expand_recipients %{"recipient" => "M@igwet.com", "sender" => "Bob@IGWET.COM"}
+      iex> length(params_list)
+      1
+  """
+
+  def expand_recipients(params) do
+    [params]
+  end
+
+  @doc """
   Sample message params
 
   ## Examples
