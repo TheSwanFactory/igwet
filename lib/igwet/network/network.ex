@@ -174,6 +174,32 @@ defmodule Igwet.Network do
     |> Repo.one!()
   end
 
+
+    @doc """
+    Gets the first node matching a given field
+
+    Raises `Ecto.NoResultsError` if no such Node exists.
+
+    ## Examples
+
+        iex> Network.get_first_node!(:name, "in")
+        %Node{}
+
+        iex> Network.get_first_node!(:name, "out")
+        ** (Ecto.NoResultsError)
+
+    """
+
+    def get_first_node!(field, value) do
+      from(
+        Node,
+        where: [^field => ^value],
+        order_by: [asc: :inserted_at],
+        limit: 1
+      )
+      |> Repo.one!()
+    end
+
   @doc """
   Gets a single node based on its unique key
 

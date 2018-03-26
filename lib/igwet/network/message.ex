@@ -13,6 +13,7 @@ defmodule Igwet.Network.Message do
   @recipient "recipient"
   @from "from"
   @to "to"
+  @node "node"
 
   defimpl Bamboo.Formatter, for: Igwet.Network.Node do
     # Used by `to`, `bcc`, `cc` and `from`
@@ -81,7 +82,7 @@ defmodule Igwet.Network.Message do
     try do
       node = Network.find_node_for_email!(sender_email)
       updates = %{
-        @sender => Mailer.keyed_email(node)#,      @from => Mailer.email_named_from_key(node)
+        @sender => Mailer.keyed_email(node)#,      @from => node
       }
       Map.merge(params, updates)
     rescue
@@ -91,33 +92,63 @@ defmodule Igwet.Network.Message do
   end
 
   @doc """
-  Replace the recipient with a list of actual email addresses
-  Expands params into a list of params
+  Lookup the recipent (raise if does not exist)
+  Replace the To field
+  Replace the Recipient with a list of emailable_nodes
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params_list = Message.expand_recipients %{"recipient" => "M@igwet.com", "sender" => "Bob@IGWET.COM"}
-      iex> length(params_list)
+      iex> params = Message.expand_recipients Message.test_params()
+      iex> length(params["recipient"])
       1
   """
 
   def expand_recipients(params) do
-    [params]
+    recipient_email = params[@recipient]
+
+    try do
+      node = Network.find_node_for_email!(recipient_email)
+      params
+      |> Map.update!(@recipient, [recipient_email])
+      |> Map.update!(@to, node)
+    rescue
+      _ ->
+      raise "Unrecognized recipient `#{recipient_email}`}"
+    end
   end
+
+
+  @doc """
+  Store the message as a node with links to the From and To
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> params = Message.save_as_node Message.test_params()
+      iex> %{key: key} = params["node"]
+      iex> key
+      "com.igwet.mg+517ACC75.5010709"
+
+  """
+
+  def save_as_node(params) do
+    params
+    |> Map.put(@node, params[@to])
+  end
+
 
   @doc """
   Sample message params
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.test_webhook
+      iex> params = Message.test_params
       iex> params["recipient"]
-      "Monica@mg.igwet.com"
+      "org.igwet+admin@mg.igwet.com"
   """
 
-  def test_webhook() do
+  def test_params() do
     %{
-      @recipient => "Monica@mg.igwet.com",
+      @recipient => "org.igwet+admin@mg.igwet.com",
       @sender => "info@theswanfactory.com",
       "subject" => "Re: Sample POST request",
       @from => "Bob <bob@mg.igwet.com>",
@@ -167,7 +198,7 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.test_webhook |> Message.params_to_email
+      iex> params = Message.test_params |> Message.params_to_email
       iex> params.from
       "Bob <bob@mg.igwet.com>"
 

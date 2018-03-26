@@ -11,6 +11,7 @@ defmodule IgwetWeb.WebhookController do
       |> Message.normalize_params()
       |> Message.mask_sender()
       |> Message.expand_recipients()
+      |> Message.save_as_node()
       |> Enum.map(&Message.params_to_email/1)
       |> Enum.map(&Igwet.Admin.Mailer.deliver_now/1)
 
