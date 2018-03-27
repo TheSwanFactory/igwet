@@ -11,6 +11,7 @@ defmodule Igwet.Network.Message do
 
   @sender "sender"
   @recipient "recipient"
+  @recipient_list "recipient_list"
   @from "from"
   @to "to"
   @node "node"
@@ -99,21 +100,21 @@ defmodule Igwet.Network.Message do
   ## Examples
       iex> alias Igwet.Network.Message
       iex> params = Message.expand_recipients Message.test_params()
-      iex> length(params["recipient"])
+      iex> length(params["recipient_list"])
       1
   """
 
   def expand_recipients(params) do
     recipient_email = params[@recipient]
+    #/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
     try do
-      node = Network.find_node_for_email!(recipient_email)
+      #node = Network.find_node_for_email!(recipient_email)
       params
-      |> Map.update!(@recipient, [recipient_email])
-      |> Map.update!(@to, node)
+      |> Map.put(@recipient_list, [recipient_email])
+      #|> Map.update!(@to, node)
     rescue
-      _ ->
-      raise "Unrecognized recipient `#{recipient_email}`}"
+      e -> raise  e#{}"Unrecognized recipient `#{recipient_email}`}"
     end
   end
 
@@ -126,13 +127,14 @@ defmodule Igwet.Network.Message do
       iex> params = Message.save_as_node Message.test_params()
       iex> %{key: key} = params["node"]
       iex> key
-      "com.igwet.mg+517ACC75.5010709"
+      "com.igwet+admin+operator"
 
   """
 
   def save_as_node(params) do
+    node = Network.get_first_node_named!("operator")
     params
-    |> Map.put(@node, params[@to])
+    |> Map.put(@node, node)
   end
 
 
@@ -143,12 +145,12 @@ defmodule Igwet.Network.Message do
       iex> alias Igwet.Network.Message
       iex> params = Message.test_params
       iex> params["recipient"]
-      "org.igwet+admin@mg.igwet.com"
+      "com.igwet+admin@mg.igwet.com"
   """
 
   def test_params() do
     %{
-      @recipient => "org.igwet+admin@mg.igwet.com",
+      @recipient => "com.igwet+admin@mg.igwet.com",
       @sender => "info@theswanfactory.com",
       "subject" => "Re: Sample POST request",
       @from => "Bob <bob@mg.igwet.com>",

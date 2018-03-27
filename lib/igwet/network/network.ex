@@ -18,15 +18,14 @@ defmodule Igwet.Network do
 
   """
   def find_node_for_email!(email) do
-      from(
-        Node,
-        where: [email: ^email],
-        order_by: [asc: :inserted_at],
-        limit: 1
-      )
-      |> Repo.one!()
+    from(
+      Node,
+      order_by: [asc: :inserted_at],
+      limit: 1
+    )
+    |> where([email: ^email])
+    |> Repo.one!()
   end
-
 
   @doc """
   Check if node is in site admin group.
@@ -174,31 +173,6 @@ defmodule Igwet.Network do
     |> Repo.one!()
   end
 
-
-    @doc """
-    Gets the first node matching a given field
-
-    Raises `Ecto.NoResultsError` if no such Node exists.
-
-    ## Examples
-
-        iex> Network.get_first_node!(:name, "in")
-        %Node{}
-
-        iex> Network.get_first_node!(:name, "out")
-        ** (Ecto.NoResultsError)
-
-    """
-
-    def get_first_node!(field, value) do
-      from(
-        Node,
-        where: [^field => ^value],
-        order_by: [asc: :inserted_at],
-        limit: 1
-      )
-      |> Repo.one!()
-    end
 
   @doc """
   Gets a single node based on its unique key

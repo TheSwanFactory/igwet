@@ -2,6 +2,7 @@
 
 defmodule IgwetWeb.WebhookController do
   use IgwetWeb, :controller
+  require Logger
 
   alias Igwet.Network.Message
 
@@ -10,10 +11,10 @@ defmodule IgwetWeb.WebhookController do
       params
       |> Message.normalize_params()
       |> Message.mask_sender()
-      |> Message.expand_recipients()
+      #|> Message.expand_recipients()
       |> Message.save_as_node()
-      |> Enum.map(&Message.params_to_email/1)
-      |> Enum.map(&Igwet.Admin.Mailer.deliver_now/1)
+      |> Message.params_to_email()
+      |> Igwet.Admin.Mailer.deliver_now()
 
       conn
       |> put_status(:created)

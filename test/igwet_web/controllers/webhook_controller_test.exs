@@ -11,7 +11,7 @@ defmodule IgwetWeb.WebhookControllerTest do
 
   test "POST /webhook -> 201", %{conn: conn} do
     conn
-    |> post("/webhook", Message.test_webhook())
+    |> post("/webhook", Message.test_params())
     |> response(201)
   end
 
