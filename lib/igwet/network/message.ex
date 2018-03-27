@@ -119,7 +119,8 @@ defmodule Igwet.Network.Message do
 
     try do
       Network.get_first_node!(:key, email["name"])
-      |> (&Map.put(params, @recipient_list, [&1])).()
+      |> (&[&1]).()
+      |> (&Map.put(params, @recipient_list, &1)).()
     rescue
       e ->
         raise "Unrecognized recipient `#{recipient_email}`}\n#{inspect(email)}\n#{inspect(e)}"
@@ -190,43 +191,31 @@ defmodule Igwet.Network.Message do
   end
 
   @doc """
-  Returns a list of email for for members of a given node
+  Return a list of nodes (or their members) containing emails
 
   ## Examples
-      iex> user = Igwet.Network.get_first_node!(:name, "operator")
-      iex> Igwet.Network.Message.emails_for_node(user)
-      ["info@theswanfactory.com"]
+      iex> alias Igwet.Network
+      iex> alias Igwet.Network.Message
+      iex> [%{email: email}] = Network.get_first_node!(:name, "operator") |> Message.nodes_with_emails
+      iex> email
+      "info@theswanfactory.com"
+      iex> list = Network.get_first_node!(:name, "admin") |> Message.nodes_with_emails
+      iex> length(list)
+      1
 
-      iex> group = Igwet.Network.get_first_node!(:name, "admin")
-      iex> Igwet.Network.Message.emails_for_node(group)
-      ["info@theswanfactory.com"]
 
   """
 
-  def member_emails(node) do
-    Enum.map(Network.node_members(node), fn x -> x.email end)
-  end
-
-  @doc """
-  Returns a list of email addreses for a given node
-
-  ## Examples
-      iex> user = Igwet.Network.get_first_node!(:name, "operator")
-      iex> Igwet.Network.Message.emails_for_node(user)
-      ["info@theswanfactory.com"]
-
-      iex> group = Igwet.Network.get_first_node!(:name, "admin")
-      iex> Igwet.Network.Message.emails_for_node(group)
-      ["info@theswanfactory.com"]
-
-  """
-
-  def emails_for_node(node) do
+  def nodes_with_emails(node) do
     case node.email do
-      nil -> member_emails(node)
-      _ -> [node.email]
+      nil ->
+        Network.node_members(node)
+        |> Enum.map(&nodes_with_emails/1)
+        |> List.flatten
+      _ -> [node]
     end
   end
+
 
   @doc """
   Verify Mailgun Configuration
