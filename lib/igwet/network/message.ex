@@ -111,18 +111,18 @@ defmodule Igwet.Network.Message do
   """
 
   def expand_recipients(params) do
+    ensure_parameter!(params, @recipient)
     recipient_email = params[@recipient]
-    # /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+
+    email = ~r/\A(?<name>[^@]+)@[a-z\d\-]+(?<domain>\.[a-z]+)*\.[a-z]+\z/iu
+    |> Regex.named_captures(recipient_email)
 
     try do
-      # node = Network.get_first_node!(:email,recipient_email)
-      params
-      |> Map.put(@recipient_list, [recipient_email])
-
-      # |> Map.update!(@to, node)
+      Network.get_first_node!(:key, email["name"])
+      |> (&Map.put(params, @recipient_list, [&1])).()
     rescue
       e ->
-        raise "Unrecognized recipient `#{recipient_email}`}\n#{inspect(e)}"
+        raise "Unrecognized recipient `#{recipient_email}`}\n#{inspect(email)}\n#{inspect(e)}"
     end
   end
 

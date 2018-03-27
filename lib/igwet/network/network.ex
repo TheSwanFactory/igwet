@@ -29,6 +29,9 @@ defmodule Igwet.Network do
       :email ->
         where(first, email: ^value)
 
+      :key ->
+        where(first, key: ^value)
+
       :name ->
         where(first, name: ^value)
 
