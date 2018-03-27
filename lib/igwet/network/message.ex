@@ -119,11 +119,37 @@ defmodule Igwet.Network.Message do
 
     try do
       Network.get_first_node!(:key, email["name"])
-      |> (&[&1]).()
+      |> nodes_with_emails
       |> (&Map.put(params, @recipient_list, &1)).()
     rescue
       e ->
         raise "Unrecognized recipient `#{recipient_email}`}\n#{inspect(email)}\n#{inspect(e)}"
+    end
+  end
+
+  @doc """
+  Return a list of nodes (or their members) containing emails
+
+  ## Examples
+      iex> alias Igwet.Network
+      iex> alias Igwet.Network.Message
+      iex> [%{email: email}] = Network.get_first_node!(:name, "operator") |> Message.nodes_with_emails
+      iex> email
+      "info@theswanfactory.com"
+      iex> list = Network.get_first_node!(:name, "admin") |> Message.nodes_with_emails
+      iex> length(list)
+      1
+
+
+  """
+
+  def nodes_with_emails(node) do
+    case node.email do
+      nil ->
+        Network.node_members(node)
+        |> Enum.map(&nodes_with_emails/1)
+        |> List.flatten
+      _ -> [node]
     end
   end
 
@@ -189,33 +215,6 @@ defmodule Igwet.Network.Message do
       |> params_to_email()
     end
   end
-
-  @doc """
-  Return a list of nodes (or their members) containing emails
-
-  ## Examples
-      iex> alias Igwet.Network
-      iex> alias Igwet.Network.Message
-      iex> [%{email: email}] = Network.get_first_node!(:name, "operator") |> Message.nodes_with_emails
-      iex> email
-      "info@theswanfactory.com"
-      iex> list = Network.get_first_node!(:name, "admin") |> Message.nodes_with_emails
-      iex> length(list)
-      1
-
-
-  """
-
-  def nodes_with_emails(node) do
-    case node.email do
-      nil ->
-        Network.node_members(node)
-        |> Enum.map(&nodes_with_emails/1)
-        |> List.flatten
-      _ -> [node]
-    end
-  end
-
 
   @doc """
   Verify Mailgun Configuration
