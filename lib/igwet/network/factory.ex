@@ -79,7 +79,7 @@ defmodule Igwet.Network.Factory do
     Repo.insert!(%Edge{
       subject: subject,
       object: object,
-      predicate: Network.get_first_node_named!(keyword)
+      predicate: Network.get_first_node!(:name, keyword)
     })
   end
 
@@ -107,12 +107,12 @@ defmodule Igwet.Network.Factory do
   def create_child_node!(attrs \\ %{}) do
     type_node =
       if Map.has_key?(attrs, :type) do
-        Network.get_first_node_named!(attrs.type)
+        Network.get_first_node!(:name, attrs.type)
       end
 
     in_node =
       if Map.has_key?(attrs, :in) do
-        Network.get_first_node_named!(attrs.in)
+        Network.get_first_node!(:name, attrs.in)
       end
 
     in_key = if in_node, do: in_node.key, else: @sys_key

@@ -8,9 +8,9 @@ defmodule Igwet.NetworkTest do
 
     {
       :ok,
-      in: Network.get_first_node_named!("in"),
-      admin_group: Network.get_first_node_named!("admin"),
-      admin_node: Network.get_first_node_named!(admin_name)
+      in: Network.get_first_node!(:name, "in"),
+      admin_group: Network.get_first_node!(:name, "admin"),
+      admin_node: Network.get_first_node!(:name, admin_name)
     }
   end
 

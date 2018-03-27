@@ -84,10 +84,10 @@ defmodule Igwet.Network.Message do
     sender_email = params[@sender]
 
     try do
-      node = Network.find_node_for_email!(sender_email)
+      node = Network.get_first_node!(:email, sender_email)
 
       updates = %{
-        # ,      @from => node
+        @from => node,
         @sender => Mailer.keyed_email(node)
       }
 
@@ -115,7 +115,7 @@ defmodule Igwet.Network.Message do
     # /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
     try do
-      # node = Network.find_node_for_email!(recipient_email)
+      # node = Network.get_first_node!(:email,recipient_email)
       params
       |> Map.put(@recipient_list, [recipient_email])
 
@@ -139,7 +139,7 @@ defmodule Igwet.Network.Message do
   """
 
   def save_as_node(params) do
-    node = Network.get_first_node_named!("operator")
+    node = Network.get_first_node!(:name, "operator")
 
     params
     |> Map.put(@node, node)
@@ -181,6 +181,7 @@ defmodule Igwet.Network.Message do
 
   def params_to_email_list(params) do
     ensure_parameter!(params, @recipient_list)
+
     for recipient <- params[@recipient_list] do
       params
       |> Map.replace!(@recipient, recipient)
@@ -192,11 +193,11 @@ defmodule Igwet.Network.Message do
   Returns a list of email for for members of a given node
 
   ## Examples
-      iex> user = Igwet.Network.get_first_node_named!("operator")
+      iex> user = Igwet.Network.get_first_node!(:name, "operator")
       iex> Igwet.Network.Message.emails_for_node(user)
       ["info@theswanfactory.com"]
 
-      iex> group = Igwet.Network.get_first_node_named!("admin")
+      iex> group = Igwet.Network.get_first_node!(:name, "admin")
       iex> Igwet.Network.Message.emails_for_node(group)
       ["info@theswanfactory.com"]
 
@@ -210,11 +211,11 @@ defmodule Igwet.Network.Message do
   Returns a list of email addreses for a given node
 
   ## Examples
-      iex> user = Igwet.Network.get_first_node_named!("operator")
+      iex> user = Igwet.Network.get_first_node!(:name, "operator")
       iex> Igwet.Network.Message.emails_for_node(user)
       ["info@theswanfactory.com"]
 
-      iex> group = Igwet.Network.get_first_node_named!("admin")
+      iex> group = Igwet.Network.get_first_node!(:name, "admin")
       iex> Igwet.Network.Message.emails_for_node(group)
       ["info@theswanfactory.com"]
 
@@ -244,7 +245,7 @@ defmodule Igwet.Network.Message do
   """
 
   def test_email(node) do
-    user = Igwet.Network.get_first_node_named!("operator")
+    user = Igwet.Network.get_first_node!(:name, "operator")
 
     new_email()
     |> to(node)

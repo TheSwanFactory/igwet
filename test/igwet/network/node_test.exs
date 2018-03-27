@@ -34,11 +34,11 @@ defmodule Igwet.NetworkTest.Node do
     test "get_first_node_named!/1 returns first node" do
       node = node_fixture()
       node_fixture(%{key: "different key"})
-      assert Network.get_first_node_named!(node.name) == node
+      assert Network.get_first_node!(:name, node.name) == node
     end
 
     test "get_first_node_named!/1 raises if no node with that name" do
-      assert_raise Ecto.NoResultsError, fn -> Network.get_first_node_named!("unnamed") end
+      assert_raise Ecto.NoResultsError, fn -> Network.get_first_node!(:name, "unnamed") end
     end
 
     test "list_nodes/0 returns all nodes" do
