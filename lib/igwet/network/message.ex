@@ -4,6 +4,7 @@ defmodule Igwet.Network.Message do
   """
 
   # require IEx; #IEx.pry
+  require Logger
   alias Igwet.Network
   alias Igwet.Admin.Mailer
 
@@ -92,8 +93,8 @@ defmodule Igwet.Network.Message do
 
       Map.merge(params, updates)
     rescue
-      _ ->
-        raise "Unrecognized sender `#{sender_email}`}"
+      e ->
+        raise "Unrecognized sender `#{sender_email}`}\n#{inspect(e)}"
     end
   end
 
@@ -120,9 +121,8 @@ defmodule Igwet.Network.Message do
 
       # |> Map.update!(@to, node)
     rescue
-      # {}"Unrecognized recipient `#{recipient_email}`}"
       e ->
-        raise e
+        raise "Unrecognized recipient `#{recipient_email}`}\n#{inspect(e)}"
     end
   end
 
@@ -181,41 +181,11 @@ defmodule Igwet.Network.Message do
 
   def params_to_email_list(params) do
     ensure_parameter!(params, @recipient_list)
-
     for recipient <- params[@recipient_list] do
       params
       |> Map.replace!(@recipient, recipient)
       |> params_to_email()
     end
-  end
-
-  @doc """
-  Verify Mailgun Configuration
-
-  ## Examples
-      iex> node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
-      iex> alias Igwet.Network.Message
-      iex> result = Message.test_email(node) |> Igwet.Admin.Mailer.deliver_now
-      iex> result.headers["sender"]
-      "list@igwet.com"
-      iex> result.text_body
-      "welcome"
-      iex> result.to
-      [{node.name, node.email}]
-
-  """
-
-  def test_email(node) do
-    user = Igwet.Network.get_first_node_named!("operator")
-
-    new_email()
-    |> to(node)
-    |> from(user)
-    |> subject("Igwet.Admin.Mailer test")
-    |> html_body("<strong>Welcome</strong>")
-    |> text_body("welcome")
-    |> put_header(@sender, "list@igwet.com")
-    |> put_header("List-Archive", "<https://www.igwet.com/network/node/operator")
   end
 
   @doc """
@@ -255,6 +225,35 @@ defmodule Igwet.Network.Message do
       nil -> member_emails(node)
       _ -> [node.email]
     end
+  end
+
+  @doc """
+  Verify Mailgun Configuration
+
+  ## Examples
+      iex> node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
+      iex> alias Igwet.Network.Message
+      iex> result = Message.test_email(node) |> Igwet.Admin.Mailer.deliver_now
+      iex> result.headers["sender"]
+      "list@igwet.com"
+      iex> result.text_body
+      "welcome"
+      iex> result.to
+      [{node.name, node.email}]
+
+  """
+
+  def test_email(node) do
+    user = Igwet.Network.get_first_node_named!("operator")
+
+    new_email()
+    |> to(node)
+    |> from(user)
+    |> subject("Igwet.Admin.Mailer test")
+    |> html_body("<strong>Welcome</strong>")
+    |> text_body("welcome")
+    |> put_header(@sender, "list@igwet.com")
+    |> put_header("List-Archive", "<https://www.igwet.com/network/node/operator")
   end
 
   @doc """

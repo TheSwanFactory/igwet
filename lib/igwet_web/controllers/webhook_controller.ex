@@ -12,9 +12,10 @@ defmodule IgwetWeb.WebhookController do
       params
       |> Message.normalize_params()
       |> Message.mask_sender()
+      |> Message.expand_recipients()
       |> Message.save_as_node()
-      |> Message.params_to_email()
-      |> Igwet.Admin.Mailer.deliver_now()
+      |> Message.params_to_email_list()
+      |> Enum.map(&Igwet.Admin.Mailer.deliver_now/1)
 
       conn
       |> put_status(:created)
