@@ -17,5 +17,4 @@ defmodule Igwet.Admin.Mailer do
     domain = Application.get_env(:igwet, Igwet.Admin.Mailer)[:domain]
     "#{key}@#{domain}"
   end
-
 end

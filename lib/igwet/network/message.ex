@@ -25,7 +25,7 @@ defmodule Igwet.Network.Message do
 
   # Should probably do this with function clauses
   defp ensure_parameter!(params, key) do
-   if (!Map.has_key?(params, key)), do: raise "No parameter named '#{key}'"
+    if !Map.has_key?(params, key), do: raise("No parameter named '#{key}'")
   end
 
   def downcase_map(params) do
@@ -45,10 +45,11 @@ defmodule Igwet.Network.Message do
   def downcase_addresses(params) do
     ensure_parameter!(params, @sender)
     ensure_parameter!(params, @recipient)
+
     %{
-        params
-        | @sender => String.downcase(params[@sender]),
-          @recipient => String.downcase(params[@recipient])
+      params
+      | @sender => String.downcase(params[@sender]),
+        @recipient => String.downcase(params[@recipient])
     }
   end
 
@@ -80,20 +81,24 @@ defmodule Igwet.Network.Message do
     ensure_parameter!(params, @sender)
     ensure_parameter!(params, @from)
     sender_email = params[@sender]
+
     try do
       node = Network.find_node_for_email!(sender_email)
+
       updates = %{
-        @sender => Mailer.keyed_email(node)#,      @from => node
+        # ,      @from => node
+        @sender => Mailer.keyed_email(node)
       }
+
       Map.merge(params, updates)
     rescue
       _ ->
-      raise "Unrecognized sender `#{sender_email}`}"
+        raise "Unrecognized sender `#{sender_email}`}"
     end
   end
 
   @doc """
-  Lookup the recipent (raise if does not exist)
+  Lookup the recipient (raise if does not exist)
   Replace the To field
   Replace the Recipient with a list of emailable_nodes
 
@@ -106,18 +111,20 @@ defmodule Igwet.Network.Message do
 
   def expand_recipients(params) do
     recipient_email = params[@recipient]
-    #/\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+    # /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
     try do
-      #node = Network.find_node_for_email!(recipient_email)
+      # node = Network.find_node_for_email!(recipient_email)
       params
       |> Map.put(@recipient_list, [recipient_email])
-      #|> Map.update!(@to, node)
+
+      # |> Map.update!(@to, node)
     rescue
-      e -> raise  e#{}"Unrecognized recipient `#{recipient_email}`}"
+      # {}"Unrecognized recipient `#{recipient_email}`}"
+      e ->
+        raise e
     end
   end
-
 
   @doc """
   Store the message as a node with links to the From and To
@@ -133,66 +140,9 @@ defmodule Igwet.Network.Message do
 
   def save_as_node(params) do
     node = Network.get_first_node_named!("operator")
+
     params
     |> Map.put(@node, node)
-  end
-
-
-  @doc """
-  Sample message params
-
-  ## Examples
-      iex> alias Igwet.Network.Message
-      iex> params = Message.test_params
-      iex> params["recipient"]
-      "com.igwet+admin@mg.igwet.com"
-  """
-
-  def test_params() do
-    %{
-      @recipient => "com.igwet+admin@mg.igwet.com",
-      @sender => "info@theswanfactory.com",
-      "subject" => "Re: Sample POST request",
-      @from => "Bob <bob@mg.igwet.com>",
-      "Message-Id" => "<517ACC75.5010709@mg.igwet.com>",
-      "Date" => "Fri, 26 Apr 2013 11:50:29 -0700",
-      @to => "Alice <alice@mg.igwet.com>",
-      "Subject" => "Re: Sample POST request",
-      "Sender"=> "bob@mg.igwet.com",
-      "message-headers" => [
-        [
-          "Received",
-          "by luna.mailgun.net with SMTP mgrt 8788212249833; Fri, 26 Apr 2013 18:50:30 +0000"
-        ],
-        [
-          "Received",
-          "from [10.20.76.69] (Unknown [50.56.129.169]) by mxa.mailgun.org with ESMTP id 517acc75.4b341f0-worker2; Fri, 26 Apr 2013 18:50:29 -0000 (UTC)"
-        ],
-        ["Message-Id", "<517ACC75.5010709@mg.igwet.com>"],
-        ["Date", "Fri, 26 Apr 2013 11:50:29 -0700"],
-        [@from, "Bob <bob@mg.igwet.com>"],
-        [
-          "User-Agent",
-          "Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20130308 Thunderbird/17.0.4"
-        ],
-        ["Mime-Version", "1.0"],
-        [@to, "Alice <alice@mg.igwet.com>"],
-        ["Subject", "Re: Sample POST request"],
-        ["References", "<517AC78B.5060404@mg.igwet.com>"],
-        ["In-Reply-To", "<517AC78B.5060404@mg.igwet.com>"],
-        ["Content-Type", "multipart/mixed"],
-        [@sender, "bob@mg.igwet.com"]
-      ],
-      "timestamp" => "1521723603",
-      "body-plain" =>
-        "Hi Alice, This is Bob. I also attached a file. Thanks, Bob On 04/26/2013 11:29 AM, Alice wrote: > Hi Bob, > > This is Alice. How are you doing? > > Thanks, > Alice",
-      "body-html" =>
-        "<html> <body ><b> I also attached a file.</b> <br> </div> <blockquote>Hi Bob, <br> <br> This is Alice. How are you doing? <br> <br> Thanks, <br> Alice <br> </blockquote> <br> </body> </html>",
-      "stripped-html" =>
-        "<html> <body ><b> I also attached a file.</b> <br> </div> </body> </html>",
-      "stripped-text" => "Hi Alice, This is Bob. I also attached a file.",
-      "stripped-signature" => "Thanks, Bob"
-    }
   end
 
   @doc """
@@ -200,8 +150,8 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.test_params |> Message.params_to_email
-      iex> params.from
+      iex> email = Message.test_params |> Message.params_to_email
+      iex> email.from
       "Bob <bob@mg.igwet.com>"
 
   """
@@ -215,6 +165,28 @@ defmodule Igwet.Network.Message do
       text_body: params["body-plain"],
       html_body: params["body-html"]
     )
+  end
+
+  @doc """
+  Use recipient_list to generate a list of emails
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> params = Message.test_params
+      iex> emails = Map.put(params, "recipient_list", [params["recipient"]]) |> Message.params_to_email_list
+      iex> length(emails)
+      1
+
+  """
+
+  def params_to_email_list(params) do
+    ensure_parameter!(params, @recipient_list)
+
+    for recipient <- params[@recipient_list] do
+      params
+      |> Map.replace!(@recipient, recipient)
+      |> params_to_email()
+    end
   end
 
   @doc """
@@ -283,5 +255,62 @@ defmodule Igwet.Network.Message do
       nil -> member_emails(node)
       _ -> [node.email]
     end
+  end
+
+  @doc """
+  Sample message params
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> params = Message.test_params
+      iex> params["recipient"]
+      "com.igwet+admin@mg.igwet.com"
+  """
+
+  def test_params() do
+    %{
+      @recipient => "com.igwet+admin@mg.igwet.com",
+      @sender => "info@theswanfactory.com",
+      "subject" => "Re: Sample POST request",
+      @from => "Bob <bob@mg.igwet.com>",
+      "Message-Id" => "<517ACC75.5010709@mg.igwet.com>",
+      "Date" => "Fri, 26 Apr 2013 11:50:29 -0700",
+      @to => "Alice <alice@mg.igwet.com>",
+      "Subject" => "Re: Sample POST request",
+      "Sender" => "bob@mg.igwet.com",
+      "message-headers" => [
+        [
+          "Received",
+          "by luna.mailgun.net with SMTP mgrt 8788212249833; Fri, 26 Apr 2013 18:50:30 +0000"
+        ],
+        [
+          "Received",
+          "from [10.20.76.69] (Unknown [50.56.129.169]) by mxa.mailgun.org with ESMTP id 517acc75.4b341f0-worker2; Fri, 26 Apr 2013 18:50:29 -0000 (UTC)"
+        ],
+        ["Message-Id", "<517ACC75.5010709@mg.igwet.com>"],
+        ["Date", "Fri, 26 Apr 2013 11:50:29 -0700"],
+        [@from, "Bob <bob@mg.igwet.com>"],
+        [
+          "User-Agent",
+          "Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20130308 Thunderbird/17.0.4"
+        ],
+        ["Mime-Version", "1.0"],
+        [@to, "Alice <alice@mg.igwet.com>"],
+        ["Subject", "Re: Sample POST request"],
+        ["References", "<517AC78B.5060404@mg.igwet.com>"],
+        ["In-Reply-To", "<517AC78B.5060404@mg.igwet.com>"],
+        ["Content-Type", "multipart/mixed"],
+        [@sender, "bob@mg.igwet.com"]
+      ],
+      "timestamp" => "1521723603",
+      "body-plain" =>
+        "Hi Alice, This is Bob. I also attached a file. Thanks, Bob On 04/26/2013 11:29 AM, Alice wrote: > Hi Bob, > > This is Alice. How are you doing? > > Thanks, > Alice",
+      "body-html" =>
+        "<html> <body ><b> I also attached a file.</b> <br> </div> <blockquote>Hi Bob, <br> <br> This is Alice. How are you doing? <br> <br> Thanks, <br> Alice <br> </blockquote> <br> </body> </html>",
+      "stripped-html" =>
+        "<html> <body ><b> I also attached a file.</b> <br> </div> </body> </html>",
+      "stripped-text" => "Hi Alice, This is Bob. I also attached a file.",
+      "stripped-signature" => "Thanks, Bob"
+    }
   end
 end

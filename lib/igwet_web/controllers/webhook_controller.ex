@@ -8,10 +8,10 @@ defmodule IgwetWeb.WebhookController do
 
   def forward_email(conn, params) do
     try do
+      # |> Message.expand_recipients()
       params
       |> Message.normalize_params()
       |> Message.mask_sender()
-      #|> Message.expand_recipients()
       |> Message.save_as_node()
       |> Message.params_to_email()
       |> Igwet.Admin.Mailer.deliver_now()
@@ -21,9 +21,9 @@ defmodule IgwetWeb.WebhookController do
       |> json(%{created_at: params["timestamp"]})
     rescue
       e ->
-      conn
-      |> put_status(:unprocessable_entity)
-      |> json(%{error: e})
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: e})
     end
   end
 end

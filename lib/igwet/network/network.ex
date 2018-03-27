@@ -23,7 +23,7 @@ defmodule Igwet.Network do
       order_by: [asc: :inserted_at],
       limit: 1
     )
-    |> where([email: ^email])
+    |> where(email: ^email)
     |> Repo.one!()
   end
 
@@ -172,7 +172,6 @@ defmodule Igwet.Network do
     )
     |> Repo.one!()
   end
-
 
   @doc """
   Gets a single node based on its unique key
