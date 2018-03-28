@@ -66,19 +66,16 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.filter_headers Message.test_params()
-      iex> list = params["received_list"]
-      iex> length(list)
-      3
-      iex> params["sender"]
-      nil
+      iex> params = Message.test_params() |> Message.downcase_map()
+      iex> result = Message.filter_headers params
+      iex> result["message-headers"]
+      9
   """
 
   def filter_headers(params) do
     headers = params[@headers]
     |> Enum.map(&header_as_keyword_list/1)
-    |> Enum.reject(fn {k, v} -> k == :a end)
-    |> Map.new
+    |> Enum.reject(fn {k, _} -> Enum.member?(@replaced_headers, k) end)
     %{params | @headers => headers}
   end
 
