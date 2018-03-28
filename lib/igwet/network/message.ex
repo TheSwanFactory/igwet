@@ -10,12 +10,14 @@ defmodule Igwet.Network.Message do
 
   import Bamboo.Email
 
-  @sender "sender"
+  @from "from"
+  @node "node"
+  @received "received"
+  @received_list "received_list"
   @recipient "recipient"
   @recipient_list "recipient_list"
-  @from "from"
+  @sender "sender"
   @to "to"
-  @node "node"
 
   defimpl Bamboo.Formatter, for: Igwet.Network.Node do
     # Used by `to`, `bcc`, `cc` and `from`
@@ -55,6 +57,23 @@ defmodule Igwet.Network.Message do
   end
 
   @doc """
+  Filter Headers
+  Remove keys we explicitly set elsewhere
+  Create @received_list and add self
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> params = Message.filter_headers Message.test_params()
+      iex> list = params["received_list"]
+      iex> length(list)
+      3
+  """
+
+  def filter_headers(params) do
+    Map.put(params, @received_list, [:a, :b, :c])
+  end
+
+  @doc """
   Normalize webhook parameters
 
   ## Examples
@@ -65,7 +84,7 @@ defmodule Igwet.Network.Message do
   """
 
   def normalize_params(params) do
-    params |> downcase_map |> downcase_addresses
+    params |> downcase_map |> downcase_addresses #|> filter_headers
   end
 
   @doc """
