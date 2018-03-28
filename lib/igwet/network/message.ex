@@ -11,6 +11,7 @@ defmodule Igwet.Network.Message do
   import Bamboo.Email
 
   @from "from"
+  @headers "message-headers"
   @node "node"
   @received "received"
   @received_list "received_list"
@@ -18,6 +19,8 @@ defmodule Igwet.Network.Message do
   @recipient_list "recipient_list"
   @sender "sender"
   @to "to"
+
+  @replaced_headers [@from, @received, @recipient, @sender, @to]
 
   defimpl Bamboo.Formatter, for: Igwet.Network.Node do
     # Used by `to`, `bcc`, `cc` and `from`
@@ -67,10 +70,42 @@ defmodule Igwet.Network.Message do
       iex> list = params["received_list"]
       iex> length(list)
       3
+      iex> params["sender"]
+      nil
   """
 
   def filter_headers(params) do
-    Map.put(params, @received_list, [:a, :b, :c])
+    headers = params[@headers]
+    |> Enum.map(&header_as_keyword_list/1)
+    |> Enum.reject(fn {k, v} -> k == :a end)
+    |> Map.new
+    %{params | @headers => headers}
+  end
+
+  defp header_as_keyword_list(header) do
+    key = Enum.at(header, 0) |> String.downcase |> String.to_atom
+    value = Enum.at(header, 1)
+    {key, value}
+  end
+
+  @doc """
+  Updatd Received
+  Remove keys we explicitly set elsewhere
+  Create @received_list and add self
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> params = Message.updated_received Message.test_params()
+      iex> list = params["received_list"]
+      iex> length(list)
+      3
+      iex> params["sender"]
+      nil
+  """
+
+  def updated_received(params) do
+    params
+    |> Map.put(@received_list, [:a, :b, :c])
   end
 
   @doc """
