@@ -68,14 +68,16 @@ defmodule Igwet.Network.Message do
       iex> alias Igwet.Network.Message
       iex> params = Message.test_params() |> Message.downcase_map()
       iex> result = Message.filter_headers params
-      iex> result["message-headers"]
-      9
+      iex> headers = result["message-headers"]
+      iex> headers[:from]
+      nil
   """
 
   def filter_headers(params) do
+    rejects = Enum.map(@replaced_headers, &String.to_atom/1)
     headers = params[@headers]
     |> Enum.map(&header_as_keyword_list/1)
-    |> Enum.reject(fn {k, _} -> Enum.member?(@replaced_headers, k) end)
+    |> Enum.reject(fn {k, _} -> Enum.member?(rejects, k) end)
     %{params | @headers => headers}
   end
 
