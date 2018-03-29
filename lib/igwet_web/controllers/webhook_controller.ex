@@ -18,6 +18,7 @@ defmodule IgwetWeb.WebhookController do
     try do
       params
       |> Message.normalize_params()
+      |> Message.add_received_header(received)
       |> Message.mask_sender()
       |> Message.expand_recipients()
       |> Message.save_as_node()
