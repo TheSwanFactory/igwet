@@ -25,9 +25,12 @@ defmodule IgwetWeb.WebhookControllerTest do
   end
 
   test "POST /webhook -> 422 unknown sender", %{conn: conn} do
+    params = %{sender: "missing-email", recipient: "none", from: "none"}
+    |> Map.put("message-headers", [])
+
     %{"error" => %{"message" => message}} =
       conn
-      |> post("/webhook", %{sender: "missing-email", recipient: "none", from: "none"})
+      |> post("/webhook", params)
       |> json_response(422)
 
     assert message =~ "Unrecognized sender"

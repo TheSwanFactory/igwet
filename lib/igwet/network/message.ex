@@ -13,14 +13,12 @@ defmodule Igwet.Network.Message do
   @from "from"
   @headers "message-headers"
   @node "node"
-  @received "received"
-  @received_list "received_list"
   @recipient "recipient"
   @recipient_list "recipient_list"
   @sender "sender"
   @to "to"
 
-  @replaced_headers [@from, @received, @recipient, @sender, @to]
+  @replaced_headers [@from, @recipient, @sender, @to]
 
   defimpl Bamboo.Formatter, for: Igwet.Network.Node do
     # Used by `to`, `bcc`, `cc` and `from`
@@ -71,40 +69,27 @@ defmodule Igwet.Network.Message do
       iex> headers = result["message-headers"]
       iex> headers[:from]
       nil
+      iex> list = Keyword.get_values(headers, :received)
+      iex> length(list)
+      2
   """
 
   def filter_headers(params) do
+    ensure_parameter!(params, @headers)
     rejects = Enum.map(@replaced_headers, &String.to_atom/1)
-    headers = params[@headers]
-    |> Enum.map(&header_as_keyword_list/1)
-    |> Enum.reject(fn {k, _} -> Enum.member?(rejects, k) end)
+
+    headers =
+      params[@headers]
+      |> Enum.map(&header_as_keyword_list/1)
+      |> Enum.reject(fn {k, _} -> Enum.member?(rejects, k) end)
+
     %{params | @headers => headers}
   end
 
   defp header_as_keyword_list(header) do
-    key = Enum.at(header, 0) |> String.downcase |> String.to_atom
+    key = Enum.at(header, 0) |> String.downcase() |> String.to_atom()
     value = Enum.at(header, 1)
     {key, value}
-  end
-
-  @doc """
-  Updatd Received
-  Remove keys we explicitly set elsewhere
-  Create @received_list and add self
-
-  ## Examples
-      iex> alias Igwet.Network.Message
-      iex> params = Message.updated_received Message.test_params()
-      iex> list = params["received_list"]
-      iex> length(list)
-      3
-      iex> params["sender"]
-      nil
-  """
-
-  def updated_received(params) do
-    params
-    |> Map.put(@received_list, [:a, :b, :c])
   end
 
   @doc """
@@ -112,13 +97,34 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.normalize_params %{"recipient" => "M@igwet.com", "sender" => "Bob@IGWET.COM"}
+      iex> params = Message.normalize_params(Message.test_params())
       iex> params["recipient"]
-      "m@igwet.com"
+      "com.igwet+admin@mg.igwet.com"
   """
 
   def normalize_params(params) do
-    params |> downcase_map |> downcase_addresses #|> filter_headers
+    params
+    |> downcase_map
+    |> downcase_addresses
+    |> filter_headers
+  end
+
+  @doc """
+  Add local Received header
+
+  ## Examples
+      iex> alias Igwet.Network.Message
+      iex> normal = Message.normalize_params(Message.test_params())
+      iex> params = Message.add_received_header(normal, "here")
+      iex> [head | _] = params["message-headers"]
+      iex> head
+      {:received, "here"}
+  """
+
+  def add_received_header(params, received) do
+    ensure_parameter!(params, @headers)
+    headers = [received: received] ++ params[@headers]
+    %{params | @headers => headers}
   end
 
   @doc """
@@ -167,8 +173,9 @@ defmodule Igwet.Network.Message do
     ensure_parameter!(params, @recipient)
     recipient_email = params[@recipient]
 
-    email = ~r/\A(?<name>[^@]+)@[a-z\d\-]+(?<domain>\.[a-z]+)*\.[a-z]+\z/iu
-    |> Regex.named_captures(recipient_email)
+    email =
+      ~r/\A(?<name>[^@]+)@[a-z\d\-]+(?<domain>\.[a-z]+)*\.[a-z]+\z/iu
+      |> Regex.named_captures(recipient_email)
 
     try do
       Network.get_first_node!(:key, email["name"])
@@ -201,8 +208,10 @@ defmodule Igwet.Network.Message do
       nil ->
         Network.node_members(node)
         |> Enum.map(&nodes_with_emails/1)
-        |> List.flatten
-      _ -> [node]
+        |> List.flatten()
+
+      _ ->
+        [node]
     end
   end
 

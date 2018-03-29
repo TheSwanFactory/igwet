@@ -6,9 +6,16 @@ defmodule IgwetWeb.WebhookController do
 
   alias Igwet.Network.Message
 
+  defp peer(conn) do
+    {host, port} = conn.peer
+    "#{Tuple.to_list(host) |> Enum.join(".")}:#{port}"
+  end
+
   def forward_email(conn, params) do
+    now = DateTime.to_string(DateTime.utc_now())
+    received = "from #{peer(conn)} by #{conn.host}; #{now}"
+
     try do
-      # |> Message.expand_recipients()
       params
       |> Message.normalize_params()
       |> Message.mask_sender()
