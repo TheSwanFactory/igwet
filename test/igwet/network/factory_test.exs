@@ -6,7 +6,7 @@ defmodule Igwet.NetworkTest.Factory do
 
   describe "factory" do
     test "IGWET has its own key" do
-      node = Network.get_first_node_named!("IGWET")
+      node = Network.get_first_node!(:name, "IGWET")
       assert "com.igwet" == node.key
 
       {:ok, datetime, 0} = DateTime.from_iso8601("2018-02-06T00:00:00Z")

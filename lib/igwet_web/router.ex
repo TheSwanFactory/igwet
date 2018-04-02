@@ -24,6 +24,7 @@ defmodule IgwetWeb.Router do
     resources("/nodes", NodeController)
     resources("/edges", EdgeController)
     resources("/addresses", AddressController)
+    post("/webhook", WebhookController, :forward_email)
   end
 
   scope "/auth", IgwetWeb do
@@ -35,7 +36,7 @@ defmodule IgwetWeb.Router do
   end
 
   if Application.get_env(:igwet, :env) == :dev do
-    # If using Phoenix
+    # Show Bamboo emails
     forward("/sent_emails", Bamboo.EmailPreviewPlug)
   end
 end
