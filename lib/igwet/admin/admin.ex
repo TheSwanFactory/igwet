@@ -11,9 +11,9 @@ defmodule Igwet.Admin do
   def test_admin_user(is_admin) do
     if is_admin do
       admin_name = Application.get_env(:igwet, :admin_user)
-      %User{name: "Test Admin User", node: Network.get_first_node_named!(admin_name)}
+      %User{name: "Test Admin User", node: Network.get_first_node!(:name, admin_name)}
     else
-      %User{name: "Test Non-Admin User", node: Network.get_first_node_named!("group")}
+      %User{name: "Test Non-Admin User", node: Network.get_first_node!(:name, "group")}
     end
   end
 
