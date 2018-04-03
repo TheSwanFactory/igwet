@@ -132,7 +132,7 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.mask_sender %{"sender" => "info@theswanfactory.com", "from" => ""}
+      iex> params = Message.mask_sender %{"sender" => "ernest.prabhakar@gmail.com", "from" => ""}
       iex> params["sender"]
       "com.igwet+admin+operator@example.com"
   """
@@ -195,7 +195,7 @@ defmodule Igwet.Network.Message do
       iex> alias Igwet.Network.Message
       iex> [%{email: email}] = Network.get_first_node!(:name, "operator") |> Message.nodes_with_emails
       iex> email
-      "info@theswanfactory.com"
+      "ernest.prabhakar@gmail.com"
       iex> list = Network.get_first_node!(:name, "admin") |> Message.nodes_with_emails
       iex> length(list)
       1
@@ -320,7 +320,7 @@ defmodule Igwet.Network.Message do
   def test_params() do
     %{
       @recipient => "com.igwet+admin@mg.igwet.com",
-      @sender => "info@theswanfactory.com",
+      @sender => "ernest.prabhakar@gmail.com",
       "subject" => "Re: Sample POST request",
       @from => "Bob <bob@mg.igwet.com>",
       "Message-Id" => "<517ACC75.5010709@mg.igwet.com>",
