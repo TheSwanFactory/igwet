@@ -22,7 +22,11 @@ To start your Phoenix server:
   * Copy, edit, and load secrets and config via `source .env` from `./example.env`
   * Start Phoenix endpoint with `mix phx.server`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Now you can visit [`localhost:4000`](http://0.0.0.0:4000) from your browser.
+
+You can test the webhook via:
+
+curl -d "@test-message.json" -H "Content-Type: application/json" -X POST http://0.0.0.0:4000/webhook
 
 ## Production
 
