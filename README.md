@@ -3,7 +3,7 @@
 # IGWET
 A secure messaging directory for Intra-Group Web/Email/Text.
 * www.igwet.com
-* www.theswanfactory.com
+* theswanfactory.wordpress.com
 
 IGWET is an inside-out social network designed to facilitate external relationships.
 Our initial product is a *secure messaging directory* for churches, conferences, singles groups, and other communities that want an easy yet safe way for members to connect with each other and non-members around shared interests, without having to share sensitive personal information.
