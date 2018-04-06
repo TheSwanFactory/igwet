@@ -118,7 +118,7 @@ defmodule Igwet.Network.Message do
       iex> params = Message.add_received_header(normal, "here")
       iex> [head | _] = params["message-headers"]
       iex> head
-      {"received", "here"}
+      {:received, "here"}
   """
 
   def add_received_header(params, received) do
@@ -261,11 +261,17 @@ defmodule Igwet.Network.Message do
     Enum.reduce(headers, email, &add_header/2)
   end
 
-  defp add_header(header, email) do
-    key = Enum.at(header, 0)
-    value = Enum.at(header, 1)
+  defp add_header(header, email) when is_list(header) do
+    [key, value]= header
     put_header(email, key, value)
   end
+
+  defp add_header(header, email) when is_tuple(header) do
+    {key, value} = header
+    put_header(email, as_string(key), value)
+  end
+
+  defp as_string(key) when is_atom(key), do: Atom.to_string(key)
 
   @doc """
   Use recipient_list to generate a list of emails
