@@ -239,14 +239,14 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> email = Message.test_params |> Message.params_to_email
+      iex> email = Message.test_params() |> Message.params_to_email()
       iex> email.from
       "Bob <bob@mg.igwet.com>"
 
   """
 
   def params_to_email(params) do
-    new_email(
+    email = new_email(
       to: params[@to],
       cc: params["cc"],
       from: params[@from],
@@ -254,6 +254,8 @@ defmodule Igwet.Network.Message do
       text_body: params["body-plain"],
       html_body: params["body-html"]
     )
+    #for {key, val} <- params[@headers], do: email.put_header(key, val)
+    email
   end
 
   @doc """
@@ -261,8 +263,9 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.test_params
-      iex> emails = Map.put(params, "recipient_list", [params["recipient"]]) |> Message.params_to_email_list
+      iex> params = Message.test_params()
+      iex> new_params = Map.put_new(params, "recipient_list", [params["recipient"]])
+      iex> emails = Message.params_to_email_list(new_params)
       iex> length(emails)
       1
 
@@ -328,7 +331,7 @@ defmodule Igwet.Network.Message do
       @to => "Alice <alice@mg.igwet.com>",
       "Subject" => "Re: Sample POST request",
       "Sender" => "bob@mg.igwet.com",
-      "message-headers" => [
+      @headers => [
         [
           "Received",
           "by luna.mailgun.net with SMTP mgrt 8788212249833; Fri, 26 Apr 2013 18:50:30 +0000"
