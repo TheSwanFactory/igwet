@@ -3,7 +3,7 @@ defmodule Igwet.Network.Message do
   Wrappers and helpers for sending and receiving messages
   """
 
-  # require IEx; #IEx.pry
+  require IEx; #IEx.pry
   require Logger
   alias Igwet.Network
   alias Igwet.Admin.Mailer
@@ -118,7 +118,7 @@ defmodule Igwet.Network.Message do
       iex> params = Message.add_received_header(normal, "here")
       iex> [head | _] = params["message-headers"]
       iex> head
-      {:received, "here"}
+      {"received", "here"}
   """
 
   def add_received_header(params, received) do
@@ -246,7 +246,7 @@ defmodule Igwet.Network.Message do
   """
 
   def params_to_email(params) do
-    email = new_email(
+    new_email(
       to: params[@to],
       cc: params["cc"],
       from: params[@from],
@@ -254,8 +254,17 @@ defmodule Igwet.Network.Message do
       text_body: params["body-plain"],
       html_body: params["body-html"]
     )
-    #for {key, val} <- params[@headers], do: email.put_header(key, val)
-    email
+    |> add_headers(params[@headers])
+  end
+
+  defp add_headers(email, headers) do
+    Enum.reduce(headers, email, &add_header/2)
+  end
+
+  defp add_header(header, email) do
+    key = Enum.at(header, 0)
+    value = Enum.at(header, 1)
+    put_header(email, key, value)
   end
 
   @doc """
