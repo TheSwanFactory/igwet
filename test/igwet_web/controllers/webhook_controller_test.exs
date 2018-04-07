@@ -18,6 +18,7 @@ defmodule IgwetWeb.WebhookControllerTest do
     assert_delivered_with(
       from: {"operator", "com.igwet+admin+operator@example.com"},
       to: [{"operator", "ernest.prabhakar@gmail.com"}]
+      #headers: [{"sender", "com.igwet+admin+operator@example.com"}]
     )
   end
 
