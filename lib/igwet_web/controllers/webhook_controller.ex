@@ -5,6 +5,7 @@ defmodule IgwetWeb.WebhookController do
   require Logger
 
   alias Igwet.Network.Message
+  alias Igwet.Admin.Mailer
 
   defp peer(conn) do
     {host, port} = conn.peer
@@ -23,7 +24,7 @@ defmodule IgwetWeb.WebhookController do
       |> Message.expand_recipients()
       |> Message.save_as_node()
       |> Message.params_to_email_list()
-      |> Enum.map(&Igwet.Admin.Mailer.deliver_now/1)
+      |> Enum.map(&Mailer.deliver_now/1)
 
       conn
       |> put_status(:created)

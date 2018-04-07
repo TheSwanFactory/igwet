@@ -267,6 +267,7 @@ defmodule Igwet.Network.Message do
   end
 
   defp add_headers(email, headers) do
+    # Add received headers
     Enum.reduce(headers, email, &add_header/2)
   end
 
