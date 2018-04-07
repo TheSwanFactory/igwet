@@ -167,8 +167,11 @@ defmodule Igwet.Network.Message do
   ## Examples
       iex> alias Igwet.Network.Message
       iex> params = Message.expand_recipients Message.test_params()
-      iex> length(params["recipient_list"])
-      1
+      iex> [head | tail] = params["recipient_list"]
+      iex> length(tail)
+      0
+      iex> head.name
+      "operator"
   """
 
   def expand_recipients(params) do
@@ -294,6 +297,7 @@ defmodule Igwet.Network.Message do
     for recipient <- params[@recipient_list] do
       params
       |> Map.replace!(@recipient, recipient)
+      |> Map.replace!(@to, recipient)
       |> params_to_email()
     end
   end
