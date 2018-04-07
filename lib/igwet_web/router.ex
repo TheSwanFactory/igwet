@@ -24,7 +24,10 @@ defmodule IgwetWeb.Router do
     resources("/nodes", NodeController)
     resources("/edges", EdgeController)
     resources("/addresses", AddressController)
-    post("/webhook", WebhookController, :forward_email)
+  end
+
+  scope "/webhook", IgwetWeb do
+    post("/", WebhookController, :forward_email)
   end
 
   scope "/auth", IgwetWeb do

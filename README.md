@@ -3,7 +3,7 @@
 # IGWET
 A secure messaging directory for Intra-Group Web/Email/Text.
 * www.igwet.com
-* www.theswanfactory.com
+* theswanfactory.wordpress.com
 
 IGWET is an inside-out social network designed to facilitate external relationships.
 Our initial product is a *secure messaging directory* for churches, conferences, singles groups, and other communities that want an easy yet safe way for members to connect with each other and non-members around shared interests, without having to share sensitive personal information.
@@ -15,14 +15,24 @@ IGWET is written in Elixir using the Phoenix web application framework.
 ## Installation
 
 To start your Phoenix server:
+```
+$ mix deps.get                          # Install dependencies
+$ mix ecto.create && mix ecto.migrate   # Create and migrate your database
+$ mix run priv/repo/seeds.exs           # Run seeds
+$ cd assets && npm install              # Install Node.js dependencies
+$ cp ./example.env .env && $(EDITOR) .env && source .env    # Configure secrets
+$ mix phx.server                        # Run app via Cowboy web server
+```
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Copy, edit, and load secrets and config via `source .env` from `./example.env`
-  * Start Phoenix endpoint with `mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+
+You can test the webhook via:
+```
+$ curl -d "@test-message.json" -H "Content-Type: application/json" -X POST http://localhost:4000/webhook
+$ open http://localhost:4000/sent_emails
+
+```
 
 ## Production
 

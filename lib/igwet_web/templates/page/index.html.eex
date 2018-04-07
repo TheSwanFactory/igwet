@@ -24,14 +24,14 @@
           Hands on Christianity</a>: A 30-day Discipleship Startup
       </li>
       <li><span class="author">Ernest Prabhakar</span>,
-        <a href="https://theswanfactory.com/2017/09/30/passiongroups-the-pitch/">PassionGroups</a>: The Pitch
+        <a href="https://theswanfactory.wordpress.com/2017/09/30/passiongroups-the-pitch/">PassionGroups</a>: The Pitch
       </li>
       <li><span class="author">Ernest Prabhakar</span>,
-        <a href="https://theswanfactory.com/2015/04/24/like-uber-for-projects-volunteer-empowerment-systems/">
+        <a href="https://theswanfactory.wordpress.com/2015/04/24/like-uber-for-projects-volunteer-empowerment-systems/">
           Like Uber for Projects</a>: Volunteer Empowerment Systems
       </li>
       <li><span class="author">Ernest Prabhakar</span>,
-        <a href="https://theswanfactory.com/2015/03/08/how-to-disrupt-facebook/">How to Disrupt Facebook</a>
+        <a href="https://theswanfactory.wordpress.com/2015/03/08/how-to-disrupt-facebook/">How to Disrupt Facebook</a>
       </li>
       <li><span class="author">Joe Edelman</a>,
         <a href="http://livable.media/">Livable Media</a>: Four Ideas for Better Human Systems
@@ -43,11 +43,11 @@
     <div id="footer" class="small">
       <span id="version"><%= "Version #{@version}" %></span>
       |
-      <span id="copyright">Copyright (C) 2018 <a href="http://www.theswanfactory.com">The Swan Factory, Inc.</a></span>
+      <span id="copyright">Copyright (C) 2018 <a href="http://theswanfactory.wordpress.com">The Swan Factory, Inc.</a></span>
       |
       <span id="source"><a href="https://github.com/TheSwanFactory/igwet">View Source</a></span>
       |
-      <span id="contact"><a href="http://www.theswanfactory.com/contact/">Contact Us</a></span>
+      <span id="contact"><a href="http://theswanfactory.wordpress.com/contact/">Contact Us</a></span>
     </div>
 </div>
 </div>
