@@ -135,6 +135,8 @@ defmodule Igwet.Network.Message do
       iex> params = Message.mask_sender %{"sender" => "ernest.prabhakar@gmail.com", "from" => ""}
       iex> params["sender"]
       "com.igwet+admin+operator@example.com"
+      iex> params["from"]
+      {"operator", "com.igwet+admin+operator@example.com"}
   """
 
   def mask_sender(params) do
@@ -144,10 +146,10 @@ defmodule Igwet.Network.Message do
 
     try do
       node = Network.get_first_node!(:email, sender_email)
-
+      keyed_email = Mailer.keyed_email(node)
       updates = %{
-        @from => node,
-        @sender => Mailer.keyed_email(node)
+        @from => {node.name, keyed_email},
+        @sender => keyed_email
       }
 
       Map.merge(params, updates)
@@ -345,7 +347,6 @@ defmodule Igwet.Network.Message do
       "Date" => "Fri, 26 Apr 2013 11:50:29 -0700",
       @to => "Alice <alice@mg.igwet.com>",
       "Subject" => "Re: Sample POST request",
-      "Sender" => "bob@mg.igwet.com",
       @headers => [
         [
           "Received",

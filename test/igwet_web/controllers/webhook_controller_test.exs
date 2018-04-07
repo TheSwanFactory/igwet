@@ -1,5 +1,6 @@
 defmodule IgwetWeb.WebhookControllerTest do
   use IgwetWeb.ConnCase
+  use Bamboo.Test
   doctest IgwetWeb.WebhookController
 
   alias Igwet.Network.Message
@@ -13,6 +14,8 @@ defmodule IgwetWeb.WebhookControllerTest do
     conn
     |> post("/webhook", Message.test_params())
     |> response(201)
+
+    assert_delivered_with(from: {"operator", "com.igwet+admin+operator@example.com"})
   end
 
   test "POST /webhook -> 422 missing data", %{conn: conn} do
