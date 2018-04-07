@@ -28,8 +28,11 @@ $ mix phx.server                        # Run app via Cowboy web server
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 You can test the webhook via:
+```
+$ curl -d "@test-message.json" -H "Content-Type: application/json" -X POST http://localhost:4000/webhook
+$ open http://localhost:4000/sent_emails
 
-curl -d "@test-message.json" -H "Content-Type: application/json" -X POST http://localhost:4000/webhook
+```
 
 ## Production
 

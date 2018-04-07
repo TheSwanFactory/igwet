@@ -3,7 +3,8 @@ defmodule Igwet.Network.Message do
   Wrappers and helpers for sending and receiving messages
   """
 
-  require IEx; #IEx.pry
+  # require IEx; #IEx.pry
+
   require Logger
   alias Igwet.Network
   alias Igwet.Admin.Mailer
@@ -148,6 +149,7 @@ defmodule Igwet.Network.Message do
     try do
       node = Network.get_first_node!(:email, sender_email)
       keyed_email = Mailer.keyed_email(node)
+
       updates = %{
         @sender => keyed_email,
         @from => {node.name, keyed_email},
@@ -269,7 +271,7 @@ defmodule Igwet.Network.Message do
   end
 
   defp add_header(header, email) when is_list(header) do
-    [key, value]= header
+    [key, value] = header
     put_header(email, key, value)
   end
 
