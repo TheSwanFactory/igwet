@@ -4,6 +4,7 @@ defmodule Igwet.Network.Message do
   """
 
   # require IEx; #IEx.pry
+
   require Logger
   alias Igwet.Network
   alias Igwet.Admin.Mailer
@@ -132,9 +133,12 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.mask_sender %{"sender" => "info@theswanfactory.com", "from" => ""}
+      iex> source = %{"sender" => "ernest.prabhakar@gmail.com", "from" => "nobody", "message-headers" => []}
+      iex> params = Message.mask_sender source
       iex> params["sender"]
       "com.igwet+admin+operator@example.com"
+      iex> params["from"]
+      {"operator", "com.igwet+admin+operator@example.com"}
   """
 
   def mask_sender(params) do
@@ -144,10 +148,12 @@ defmodule Igwet.Network.Message do
 
     try do
       node = Network.get_first_node!(:email, sender_email)
+      keyed_email = Mailer.keyed_email(node)
 
       updates = %{
-        @from => node,
-        @sender => Mailer.keyed_email(node)
+        @sender => keyed_email,
+        @from => {node.name, keyed_email},
+        @headers => [sender: keyed_email] ++ params[@headers]
       }
 
       Map.merge(params, updates)
@@ -165,8 +171,11 @@ defmodule Igwet.Network.Message do
   ## Examples
       iex> alias Igwet.Network.Message
       iex> params = Message.expand_recipients Message.test_params()
-      iex> length(params["recipient_list"])
-      1
+      iex> [head | tail] = params["recipient_list"]
+      iex> length(tail)
+      0
+      iex> head.name
+      "operator"
   """
 
   def expand_recipients(params) do
@@ -195,7 +204,7 @@ defmodule Igwet.Network.Message do
       iex> alias Igwet.Network.Message
       iex> [%{email: email}] = Network.get_first_node!(:name, "operator") |> Message.nodes_with_emails
       iex> email
-      "info@theswanfactory.com"
+      "ernest.prabhakar@gmail.com"
       iex> list = Network.get_first_node!(:name, "admin") |> Message.nodes_with_emails
       iex> length(list)
       1
@@ -239,7 +248,7 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> email = Message.test_params |> Message.params_to_email
+      iex> email = Message.test_params() |> Message.params_to_email()
       iex> email.from
       "Bob <bob@mg.igwet.com>"
 
@@ -254,15 +263,34 @@ defmodule Igwet.Network.Message do
       text_body: params["body-plain"],
       html_body: params["body-html"]
     )
+    |> add_headers(params[@headers])
   end
+
+  defp add_headers(email, headers) do
+    # Add received headers
+    Enum.reduce(headers, email, &add_header/2)
+  end
+
+  defp add_header(header, email) when is_list(header) do
+    [key, value] = header
+    put_header(email, key, value)
+  end
+
+  defp add_header(header, email) when is_tuple(header) do
+    {key, value} = header
+    put_header(email, as_string(key), value)
+  end
+
+  defp as_string(key) when is_atom(key), do: Atom.to_string(key)
 
   @doc """
   Use recipient_list to generate a list of emails
 
   ## Examples
       iex> alias Igwet.Network.Message
-      iex> params = Message.test_params
-      iex> emails = Map.put(params, "recipient_list", [params["recipient"]]) |> Message.params_to_email_list
+      iex> params = Message.test_params()
+      iex> new_params = Map.put_new(params, "recipient_list", [params["recipient"]])
+      iex> emails = Message.params_to_email_list(new_params)
       iex> length(emails)
       1
 
@@ -274,6 +302,7 @@ defmodule Igwet.Network.Message do
     for recipient <- params[@recipient_list] do
       params
       |> Map.replace!(@recipient, recipient)
+      |> Map.replace!(@to, recipient)
       |> params_to_email()
     end
   end
@@ -320,15 +349,14 @@ defmodule Igwet.Network.Message do
   def test_params() do
     %{
       @recipient => "com.igwet+admin@mg.igwet.com",
-      @sender => "info@theswanfactory.com",
+      @sender => "ernest.prabhakar@gmail.com",
       "subject" => "Re: Sample POST request",
       @from => "Bob <bob@mg.igwet.com>",
       "Message-Id" => "<517ACC75.5010709@mg.igwet.com>",
       "Date" => "Fri, 26 Apr 2013 11:50:29 -0700",
       @to => "Alice <alice@mg.igwet.com>",
       "Subject" => "Re: Sample POST request",
-      "Sender" => "bob@mg.igwet.com",
-      "message-headers" => [
+      @headers => [
         [
           "Received",
           "by luna.mailgun.net with SMTP mgrt 8788212249833; Fri, 26 Apr 2013 18:50:30 +0000"

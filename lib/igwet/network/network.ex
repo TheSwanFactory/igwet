@@ -13,7 +13,7 @@ defmodule Igwet.Network do
 
   ## Examples
 
-      iex> get_first_node!(:email, "info@theswanfactory.com")
+      iex> get_first_node!(:email, "ernest.prabhakar@gmail.com")
       %Node{}
 
   """
