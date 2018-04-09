@@ -31,8 +31,11 @@ defmodule Igwet.Admin.User.FromAuth do
 
   defp auth_user(auth) do
     info = basic_info(auth)
+    Logger.debug("** info: " <> inspect(info))
     user = Admin.find_or_create_user(info)
+    Logger.debug("** user: " <> inspect(user))
     node = Node |> where([n], n.email == ^user.email) |> Repo.one()
+    Logger.debug("** node: " <> inspect(node))
     params = %{node: node, last_login: NaiveDateTime.utc_now()}
     {:ok, updated} = Admin.update_user(user, params)
     # Preload
