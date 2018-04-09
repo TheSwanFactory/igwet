@@ -20,13 +20,24 @@ defmodule IgwetWeb.ControllerHelper do
   end
 
   def unauthorized(conn, message) do
-    last_path = case conn.method do
-      "GET" -> true
-      _ -> false
-    end |> case do
-      false -> nil
-      true -> conn.request_path <> if byte_size(conn.query_string) > 0 do "?" <> conn.query_string else "" end
-    end
+    last_path =
+      case conn.method do
+        "GET" -> true
+        _ -> false
+      end
+      |> case do
+        false ->
+          nil
+
+        true ->
+          conn.request_path <>
+            if byte_size(conn.query_string) > 0 do
+              "?" <> conn.query_string
+            else
+              ""
+            end
+      end
+
     text = "#{last_path}: #{message}"
 
     conn
@@ -42,6 +53,7 @@ defmodule IgwetWeb.ControllerHelper do
       true ->
         conn
         |> assign(:current_user, user)
+
       nil ->
         conn
         |> assign(:current_user, user)
@@ -50,7 +62,9 @@ defmodule IgwetWeb.ControllerHelper do
       false ->
         conn
         |> assign(:current_user, user)
-        |> unauthorized("The contact for this login does not have the Administrator privilege necessary to view this page.")
+        |> unauthorized(
+          "The contact for this login does not have the Administrator privilege necessary to view this page."
+        )
     end
   end
 end

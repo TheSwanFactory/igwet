@@ -22,7 +22,10 @@ defmodule IgwetWeb.AuthController do
     case FromAuth.find_or_create(auth) do
       {:ok, user} ->
         conn
-        |> put_flash(:info, "Successfully authenticated as #{user.name} <#{user.email}>.")
+        |> put_flash(
+          :info,
+          "Successfully authenticated #{user.name} <#{user.email}> as node '#{user.node.key}'."
+        )
         |> put_session(:current_user, user)
         |> redirect(to: "/")
 
