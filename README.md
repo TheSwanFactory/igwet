@@ -14,8 +14,17 @@ IGWET is written in Elixir using the Phoenix web application framework.
 
 ## Installation
 
+
+To initialize the database:
+
+```
+$ brew install postgres && brew services start postgresql
+
+```
+
 To start your Phoenix server:
 ```
+$ brew install elixir
 $ mix deps.get                          # Install dependencies
 $ mix ecto.create && mix ecto.migrate   # Create and migrate your database
 $ mix run priv/repo/seeds.exs           # Run seeds
