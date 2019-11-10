@@ -28,7 +28,7 @@ $ brew install elixir
 $ mix deps.get                          # Install dependencies
 $ mix ecto.create && mix ecto.migrate   # Create and migrate your database
 $ mix run priv/repo/seeds.exs           # Run seeds
-$ cd assets && npm install              # Install Node.js dependencies
+$ cd assets && npm install & cd ..             # Install Node.js dependencies
 $ cp ./example.env .env && $(EDITOR) .env && source .env    # Configure secrets
 $ mix phx.server                        # Run app via Cowboy web server
 ```
