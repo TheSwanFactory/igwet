@@ -19,6 +19,11 @@ To initialize the database:
 
 ```
 $ brew install postgres && brew services start postgresql
+# OR $ brew postgresql-upgrade-database
+$ createuser phx -s -P
+# elixir
+$ psql postgres -c "\du"
+
 
 ```
 
