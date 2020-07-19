@@ -29,7 +29,7 @@ config :igwet, Igwet.Admin.Mailer,
   api_key: "${MG_API_KEY}"
 
 # Do not print debug messages in production
-config :logger, level: :info
+config :logger, level: :debug
 
 config :igwet, Igwet.Repo,
   adapter: Ecto.Adapters.Postgres,

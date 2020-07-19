@@ -1,7 +1,6 @@
 defmodule IgwetWeb.ControllerHelper do
   import Plug.Conn
   import Phoenix.Controller
-  alias IgwetWeb.ErrorView
   alias Igwet.Admin
 
   def get_user(conn) do
@@ -20,33 +19,52 @@ defmodule IgwetWeb.ControllerHelper do
     end
   end
 
+  def unauthorized(conn, message) do
+    last_path =
+      case conn.method do
+        "GET" -> true
+        _ -> false
+      end
+      |> case do
+        false ->
+          nil
+
+        true ->
+          conn.request_path <>
+            if byte_size(conn.query_string) > 0 do
+              "?" <> conn.query_string
+            else
+              ""
+            end
+      end
+
+    text = "#{last_path}: #{message}"
+
+    conn
+    |> put_session(:last_path, last_path)
+    |> put_flash(:error, text)
+    |> redirect(to: "/")
+  end
+
   def require_admin(conn, _params) do
     user = get_user(conn)
 
     case Admin.is_admin(user) do
       true ->
-        conn |> assign(:current_user, user)
+        conn
+        |> assign(:current_user, user)
 
       nil ->
         conn
-        |> put_status(401)
-        |> render(
-          ErrorView,
-          :"401",
-          message: "There is no user with a valid contact currently logged in"
-        )
-        |> halt
+        |> assign(:current_user, user)
+        |> unauthorized("There is no user with a valid contact currently logged in.")
 
       false ->
         conn
-        |> put_status(401)
-        |> render(
-          ErrorView,
-          :"401",
-          message:
-            "The contact for this login does not have the Administrator privilege necessary to view this page"
+        |> assign(:current_user, user)
+        |> unauthorized(
+          "The contact for this login does not have the Administrator privilege necessary to view this page."
         )
-        |> halt
     end
   end
 end
