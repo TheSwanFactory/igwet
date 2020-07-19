@@ -20,7 +20,7 @@ defmodule Igwet.Mixfile do
   def application do
     [
       mod: {Igwet.Application, []},
-      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ssl]
+      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ssl, :ex_twilio]
     ]
   end
 
@@ -47,7 +47,9 @@ defmodule Igwet.Mixfile do
       {:ueberauth_auth0, "~> 0.3"},
       {:address_us, "~> 0.2.1"},
       {:csv, "~> 2.0.0"},
-      {:bamboo, "~> 0.8"}
+      {:bamboo, "~> 0.8"},
+      {:plug_cowboy, "~> 1.0"},
+      {:ex_twilio, github: "danielberkompas/ex_twilio"}
     ]
   end
 

@@ -42,6 +42,9 @@ config :ueberauth, Ueberauth.Strategy.Auth0.OAuth,
   client_id: "${AUTH0_CLIENT_ID}",
   client_secret: "${AUTH0_CLIENT_SECRET}"
 
+  config :ex_twilio, account_sid:   {:system, "TWILIO_ACCOUNT_SID"},
+                     auth_token:    {:system, "TWILIO_AUTH_TOKEN"}
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

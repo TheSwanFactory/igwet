@@ -29,6 +29,7 @@ $ psql postgres -c "\du"
 
 To start your Phoenix server:
 ```
+$ brew upgrade npm # or install
 $ brew install elixir
 $ mix deps.get                          # Install dependencies
 $ mix ecto.create && mix ecto.migrate   # Create and migrate your database
