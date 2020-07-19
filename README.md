@@ -53,6 +53,25 @@ $ open http://localhost:4000/sent_emails
 ## Production
 
 We recommend Gigalixir.
+```
+$ brew tap gigalixir/brew && brew install gigalixir
+$ gigalixir --help
+$ gigalixir signup # if not already
+$ gigalixir login
+$ gigalixir account
+$ gigalixir create -n igwet
+$ gigalixir apps
+$ git remote -v
+$ curl -O https://raw.githubusercontent.com/HashNuke/heroku-buildpack-elixir/master/elixir_buildpack.config
+$ curl -O https://raw.githubusercontent.com/hectorip/buildpack-elixir-phoenix/master/phoenix_static_buildpack.config
+$ git add elixir_buildpack.config phoenix_static_buildpack.config
+$ git commit -m "set elixir, erlang, and node version"
+$ gigalixir pg:create --free
+$ gigalixir pg
+$ gigalixir config
+$ git push gigalixir master
+$ gigalixir open
+```
 
 ### Seeds
 To update the seeds in production use:
