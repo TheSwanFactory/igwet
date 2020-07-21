@@ -40,6 +40,6 @@ defmodule IgwetWeb.Router do
 
   if Application.get_env(:igwet, :env) == :dev do
     # Show Bamboo emails
-    forward("/sent_emails", Bamboo.EmailPreviewPlug)
+    forward("/sent_emails", Bamboo.SentEmailViewerPlug)
   end
 end

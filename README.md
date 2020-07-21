@@ -34,6 +34,7 @@ To start your Phoenix server:
 $ brew upgrade npm # or install
 $ brew install elixir
 $ mix deps.get                          # Install dependencies
+$ mix compile
 $ mix ecto.create && mix ecto.migrate   # Create and migrate your database
 $ mix run priv/repo/seeds.exs           # Run seeds
 $ cd assets && npm install & cd ..             # Install Node.js dependencies
@@ -65,10 +66,6 @@ $ gigalixir account
 $ gigalixir create -n igwet
 $ gigalixir apps
 $ git remote -v
-$ curl -O https://raw.githubusercontent.com/HashNuke/heroku-buildpack-elixir/master/elixir_buildpack.config
-$ curl -O https://raw.githubusercontent.com/hectorip/buildpack-elixir-phoenix/master/phoenix_static_buildpack.config
-$ git add elixir_buildpack.config phoenix_static_buildpack.config
-$ git commit -m "set elixir, erlang, and node version"
 $ gigalixir pg:create --free
 $ gigalixir pg
 $ gigalixir config
