@@ -8,7 +8,7 @@ defmodule IgwetWeb.WebhookController do
   alias Igwet.Admin.Mailer
 
   defp peer(conn) do
-    {host, port} = conn.peer
+    %{address: host, port: port} = Plug.Conn.get_peer_data(conn)
     "#{Tuple.to_list(host) |> Enum.join(".")}:#{port}"
   end
 

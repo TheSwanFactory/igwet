@@ -10,21 +10,21 @@ defmodule Igwet.AdminTest do
     @valid_attrs %{
       authid: "some authid",
       avatar: "some avatar",
-      last_login: ~N[2010-04-17 14:00:00.000000],
+      last_login: ~N[2010-04-17 14:00:00],
       name: "some name",
       email: "me@me.com"
     }
     @update_attrs %{
       authid: "some updated authid",
       avatar: "some updated avatar",
-      last_login: ~N[2011-05-18 15:01:01.000000],
+      last_login: ~N[2011-05-18 15:01:01],
       name: "some updated name"
     }
     @invalid_attrs %{authid: nil, avatar: nil, last_login: nil, name: nil}
     @next_attrs %{
       authid: "next authid",
       avatar: "next avatar",
-      last_login: ~N[2010-04-17 14:00:00.000000],
+      last_login: ~N[2010-04-17 14:00:00],
       name: "next name"
     }
 
@@ -78,7 +78,7 @@ defmodule Igwet.AdminTest do
       assert {:ok, %User{} = user} = Admin.create_user(@valid_attrs)
       assert user.authid == "some authid"
       assert user.avatar == "some avatar"
-      assert user.last_login == ~N[2010-04-17 14:00:00.000000]
+      assert user.last_login == ~N[2010-04-17 14:00:00]
       assert user.name == "some name"
     end
 
@@ -92,7 +92,7 @@ defmodule Igwet.AdminTest do
       assert %User{} = user
       assert user.authid == "some updated authid"
       assert user.avatar == "some updated avatar"
-      assert user.last_login == ~N[2011-05-18 15:01:01.000000]
+      assert user.last_login == ~N[2011-05-18 15:01:01]
       assert user.name == "some updated name"
     end
 

@@ -9,6 +9,7 @@ defmodule Igwet.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
+      consolidate_protocols: Mix.env() != :test,
       aliases: aliases(),
       deps: deps()
     ]
