@@ -16,6 +16,7 @@ blocks:
         - name: mix test
           commands:
             - checkout
+            - mix local.hex --force
             - sem-service start postgres 11
             - sem-version elixir 1.10.3
             - cache restore
