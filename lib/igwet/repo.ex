@@ -1,5 +1,7 @@
 defmodule Igwet.Repo do
-  use Ecto.Repo, otp_app: :igwet
+  use Ecto.Repo,
+    otp_app: :igwet,
+    adapter: Ecto.Adapters.Postgres
 
   @doc """
   Dynamically loads the repository url from the

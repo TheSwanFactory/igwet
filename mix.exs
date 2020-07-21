@@ -5,10 +5,11 @@ defmodule Igwet.Mixfile do
     [
       app: :igwet,
       version: "0.0.22",
-      elixir: "~> 1.5",
+      elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
+      consolidate_protocols: Mix.env() != :test,
       aliases: aliases(),
       deps: deps()
     ]
@@ -20,7 +21,7 @@ defmodule Igwet.Mixfile do
   def application do
     [
       mod: {Igwet.Application, []},
-      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ssl]
+      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ssl, :ex_twilio]
     ]
   end
 
@@ -33,21 +34,25 @@ defmodule Igwet.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.3.0"},
-      {:phoenix_pubsub, "~> 1.0"},
-      {:phoenix_ecto, "~> 3.2"},
-      {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.10"},
-      {:phoenix_live_reload, "~> 1.0", only: :dev},
-      {:libcluster, "~> 2.1"},
-      {:distillery, "~> 1.5", runtime: false},
-      {:gettext, "~> 0.11"},
-      {:cowboy, "~> 1.0"},
-      {:ueberauth, "~> 0.4"},
-      {:ueberauth_auth0, "~> 0.3"},
-      {:address_us, "~> 0.2.1"},
-      {:csv, "~> 2.0.0"},
-      {:bamboo, "~> 0.8"}
+      {:phoenix, ">= 1.5.3"},
+      {:phoenix_pubsub, ">= 2.0.0"},
+      {:phoenix_ecto, ">= 4.1.0"},
+      {:postgrex, ">= 0.15.5"},
+      {:phoenix_html, ">= 2.10.0"},
+      {:phoenix_live_reload, ">= 1.2.4", only: :dev},
+      {:libcluster, ">= 3.2.1"},
+      {:distillery, ">= 2.1.1", runtime: false},
+      {:gettext, ">= 0.11.0"},
+      {:cowboy, ">= 2.8.0"},
+      {:ueberauth, ">= 0.4.0"},
+      {:ueberauth_auth0, ">= 0.3.0"},
+      {:address_us, ">= 0.4.0"},
+      {:csv, ">= 2.3.1"},
+      {:bamboo, ">= 1.5.0"},
+      {:plug_cowboy, ">= 2.3.0"},
+      {:ex_twilio, github: "danielberkompas/ex_twilio"},
+      {:jason, ">= 1.2.1"},
+      {:ecto_sql, ">= 3.4.5"},
     ]
   end
 

@@ -16,8 +16,10 @@ config :igwet,
 config :igwet, IgwetWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "YbvTQa/w6m9GwiFuVEp76H8MgaXGqh0G/1aMI+3w+QEqMM9Emilm3OKhEWPOXnfc",
-  render_errors: [view: IgwetWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Igwet.PubSub, adapter: Phoenix.PubSub.PG2]
+  render_errors: [view: IgwetWeb.ErrorView, accepts: ~w(html json)]
+
+# Configures Phoenix JSON encoding
+config :phoenix, :json_library, Jason
 
 # Configure Bamboo for Mailgun
 config :igwet, Igwet.Admin.Mailer,
@@ -41,6 +43,9 @@ config :ueberauth, Ueberauth.Strategy.Auth0.OAuth,
   domain: "${AUTH0_DOMAIN}",
   client_id: "${AUTH0_CLIENT_ID}",
   client_secret: "${AUTH0_CLIENT_SECRET}"
+
+  config :ex_twilio, account_sid:   {:system, "TWILIO_ACCOUNT_SID"},
+                     auth_token:    {:system, "TWILIO_AUTH_TOKEN"}
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

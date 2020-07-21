@@ -19,18 +19,29 @@ To initialize the database:
 
 ```
 $ brew install postgres && brew services start postgresql
+# OR $ brew postgresql-upgrade-database
+$ createuser phx -s -P
+# elixir
+$ createuser runner -s -P
+# semaphoredb
+$ psql postgres -c "\du"
+
 
 ```
 
 To start your Phoenix server:
 ```
+$ brew upgrade npm # or install
 $ brew install elixir
 $ mix deps.get                          # Install dependencies
+$ mix compile
 $ mix ecto.create && mix ecto.migrate   # Create and migrate your database
 $ mix run priv/repo/seeds.exs           # Run seeds
 $ cd assets && npm install & cd ..             # Install Node.js dependencies
 $ cp ./example.env .env && $(EDITOR) .env && source .env    # Configure secrets
+$ mix test
 $ mix phx.server                        # Run app via Cowboy web server
+$ open http://0.0.0.0:4000
 ```
 
 
@@ -46,6 +57,23 @@ $ open http://localhost:4000/sent_emails
 ## Production
 
 We recommend Gigalixir.
+```
+$ brew tap gigalixir/brew && brew install gigalixir
+$ gigalixir --help
+$ gigalixir signup # if not already
+$ gigalixir login
+$ gigalixir account
+$ gigalixir create -n igwet
+$ gigalixir apps
+$ git remote -v
+$ gigalixir pg:create --free
+$ gigalixir pg
+$ gigalixir config
+$ git push gigalixir master
+$ gigalixir open
+$ gigalixir account:ssh_keys:add "$(cat ~/.ssh/id_rsa.pub)"
+$ gigalixir ps:migrate
+```
 
 ### Seeds
 To update the seeds in production use:
