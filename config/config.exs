@@ -16,8 +16,7 @@ config :igwet,
 config :igwet, IgwetWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "YbvTQa/w6m9GwiFuVEp76H8MgaXGqh0G/1aMI+3w+QEqMM9Emilm3OKhEWPOXnfc",
-  render_errors: [view: IgwetWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Igwet.PubSub, adapter: Phoenix.PubSub.PG2]
+  render_errors: [view: IgwetWeb.ErrorView, accepts: ~w(html json)]
 
 # Configures Phoenix JSON encoding
 config :phoenix, :json_library, Jason
