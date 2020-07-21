@@ -2,7 +2,6 @@ defmodule Igwet.Admin.User.FromAuth do
   # @compile if Mix.env == :test, do: :export_all
   require IEx
   require Logger
-  require Poison
 
   import Ecto.Query, warn: false
 
@@ -66,7 +65,7 @@ defmodule Igwet.Admin.User.FromAuth do
   # default case if nothing matches
   defp avatar_from_auth(auth) do
     Logger.warn(auth.provider <> " needs to find an avatar URL!")
-    Logger.debug(Poison.encode!(auth))
+    Logger.debug(inspect(auth))
     nil
   end
 
