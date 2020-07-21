@@ -22,6 +22,8 @@ $ brew install postgres && brew services start postgresql
 # OR $ brew postgresql-upgrade-database
 $ createuser phx -s -P
 # elixir
+$ createuser runner -s -P
+# semaphoredb
 $ psql postgres -c "\du"
 
 
@@ -36,6 +38,7 @@ $ mix ecto.create && mix ecto.migrate   # Create and migrate your database
 $ mix run priv/repo/seeds.exs           # Run seeds
 $ cd assets && npm install & cd ..             # Install Node.js dependencies
 $ cp ./example.env .env && $(EDITOR) .env && source .env    # Configure secrets
+$ mix test
 $ mix phx.server                        # Run app via Cowboy web server
 $ open http://0.0.0.0:4000
 ```
@@ -71,6 +74,8 @@ $ gigalixir pg
 $ gigalixir config
 $ git push gigalixir master
 $ gigalixir open
+$ gigalixir account:ssh_keys:add "$(cat ~/.ssh/id_rsa.pub)"
+$ gigalixir ps:migrate
 ```
 
 ### Seeds

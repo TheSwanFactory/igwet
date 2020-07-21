@@ -5,7 +5,7 @@ defmodule Igwet.Mixfile do
     [
       app: :igwet,
       version: "0.0.22",
-      elixir: ">= 1.5",
+      elixir: ">= 1.5.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -49,7 +49,9 @@ defmodule Igwet.Mixfile do
       {:csv, ">= 2.3.1"},
       {:bamboo, ">= 1.5.0"},
       {:plug_cowboy, ">= 2.3.0"},
-      {:ex_twilio, github: "danielberkompas/ex_twilio"}
+      {:ex_twilio, github: "danielberkompas/ex_twilio"},
+      {:jason, ">= 1.2.1"},
+      {:ecto_sql, ">= 3.4.5"},
     ]
   end
 

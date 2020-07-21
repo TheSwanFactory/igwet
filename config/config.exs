@@ -19,6 +19,9 @@ config :igwet, IgwetWeb.Endpoint,
   render_errors: [view: IgwetWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Igwet.PubSub, adapter: Phoenix.PubSub.PG2]
 
+# Configures Phoenix JSON encoding
+config :phoenix, :json_library, Jason
+
 # Configure Bamboo for Mailgun
 config :igwet, Igwet.Admin.Mailer,
   adapter: Bamboo.MailgunAdapter,
