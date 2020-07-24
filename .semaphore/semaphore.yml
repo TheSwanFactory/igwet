@@ -1,0 +1,32 @@
+version: v1.0
+name: Test MyApp
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+auto_cancel:
+  running:
+    when: "true" # enable auto-cancel for branches, tags and pull-requests
+blocks:
+  - name: Test
+    task:
+      env_vars:
+        - name: DATABASE_URL
+          value: 'ecto://postgres:@0.0.0.0:5432/myapp_test'
+        - name: MIX_ENV
+          value: test
+      jobs:
+        - name: mix test
+          commands:
+            - checkout
+            - sem-service start postgres 11
+            - sem-version elixir 1.10.3
+            - mix local.hex --force
+            - mix local.rebar --force
+            - cache restore
+            - mix deps.get
+            - mix compile
+            - cache store
+            - mix ecto.create
+            - mix ecto.migrate
+            - mix test
