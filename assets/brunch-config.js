@@ -28,6 +28,7 @@ exports.config = {
   },
 
   conventions: {
+    ignored: [/\.png$/,/\.ico$/,/\.txt/],
     // This option sets where we should place non-css and non-js assets in.
     // By default, we set this to "/assets/static". Files in this directory
     // will be copied to `paths.public`, which is "priv/static" by default.

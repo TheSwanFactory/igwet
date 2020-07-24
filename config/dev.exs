@@ -61,7 +61,7 @@ config :igwet, Igwet.Repo,
   password: "elixir",
   database: "igwet_dev",
   hostname: "localhost",
-  pool_size: 10
+  pool_size: 1
 
 # Configure Bamboo to store instead of send emails
 config :igwet, Igwet.Admin.Mailer,
