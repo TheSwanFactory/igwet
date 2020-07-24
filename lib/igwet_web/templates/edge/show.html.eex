@@ -1,7 +1,10 @@
 <h2>Show Edge</h2>
 
 <ul>
-
+  <li><strong>Subject:</strong>@edge.subject_id</li>
+  <li><strong>Predicate:</strong>@edge.predicate_id</li>
+  <li><strong>Object:</strong>@edge.object_id</li>
+  <li><strong>As:</strong>@edge.as</li>
 </ul>
 
 <span><%= link "Edit", to: edge_path(@conn, :edit, @edge) %></span>
