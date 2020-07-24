@@ -4,6 +4,9 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
+auto_cancel:
+  running:
+    when: "true" # enable auto-cancel for branches, tags and pull-requests
 blocks:
   - name: Test
     task:
@@ -21,7 +24,8 @@ blocks:
             - mix local.hex --force
             - mix local.rebar --force
             - cache restore
-            - mix deps.get,compile
+            - mix deps.get
+            - mix compile
             - cache store
             - mix ecto.create
             - mix ecto.migrate
