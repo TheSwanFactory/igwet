@@ -4,6 +4,7 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Initials</th>
       <th>About</th>
       <th>Email</th>
       <th>Phone</th>
@@ -18,6 +19,7 @@
 <%= for node <- @nodes do %>
     <tr>
       <td><%= node.name %></td>
+      <td><%= node.initials %></td>
       <td><%= node.about %></td>
       <td><%= node.email %></td>
       <td><%= node.phone %></td>
