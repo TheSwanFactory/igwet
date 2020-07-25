@@ -13,6 +13,7 @@ defmodule Igwet.Network.Node do
     field(:about, :string)
     field(:date, :utc_datetime)
     field(:email, :string)
+    field(:initials, :string)
     field(:key, :string)
     field(:meta, :string)
     field(:name, :string)
@@ -29,7 +30,7 @@ defmodule Igwet.Network.Node do
   @doc false
   def changeset(%Node{} = node, attrs) do
     node
-    |> cast(attrs, [:about, :date, :email, :key, :meta, :name, :phone, :url])
+    |> cast(attrs, [:about, :date, :email, :initials, :key, :meta, :name, :phone, :url])
     |> validate_required([:key, :name])
     |> unique_constraint(:key)
   end
