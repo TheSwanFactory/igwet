@@ -62,8 +62,11 @@ defmodule Igwet.Admin do
       iex> got == user
       true
   """
-  def get_user!(id), do: Repo.get!(User, id)
-
+  def get_user!(id) do
+    User
+    |> Repo.get!(id)
+    |> Repo.preload [:node]
+  end
   @doc """
   Creates a user.
 

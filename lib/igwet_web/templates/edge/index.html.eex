@@ -3,25 +3,25 @@
 <table class="table">
   <thead>
     <tr>
+      <th>Actions</th>
       <th>Subject</th>
       <th>Predicate</th>
       <th>Object</th>
       <th>As</th>
-      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
 <%= for edge <- @edges do %>
     <tr>
-      <td><%= edge.subject.key %></td>
-      <td><%= edge.predicate.key %></td>
-      <td><%= edge.object.key %></td>
-      <td><%= edge.as %></td>
-      <td class="text-right">
+      <td class="text-left">
         <span><%= link "Show", to: edge_path(@conn, :show, edge), class: "btn btn-default btn-xs" %></span>
         <!-- <span><%= link "Edit", to: edge_path(@conn, :edit, edge), class: "btn btn-default btn-xs" %></span> -->
         <span><%= link "Delete", to: edge_path(@conn, :delete, edge), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
+      <td><%= edge.subject.key %></td>
+      <td><%= edge.predicate.key %></td>
+      <td><%= edge.object.key %></td>
+      <td><%= edge.as %></td>
     </tr>
 <% end %>
   </tbody>

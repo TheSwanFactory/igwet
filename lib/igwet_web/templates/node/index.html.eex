@@ -3,6 +3,7 @@
 <table class="table">
   <thead>
     <tr>
+      <th>Actions</th>
       <th>Name</th>
       <th>Initials</th>
       <th>About</th>
@@ -11,13 +12,16 @@
       <th>URL</th>
       <th>Date</th>
       <th>Key</th>
-
-      <th></th>
     </tr>
   </thead>
   <tbody>
 <%= for node <- @nodes do %>
     <tr>
+      <td class="text-left">
+        <span><%= link "Show", to: node_path(@conn, :show, node), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: node_path(@conn, :edit, node), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: node_path(@conn, :delete, node), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
       <td><%= node.name %></td>
       <td><%= node.initials %></td>
       <td><%= node.about %></td>
@@ -26,12 +30,6 @@
       <td><%= node.url %></td>
       <td><%= node.date %></td>
       <td><%= node.key %></td>
-
-      <td class="text-right">
-        <span><%= link "Show", to: node_path(@conn, :show, node), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: node_path(@conn, :edit, node), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: node_path(@conn, :delete, node), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-      </td>
     </tr>
 <% end %>
   </tbody>
