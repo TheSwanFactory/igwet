@@ -314,7 +314,7 @@ defmodule Igwet.Network do
   def get_edge!(id) do
     Edge
     |> Repo.get!(id)
-    |> Repo.preload [:subject, :predicate, :object]
+    |> Repo.preload([:subject, :predicate, :object])
   end
 
   @doc """

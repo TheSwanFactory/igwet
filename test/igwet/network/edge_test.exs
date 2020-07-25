@@ -22,7 +22,7 @@ defmodule Igwet.NetworkTest.Edge do
     def edge_fixture(name \\ "fixture") do
       attrs = edge_attrs(name)
       {:ok, edge} = Network.create_edge(attrs)
-      edge
+      Network.get_edge!(edge.id)
     end
 
     test "list_edges/0 returns all edges" do
