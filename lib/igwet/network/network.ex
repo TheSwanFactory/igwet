@@ -96,11 +96,11 @@ defmodule Igwet.Network do
 
   ## Examples
 
-      iex> all_objects("in")
+      iex> objects_for_predicate("in")
       [%Igwet.Network.Node{}]
 
   """
-  def all_objects(predicate) do
+  def objects_for_predicate(predicate) do
     in_node = get_first_node!(:name, predicate)
 
     edges =

@@ -9,6 +9,7 @@ defmodule Igwet.NetworkTest do
     {
       :ok,
       in: Network.get_first_node!(:name, "in"),
+      igwet_group: Network.get_first_node!(:name, "IGWET"),
       admin_group: Network.get_first_node!(:name, "admin"),
       admin_node: Network.get_first_node!(:name, admin_name)
     }
@@ -30,6 +31,14 @@ defmodule Igwet.NetworkTest do
       group = context[:admin_group]
       assert Network.edge_exists?(user, is_in, group)
       assert !Network.edge_exists?(group, is_in, user)
+    end
+
+    test "objects_for_predicate", context do
+      groups = Network.objects_for_predicate("in")
+      assert Enum.count(groups) == 2
+
+      first = List.first(groups)
+      assert first.name == context[:igwet_group].name
     end
 
     test "node_groups", context do
