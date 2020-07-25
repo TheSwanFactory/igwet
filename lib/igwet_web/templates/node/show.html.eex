@@ -11,6 +11,11 @@
   </li>
 
   <li>
+    <strong>Initials:</strong>
+    <%= @node.initials %>
+  </li>
+
+  <li>
     <strong>About:</strong>
     <%= @node.about %>
   </li>
