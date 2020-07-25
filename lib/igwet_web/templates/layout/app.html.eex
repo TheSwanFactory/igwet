@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>IGWET: The Secure Messaging Directory</title>
+    <title>IGWET: <%= Enum.at(Regex.run(~r/Elixir\.IgwetWeb\.(.*)View/, to_string(@view_module)),1) %></title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
