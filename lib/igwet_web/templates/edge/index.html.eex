@@ -13,13 +13,13 @@
   <tbody>
 <%= for edge <- @edges do %>
     <tr>
-      <td><%= edge.subject_id %></td>
-      <td><%= edge.predicate_id %></td>
-      <td><%= edge.object_id %></td>
+      <td><%= edge.subject.key %></td>
+      <td><%= edge.predicate.key %></td>
+      <td><%= edge.object.key %></td>
       <td><%= edge.as %></td>
       <td class="text-right">
         <span><%= link "Show", to: edge_path(@conn, :show, edge), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: edge_path(@conn, :edit, edge), class: "btn btn-default btn-xs" %></span>
+        <!-- <span><%= link "Edit", to: edge_path(@conn, :edit, edge), class: "btn btn-default btn-xs" %></span> -->
         <span><%= link "Delete", to: edge_path(@conn, :delete, edge), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
     </tr>

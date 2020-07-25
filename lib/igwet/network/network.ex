@@ -294,7 +294,7 @@ defmodule Igwet.Network do
 
   """
   def list_edges do
-    Repo.all(Edge)
+    Repo.all from e in Edge, preload: [:subject, :predicate, :object]
   end
 
   @doc """
@@ -311,7 +311,9 @@ defmodule Igwet.Network do
       ** (Ecto.NoResultsError)
 
   """
-  def get_edge!(id), do: Repo.get!(Edge, id)
+  def get_edge!(id) do
+    Edge |> Repo.get!(id) |> Repo.preload [:subject, :predicate, :object]
+  end
 
   @doc """
   Creates a edge.

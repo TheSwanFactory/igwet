@@ -1,11 +1,11 @@
 <h2>Show Edge</h2>
 
 <ul>
-  <li><strong>Subject:</strong> <%= @edge.subject_id %></li>
-  <li><strong>Predicate:</strong> <%= @edge.predicate_id %></li>
-  <li><strong>Object:</strong> <%= @edge.object_id %></li>
+  <li><strong>Subject:</strong> <%= @edge.subject.name %> <em>(<%= @edge.subject.key %>)</em></li>
+  <li><strong>Subject:</strong> <%= @edge.predicate.name %> <em>(<%= @edge.predicate.key %>)</em></li>
+  <li><strong>Subject:</strong> <%= @edge.object.name %> <em>(<%= @edge.object.key %>)</em></li>
   <li><strong>As:</strong> <%= @edge.as %></li>
 </ul>
 
-<span><%= link "Edit", to: edge_path(@conn, :edit, @edge) %></span>
+<!-- <span><%= link "Edit", to: edge_path(@conn, :edit, @edge) %></span> -->
 <span><%= link "Back", to: edge_path(@conn, :index) %></span>
