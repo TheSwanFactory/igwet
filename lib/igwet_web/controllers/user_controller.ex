@@ -3,6 +3,7 @@ defmodule IgwetWeb.UserController do
 
   alias Igwet.Admin
   alias Igwet.Admin.User
+  alias Igwet.Repo
 
   plug(:require_admin)
 
@@ -30,7 +31,7 @@ defmodule IgwetWeb.UserController do
 
   def show(conn, %{"id" => id}) do
     user = Admin.get_user!(id)
-    render(conn, "show.html", user: user)
+    render(conn, "show.html", user: Repo.preload(user, [:node]))
   end
 
   def edit(conn, %{"id" => id}) do
