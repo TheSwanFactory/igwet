@@ -92,12 +92,33 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Return all objects for that predicate.
+
+  ## Examples
+
+      iex> all_objects("in")
+      [%Igwet.Network.Node{}]
+
+  """
+  def all_objects(predicate) do
+    in_node = get_first_node!(:name, predicate)
+
+    edges =
+      Edge
+      |> where([e], e.predicate_id == ^in_node.id)
+      |> preload([:object])
+      |> Repo.all()
+
+    Enum.map(edges, & &1.object)
+  end
+
+  @doc """
   Return all group nodes this node is in.
 
   ## Examples
 
       iex> node_groups(node)
-      [%Node{},...]
+      [%Igwet.Network.Node{},...]
 
   """
   def node_groups(node) do
@@ -118,7 +139,7 @@ defmodule Igwet.Network do
   ## Examples
 
       iex> node_members(node)
-      [%Node{},...]
+      [%Igwet.Network.Node{},...]
 
   """
   def node_members(node) do
@@ -139,7 +160,7 @@ defmodule Igwet.Network do
   ## Examples
 
       iex> list_nodes()
-      [%Node{}, ...]
+      [%Igwet.Network.Node{}, ...]
 
   """
   def list_nodes do
@@ -290,7 +311,7 @@ defmodule Igwet.Network do
   ## Examples
 
       iex> list_edges()
-      [%Edge{}, ...]
+      [%Igwet.Network.Edge{}, ...]
 
   """
   def list_edges do
@@ -375,7 +396,7 @@ defmodule Igwet.Network do
   ## Examples
 
       iex> change_edge(edge)
-      %Ecto.Changeset{source: %Edge{}}
+      %Ecto.Changeset{%Igwet.Network.Edge{}}
 
   """
   def change_edge(%Edge{} = edge) do
@@ -418,10 +439,10 @@ defmodule Igwet.Network do
 
   ## Examples
 
-      iex> create_address(%{field: value})
+      iex> create_address(%{field: "value"})
       {:ok, %Address{}}
 
-      iex> create_address(%{field: bad_value})
+      iex> create_address(%{field: "bad_value"})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -435,11 +456,11 @@ defmodule Igwet.Network do
   Updates a address.
 
   ## Examples
+      iex> address = create_address(%{field: "value"})
+      iex> update_address(address, %{field: "new_value"})
+      {:ok, %Igwet.Network.Address{}}
 
-      iex> update_address(address, %{field: new_value})
-      {:ok, %Address{}}
-
-      iex> update_address(address, %{field: bad_value})
+      iex> update_address(address, %{field: "bad_value"})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -454,6 +475,7 @@ defmodule Igwet.Network do
 
   ## Examples
 
+      iex> address = create_address(%{field: "value"})
       iex> delete_address(address)
       {:ok, %Address{}}
 
@@ -470,8 +492,9 @@ defmodule Igwet.Network do
 
   ## Examples
 
+      iex> address = create_address(%{field: "value"})
       iex> change_address(address)
-      %Ecto.Changeset{source: %Address{}}
+      %Ecto.Changeset{%Address{}}
 
   """
   def change_address(%Address{} = address) do
