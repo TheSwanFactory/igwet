@@ -47,6 +47,9 @@ config :igwet, IgwetWeb.Endpoint,
     ]
   ]
 
+config :igwet, IgwetWeb.Endpoint,
+  pubsub_server: Igwet.PubSub
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
