@@ -5,6 +5,23 @@
     </div>
   <% end %>
 
+  <h3>Membership</h3>
+  <div class="form-group">
+    <ul>
+    <%= for member <- @all_members do %>
+      <li>
+        <%= if Enum.member?(@my_members, member) do %>
+          <input checked="checked" name="<%= member.key %>" type="checkbox" value="<%= member.id %>">
+        <% else %>
+          <input name="<%= member.key %>" type="checkbox" value="<%= member.id %>">
+        <% end %>
+        <%= link(member.name, to: node_path(@conn, :show, member)) %>
+      </li>
+    <% end %>
+    </ul>
+  </div>
+
+  <h3>Group Details</h3>
   <div class="form-group">
     <%= label f, :name, class: "control-label" %>
     <%= text_input f, :name, class: "form-control" %>
@@ -38,4 +55,6 @@
   <div class="form-group">
     <%= submit "Submit", class: "btn btn-primary" %>
   </div>
+
+
 <% end %>
