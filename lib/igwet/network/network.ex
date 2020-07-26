@@ -298,6 +298,42 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Get initials.
+  Set if not present
+  """
+  def get_initials(node) do
+    if (node.initials) do
+      node.initials
+    else
+      initials = String.split(node.name, " ")
+      |> Enum.map(&String.first/1)
+      |> Enum.join("")
+      |> String.downcase()
+      update_node(node, %{initials: initials})
+      initials
+    end
+  end
+
+  @doc """
+  Updated membershp based on form attributes.
+  """
+  def update_members(_group, _attrs) do
+  end
+
+  @doc """
+  Associate a member with a group.
+  Set 'as' to initials, update if not unique,
+  """
+  def add_member(_group, _member) do
+  end
+
+  @doc """
+  Remove a member key_from_string a group.
+  """
+  def remove_member(_group, _member) do
+  end
+
+  @doc """
   Deletes a Node.
 
   ## Examples

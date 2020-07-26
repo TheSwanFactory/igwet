@@ -5,7 +5,7 @@ defmodule Igwet.NetworkTest do
 
   setup do
     admin_name = Application.get_env(:igwet, :admin_user)
-
+    {:ok, user} =Network.create_node(%{name: "Test User", key: "test+user"})
     {
       :ok,
       in: Network.get_first_node!(:name, "in"),
@@ -13,6 +13,7 @@ defmodule Igwet.NetworkTest do
       admin_group: Network.get_first_node!(:name, "admin"),
       admin_node: Network.get_first_node!(:name, admin_name),
       admin_name: admin_name,
+      test_user: user,
     }
   end
 
@@ -64,6 +65,13 @@ defmodule Igwet.NetworkTest do
 
       first = List.first(members)
       assert first.name == context[:admin_node].name
+    end
+
+    test "get_initials", context do
+      user = context[:test_user]
+      assert user.initials == nil
+      assert Network.get_initials(user) == "tu"
+      assert Network.get_node!(user.id).initials == "tu"
     end
   end
 end

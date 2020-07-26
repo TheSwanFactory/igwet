@@ -2,7 +2,6 @@ defmodule IgwetWeb.GroupController do
   use IgwetWeb, :controller
 
   alias Igwet.Network
-  alias Igwet.Network.Node
 
   plug(:require_admin)
 
