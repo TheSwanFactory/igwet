@@ -11,23 +11,6 @@ defmodule IgwetWeb.GroupController do
     render(conn, "index.html", nodes: nodes)
   end
 
-  def new(conn, _params) do
-    changeset = Network.change_node(%Node{})
-    render(conn, "new.html", changeset: changeset)
-  end
-
-  def create(conn, %{"node" => node_params}) do
-    case Network.create_node(node_params) do
-      {:ok, node} ->
-        conn
-        |> put_flash(:info, "Node created successfully.")
-        |> redirect(to: node_path(conn, :show, node))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
-    end
-  end
-
   def show(conn, %{"id" => id}) do
     node = Network.get_node!(id)
     groups = Network.node_groups(node)
@@ -38,7 +21,9 @@ defmodule IgwetWeb.GroupController do
   def edit(conn, %{"id" => id}) do
     node = Network.get_node!(id)
     changeset = Network.change_node(node)
-    render(conn, "edit.html", node: node, changeset: changeset)
+    my_members = Network.node_members(node)
+    all_members = Network.subjects_for_predicate("in")
+    render(conn, "edit.html", node: node, changeset: changeset, my_members: my_members, all_members: all_members)
   end
 
   def update(conn, %{"id" => id, "node" => node_params}) do

@@ -34,5 +34,3 @@
 <% end %>
   </tbody>
 </table>
-
-<span><%= link "New Node", to: group_path(@conn, :new) %></span>

@@ -113,6 +113,27 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Return all objects for that predicate.
+
+  ## Examples
+
+      iex> subjects_for_predicate("in")
+      [%Igwet.Network.Node{}]
+
+  """
+  def subjects_for_predicate(predicate) do
+    in_node = get_first_node!(:name, predicate)
+
+    edges =
+      Edge
+      |> where([e], e.predicate_id == ^in_node.id)
+      |> preload([:subject])
+      |> Repo.all()
+
+    Enum.map(edges, & &1.subject)
+  end
+
+  @doc """
   Return all group nodes this node is in.
 
   ## Examples
