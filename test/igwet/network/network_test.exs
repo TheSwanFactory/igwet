@@ -5,12 +5,15 @@ defmodule Igwet.NetworkTest do
 
   setup do
     admin_name = Application.get_env(:igwet, :admin_user)
-
+    {:ok, user} =Network.create_node(%{name: "Test Node", key: "test+user"})
     {
       :ok,
       in: Network.get_first_node!(:name, "in"),
+      igwet_group: Network.get_first_node!(:name, "IGWET"),
       admin_group: Network.get_first_node!(:name, "admin"),
-      admin_node: Network.get_first_node!(:name, admin_name)
+      admin_node: Network.get_first_node!(:name, admin_name),
+      admin_name: admin_name,
+      test_node: user,
     }
   end
 
@@ -24,12 +27,31 @@ defmodule Igwet.NetworkTest do
       assert !Network.node_in_group?(context[:admin_group], context[:admin_node])
     end
 
-    test "edge_exists?", context do
+    test "find_edge", context do
       user = context[:admin_node]
       is_in = context[:in]
       group = context[:admin_group]
-      assert Network.edge_exists?(user, is_in, group)
-      assert !Network.edge_exists?(group, is_in, user)
+
+      assert nil != Network.find_edge(user, is_in, group)
+      assert nil == Network.find_edge(group, is_in, user)
+    end
+
+    test "objects_for_predicate", context do
+      groups = Network.objects_for_predicate("in")
+      assert Enum.count(groups) == 2
+
+      groups
+      |> Enum.map(& &1.name)
+      |> Enum.member?(context[:igwet_group].name)
+    end
+
+    test "subjects_for_predicate", context do
+      groups = Network.subjects_for_predicate("in")
+      assert Enum.count(groups) == 2
+
+      groups
+      |> Enum.map(& &1.name)
+      |> Enum.member?(context[:admin_group].name)
     end
 
     test "node_groups", context do
@@ -47,5 +69,28 @@ defmodule Igwet.NetworkTest do
       first = List.first(members)
       assert first.name == context[:admin_node].name
     end
+
+    test "get_initials", context do
+      user = context[:test_node]
+      assert user.initials == nil
+      assert Network.get_initials(user) == "tn"
+      assert Network.get_node!(user.id).initials == "tn"
+    end
+
+    test "set_node_in_group", context do
+      node = context[:test_node]
+      group = context[:admin_group]
+      Network.set_node_in_group(node, group)
+      assert Network.node_in_group?(node, group)
+    end
+
+    test "unset_node_in_group", context do
+      node = context[:test_node]
+      group = context[:admin_group]
+      Network.set_node_in_group(node, group)
+      Network.unset_node_in_group(node, group)
+      assert !Network.node_in_group?(node, group)
+    end
+
   end
 end
