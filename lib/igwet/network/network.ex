@@ -3,6 +3,7 @@ defmodule Igwet.Network do
   The Network context.
   """
 
+  require Logger
   import Ecto.Query, warn: false
   alias Igwet.Repo
   alias Igwet.Network.Node
@@ -66,7 +67,7 @@ defmodule Igwet.Network do
   """
   def node_in_group?(node, group) do
     in_node = get_first_node!(:name, "in")
-    edge_exists?(node, in_node, group)
+    nil != find_edge(node, in_node, group)
   end
 
   @doc """
@@ -74,21 +75,83 @@ defmodule Igwet.Network do
 
   ## Examples
 
-      iex> edge_exists?(subject, predicate, object)
+      iex> find_edge(subject, predicate, object)
       true
 
   """
-  def edge_exists?(subject, predicate, object) do
-    edge =
-      Edge
-      |> where(
-        [e],
+  def find_edge(subject, predicate, object) do
+    Edge
+      |> where([e],
         e.subject_id == ^subject.id and e.predicate_id == ^predicate.id and
           e.object_id == ^object.id
       )
       |> Repo.one()
+  end
 
-    edge != nil
+  @doc """
+  Associate a member with a group.
+  Set 'as' to initials, update if not unique,
+  """
+  def set_node_in_group(node, group) do
+    if (node_in_group?(node, group)) do
+      false
+    else
+      in_node = get_first_node!(:name, "in")
+      create_edge(%{subject_id: node.id, predicate_id: in_node.id, object_id: group.id})
+    end
+  end
+
+  @doc """
+  Remove a member a group.
+  """
+  def unset_node_in_group(node, group) do
+    in_node = get_first_node!(:name, "in")
+    edge = find_edge(node, in_node, group)
+    if (!edge) do
+      false
+    else
+      delete_edge(edge)
+    end
+  end
+
+  @doc """
+  Return all objects for that predicate.
+
+  ## Examples
+
+      iex> objects_for_predicate("in")
+      [%Igwet.Network.Node{}]
+
+  """
+  def objects_for_predicate(predicate) do
+    in_node = get_first_node!(:name, predicate)
+
+    Edge
+    |> where([e], e.predicate_id == ^in_node.id)
+    |> preload([:object])
+    |> Repo.all()
+    |> Enum.map(& &1.object)
+    |> Enum.uniq
+  end
+
+  @doc """
+  Return all objects for that predicate.
+
+  ## Examples
+
+      iex> subjects_for_predicate("in")
+      [%Igwet.Network.Node{}]
+
+  """
+  def subjects_for_predicate(predicate) do
+    in_node = get_first_node!(:name, predicate)
+
+    Edge
+    |> where([e], e.predicate_id == ^in_node.id)
+    |> preload([:subject])
+    |> Repo.all()
+    |> Enum.map(& &1.subject)
+    |> Enum.uniq
   end
 
   @doc """
@@ -97,7 +160,7 @@ defmodule Igwet.Network do
   ## Examples
 
       iex> node_groups(node)
-      [%Node{},...]
+      [%Igwet.Network.Node{},...]
 
   """
   def node_groups(node) do
@@ -118,7 +181,7 @@ defmodule Igwet.Network do
   ## Examples
 
       iex> node_members(node)
-      [%Node{},...]
+      [%Igwet.Network.Node{},...]
 
   """
   def node_members(node) do
@@ -139,7 +202,7 @@ defmodule Igwet.Network do
   ## Examples
 
       iex> list_nodes()
-      [%Node{}, ...]
+      [%Igwet.Network.Node{}, ...]
 
   """
   def list_nodes do
@@ -256,6 +319,51 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Updated membershp based on form attributes.
+  """
+  def update_members(group, members, attrs) do
+    ids = Enum.map(members, & &1.id)
+    Logger.debug("** update_members.ids "<> inspect(ids))
+    Logger.debug("** update_members.attrs "<> inspect(attrs))
+
+    for {key, value} <- attrs do
+      Logger.debug("*** update_members: "<> inspect(key))
+      if k = Regex.run(~r/member:(.*)/, key, capture: :all_but_first) do
+        Logger.debug("*** update_members "<>inspect(k)<>" = "<>inspect(value))
+        if !Enum.member?(ids, value) do
+          Logger.debug("*** update_members:set_node_in_group "<>inspect(value))
+          node = get_node!(value)
+          set_node_in_group(node, group)
+        end
+      end
+    end
+    obsolete = ids -- Map.values(attrs)
+    for value <- obsolete do
+      Logger.debug("*** update_members:UNset_node_in_group "<>inspect(value))
+      node = get_node!(value)
+      unset_node_in_group(node, group)
+    end
+  end
+
+
+  @doc """
+  Get initials.
+  Set if not present
+  """
+  def get_initials(node) do
+    if (node.initials) do
+      node.initials
+    else
+      initials = String.split(node.name, " ")
+      |> Enum.map(&String.first/1)
+      |> Enum.join("")
+      |> String.downcase()
+      update_node(node, %{initials: initials})
+      initials
+    end
+  end
+
+  @doc """
   Deletes a Node.
 
   ## Examples
@@ -290,11 +398,11 @@ defmodule Igwet.Network do
   ## Examples
 
       iex> list_edges()
-      [%Edge{}, ...]
+      [%Igwet.Network.Edge{}, ...]
 
   """
   def list_edges do
-    Repo.all(Edge)
+    Repo.all from e in Edge, preload: [:subject, :predicate, :object]
   end
 
   @doc """
@@ -311,7 +419,11 @@ defmodule Igwet.Network do
       ** (Ecto.NoResultsError)
 
   """
-  def get_edge!(id), do: Repo.get!(Edge, id)
+  def get_edge!(id) do
+    Edge
+    |> Repo.get!(id)
+    |> Repo.preload([:subject, :predicate, :object])
+  end
 
   @doc """
   Creates a edge.
@@ -371,7 +483,7 @@ defmodule Igwet.Network do
   ## Examples
 
       iex> change_edge(edge)
-      %Ecto.Changeset{source: %Edge{}}
+      %Ecto.Changeset{%Igwet.Network.Edge{}}
 
   """
   def change_edge(%Edge{} = edge) do
@@ -414,10 +526,10 @@ defmodule Igwet.Network do
 
   ## Examples
 
-      iex> create_address(%{field: value})
+      iex> create_address(%{field: "value"})
       {:ok, %Address{}}
 
-      iex> create_address(%{field: bad_value})
+      iex> create_address(%{field: "bad_value"})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -431,11 +543,11 @@ defmodule Igwet.Network do
   Updates a address.
 
   ## Examples
+      iex> address = create_address(%{field: "value"})
+      iex> update_address(address, %{field: "new_value"})
+      {:ok, %Igwet.Network.Address{}}
 
-      iex> update_address(address, %{field: new_value})
-      {:ok, %Address{}}
-
-      iex> update_address(address, %{field: bad_value})
+      iex> update_address(address, %{field: "bad_value"})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -450,6 +562,7 @@ defmodule Igwet.Network do
 
   ## Examples
 
+      iex> address = create_address(%{field: "value"})
       iex> delete_address(address)
       {:ok, %Address{}}
 
@@ -466,8 +579,9 @@ defmodule Igwet.Network do
 
   ## Examples
 
+      iex> address = create_address(%{field: "value"})
       iex> change_address(address)
-      %Ecto.Changeset{source: %Address{}}
+      %Ecto.Changeset{%Address{}}
 
   """
   def change_address(%Address{} = address) do

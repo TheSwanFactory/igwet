@@ -33,7 +33,6 @@ defmodule Igwet.AdminTest do
         attrs
         |> Enum.into(@valid_attrs)
         |> Admin.create_user()
-
       user
     end
 
