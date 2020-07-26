@@ -10,11 +10,7 @@
     <ul>
     <%= for member <- @all_members do %>
       <li>
-        <%= if Enum.member?(@my_members, member) do %>
-          <input checked="checked" name="member[<%= member.key %>]" type="checkbox" value="<%= member.id %>">
-        <% else %>
-          <input name="<%= member.key %>" type="checkbox" value="<%= member.id %>">
-        <% end %>
+        <input <%= if Enum.member?(@my_members, member), do: "checked", else: "" %> name="node[member:<%= member.key %>]" type="checkbox" value="<%= member.id %>">
         <%= link(member.name, to: node_path(@conn, :show, member)) %>
       </li>
     <% end %>
