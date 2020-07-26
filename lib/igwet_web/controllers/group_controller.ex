@@ -32,7 +32,7 @@ defmodule IgwetWeb.GroupController do
       {:ok, node} ->
         conn
         |> put_flash(:info, "Node updated successfully.")
-        |> redirect(to: node_path(conn, :show, node))
+        |> redirect(to: group_path(conn, :show, node))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", node: node, changeset: changeset)
@@ -45,6 +45,6 @@ defmodule IgwetWeb.GroupController do
 
     conn
     |> put_flash(:info, "Node deleted successfully.")
-    |> redirect(to: node_path(conn, :index))
+    |> redirect(to: group_path(conn, :index))
   end
 end
