@@ -30,6 +30,8 @@ defmodule IgwetWeb.GroupController do
 
     case Network.update_node(node, node_params) do
       {:ok, node} ->
+        members = Network.node_members(node)
+        Network.update_members(node, members, node_params)
         conn
         |> put_flash(:info, "Node updated successfully.")
         |> redirect(to: group_path(conn, :show, node))
