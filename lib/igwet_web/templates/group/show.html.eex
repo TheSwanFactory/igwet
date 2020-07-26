@@ -1,0 +1,67 @@
+<h2>Show Group</h2>
+
+<span><%= link "Edit", to: group_path(@conn, :edit, @node) %></span>
+<span><%= link "Back", to: group_path(@conn, :index) %></span>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @node.name %>
+  </li>
+
+  <li>
+    <strong>Initials:</strong>
+    <%= @node.initials %>
+  </li>
+
+  <li>
+    <strong>About:</strong>
+    <%= @node.about %>
+  </li>
+
+  <li>
+    <strong>Email:</strong>
+    <%= @node.email %>
+  </li>
+
+  <li>
+    <strong>Phone:</strong>
+    <%= @node.phone %>
+  </li>
+
+  <li>
+    <strong>URL:</strong>
+    <%= @node.url %>
+  </li>
+
+  <li>
+    <strong>Date:</strong>
+    <%= @node.date %>
+  </li>
+
+  <li>
+    <strong>Key:</strong>
+    <%= @node.key %>
+  </li>
+
+
+  <ul>
+    <h3>Parent Groups</h3>
+    <%= for group <- @groups do %>
+      <li>
+        <%= link(group.name, to: group_path(@conn, :show, group)) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <ul>
+    <h3>Members</h3>
+    <%= for member <- @members do %>
+      <li>
+        <%= link(member.name, to: group_path(@conn, :show, member)) %>
+      </li>
+    <% end %>
+  </ul>
+
+</ul>
