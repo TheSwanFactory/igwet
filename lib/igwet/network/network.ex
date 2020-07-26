@@ -3,6 +3,7 @@ defmodule Igwet.Network do
   The Network context.
   """
 
+  require Logger
   import Ecto.Query, warn: false
   alias Igwet.Repo
   alias Igwet.Network.Node
@@ -66,7 +67,7 @@ defmodule Igwet.Network do
   """
   def node_in_group?(node, group) do
     in_node = get_first_node!(:name, "in")
-    edge_exists?(node, in_node, group)
+    nil != find_edge(node, in_node, group)
   end
 
   @doc """
@@ -74,21 +75,49 @@ defmodule Igwet.Network do
 
   ## Examples
 
-      iex> edge_exists?(subject, predicate, object)
+      iex> find_edge(subject, predicate, object)
       true
 
   """
-  def edge_exists?(subject, predicate, object) do
-    edge =
-      Edge
-      |> where(
-        [e],
+  def find_edge(subject, predicate, object) do
+    Edge
+      |> where([e],
         e.subject_id == ^subject.id and e.predicate_id == ^predicate.id and
           e.object_id == ^object.id
       )
       |> Repo.one()
+  end
 
-    edge != nil
+  @doc """
+  Updated membershp based on form attributes.
+  """
+  def update_members(_group, _attrs) do
+  end
+
+  @doc """
+  Associate a member with a group.
+  Set 'as' to initials, update if not unique,
+  """
+  def set_node_in_group(node, group) do
+    if (node_in_group?(node, group)) do
+      false
+    else
+      in_node = get_first_node!(:name, "in")
+      create_edge(%{subject_id: node.id, predicate_id: in_node.id, object_id: group.id})
+    end
+  end
+
+  @doc """
+  Remove a member a group.
+  """
+  def unset_node_in_group(node, group) do
+    in_node = get_first_node!(:name, "in")
+    edge = find_edge(node, in_node, group)
+    if (!edge) do
+      false
+    else
+      delete_edge(edge)
+    end
   end
 
   @doc """
@@ -312,25 +341,6 @@ defmodule Igwet.Network do
       update_node(node, %{initials: initials})
       initials
     end
-  end
-
-  @doc """
-  Updated membershp based on form attributes.
-  """
-  def update_members(_group, _attrs) do
-  end
-
-  @doc """
-  Associate a member with a group.
-  Set 'as' to initials, update if not unique,
-  """
-  def add_member(_group, _member) do
-  end
-
-  @doc """
-  Remove a member key_from_string a group.
-  """
-  def remove_member(_group, _member) do
   end
 
   @doc """
