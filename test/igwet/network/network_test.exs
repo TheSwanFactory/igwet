@@ -40,16 +40,18 @@ defmodule Igwet.NetworkTest do
       groups = Network.objects_for_predicate("in")
       assert Enum.count(groups) == 2
 
-      first = List.first(groups)
-      assert first.name == context[:igwet_group].name
+      groups
+      |> Enum.map(& &1.name)
+      |> Enum.member?(context[:igwet_group].name)
     end
 
     test "subjects_for_predicate", context do
       groups = Network.subjects_for_predicate("in")
       assert Enum.count(groups) == 2
 
-      first = List.first(groups)
-      assert first.name == context[:admin_group].name
+      groups
+      |> Enum.map(& &1.name)
+      |> Enum.member?(context[:admin_group].name)
     end
 
     test "node_groups", context do

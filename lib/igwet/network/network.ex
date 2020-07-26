@@ -126,13 +126,12 @@ defmodule Igwet.Network do
   def objects_for_predicate(predicate) do
     in_node = get_first_node!(:name, predicate)
 
-    edges =
-      Edge
-      |> where([e], e.predicate_id == ^in_node.id)
-      |> preload([:object])
-      |> Repo.all()
-
-    Enum.map(edges, & &1.object)
+    Edge
+    |> where([e], e.predicate_id == ^in_node.id)
+    |> preload([:object])
+    |> Repo.all()
+    |> Enum.map(& &1.object)
+    |> Enum.uniq
   end
 
   @doc """
@@ -147,13 +146,12 @@ defmodule Igwet.Network do
   def subjects_for_predicate(predicate) do
     in_node = get_first_node!(:name, predicate)
 
-    edges =
-      Edge
-      |> where([e], e.predicate_id == ^in_node.id)
-      |> preload([:subject])
-      |> Repo.all()
-
-    Enum.map(edges, & &1.subject)
+    Edge
+    |> where([e], e.predicate_id == ^in_node.id)
+    |> preload([:subject])
+    |> Repo.all()
+    |> Enum.map(& &1.subject)
+    |> Enum.uniq
   end
 
   @doc """
@@ -324,7 +322,7 @@ defmodule Igwet.Network do
   Updated membershp based on form attributes.
   """
   def update_members(group, members, attrs) do
-    ids = Enum.map(members, fn x->x.id end)
+    ids = Enum.map(members, & &1.id)
     Logger.debug("** update_members.ids "<> inspect(ids))
     Logger.debug("** update_members.attrs "<> inspect(attrs))
 
