@@ -4,7 +4,7 @@ defmodule IgwetWeb.WebhookController do
   use IgwetWeb, :controller
   require Logger
 
-  alias Igwet.Network.Message
+  alias Igwet.Network.Sendmail
   alias Igwet.Admin.Mailer
 
   defp peer(conn) do
@@ -18,12 +18,12 @@ defmodule IgwetWeb.WebhookController do
 
     try do
       params
-      |> Message.normalize_params()
-      |> Message.add_received_header(received)
-      |> Message.mask_sender()
-      |> Message.expand_recipients()
-      |> Message.save_as_node()
-      |> Message.params_to_email_list()
+      |> Sendmail.normalize_params()
+      |> Sendmail.add_received_header(received)
+      |> Sendmail.mask_sender()
+      |> Sendmail.expand_recipients()
+      |> Sendmail.save_as_node()
+      |> Sendmail.params_to_email_list()
       |> Enum.map(&Mailer.deliver_now/1)
 
       conn

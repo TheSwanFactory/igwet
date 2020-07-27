@@ -1,15 +1,15 @@
-defmodule Igwet.NetworkTest.Message do
+defmodule Igwet.NetworkTest.Sendmail do
   use Igwet.DataCase
   use Bamboo.Test
-  doctest Igwet.Network.Message
+  doctest Igwet.Network.Sendmail
 
-  alias Igwet.Network.Message
+  alias Igwet.Network.Sendmail
 
   describe "message" do
     test "email delivery" do
       node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
-      Message.test_email(node) |> Igwet.Admin.Mailer.deliver_now()
-      assert_delivered_email(Message.test_email(node))
+      Sendmail.test_email(node) |> Igwet.Admin.Mailer.deliver_now()
+      assert_delivered_email(Sendmail.test_email(node))
     end
   end
 end
