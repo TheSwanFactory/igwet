@@ -1,0 +1,33 @@
+<h2>Show Group</h2>
+
+<span><%= link "Edit", to: group_path(@conn, :edit, @node) %></span>
+<span><%= link "Back", to: group_path(@conn, :index) %></span>
+
+<ul>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @node.name %>
+  </li>
+
+  <li>
+    <strong>Body:</strong>
+    <%= @node.about %>
+  </li>
+
+  <li>
+    <strong>Email:</strong>
+    <%= @node.email %>
+  </li>
+
+  <li>
+    <strong>Phone:</strong>
+    <%= @node.phone %>
+  </li>
+
+  <li>
+    <strong>Date:</strong>
+    <%= @node.date %>
+  </li>
+
+</ul>

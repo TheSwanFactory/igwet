@@ -22,6 +22,7 @@ defmodule IgwetWeb.Router do
     get("/logout", AuthController, :logout)
     resources("/users", UserController)
     resources("/groups", GroupController)
+    resources("/messages", MessageController)
     resources("/nodes", NodeController)
     resources("/edges", EdgeController)
     resources("/addresses", AddressController)
