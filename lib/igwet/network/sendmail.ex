@@ -225,6 +225,22 @@ defmodule Igwet.Network.Sendmail do
   end
 
   @doc """
+  Return a list of nodes (or their members) containing phone numbers
+  """
+  def nodes_with_phones(node) do
+    case node.phone do
+      nil ->
+        Network.node_members(node)
+        |> Enum.map(&nodes_with_phones/1)
+        |> List.flatten()
+
+      _ ->
+        [node]
+    end
+  end
+
+
+  @doc """
   Store the message as a node with links to the From and To
 
   ## Examples
