@@ -9,10 +9,13 @@ defmodule IgwetWeb.WebhookController do
 
 
   def receive_sms(conn, params) do
-    %{address: host, port: port} = Plug.Conn.get_peer_data(conn)
-    "#{Tuple.to_list(host) |> Enum.join(".")}:#{port}"
+    Logger.debug("'conn: '" <> inspect(conn))
+    Logger.debug("'params: '" <> inspect(params))
+    #from, to, body = params
+    #sender = Network.node_for_phone(from)
+    #receiver = Network.node_for_phone(to)
+    #message = sender <> ': ' <> body
   end
-
 
   defp peer(conn) do
     %{address: host, port: port} = Plug.Conn.get_peer_data(conn)
