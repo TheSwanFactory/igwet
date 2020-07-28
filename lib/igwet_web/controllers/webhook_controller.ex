@@ -7,6 +7,13 @@ defmodule IgwetWeb.WebhookController do
   alias Igwet.Network.Sendmail
   alias Igwet.Admin.Mailer
 
+
+  def receive_sms(conn, params) do
+    %{address: host, port: port} = Plug.Conn.get_peer_data(conn)
+    "#{Tuple.to_list(host) |> Enum.join(".")}:#{port}"
+  end
+
+
   defp peer(conn) do
     %{address: host, port: port} = Plug.Conn.get_peer_data(conn)
     "#{Tuple.to_list(host) |> Enum.join(".")}:#{port}"
