@@ -1,32 +1,28 @@
-defmodule Igwet.Network.Sendmail do
+defmodule Igwet.Network.SMS do
   @moduledoc """
-  Wrappers and helpers for sending and receiving Email messages
+  Wrappers and helpers for sending and receiving SMS messages
+  See: https://www.twilio.com/docs/sms/twiml
   """
 
   # require IEx; #IEx.pry
 
   require Logger
   alias Igwet.Network
-  alias Igwet.Admin.Mailer
-
-  import Bamboo.Email
+  import ExTwilio.Api
 
   @from "from"
-  @headers "message-headers"
+  @to "to"
+  @body "body"
+  @n_media "NumMedia"
+  @msg_id "MessageSid"
+  @sms_id "SmsSid"
+  @acct_id "AccountSid"
+  @msg_svc_id "MessagingServiceSid"
   @node "node"
   @recipient "recipient"
-  @recipient_list "recipient_list"
   @sender "sender"
-  @to "to"
 
   @replaced_headers [@from, @recipient, @sender, @to]
-
-  defimpl Bamboo.Formatter, for: Igwet.Network.Node do
-    # Used by `to`, `bcc`, `cc` and `from`
-    def format_email_address(node, _opts) do
-      {node.name, node.email}
-    end
-  end
 
   # Should probably do this with function clauses
   defp ensure_parameter!(params, key) do
@@ -35,27 +31,6 @@ defmodule Igwet.Network.Sendmail do
 
   def downcase_map(params) do
     for {key, val} <- params, into: %{}, do: {String.downcase(key), val}
-  end
-
-  @doc """
-  Normalize sender and recipient email addresess
-
-  ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.downcase_addresses %{"recipient" => "M@igwet.com", "sender" => "Bob@IGWET.COM"}
-      iex> params["recipient"]
-      "m@igwet.com"
-  """
-
-  def downcase_addresses(params) do
-    ensure_parameter!(params, @sender)
-    ensure_parameter!(params, @recipient)
-
-    %{
-      params
-      | @sender => String.downcase(params[@sender]),
-        @recipient => String.downcase(params[@recipient])
-    }
   end
 
   @doc """
