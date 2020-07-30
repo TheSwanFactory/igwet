@@ -12,11 +12,7 @@ defmodule IgwetWeb.WebhookController do
 
   def receive_sms(_conn, params) do
     Logger.debug("'params: '" <> inspect(params))
-    {from, to, body} = params
-    sender = Network.get_first_node!(:phone, from)
-    receiver = Network.get_first_node!(:phone, to)
-    message = Network.get_initials(sender) <> ": " <> body
-    Logger.debug("'message: '" <> message <> inspect(receiver))
+    relay_sms(params)
   end
 
   defp peer(conn) do

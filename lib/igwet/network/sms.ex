@@ -22,15 +22,9 @@ defmodule Igwet.Network.SMS do
   @recipient "recipient"
   @sender "sender"
 
-  @replaced_headers [@from, @recipient, @sender, @to]
-
   # Should probably do this with function clauses
   defp ensure_parameter!(params, key) do
     if !Map.has_key?(params, key), do: raise("No parameter named '#{key}'")
-  end
-
-  def downcase_map(params) do
-    for {key, val} <- params, into: %{}, do: {String.downcase(key), val}
   end
 
   @doc """
@@ -50,26 +44,16 @@ defmodule Igwet.Network.SMS do
       2
   """
 
-  def filter_headers(params) do
-    ensure_parameter!(params, @headers)
-    rejects = Enum.map(@replaced_headers, &String.to_atom/1)
-
-    headers =
-      params[@headers]
-      |> Enum.map(&header_as_keyword_list/1)
-      |> Enum.reject(fn {k, _} -> Enum.member?(rejects, k) end)
-
-    %{params | @headers => headers}
-  end
-
-  defp header_as_keyword_list(header) do
-    key = Enum.at(header, 0) |> String.downcase() |> String.to_atom()
-    value = Enum.at(header, 1)
-    {key, value}
+  def relay_sms(params) do
+    params
+    |> expand_recipients()
+    |> save_as_node()
+    |> params_to_sms_list()
+    |> Enum.map(&deliver_now/1)
   end
 
   @doc """
-  Normalize webhook parameters
+  Convert webhook parameters to nodes
 
   ## Examples
       iex> alias Igwet.Network.Sendmail
@@ -78,11 +62,12 @@ defmodule Igwet.Network.SMS do
       "com.igwet+admin@mg.igwet.com"
   """
 
-  def normalize_params(params) do
-    params
-    |> downcase_map
-    |> downcase_addresses
-    |> filter_headers
+  def to_nodes(params) do
+    {from, to, body} = params
+    sender = Network.get_first_node!(:phone, from)
+    receiver = Network.get_first_node!(:phone, to)
+    message = Network.get_initials(sender) <> ": " <> body
+    %{sender, receiver, message, params}
   end
 
   @doc """
