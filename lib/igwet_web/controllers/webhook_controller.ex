@@ -4,17 +4,18 @@ defmodule IgwetWeb.WebhookController do
   use IgwetWeb, :controller
   require Logger
 
+  alias Igwet.Network
   alias Igwet.Network.Sendmail
   alias Igwet.Admin.Mailer
 
 
-  def receive_sms(conn, params) do
-    Logger.debug("'conn: '" <> inspect(conn))
+  def receive_sms(_conn, params) do
     Logger.debug("'params: '" <> inspect(params))
-    #from, to, body = params
-    #sender = Network.node_for_phone(from)
-    #receiver = Network.node_for_phone(to)
-    #message = sender <> ': ' <> body
+    {from, to, body} = params
+    sender = Network.get_first_node!(:phone, from)
+    receiver = Network.get_first_node!(:phone, to)
+    message = Network.get_initials(sender) <> ": " <> body
+    Logger.debug("'message: '" <> message <> inspect(receiver))
   end
 
   defp peer(conn) do
