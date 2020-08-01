@@ -1,7 +1,6 @@
 = RP-OOO1-SD "Self-Document"
-
-Ernest Prabhakar <admin+operator@igwet.com>
-v1.0, 2020-08-01
+- v1.0, 2020-08-01
+- Ernest Prabhakar <admin+operator@igwet.com>
 
 ## USAGE
 
@@ -13,9 +12,9 @@ v1.0, 2020-08-01
 
 RP Number:: unique Relational Practice identifier (ignores trailing initials)
 Initials/Name:: imperative verb (first person plural), quoted
-Author:: editor of last major version
-Author Email:: their igwet.com alias
 Version:: Rewrite.Extension.Refinement
+Author:: authors/editors of each rewrite or extension (refinements optional)
+Author Email:: their igwet.com alias
 USAGE:WHEN:: context where this practice may be useful
 USAGE:TRY:: specific actions to take
 USAGE:SO THAT:: expected results, if the practice is appropriate
