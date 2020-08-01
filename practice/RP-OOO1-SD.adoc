@@ -1,31 +1,37 @@
-= RP-OOO1-SD Self-Document
+= RP-OOO1-SD "Self-Document"
 Ernest Prabhakar <admin+operator@igwet.com>
 v1.0, 2020-08-01
 
 ## USAGE
 
-WHEN cultivating a shared practice,
-TRY writing it down in an open, structured format,
-SO THAT it is easier to discover, apply, and improve upon
+- WHEN cultivating a shared practice,
+- TRY writing it down in an open, structured format,
+- SO THAT it is easier to discover, apply, and improve upon
 
 ## DETAILS
 
-RP Number:: unique ASCII identifier (ignores trailing initals)
-Initials/Name:: imperative verb (first person plural)
+RP Number:: unique Relational Practice identifier (ignores trailing initials)
+Initials/Name:: imperative verb (first person plural), quoted
 Author:: editor of last major version
 Author Email:: their igwet.com alias
 Version:: Rewrite.Extension.Refinement
-WHEN:: context where this practice may be useful
-TRY:: specific actions to take
-SO THAT:: expected results, if the practice is appropriate
+USAGE.WHEN:: context where this practice may be useful
+USAGE.TRY:: specific actions to take
+USAGE.SO THAT:: expected results, if the practice is appropriate
+DETAILS:: Clarify and expand upon core usage concepts
+EXAMPLE:: Illustrate how this was actually used to solve a real-world problem
+PRIOR ART:: Links to existing practices, traditions, and conventions that served as inspiration for this practice
+https://asciidoctor.org/docs/asciidoc-recommended-practices/[AsciiDoc]:: Textual conventions for RP documents, such as one sentence per line
 
 ## Example
 
-This document's source code as an asciidoc text file.
+I am trying to encourage the Biastes public discipleship men's group to define ourselves in terms of an evolving set of written practices; rather than explicit rules, implicit traditions, or embodied leaders.
+These first few foundational documents introduce the "meta-practice" of how, when, and why to codify practices.
+This specific document both introduces the general concept of an open, structured format, and serves as a concrete proposal and prototype for how to do that in asciidoc.
+My hope is that subsequent RP's will evolve this format in a way that continues to makes it easy for humans to write, computers to parse, and websites to display.
 
 ## PRIOR ART
 
-- https://asciidoctor.org/docs/asciidoc-recommended-practices/[AsciiDoc]
 - https://en.wikipedia.org/wiki/Design_pattern[Design Pattern]
 - https://en.wikipedia.org/wiki/Request_for_Comments#Production_and_versioning[IETF Requests for Comment]
 - https://semver.org[Semantic Versioning]
