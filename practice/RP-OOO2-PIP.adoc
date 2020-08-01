@@ -1,0 +1,48 @@
+= RP-OOO2-PIP "Prototype Improved Practices"
+- v1.0, 2020-08-01 Ernest Prabhakar <admin+operator@igwet.com>
+
+== USAGE
+
+- WHEN the existing practice (format or informal) is not working well for everyone,
+- TRY finding others who see the same problem, then work with them to prototype an improved practice,
+- SO THAT others can experience the benefit before they need to face the problem
+
+== DETAILS
+
+Human beings typically feel shame when confronted by important problems they do not know how to solve.
+Our natural reaction is to quickly get rid of such problems, either by denying them or redefining them to fit existing solutions.
+Since shame increases with both the status of the person and the urgency of the problem, it is often an https://en.wikipedia.org/wiki/Anti-pattern[anti-pattern] to raise problems with those most able to solve them, if they do not experience the problem themselves.
+This is especially true if those in power actually benefit from the existence of the problem in some way.
+
+The alternative pattern is to find and empower those who already see the problem, so that together we can:
+1. Collect anecdotes and data to characterize the problem
+2. Agree on common language to describe and measure the problem
+3. Experiment with small-scale solutions for addressing the problem
+4. Nurture hope by demonstrating effective solutions to the larger community
+5. Leverage that hope to recruit more people to take on the problem
+
+== EXAMPLE
+
+As of August 1st, 2020, I am attempting to practice this as part of https://2transform.us/category/podcast/[The Great Reset].
+
+My first encounter with structural obstacles to revival was the failure of https://www.ryanderfler.com/blog/worldcup[Hands On Christianity], a one-month startup I ran with Ryan Derfler and Rob Schulze in March, 2014.
+More precisely, I learned the strongholds I saw in the church actually mirror those in my own heart, so I had to overcome the latter before I could successfully rescue people from the former.
+
+Every few months since I have taken another run at the problem, but never managed to gain traction.  Then earlier in 2020 I had lunch with Ted Hahs, and realized we shared both a passion for revival and the belief that honoring our fathers was the key to success. We started meeting with John McClements, though only once in person before we were overtaken by the COVID-19 pandemic. When reflecting on how to take advantage of this unique season for the global body of Christ, Ted challenged me to host a weekly conversation with him and post in on YouTube.
+
+The https://2transform.us/2020/04/03/tgr-01-the-cup-of-suffering/[first episode of The Great Reset] aired as a Zoom call on April 3rd, 2020.
+While the format has evolved somewhat, I have tried to keep experimenting with ways to use these sessions to demonstrate my (and hopefully our) values, not merely talk about them.
+There have not been many viewers, but the videos have proved helpful when inviting guests.
+A few of them even stuck around, which helped keep up our numbers when some founders (including John McClements) felt called to leave.
+
+I hope that this latest experiment -- systematically documenting Relational Practices -- will be effective enough that the group as a whole will get behind it, which would enable us to start demoing it to a larger audience.
+I am cautiously optimistic about that actually happening, as I have gotten positive feedback when field-testing this with members who expressed frustration with our current lack of measurable progress.
+However, even if this particular experiment (or The Great Reset itself) fails, this practice has proved so fruitful compared to my earlier efforts that I fully intend to leverage it as part of whatever I end up doing next.
+
+== PRIOR ART
+- https://en.wikipedia.org/wiki/Benedictines[Benedictine] monastic movement
+- https://en.wikipedia.org/wiki/Disruptive_innovation[Disruptive Innovation]
+- The Early Church in https://www.biblegateway.com/passage/?search=Acts+2%3A40-47&version=NIV[Acts 2]
+- Jesus https://en.wikipedia.org/wiki/Calling_of_the_disciples[calling the disciples]
+- http://theleanstartup.com/principles[Lean Startup] and https://medium.com/west-stringfellow/go-to-market-the-lean-startup-mvps-and-product-market-fit-a0d61574dde9[Minimum Viable Product]
+- https://www.python.org/dev/peps/pep-0001/[Python Enhancement Proposals]
