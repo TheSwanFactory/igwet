@@ -15,9 +15,9 @@ Initials/Name:: imperative verb (first person plural), quoted
 Author:: editor of last major version
 Author Email:: their igwet.com alias
 Version:: Rewrite.Extension.Refinement
-USAGE.WHEN:: context where this practice may be useful
-USAGE.TRY:: specific actions to take
-USAGE.SO THAT:: expected results, if the practice is appropriate
+USAGE:WHEN:: context where this practice may be useful
+USAGE:TRY:: specific actions to take
+USAGE:SO THAT:: expected results, if the practice is appropriate
 DETAILS:: Clarify and expand upon core usage concepts
 EXAMPLE:: Illustrate how this was actually used to solve a real-world problem
 PRIOR ART:: Links to existing practices, traditions, and conventions that served as inspiration for this practice
@@ -27,8 +27,8 @@ https://asciidoctor.org/docs/asciidoc-recommended-practices/[AsciiDoc]:: Textual
 
 I am trying to encourage the Biastes public discipleship men's group to define ourselves in terms of an evolving set of written practices; rather than explicit rules, implicit traditions, or embodied leaders.
 These first few foundational documents introduce the "meta-practice" of how, when, and why to codify practices.
-This specific document both introduces the general concept of an open, structured format, and serves as a concrete proposal and prototype for how to do that in asciidoc.
-My hope is that subsequent RP's will evolve this format in a way that continues to makes it easy for humans to write, computers to parse, and websites to display.
+This specific document both introduces the general concept of an open, structured format, and serves as a https://github.com/TheSwanFactory/igwet/blob/master/practice/RP-OOO1-SD.adoc[concrete proposal and prototype] for how to do that in asciidoc.
+My hope is that subsequent RP's will evolve this format in a way that continues to makes it easier for humans to write, computers to parse, and websites to display.
 
 ## PRIOR ART
 
