@@ -1,0 +1,24 @@
+= RP-OOO3-ECC "Encounter Christ through the Cross"
+- v1.0, 2020-08-01 Ernest Prabhakar <admin+operator@igwet.com>
+
+== USAGE
+
+- WHEN there does not seem to be any honorable way forward,
+- TRY denying Self to encounter Christ through His Cross
+- SO THAT we and our reality can be transformed in His image
+
+== DETAILS
+
+Communities that survive require mechanisms bridge the gap between short-term self-interest and the long-term needs of the community. The most powerful such mechanism is code of honor that members internalize as core to their identity.
+
+
+== EXAMPLE
+
+
+== PRIOR ART
+- https://en.wikipedia.org/wiki/Benedictines[Benedictine] monastic movement
+- https://en.wikipedia.org/wiki/Disruptive_innovation[Disruptive Innovation]
+- The Early Church in https://www.biblegateway.com/passage/?search=Acts+2%3A40-47&version=NIV[Acts 2]
+- Jesus https://en.wikipedia.org/wiki/Calling_of_the_disciples[calling the disciples]
+- http://theleanstartup.com/principles[Lean Startup] and https://medium.com/west-stringfellow/go-to-market-the-lean-startup-mvps-and-product-market-fit-a0d61574dde9[Minimum Viable Product]
+- https://www.python.org/dev/peps/pep-0001/[Python Enhancement Proposals]
