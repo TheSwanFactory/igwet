@@ -1,0 +1,38 @@
+= RP-OOO3-FCC "Follow Christ to the Cross"
+- v1.0, 2020-08-01 Ernest Prabhakar <admin+operator@igwet.com>
+
+== USAGE
+
+- WHEN there does not seem to be any honorable way forward,
+- TRY denying Self to follow Christ all the way to the cross
+- SO THAT we and our reality can be transformed in His image
+
+== DETAILS
+
+Successful cultures include mechanisms to tie short-term self-interest to the long-term needs of the community.
+The most powerful such mechanism is a _worldview_, which shapes our perceptions of identity, morality, and reality.
+Not only does worldview affect our conscious notions of right and wrong, it subtly constrains what we find possible, or even thinkable.
+
+When we initially follow Jesus, it is for reasons compatible with our personal or cultural worldview.
+But if we follow Him long enough -- and hard enough -- He eventually asks us to choose between our worldview and God's.
+As He himself did at Gethsemane, when He agreed to go to the cross.
+
+Do we only follow Jesus because of what He can give us?  Or do we follow Jesus so we can give him our everything?
+
+Those of us from an evangelical background did this at our individual conversions. This practice is about learning do that repeatedly as a community. Because that is the only way we can help each other accomplish *everything* He has told us to do.
+
+== EXAMPLE
+
+
+== PRIOR ART
+- Two Trees
+- The War of Art, Review (Derek Sivers)
+- Peter rebukes Jesus
+
+
+- https://en.wikipedia.org/wiki/Benedictines[Benedictine] monastic movement
+- https://en.wikipedia.org/wiki/Disruptive_innovation[Disruptive Innovation]
+- The Early Church in https://www.biblegateway.com/passage/?search=Acts+2%3A40-47&version=NIV[Acts 2]
+- Jesus https://en.wikipedia.org/wiki/Calling_of_the_disciples[calling the disciples]
+- http://theleanstartup.com/principles[Lean Startup] and https://medium.com/west-stringfellow/go-to-market-the-lean-startup-mvps-and-product-market-fit-a0d61574dde9[Minimum Viable Product]
+- https://www.python.org/dev/peps/pep-0001/[Python Enhancement Proposals]
