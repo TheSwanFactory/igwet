@@ -1,12 +1,13 @@
 <div class="jumbotron">
   <h2><%= "Welcome to #{@name}!"%></h2>
-  <h3>Inter-Group Web/Email/Text</h3>
+  <h3>Interconnecting Groups for Whole-Earth Transformation</h3>
 </div>
-  <h4>IGWET: The Secure Messaging Directory</h4>
+  <h4>IGWET: Transformation as a Service</h4>
   <p class="lead">
-    An inside-out social network<br/>
-    for turning anonymous crowds<br/>
-    into passion-driven communities</p>
+    IGWET is a fully open platform for empowering Transformation Communities that are seeking to create positive change in the world.
+    We provide easy-to-use pseudonymous chat and email to enable ad-hoc groups to build up trust before revealing sensitive personal information.
+    We also invite you to join us in building out a library of Relational Practices, which groups can adopt and adapt in order to "be the change they seek to make in the world."
+  </p>
 
 <div class="row marketing">
   <div class="col-lg-6 resources">
