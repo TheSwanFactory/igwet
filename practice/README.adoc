@@ -1,0 +1,9 @@
+= About the "Practice" Subfolder
+
+This file contains AsciiDoc source code for the IGWET.com Relational Practices (RPs).
+
+The current plan is to statically generate HTML using asciidoctor, and then use index.js to display them under igwet.com/practice.
+
+While we would eventually like to have a proper GUI for non-technical users to create and edit RPs, our priority is to embed these in a fully public, irrevocable, and easily forkable format.
+A GitHub repository satisfied those constraints, but an internal database does not.
+The ultimate solution way well involve some sort of blockchain coupled with the Fediverse distributed authentication system.
