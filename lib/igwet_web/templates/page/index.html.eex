@@ -8,6 +8,52 @@
     We provide easy-to-use pseudonymous chat and email to enable ad-hoc groups to build up trust before revealing sensitive personal information.
     We also invite you to join us in building out a library of Relational Practices, which groups can adopt and adapt in order to "be the change they seek to make in the world."
   </p>
+  <h4>Philosophy</h4>
+  <p>
+    IGWET provides what might be called "open source spirituality:" an alternative structure for social movements.
+  </p><p>
+    Most enduring movements are initial built around a charismatic founder, and later propagated by institutions, events, and media.
+    Those mechanisms provide funds for increasing both the depth and breadth of a movement.
+    While such movements have often produced enormous good, their eventual success leads to them becoming enmeshed in the very systems they once critiqued.
+  </p><p>
+    Because of this, many movements (especially monontheistic religions) depend upon periodic reform to maintain their vitality.
+    While that helps, reformers who are sufficiently courageous <em>and</em> effective tend to be few and far between, with gaps often measured in centuries.
+  </p><p>
+    IGWET instead allows movements to form and grow around emergent "networked communities of practice."
+    Such networks provides many of the benefits of institutional structures -- credentialing, trust, collective action -- without the temptations of centralized power or the distortions of massive fixed costs.
+    In effect, a dynamic network allows for a culture of perpetual incremental reformation, without fear of retribution by those who profit from inefficiency.
+    Instead, shared practices provide a scaffold to demonstrate competence and weed out bad actors without the need for a central authority.
+  </p><p>
+    Historically, such networked communities have not been able to win against hierarchical insitutions.
+    Hierarchy enables rapid decision making and mass-conformity, which was a competitive advantage in the industrial era.
+    However, in a post-industrial Volatile-Uncertain-Complex-Ambiguous (VUCA) world, networks should have the edge by being able to rapidly assimilate new information and cheaply experiment with alternate solutions.
+  </p><p>
+    The challenge to date is that virtually all of the tools and media of the modern world implicitly assume (and encourage) top-down thinking.
+    This makes it very difficult for new movements to achieve scale without falling into those traps.
+    IGWET aims to change that with a low-cost, easy-to-use platform designed to promote (and protect) bottom-up innovation.
+  </p>
+  <h4>Mechanics</h4>
+  <p>
+    IGWET accomplishes this lofty goal via three core mechanics:
+  </p>
+  <dl>
+    <dt>
+      Ad-hoc Pseudonymous Chat Circles
+    </dt><dd>
+      There is something magical that happens when group of like-minded, passionate people interact in a chat circle.
+      The challenge is finding people with shared interests, trusting them enough to share your personal phone number, and then adding and removing people over time.
+      IGWET provides a secure messaging directory which lets people establish secure pseudonyms, then easily form and manage ad-hoc SMS groups via a proxy chatbot.
+      This will also provides an easy way to archive message threads, schedule reminders, and provide throttling and muting for when members get a little too passionate.
+    </dd><dt>
+      Shared Library of Relational Practices
+    </dt><dd>
+    </dd><dt>
+      Fully-Open Decentralized Infrastructure
+    </dt><dd>
+    </dd>
+  </dl>
+
+
 
 <div class="row marketing">
   <div class="col-lg-6 resources">
