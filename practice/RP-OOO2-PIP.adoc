@@ -1,5 +1,5 @@
 = RP-OOO2-PIP "Prototype Improved Practices"
-- v1.0, 2020-08-01 Ernest Prabhakar <admin+operator@igwet.com>
+- v1.0, 2020-08-02 Ernest Prabhakar <admin+operator@igwet.com>
 
 == USAGE
 
