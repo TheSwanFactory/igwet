@@ -15,7 +15,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :igwet, IgwetWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
+  url: [host: "igwet.gigalixirapp.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 config :igwet, IgwetWeb.Endpoint,
@@ -27,6 +27,12 @@ config :igwet, Igwet.Admin.Mailer,
   adapter: Bamboo.MailgunAdapter,
   domain: "${MG_DOMAIN}",
   api_key: "${MG_API_KEY}"
+
+# Configures Ueberauth's Auth0 auth provider
+config :ueberauth, Ueberauth.Strategy.Auth0.OAuth,
+  domain: System.get_env("AUTH0_DOMAIN"),
+  client_id: System.get_env("AUTH0_CLIENT_ID"),
+  client_secret: System.get_env("AUTH0_CLIENT_SECRET")
 
 # Do not print debug messages in production
 config :logger, level: :debug

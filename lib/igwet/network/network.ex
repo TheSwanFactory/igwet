@@ -36,6 +36,9 @@ defmodule Igwet.Network do
       :name ->
         where(first, name: ^value)
 
+      :phone ->
+        where(first, phone: ^value)
+
       _ ->
         raise "get_first_node!: Unknown field `#{field}`"
     end

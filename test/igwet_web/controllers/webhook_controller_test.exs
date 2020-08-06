@@ -6,7 +6,7 @@ defmodule IgwetWeb.WebhookControllerTest do
   use Bamboo.Test
   doctest IgwetWeb.WebhookController
 
-  alias Igwet.Network.Message
+  alias Igwet.Network.Sendmail
 
   setup %{conn: conn} do
     conn = put_req_header(conn, "content-type", "application/json")
@@ -15,7 +15,7 @@ defmodule IgwetWeb.WebhookControllerTest do
 
   test "POST /webhook -> 201", %{conn: conn} do
     conn
-    |> post("/webhook", Message.test_params())
+    |> post("/webhook", Sendmail.test_params())
     |> response(201)
 
     assert_email_delivered_with(
