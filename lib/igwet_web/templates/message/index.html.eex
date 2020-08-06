@@ -1,0 +1,31 @@
+<h2>Listing Group</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Actions</th>
+      <th>Subject</th>
+      <th>Body</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Date Sent</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for node <- @nodes do %>
+    <tr>
+      <td class="text-left">
+        <span><%= link "Show", to: group_path(@conn, :show, node), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: group_path(@conn, :edit, node), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: group_path(@conn, :delete, node), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+      </td>
+      <td><%= node.name %></td>
+      <td><%= node.initials %></td>
+      <td><%= node.about %></td>
+      <td><%= node.email %></td>
+      <td><%= node.phone %></td>
+      <td><%= node.date %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>

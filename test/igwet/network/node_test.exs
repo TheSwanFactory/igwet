@@ -31,10 +31,11 @@ defmodule Igwet.NetworkTest.Node do
       node
     end
 
-    test "get_first_node_named!/1 returns first node" do
+    test "get_first_node!/1 returns first node" do
       node = node_fixture()
       node_fixture(%{key: "different key"})
       assert Network.get_first_node!(:name, node.name) == node
+      assert Network.get_first_node!(:phone, node.phone) == node
     end
 
     test "get_first_node_named!/1 raises if no node with that name" do
