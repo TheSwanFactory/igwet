@@ -4,7 +4,6 @@ defmodule IgwetWeb.WebhookController do
   use IgwetWeb, :controller
   require Logger
 
-  alias Igwet.Network
   alias Igwet.Network.Sendmail
   alias Igwet.Network.SMS
   alias Igwet.Admin.Mailer
@@ -12,7 +11,7 @@ defmodule IgwetWeb.WebhookController do
 
   def receive_sms(_conn, params) do
     Logger.debug("'params: '" <> inspect(params))
-    relay_sms(params)
+    SMS.relay_sms(params)
   end
 
   defp peer(conn) do
