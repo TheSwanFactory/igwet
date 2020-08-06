@@ -1,6 +1,6 @@
-defmodule Igwet.Network.Message do
+defmodule Igwet.Network.Sendmail do
   @moduledoc """
-  Wrappers and helpers for sending and receiving messages
+  Wrappers and helpers for sending and receiving Email messages
   """
 
   # require IEx; #IEx.pry
@@ -41,8 +41,8 @@ defmodule Igwet.Network.Message do
   Normalize sender and recipient email addresess
 
   ## Examples
-      iex> alias Igwet.Network.Message
-      iex> params = Message.downcase_addresses %{"recipient" => "M@igwet.com", "sender" => "Bob@IGWET.COM"}
+      iex> alias Igwet.Network.Sendmail
+      iex> params = Sendmail.downcase_addresses %{"recipient" => "M@igwet.com", "sender" => "Bob@IGWET.COM"}
       iex> params["recipient"]
       "m@igwet.com"
   """
@@ -64,9 +64,9 @@ defmodule Igwet.Network.Message do
   Create @received_list and add self
 
   ## Examples
-      iex> alias Igwet.Network.Message
-      iex> params = Message.test_params() |> Message.downcase_map()
-      iex> result = Message.filter_headers params
+      iex> alias Igwet.Network.Sendmail
+      iex> params = Sendmail.test_params() |> Sendmail.downcase_map()
+      iex> result = Sendmail.filter_headers params
       iex> headers = result["message-headers"]
       iex> headers[:from]
       nil
@@ -97,8 +97,8 @@ defmodule Igwet.Network.Message do
   Normalize webhook parameters
 
   ## Examples
-      iex> alias Igwet.Network.Message
-      iex> params = Message.normalize_params(Message.test_params())
+      iex> alias Igwet.Network.Sendmail
+      iex> params = Sendmail.normalize_params(Sendmail.test_params())
       iex> params["recipient"]
       "com.igwet+admin@mg.igwet.com"
   """
@@ -114,9 +114,9 @@ defmodule Igwet.Network.Message do
   Add local Received header
 
   ## Examples
-      iex> alias Igwet.Network.Message
-      iex> normal = Message.normalize_params(Message.test_params())
-      iex> params = Message.add_received_header(normal, "here")
+      iex> alias Igwet.Network.Sendmail
+      iex> normal = Sendmail.normalize_params(Sendmail.test_params())
+      iex> params = Sendmail.add_received_header(normal, "here")
       iex> [head | _] = params["message-headers"]
       iex> head
       {:received, "here"}
@@ -132,9 +132,9 @@ defmodule Igwet.Network.Message do
   Replace Sender and From information with a node
 
   ## Examples
-      iex> alias Igwet.Network.Message
+      iex> alias Igwet.Network.Sendmail
       iex> source = %{"sender" => "ernest.prabhakar@gmail.com", "from" => "nobody", "message-headers" => []}
-      iex> params = Message.mask_sender source
+      iex> params = Sendmail.mask_sender source
       iex> params["sender"]
       "com.igwet+admin+operator@example.com"
       iex> params["from"]
@@ -169,8 +169,8 @@ defmodule Igwet.Network.Message do
   Replace the Recipient with a list of emailable_nodes
 
   ## Examples
-      iex> alias Igwet.Network.Message
-      iex> params = Message.expand_recipients Message.test_params()
+      iex> alias Igwet.Network.Sendmail
+      iex> params = Sendmail.expand_recipients Sendmail.test_params()
       iex> [head | tail] = params["recipient_list"]
       iex> length(tail)
       0
@@ -201,11 +201,11 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> alias Igwet.Network
-      iex> alias Igwet.Network.Message
-      iex> [%{email: email}] = Network.get_first_node!(:name, "operator") |> Message.nodes_with_emails
+      iex> alias Igwet.Network.Sendmail
+      iex> [%{email: email}] = Network.get_first_node!(:name, "operator") |> Sendmail.nodes_with_emails
       iex> email
       "ernest.prabhakar@gmail.com"
-      iex> list = Network.get_first_node!(:name, "admin") |> Message.nodes_with_emails
+      iex> list = Network.get_first_node!(:name, "admin") |> Sendmail.nodes_with_emails
       iex> length(list)
       1
 
@@ -225,11 +225,27 @@ defmodule Igwet.Network.Message do
   end
 
   @doc """
+  Return a list of nodes (or their members) containing phone numbers
+  """
+  def nodes_with_phones(node) do
+    case node.phone do
+      nil ->
+        Network.node_members(node)
+        |> Enum.map(&nodes_with_phones/1)
+        |> List.flatten()
+
+      _ ->
+        [node]
+    end
+  end
+
+
+  @doc """
   Store the message as a node with links to the From and To
 
   ## Examples
-      iex> alias Igwet.Network.Message
-      iex> params = Message.save_as_node Message.test_params()
+      iex> alias Igwet.Network.Sendmail
+      iex> params = Sendmail.save_as_node Sendmail.test_params()
       iex> %{key: key} = params["node"]
       iex> key
       "com.igwet+admin+operator"
@@ -247,8 +263,8 @@ defmodule Igwet.Network.Message do
   Convert Mailgun web params into a Bamboo email
 
   ## Examples
-      iex> alias Igwet.Network.Message
-      iex> email = Message.test_params() |> Message.params_to_email()
+      iex> alias Igwet.Network.Sendmail
+      iex> email = Sendmail.test_params() |> Sendmail.params_to_email()
       iex> email.from
       "Bob <bob@mg.igwet.com>"
 
@@ -287,10 +303,10 @@ defmodule Igwet.Network.Message do
   Use recipient_list to generate a list of emails
 
   ## Examples
-      iex> alias Igwet.Network.Message
-      iex> params = Message.test_params()
+      iex> alias Igwet.Network.Sendmail
+      iex> params = Sendmail.test_params()
       iex> new_params = Map.put_new(params, "recipient_list", [params["recipient"]])
-      iex> emails = Message.params_to_email_list(new_params)
+      iex> emails = Sendmail.params_to_email_list(new_params)
       iex> length(emails)
       1
 
@@ -312,8 +328,8 @@ defmodule Igwet.Network.Message do
 
   ## Examples
       iex> node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
-      iex> alias Igwet.Network.Message
-      iex> result = Message.test_email(node) |> Igwet.Admin.Mailer.deliver_now
+      iex> alias Igwet.Network.Sendmail
+      iex> result = Sendmail.test_email(node) |> Igwet.Admin.Mailer.deliver_now
       iex> result.headers["sender"]
       "list@igwet.com"
       iex> result.text_body
@@ -340,8 +356,8 @@ defmodule Igwet.Network.Message do
   Sample message params
 
   ## Examples
-      iex> alias Igwet.Network.Message
-      iex> params = Message.test_params
+      iex> alias Igwet.Network.Sendmail
+      iex> params = Sendmail.test_params
       iex> params["recipient"]
       "com.igwet+admin@mg.igwet.com"
   """
