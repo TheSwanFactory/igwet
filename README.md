@@ -1,4 +1,4 @@
-[![Build Status](https://semaphoreci.com/api/v1/drernie/igwet/branches/master/badge.svg)](https://semaphoreci.com/drernie/igwet)
+[![Build Status](https://drernie.semaphoreci.com/badges/igwet.svg?style=shields)](https://drernie.semaphoreci.com)
 
 # IGWET
 A secure messaging directory for Intra-Group Web/Email/Text.
