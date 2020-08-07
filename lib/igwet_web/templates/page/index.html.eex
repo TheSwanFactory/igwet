@@ -21,7 +21,7 @@
   </p><p>
     IGWET allows movements to instead form and grow around emergent "<a href="https://en.wikipedia.org/wiki/Network_of_practice">networks of practice</a>."
     Such networks provides many of the benefits of institutional structures -- credentialing, trust, collective action -- without the temptations of centralized power or the distortions of massive fixed costs.
-    In effect, a dynamic network allows for a culture of perpetual incremental reformation, without fear of retribution by those who profit from inefficiency.
+    In effect, a dynamic network allows for a culture of perpetual incremental reformation, without fear of retribution by those who profit from the status quo.
     Instead, shared practices provide a scaffold to demonstrate competence and weed out bad actors without the need for a central authority.
   </p><p>
     Historically, such networked communities have not been able to win against hierarchical insitutions.
@@ -53,7 +53,7 @@
       Each community is free to specific precisely which practices it subscribes to, and other communities can rate how well those members represent their home community.
       The goal is to evolve ever-more effective and diverse practices that become the gold standard for how people should treat each other online (and off).
     </dd><dt>
-      Open, Portable, Cooperativ
+      Open, Portable, Cooperative
     </dt><dd>
       IGWET incorporates several best practices to ensure its business is aligned with the needs of its communities.  One, all of the code is open source, and we encourage others to host their own IGWET servers and federate with us (probably via ActivityPub and the Fediverse).  Two, we are committed to making it easy for communities to seamlessly migrate their members and history between servers.  Three, we are committed to creating cooperative governance structures within and across servers.  Individual servers are welcome to operate as for-profit businesses, and choose whatever additional functionality and quality-of-service gauranteess they want to provide.  But to partiicpate in the federation, they need to ensure the governance of their policies is accountable to the communities they host.
     </dd>
