@@ -22,7 +22,7 @@ defmodule Igwet.Mixfile do
   def application do
     [
       mod: {Igwet.Application, []},
-      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ex_twilio] #:ssl, 
+      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ex_twilio] #:ssl,
     ]
   end
 
@@ -70,7 +70,8 @@ defmodule Igwet.Mixfile do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "run priv/repo/seeds.exs", "test"],
       prod: ["cd assets && npm run deploy && cd ..", "mix phx.digest", "mix distillery.release --env=prod"],
-      deploy: ["test", "version.next", "prod", "cmd git push gigalixir master"]
+      deploy: ["test", "version.next", "push"]
+      push: ["cmd git push gigalixir master", "cmd gigalixir open"]
     ]
   end
 end
