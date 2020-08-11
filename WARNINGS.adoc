@@ -4,7 +4,8 @@
 
 > MIX_ENV=prod  PORT=4000 _build/prod/rel/igwet/bin/igwet foreground
 
-
+gigalixir drains:add syslog+tls://logs4.papertrailapp.com:29017
+logs4.papertrailapp.com:290
 ----
 src/jwa/jose_jwa.erl:60: Warning: crypto:block_decrypt/3 is deprecated and will be removed in OTP 24; use use crypto:crypto_one_time/4 or crypto:crypto_init/3 + crypto:crypto_update/2 + crypto:crypto_final/1 instead
 
