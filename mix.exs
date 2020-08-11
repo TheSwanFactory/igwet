@@ -4,14 +4,15 @@ defmodule Igwet.Mixfile do
   def project do
     [
       app: :igwet,
-      version: "0.0.22",
+      version: "0.0.23",
       elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :test,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      default_task: "phx.server"
     ]
   end
 
@@ -21,7 +22,7 @@ defmodule Igwet.Mixfile do
   def application do
     [
       mod: {Igwet.Application, []},
-      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ssl, :ex_twilio]
+      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ex_twilio] #:ssl, 
     ]
   end
 
@@ -53,6 +54,7 @@ defmodule Igwet.Mixfile do
       {:ex_twilio, github: "danielberkompas/ex_twilio"},
       {:jason, ">= 1.2.1"},
       {:ecto_sql, ">= 3.4.5"},
+      {:version_tasks, "~> 0.11.4"}
     ]
   end
 
@@ -66,7 +68,9 @@ defmodule Igwet.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate", "run priv/repo/seeds.exs", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "run priv/repo/seeds.exs", "test"],
+      prod: ["cd assets && npm run deploy && cd ..", "mix phx.digest", "mix distillery.release --env=prod"],
+      deploy: ["test", "version.next", "prod", "cmd git push gigalixir master"]
     ]
   end
 end
