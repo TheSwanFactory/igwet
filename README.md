@@ -83,3 +83,10 @@ $ source .env
 $ gigalixir remote_console -a $APP_NAME
 $ Path.join(["#{:code.priv_dir(:igwet)}", "repo", "seeds.exs"]) |> Code.eval_file
 ```
+
+### Test Production Release
+```
+$ createdb phx
+$ MIX_ENV=prod mix distillery.release --env=prod
+$ MIX_ENV=prod PORT=4000 _build/prod/rel/igwet/bin/igwet foreground
+```
