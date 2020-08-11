@@ -1,0 +1,24 @@
+= WARNINGS
+
+> MIX_ENV=prod mix distillery.release --env=prod
+
+> MIX_ENV=prod  PORT=4000 _build/prod/rel/igwet/bin/igwet foreground
+
+
+----
+src/jwa/jose_jwa.erl:60: Warning: crypto:block_decrypt/3 is deprecated and will be removed in OTP 24; use use crypto:crypto_one_time/4 or crypto:crypto_init/3 + crypto:crypto_update/2 + crypto:crypto_final/1 instead
+
+src/jose_xchacha20_poly1305_crypto.erl:26: Warning: crypto:block_decrypt/4 is deprecated and will be removed in OTP 24; use use crypto:crypto_one_time/5, crypto:crypto_one_time_aead/6,7 or crypto:crypto_(dyn_iv)?_init + crypto:crypto_(dyn_iv)?_update + crypto:crypto_final instead
+
+warning: Poison.EncodeError.exception/1 is undefined (module Poison.EncodeError is not available or is yet to be defined)
+  lib/jose/poison/lexical_encoder.ex:8: JOSE.Poison.LexicalEncodeError.exception/1
+
+warning: found quoted keyword "coveralls" but the quotes are not required. Note that keywords are always atoms, even when quoted. Similar to atoms, keywords made exclusively of Unicode letters, numbers, underscore, and @ do not require quotes
+  /Users/ernest/Developer/igwet/deps/parallel_stream/mix.exs:17
+
+  warning: Stream.chunk/4 is deprecated. Use Stream.chunk_every/4 instead
+    lib/parallel_stream/producer.ex:16: ParallelStream.Producer.build!/4
+
+warning: System.stacktrace/0 outside of rescue/catch clauses is deprecated. If you want to support only Elixir v1.7+, you must access __STACKTRACE__ inside a rescue/catch. If you want to support earlier Elixir versions, move System.stacktrace/0 inside a rescue/catch
+  lib/plug/conn/wrapper_error.ex:23
+----

@@ -71,6 +71,7 @@ $ gigalixir pg
 $ gigalixir config
 $ git push gigalixir master
 $ gigalixir open
+$ ssh-keygen -t rsa # if you have never done so before
 $ gigalixir account:ssh_keys:add "$(cat ~/.ssh/id_rsa.pub)"
 $ gigalixir ps:migrate
 ```
@@ -79,6 +80,13 @@ $ gigalixir ps:migrate
 To update the seeds in production use:
 ```
 $ source .env
-$ gigalixir remote_console $APP_NAME
+$ gigalixir remote_console -a $APP_NAME
 $ Path.join(["#{:code.priv_dir(:igwet)}", "repo", "seeds.exs"]) |> Code.eval_file
+```
+
+### Test Production Release
+```
+$ createdb phx
+$ MIX_ENV=prod mix distillery.release --env=prod
+$ MIX_ENV=prod PORT=4000 _build/prod/rel/igwet/bin/igwet foreground
 ```
