@@ -22,7 +22,7 @@ defmodule Igwet.Mixfile do
   def application do
     [
       mod: {Igwet.Application, []},
-      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ssl, :ex_twilio]
+      extra_applications: [:ueberauth, :ueberauth_auth0, :logger, :runtime_tools, :ex_twilio] #:ssl, 
     ]
   end
 
