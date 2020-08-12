@@ -69,7 +69,7 @@ defmodule Igwet.Mixfile do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "run priv/repo/seeds.exs", "test"],
-      prod: ["cd assets && npm run deploy && cd ..", "mix phx.digest", "mix distillery.release --env=prod"],
+      prod: ["cmd cd assets && npm run deploy && cd ..", "phx.digest", "distillery.release --env=prod"],
       deploy: ["version.next", "cmd git push gigalixir master", "cmd gigalixir open"]
     ]
   end
