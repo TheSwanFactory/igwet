@@ -1,12 +1,13 @@
+
 <div class="jumbotron">
   <h2><%= "Welcome to #{@name}!"%></h2>
   <h3>Interconnecting Groups for Whole-Earth Transformation</h3>
 </div>
-  <h4>IGWET: Transformation as a Service</h4>
+  <h4>IGWET: The premier Social Transformation as a Service platform (STaaS)</h4>
   <p class="lead">
     IGWET is a fully open platform for empowering Transformational Communities that seek to create positive change in the world.
     We provide easy-to-use pseudonymous chat and email to enable ad-hoc groups to build up trust before revealing sensitive personal information.
-    We also invite you to join us in building out a library of Relational Practices, which groups can adopt and adapt in order to "be the change they seek to make in the world."
+    We invite you to join us in building out a library of Relational Practices, which groups can adopt and adapt in order to "be the change they seek to make in the world."
   </p>
   <h4>Philosophy</h4>
   <p>
