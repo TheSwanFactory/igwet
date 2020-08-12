@@ -28,7 +28,7 @@
           <% end %>
           </ul>
         </nav>
-        <span class="igwet-logo"></span>
+        <span><img src="/images/igwet_logo.png"></span>
       </header>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
