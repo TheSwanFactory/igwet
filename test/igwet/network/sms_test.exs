@@ -6,7 +6,7 @@ defmodule Igwet.NetworkTest.SMS do
 
   describe "SMS" do
     test "text delivery" do
-      node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
+      _node = %Igwet.Network.Node{name: "Test", phone: "+14085551212"}
       #Sendmail.test_email(node) |> Igwet.Admin.Mailer.deliver_now()
       #assert_delivered_email(Sendmail.test_email(node))
     end

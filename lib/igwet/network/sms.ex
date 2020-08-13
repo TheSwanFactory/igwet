@@ -14,12 +14,69 @@ defmodule Igwet.Network.SMS do
   @to "to"
   @body "body"
   @n_media "NumMedia"
+  @url_media "MediaUrl"
   @msg_id "MessageSid"
   @sms_id "SmsSid"
   @acct_id "AccountSid"
   @msg_svc_id "MessagingServiceSid"
   @node "node"
   @sender "sender"
+
+
+    @doc """
+    Sample message params
+    {
+        "sid": "SMxxx",
+        "date_created": "Thu, 13 Aug 2020 02:58:31 +0000",
+        "date_updated": "Thu, 13 Aug 2020 02:58:31 +0000",
+        "date_sent": null,
+        "account_sid": "ACxxxx",
+        "to": "+14085551212",
+        "from": "+12105551212",
+        "messaging_service_sid": "MGxxx",
+        "body": "This is my fight song",
+        "status": "accepted",
+        "num_segments": "0",
+        "num_media": "0",
+        "direction": "outbound-api",
+        "api_version": "2010-04-01",
+        "price": null,
+        "price_unit": null,
+        "error_code": null,
+        "error_message": null,
+        "uri": "/2010-04-01/Accounts/ACxxxx/Messages/SMxxx.json",
+        "subresource_uris": {
+            "media": "/2010-04-01/Accounts/ACxxxx/Messages/SMxxx/Media.json"
+        }
+    }
+
+    ## Examples
+        iex> alias Igwet.Network.SMS
+        iex> params = SMS.test_params()
+        nil
+        iex> params["sender"]
+        "com.igwet+admin@mg.igwet.com"
+    """
+
+    def test_params() do
+      %{
+        @from => "+12125551234",
+        @to => "+13105555555",
+        @body => "Hello from my Twilio line!",
+        @msg_svc_id => "msg-id",
+        @acct_id => "acct_id",
+        @sms_id => "sms_id",
+        @msg_id => "123344",
+        @n_media => 0,
+        'ProvideFeedback' => true,
+        'ForceDelivery' => true,
+        'ContentRetention' => true,
+        'AddressRetention' => true,
+        'SmartEncoded' => true,
+      }
+    end
+
+
 
   # Should probably do this with function clauses
   defp ensure_parameter!(params, key) do
@@ -32,21 +89,17 @@ defmodule Igwet.Network.SMS do
   Create @received_list and add self
 
   ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.test_params() |> Sendmail.downcase_map()
-      iex> result = Sendmail.filter_headers params
-      iex> headers = result["message-headers"]
-      iex> headers[:from]
-      nil
-      iex> list = Keyword.get_values(headers, :received)
+      iex> alias Igwet.Network.SMS
+      iex> params = SMS.test_params()
+      iex> list = SMS.relay_sms(params)
       iex> length(list)
       2
   """
 
   def relay_sms(params) do
     params
-    |> expand_recipients()
-    |> save_as_node()
+    #|> expand_recipients()
+    #|> save_as_node()
     #|> params_to_sms_list()
     #|> Enum.map(&deliver_now/1)
   end
@@ -125,32 +178,5 @@ defmodule Igwet.Network.SMS do
 
     params
     |> Map.put(@node, node)
-  end
-
-  @doc """
-  Sample message params
-
-  ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.test_params
-      iex> params["recipient"]
-      "com.igwet+admin@mg.igwet.com"
-  """
-
-  def test_params() do
-    %{
-      @sender => "ernest.prabhakar@gmail.com",
-      "subject" => "Re: Sample POST request",
-      @from => "Bob <bob@mg.igwet.com>",
-      "Message-Id" => "<517ACC75.5010709@mg.igwet.com>",
-      "Date" => "Fri, 26 Apr 2013 11:50:29 -0700",
-      @to => "Alice <alice@mg.igwet.com>",
-      "Subject" => "Re: Sample POST request",
-      @msg_svc_id => "msg-id",
-      @acct_id => "acct_id",
-      @sms_id => "sms_id",
-      @msg_id => "123344",
-      @n_media => 0,
-    }
   end
 end
