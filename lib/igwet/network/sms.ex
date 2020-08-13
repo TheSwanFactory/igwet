@@ -115,7 +115,7 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> params = SMS.test_params("to_nodes")
-      iex> {sender, receiver, message, params} = SMS.to_nodes params
+      iex> %{sender: sender, receiver: receiver} = SMS.to_nodes params
       iex> sender.name
       "from"
       iex> sender.phone
@@ -130,7 +130,11 @@ defmodule Igwet.Network.SMS do
     sender = Network.get_first_node!(:phone, from)
     receiver = Network.get_first_node!(:phone, to)
     message = Network.get_initials(sender) <> ": " <> body
-    {sender, receiver, message, params}
+    Map.merge(params, %{
+      sender: sender,
+      receiver: receiver,
+      message: message,
+    })
   end
 
   @doc """
