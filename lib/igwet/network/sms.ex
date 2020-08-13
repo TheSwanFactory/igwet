@@ -53,6 +53,11 @@ defmodule Igwet.Network.SMS do
         iex> params = SMS.test_params()
         iex> params["to"]
         "+13105555555"
+        iex> {:ok, node} = Igwet.Network.create_node %{name: "from", phone: params["from"], key: "test_params+from"}
+        iex> node.name
+        "from"
+        iex> node.phone
+        params["from"]
     """
 
     def test_params() do
@@ -72,8 +77,6 @@ defmodule Igwet.Network.SMS do
         'SmartEncoded' => true,
       }
     end
-
-
 
   # Should probably do this with function clauses
   defp ensure_parameter!(params, key) do
@@ -103,17 +106,22 @@ defmodule Igwet.Network.SMS do
   Convert webhook parameters to nodes
 
   ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.normalize_params(Sendmail.test_params())
-      iex> params["recipient"]
-      "com.igwet+admin@mg.igwet.com"
+      iex> alias Igwet.Network.SMS
+      iex> params = SMS.test_params()
+      iex> {:ok, node} = Igwet.Network.create_node %{name: "from", phone: params["from"], key: "to_nodes+from"}
+      iex> {:ok, node} = Igwet.Network.create_node %{name: "to", phone: params["to"], key: "to_nodes+to"}
+      iex> {sender, receiver, message, params} = SMS.to_nodes params
+      iex> sender.name
+      "from"
+      iex> sender.phone
+      params["from"]
   """
 
   def to_nodes(params) do
     ensure_parameter!(params, @from)
     ensure_parameter!(params, @to)
     ensure_parameter!(params, @body)
-    {from, to, body} = params
+    %{@from => from, @to => to, @body => body} = params
     sender = Network.get_first_node!(:phone, from)
     receiver = Network.get_first_node!(:phone, to)
     message = Network.get_initials(sender) <> ": " <> body
@@ -128,16 +136,17 @@ defmodule Igwet.Network.SMS do
   Replace the Recipient with a list of emailable_nodes
 
   ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.expand_recipients Sendmail.test_params()
-      iex> [head | tail] = params["recipient_list"]
+      iex> alias Igwet.Network.SMS
+      iex> recipients = SMS.expand_recipients SMS.test_params()
+      iex> [head | tail] = recipients
       iex> length(tail)
       0
-      iex> head.name
-      "operator"
+      iex> head["to"]
+      "+13105555555"
   """
 
-  def expand_recipients(_params) do
+  def expand_recipients(params) do
+    [params]
   end
 
   @doc """
@@ -160,8 +169,8 @@ defmodule Igwet.Network.SMS do
   Store the message as a node with links to the From and To
 
   ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.save_as_node Sendmail.test_params()
+      iex> alias Igwet.Network.SMS
+      iex> params = SMS.save_as_node SMS.test_params()
       iex> %{key: key} = params["node"]
       iex> key
       "com.igwet+admin+operator"
