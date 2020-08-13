@@ -115,11 +115,14 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> params = SMS.test_params("to_nodes")
-      iex> %{sender: sender, receiver: receiver} = SMS.to_nodes params
+      iex> %{sender: sender, receiver: receiver, message: message} = SMS.to_nodes params
       iex> sender.name
       "from"
       iex> sender.phone
       params["from"]
+      iex> [head | _tail] = String.split(message, ":")
+      iex> head
+      "f"
   """
 
   def to_nodes(params) do
@@ -138,9 +141,8 @@ defmodule Igwet.Network.SMS do
   end
 
   @doc """
-  Lookup the recipient (raise if does not exist)
-  Replace the To field
-  Replace the Recipient with a list of emailable_nodes
+  Lookup recipients in receiver
+  Remove the sender
 
   ## Examples
       iex> alias Igwet.Network.SMS
