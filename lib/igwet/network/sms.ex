@@ -50,18 +50,18 @@ defmodule Igwet.Network.SMS do
 
     ## Examples
         iex> alias Igwet.Network.SMS
-        iex> params = SMS.test_params()
+        iex> params = SMS.test_params("test_params")
         iex> params["to"]
         "+13105555555"
-        iex> {:ok, node} = Igwet.Network.create_node %{name: "from", phone: params["from"], key: "test_params+from"}
+        iex> node = params[:sender]
         iex> node.name
         "from"
         iex> node.phone
         params["from"]
     """
 
-    def test_params() do
-      %{
+    def test_params(prefix) do
+      params = %{
         @from => "+12125551234",
         @to => "+13105555555",
         @body => "Hello from my Twilio line!",
@@ -76,6 +76,12 @@ defmodule Igwet.Network.SMS do
         'AddressRetention' => true,
         'SmartEncoded' => true,
       }
+      {:ok, sender} = Igwet.Network.create_node %{name: "from", phone: params["from"], key: prefix <> "from"}
+      {:ok, receiver} = Igwet.Network.create_node %{name: "to", phone: params["to"], key: prefix <> "to"}
+      Map.merge(params, %{
+        sender: sender,
+        receiver: receiver,
+      })
     end
 
   # Should probably do this with function clauses
@@ -90,12 +96,13 @@ defmodule Igwet.Network.SMS do
 
   ## Examples
       iex> alias Igwet.Network.SMS
-      iex> params = SMS.test_params()
+      iex> params = SMS.test_params("relay_sms")
       iex> _list = SMS.relay_sms(params)
   """
 
   def relay_sms(params) do
     params
+    |> to_nodes()
     #|> expand_recipients()
     #|> save_as_node()
     #|> params_to_sms_list()
@@ -107,9 +114,7 @@ defmodule Igwet.Network.SMS do
 
   ## Examples
       iex> alias Igwet.Network.SMS
-      iex> params = SMS.test_params()
-      iex> {:ok, node} = Igwet.Network.create_node %{name: "from", phone: params["from"], key: "to_nodes+from"}
-      iex> {:ok, node} = Igwet.Network.create_node %{name: "to", phone: params["to"], key: "to_nodes+to"}
+      iex> params = SMS.test_params("to_nodes")
       iex> {sender, receiver, message, params} = SMS.to_nodes params
       iex> sender.name
       "from"
@@ -128,8 +133,6 @@ defmodule Igwet.Network.SMS do
     {sender, receiver, message, params}
   end
 
-
-
   @doc """
   Lookup the recipient (raise if does not exist)
   Replace the To field
@@ -137,7 +140,7 @@ defmodule Igwet.Network.SMS do
 
   ## Examples
       iex> alias Igwet.Network.SMS
-      iex> recipients = SMS.expand_recipients SMS.test_params()
+      iex> recipients = SMS.expand_recipients SMS.test_params("expand_recipients")
       iex> [head | tail] = recipients
       iex> length(tail)
       0
@@ -170,7 +173,7 @@ defmodule Igwet.Network.SMS do
 
   ## Examples
       iex> alias Igwet.Network.SMS
-      iex> params = SMS.save_as_node SMS.test_params()
+      iex> params = SMS.save_as_node SMS.test_params("save_as_node")
       iex> %{key: key} = params["node"]
       iex> key
       "com.igwet+admin+operator"
