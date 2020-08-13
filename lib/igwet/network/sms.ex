@@ -14,13 +14,11 @@ defmodule Igwet.Network.SMS do
   @to "to"
   @body "body"
   @n_media "NumMedia"
-  @url_media "MediaUrl"
   @msg_id "MessageSid"
   @sms_id "SmsSid"
   @acct_id "AccountSid"
   @msg_svc_id "MessagingServiceSid"
   @node "node"
-  @sender "sender"
 
 
     @doc """
@@ -53,9 +51,8 @@ defmodule Igwet.Network.SMS do
     ## Examples
         iex> alias Igwet.Network.SMS
         iex> params = SMS.test_params()
-        nil
-        iex> params["sender"]
-        "com.igwet+admin@mg.igwet.com"
+        iex> params["to"]
+        "+13105555555"
     """
 
     def test_params() do
@@ -91,9 +88,7 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> params = SMS.test_params()
-      iex> list = SMS.relay_sms(params)
-      iex> length(list)
-      2
+      iex> _list = SMS.relay_sms(params)
   """
 
   def relay_sms(params) do
