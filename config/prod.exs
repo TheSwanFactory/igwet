@@ -16,7 +16,14 @@ use Mix.Config
 config :igwet, IgwetWeb.Endpoint,
   load_from_system_env: true,
   url: [host: "igwet.gigalixirapp.com", port: 4000],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  force_ssl: [hsts: true],
+  https: [:inet6,
+         port: 443,
+         cipher_suite: :strong,
+         otp_app: :igwet,
+         keyfile: System.get_env("IGWET_SSL_KEY_PATH"),
+         certfile: System.get_env("IGWET_SSL_CERT_PATH")]
 
 config :igwet, IgwetWeb.Endpoint,
   server: true,

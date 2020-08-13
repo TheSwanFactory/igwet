@@ -23,3 +23,4 @@ warning: found quoted keyword "coveralls" but the quotes are not required. Note 
 warning: System.stacktrace/0 outside of rescue/catch clauses is deprecated. If you want to support only Elixir v1.7+, you must access __STACKTRACE__ inside a rescue/catch. If you want to support earlier Elixir versions, move System.stacktrace/0 inside a rescue/catch
   lib/plug/conn/wrapper_error.ex:23
 ----
+https://igwet-app.us.auth0.com/authorize?client_id=0Qm7EwC3X7ezxPa8uCT0KLZrb4nzJ0qs&redirect_uri=https%3A%2F%2Figwet.gigalixirapp.com%2Fauth%2Fauth0%2Fcallback&response_type=code&scope=openid+profile+email

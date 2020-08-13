@@ -4,7 +4,7 @@ defmodule Igwet.Mixfile do
   def project do
     [
       app: :igwet,
-      version: "0.0.24",
+      version: "0.1.0",
       elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -69,8 +69,8 @@ defmodule Igwet.Mixfile do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "run priv/repo/seeds.exs", "test"],
-      prod: ["cd assets && npm run deploy && cd ..", "mix phx.digest", "mix distillery.release --env=prod"],
-      deploy: ["version.next", "cmd git push gigalixir master", "cmd gigalixir open"]
+      prod: ["cmd cd assets && npm run deploy && cd ..", "phx.digest", "distillery.release --env=prod"],
+      deploy: ["version.up", "cmd git push gigalixir master", "cmd gigalixir open"]
     ]
   end
 end
