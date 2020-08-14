@@ -76,12 +76,21 @@ defmodule Igwet.Network.SMS do
       'AddressRetention' => true,
       'SmartEncoded' => true,
     }
-    {:ok, sender} = Igwet.Network.create_node %{name: "from", phone: params["from"], key: prefix <> "from"}
-    {:ok, receiver} = Igwet.Network.create_node %{name: "to", phone: params["to"], key: prefix <> "to"}
+    {:ok, sender} = Network.create_node %{name: "from", phone: params["from"], key: prefix <> "+from"}
+    {:ok, receiver} = Network.create_node %{name: "to", phone: params["to"], key: prefix <> "+to"}
+    Network.set_node_in_group(sender, receiver)
     Map.merge(params, %{
+      prefix: prefix,
       sender: sender,
       receiver: receiver,
     })
+  end
+
+  defp member_for_phone(params, phone) do
+    name = "member:" <> phone
+    {:ok, member} = Network.create_node %{name: name, phone: phone, key: params[:prefix] <> "+" <> name}
+    Network.set_node_in_group(member, params[:receiver])
+    params
   end
 
   # Should probably do this with function clauses
@@ -147,7 +156,7 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> params = SMS.test_params("expand_recipients")
-      iex> list = SMS.expand_recipients(params)["recipients"]
+      iex> list = SMS.expand_recipients(params)[:recipients]
       iex> length(list)
       2
       "+13105555555"
