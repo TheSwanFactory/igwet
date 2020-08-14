@@ -21,68 +21,68 @@ defmodule Igwet.Network.SMS do
   @node "node"
 
 
-    @doc """
-    Sample message params
-    {
-        "sid": "SMxxx",
-        "date_created": "Thu, 13 Aug 2020 02:58:31 +0000",
-        "date_updated": "Thu, 13 Aug 2020 02:58:31 +0000",
-        "date_sent": null,
-        "account_sid": "ACxxxx",
-        "to": "+14085551212",
-        "from": "+12105551212",
-        "messaging_service_sid": "MGxxx",
-        "body": "This is my fight song",
-        "status": "accepted",
-        "num_segments": "0",
-        "num_media": "0",
-        "direction": "outbound-api",
-        "api_version": "2010-04-01",
-        "price": null,
-        "price_unit": null,
-        "error_code": null,
-        "error_message": null,
-        "uri": "/2010-04-01/Accounts/ACxxxx/Messages/SMxxx.json",
-        "subresource_uris": {
-            "media": "/2010-04-01/Accounts/ACxxxx/Messages/SMxxx/Media.json"
-        }
-    }
-
-    ## Examples
-        iex> alias Igwet.Network.SMS
-        iex> params = SMS.test_params("test_params")
-        iex> params["to"]
-        "+13105555555"
-        iex> node = params[:sender]
-        iex> node.name
-        "from"
-        iex> node.phone
-        params["from"]
-    """
-
-    def test_params(prefix) do
-      params = %{
-        @from => "+12125551234",
-        @to => "+13105555555",
-        @body => "Hello from my Twilio line!",
-        @msg_svc_id => "msg-id",
-        @acct_id => "acct_id",
-        @sms_id => "sms_id",
-        @msg_id => "123344",
-        @n_media => 0,
-        'ProvideFeedback' => true,
-        'ForceDelivery' => true,
-        'ContentRetention' => true,
-        'AddressRetention' => true,
-        'SmartEncoded' => true,
+  @doc """
+  Sample message params
+  {
+      "sid": "SMxxx",
+      "date_created": "Thu, 13 Aug 2020 02:58:31 +0000",
+      "date_updated": "Thu, 13 Aug 2020 02:58:31 +0000",
+      "date_sent": null,
+      "account_sid": "ACxxxx",
+      "to": "+14085551212",
+      "from": "+12105551212",
+      "messaging_service_sid": "MGxxx",
+      "body": "This is my fight song",
+      "status": "accepted",
+      "num_segments": "0",
+      "num_media": "0",
+      "direction": "outbound-api",
+      "api_version": "2010-04-01",
+      "price": null,
+      "price_unit": null,
+      "error_code": null,
+      "error_message": null,
+      "uri": "/2010-04-01/Accounts/ACxxxx/Messages/SMxxx.json",
+      "subresource_uris": {
+          "media": "/2010-04-01/Accounts/ACxxxx/Messages/SMxxx/Media.json"
       }
-      {:ok, sender} = Igwet.Network.create_node %{name: "from", phone: params["from"], key: prefix <> "from"}
-      {:ok, receiver} = Igwet.Network.create_node %{name: "to", phone: params["to"], key: prefix <> "to"}
-      Map.merge(params, %{
-        sender: sender,
-        receiver: receiver,
-      })
-    end
+  }
+
+  ## Examples
+      iex> alias Igwet.Network.SMS
+      iex> params = SMS.test_params("test_params")
+      iex> params["to"]
+      "+13105555555"
+      iex> node = params[:sender]
+      iex> node.name
+      "from"
+      iex> node.phone
+      params["from"]
+  """
+
+  def test_params(prefix) do
+    params = %{
+      @from => "+12125551234",
+      @to => "+13105555555",
+      @body => "Hello from my Twilio line!",
+      @msg_svc_id => "msg-id",
+      @acct_id => "acct_id",
+      @sms_id => "sms_id",
+      @msg_id => "123344",
+      @n_media => 0,
+      'ProvideFeedback' => true,
+      'ForceDelivery' => true,
+      'ContentRetention' => true,
+      'AddressRetention' => true,
+      'SmartEncoded' => true,
+    }
+    {:ok, sender} = Igwet.Network.create_node %{name: "from", phone: params["from"], key: prefix <> "from"}
+    {:ok, receiver} = Igwet.Network.create_node %{name: "to", phone: params["to"], key: prefix <> "to"}
+    Map.merge(params, %{
+      sender: sender,
+      receiver: receiver,
+    })
+  end
 
   # Should probably do this with function clauses
   defp ensure_parameter!(params, key) do
@@ -146,11 +146,10 @@ defmodule Igwet.Network.SMS do
 
   ## Examples
       iex> alias Igwet.Network.SMS
-      iex> recipients = SMS.expand_recipients SMS.test_params("expand_recipients")
-      iex> [head | tail] = recipients
-      iex> length(tail)
-      0
-      iex> head["to"]
+      iex> params = SMS.test_params("expand_recipients")
+      iex> list = SMS.expand_recipients(params)["recipients"]
+      iex> length(list)
+      2
       "+13105555555"
   """
 
