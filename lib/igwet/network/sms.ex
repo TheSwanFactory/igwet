@@ -105,14 +105,14 @@ defmodule Igwet.Network.SMS do
 
   ## Examples
       iex> alias Igwet.Network.SMS
-      iex> params = SMS.test_params("relay_sms")
-      iex> _list = SMS.relay_sms(params)
+      iex> SMS.test_params("relay_sms")
+      ...> |> SMS.relay_sms()
   """
 
   def relay_sms(params) do
     params
     |> to_nodes()
-    #|> expand_recipients()
+    |> expand_recipients()
     #|> save_as_node()
     #|> params_to_sms_list()
     #|> Enum.map(&deliver_now/1)
@@ -156,33 +156,26 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> params = SMS.test_params("expand_recipients")
-      iex> params |> SMS.phone2member("+3125551212")
-      iex> list = SMS.expand_recipients(params)[:recipients]
+      ...>          |> SMS.phone2member("+3125551212")
+      ...>          |> SMS.phone2member("+8155551212")
+      ...>          |> SMS.expand_recipients
+      iex> list = params[:recipients]
+      iex> length(list)
+      2
+      iex> list = params[:phones]
       iex> length(list)
       2
   """
 
   def expand_recipients(params) do
+    recipients = params[:receiver]
+                 |> Network.node_members()
+                 |> List.delete(params[:sender])
     Map.merge(params, %{
-      recipients: Network.node_members(params[:receiver]),
+      recipients: recipients,
+      phones: Enum.map(recipients, & &1.phone)
     })
   end
-
-  @doc """
-  Return a list of nodes (or their members) containing phone numbers
-  """
-  def nodes_with_phones(node) do
-    case node.phone do
-      nil ->
-        Network.node_members(node)
-        |> Enum.map(&nodes_with_phones/1)
-        |> List.flatten()
-
-      _ ->
-        [node]
-    end
-  end
-
 
   @doc """
   Store the message as a node with links to the From and To
