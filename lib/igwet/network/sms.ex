@@ -113,7 +113,7 @@ defmodule Igwet.Network.SMS do
     params
     |> to_nodes()
     |> expand_recipients()
-    #|> save_as_node()
+    |> save_as_node()
     #|> params_to_sms_list()
     #|> Enum.map(&deliver_now/1)
   end
@@ -124,12 +124,12 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> params = SMS.test_params("to_nodes")
-      iex> %{sender: sender, receiver: receiver, message: message} = SMS.to_nodes params
+      iex> %{sender: sender, receiver: receiver, text: text} = SMS.to_nodes params
       iex> sender.name
       "from"
       iex> sender.phone
       params["from"]
-      iex> [head | _tail] = String.split(message, ":")
+      iex> [head | _tail] = String.split(text, ":")
       iex> head
       "f"
   """
@@ -138,14 +138,18 @@ defmodule Igwet.Network.SMS do
     ensure_parameter!(params, @from)
     ensure_parameter!(params, @to)
     ensure_parameter!(params, @body)
-    %{@from => from, @to => to, @body => body} = params
-    sender = Network.get_first_node!(:phone, from)
-    receiver = Network.get_first_node!(:phone, to)
-    message = Network.get_initials(sender) <> ": " <> body
+    ensure_parameter!(params, @msg_id)
+
+    sender = Network.get_first_node!(:phone, params[@from])
+    receiver = Network.get_first_node!(:phone, params[@to])
+    text = Network.get_initials(sender) <> ": " <> params[@body]
+    {:ok, message} = Network.create_node %{name: text, key: sender.key <> "+" <> params[@msg_id]}
+
     Map.merge(params, %{
-      sender: sender,
-      receiver: receiver,
       message: message,
+      receiver: receiver,
+      sender: sender,
+      text: text,
     })
   end
 
