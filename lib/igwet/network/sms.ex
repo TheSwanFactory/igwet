@@ -86,7 +86,7 @@ defmodule Igwet.Network.SMS do
     })
   end
 
-  defp member_for_phone(params, phone) do
+  def phone2member(params, phone) do
     name = "member:" <> phone
     {:ok, member} = Network.create_node %{name: name, phone: phone, key: params[:prefix] <> "+" <> name}
     Network.set_node_in_group(member, params[:receiver])
@@ -156,14 +156,16 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> params = SMS.test_params("expand_recipients")
+      iex> params |> SMS.phone2member("+3125551212")
       iex> list = SMS.expand_recipients(params)[:recipients]
       iex> length(list)
       2
-      "+13105555555"
   """
 
   def expand_recipients(params) do
-    [params]
+    Map.merge(params, %{
+      recipients: Network.node_members(params[:receiver]),
+    })
   end
 
   @doc """
