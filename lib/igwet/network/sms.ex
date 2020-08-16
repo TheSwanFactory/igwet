@@ -18,7 +18,6 @@ defmodule Igwet.Network.SMS do
   @sms_id "SmsSid"
   @acct_id "AccountSid"
   @msg_svc_id "MessagingServiceSid"
-  @node "node"
 
 
   @doc """
@@ -83,6 +82,7 @@ defmodule Igwet.Network.SMS do
       prefix: prefix,
       sender: sender,
       receiver: receiver,
+      initials: Enum.map([sender, receiver], & Network.get_initials(&1))
     })
   end
 
@@ -112,8 +112,7 @@ defmodule Igwet.Network.SMS do
   def relay_sms(params) do
     params
     |> to_nodes()
-    |> expand_recipients()
-    |> save_as_node()
+    |> add_recipients()
     #|> params_to_sms_list()
     #|> Enum.map(&deliver_now/1)
   end
@@ -143,7 +142,10 @@ defmodule Igwet.Network.SMS do
     sender = Network.get_first_node!(:phone, params[@from])
     receiver = Network.get_first_node!(:phone, params[@to])
     text = Network.get_initials(sender) <> ": " <> params[@body]
-    {:ok, message} = Network.create_node %{name: text, key: sender.key <> "+" <> params[@msg_id]}
+    chat = Network.get_first_node!(:name, "chat")
+    {:ok, message} = Network.create_node %{name: text, type: chat, key: sender.key <> "+" <> params[@msg_id]}
+    #Network.set_node_in_group(message, receiver)
+    Network.make_edge(message, "from", sender)
 
     Map.merge(params, %{
       message: message,
@@ -159,44 +161,28 @@ defmodule Igwet.Network.SMS do
 
   ## Examples
       iex> alias Igwet.Network.SMS
-      iex> params = SMS.test_params("expand_recipients")
+      iex> params = SMS.test_params("add_recipients")
       ...>          |> SMS.phone2member("+3125551212")
       ...>          |> SMS.phone2member("+8155551212")
-      ...>          |> SMS.expand_recipients
+      ...>          |> SMS.to_nodes()
+      ...>          |> SMS.add_recipients
+      iex> params[:phones]
+      ["+3125551212","+8155551212"]
       iex> list = params[:recipients]
       iex> length(list)
       2
-      iex> list = params[:phones]
-      iex> length(list)
-      2
   """
 
-  def expand_recipients(params) do
+  def add_recipients(params) do
+    sender = params[:sender]
     recipients = params[:receiver]
                  |> Network.node_members()
-                 |> List.delete(params[:sender])
+                 |> List.delete(sender)
+    edges = Enum.map(recipients, & Network.make_edge(params[:message], "to", &1))
     Map.merge(params, %{
       recipients: recipients,
-      phones: Enum.map(recipients, & &1.phone)
+      phones: Enum.map(recipients, & &1.phone),
+      edges: edges
     })
-  end
-
-  @doc """
-  Store the message as a node with links to the From and To
-
-  ## Examples
-      iex> alias Igwet.Network.SMS
-      iex> params = SMS.save_as_node SMS.test_params("save_as_node")
-      iex> %{key: key} = params["node"]
-      iex> key
-      "com.igwet+admin+operator"
-
-  """
-
-  def save_as_node(params) do
-    node = Network.get_first_node!(:name, "operator")
-
-    params
-    |> Map.put(@node, node)
   end
 end
