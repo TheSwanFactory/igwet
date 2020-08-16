@@ -77,6 +77,12 @@ defmodule Igwet.NetworkTest do
       assert Network.get_node!(user.id).initials == "tn"
     end
 
+    test "get_predicate", _context do
+      node = Network.get_predicate("of")
+      assert nil != node
+      assert Network.get_predicate("of") == node
+    end
+
     test "set_node_in_group", context do
       node = context[:test_node]
       group = context[:admin_group]
