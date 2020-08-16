@@ -19,7 +19,6 @@ defmodule Igwet.Network.SMS do
   @acct_id "AccountSid"
   @msg_svc_id "MessagingServiceSid"
 
-
   @doc """
   Sample message params
   {
@@ -74,6 +73,7 @@ defmodule Igwet.Network.SMS do
       'ContentRetention' => true,
       'AddressRetention' => true,
       'SmartEncoded' => true,
+      "Debug" => true
     }
     {:ok, sender} = Network.create_node %{name: "from", phone: params["from"], key: prefix <> "+from"}
     {:ok, receiver} = Network.create_node %{name: "to", phone: params["to"], key: prefix <> "+to"}
@@ -113,8 +113,7 @@ defmodule Igwet.Network.SMS do
     params
     |> to_nodes()
     |> add_recipients()
-    #|> params_to_sms_list()
-    #|> Enum.map(&deliver_now/1)
+    |> send_messages()
   end
 
   @doc """
@@ -185,4 +184,27 @@ defmodule Igwet.Network.SMS do
       edges: edges
     })
   end
+
+  @doc """
+  Send message to recipients
+  If DEBUG, just log.
+
+  ## Examples
+  """
+
+  def send_messages(params) do
+    params[:phones]
+    |> Enum.map(& %{to: &1, from: params[:receiver].phone, body: params[:message], debug: params["Debug"]})
+    |> Enum.each(& send_message(&1))
+  end
+
+  def send_message(dict) do
+    if (dict.debug) do
+      Logger.warn("send_message: " <> inspect(dict))
+      dict
+    else
+      #ExTwilio.Message.create dict
+    end
+  end
+
 end
