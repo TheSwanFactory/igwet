@@ -62,7 +62,7 @@ defmodule Igwet.Network.SMS do
     params = %{
       @from => "+12125551234",
       @to => "+13105555555",
-      @body => "Hello from my Twilio line!",
+      @body => "Hello, Twirled!",
       @msg_svc_id => "msg-id",
       @acct_id => "acct_id",
       @sms_id => "sms_id",
@@ -106,7 +106,10 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> SMS.test_params("relay_sms")
+      ...> |> SMS.phone2member("+3125551212")
+      ...> |> SMS.phone2member("+8155551212")
       ...> |> SMS.relay_sms()
+      [%{body: "f: Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "f: Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
   """
 
   def relay_sms(params) do
@@ -190,7 +193,7 @@ defmodule Igwet.Network.SMS do
   If DEBUG, just log.
   iex> alias Igwet.Network.SMS
   iex> SMS.test_params("add_recipients")
-  ...> |> Map.merge(%{phones: ["+3125551212","+8155551212"], message: "Hello, Twirled!"})
+  ...> |> Map.merge(%{phones: ["+3125551212","+8155551212"], text: "Hello, Twirled!"})
   ...> |> SMS.send_messages()
   [%{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
   ## Examples
@@ -198,17 +201,16 @@ defmodule Igwet.Network.SMS do
 
   def send_messages(params) do
     params[:phones]
-    |> Enum.map(& %{to: &1, from: params[:receiver].phone, body: params[:message], debug: params["Debug"]})
+    |> Enum.map(& %{to: &1, from: params[:receiver].phone, body: params[:text], debug: params["Debug"]})
     |> Enum.map(& send_message(&1))
   end
 
   def send_message(dict) do
-    if (dict.debug) do
-      Logger.debug("send_message: " <> inspect(dict))
-      dict
-    else
+    Logger.debug("send_message: " <> inspect(dict))
+    if (!dict.debug) do
       ExTwilio.Message.create dict
     end
+    dict
   end
 
 end
