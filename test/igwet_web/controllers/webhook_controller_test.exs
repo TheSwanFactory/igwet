@@ -1,3 +1,4 @@
+require Logger
 require Protocol
 Protocol.derive(Jason.Encoder, RuntimeError)
 
@@ -6,11 +7,20 @@ defmodule IgwetWeb.WebhookControllerTest do
   use Bamboo.Test
   doctest IgwetWeb.WebhookController
 
+  alias Igwet.Network.SMS
   alias Igwet.Network.Sendmail
 
   setup %{conn: conn} do
     conn = put_req_header(conn, "content-type", "application/json")
     {:ok, %{conn: conn}}
+  end
+
+  test "POST /webhook/twilio -> 201", %{conn: conn} do
+    "{\"created_at\":" <> time = conn
+    |> post("/webhook/twilio", SMS.test_params("webhook"))
+    |> response(201)
+
+    assert nil != time
   end
 
   test "POST /webhook -> 201", %{conn: conn} do
