@@ -188,22 +188,26 @@ defmodule Igwet.Network.SMS do
   @doc """
   Send message to recipients
   If DEBUG, just log.
-
+  iex> alias Igwet.Network.SMS
+  iex> SMS.test_params("add_recipients")
+  ...> |> Map.merge(%{phones: ["+3125551212","+8155551212"], message: "Hello, Twirled!"})
+  ...> |> SMS.send_messages()
+  [%{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
   ## Examples
   """
 
   def send_messages(params) do
     params[:phones]
     |> Enum.map(& %{to: &1, from: params[:receiver].phone, body: params[:message], debug: params["Debug"]})
-    |> Enum.each(& send_message(&1))
+    |> Enum.map(& send_message(&1))
   end
 
   def send_message(dict) do
     if (dict.debug) do
-      Logger.warn("send_message: " <> inspect(dict))
+      Logger.debug("send_message: " <> inspect(dict))
       dict
     else
-      #ExTwilio.Message.create dict
+      ExTwilio.Message.create dict
     end
   end
 
