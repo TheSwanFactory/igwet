@@ -18,8 +18,80 @@ defmodule Igwet.Network.SMS do
   @sms_id "SmsSid"
   @acct_id "AccountSid"
   @msg_svc_id "MessagingServiceSid"
-  @node "node"
-  @sender "sender"
+
+  @doc """
+  Sample message params
+  {
+      "sid": "SMxxx",
+      "date_created": "Thu, 13 Aug 2020 02:58:31 +0000",
+      "date_updated": "Thu, 13 Aug 2020 02:58:31 +0000",
+      "date_sent": null,
+      "account_sid": "ACxxxx",
+      "to": "+14085551212",
+      "from": "+12105551212",
+      "messaging_service_sid": "MGxxx",
+      "body": "This is my fight song",
+      "status": "accepted",
+      "num_segments": "0",
+      "num_media": "0",
+      "direction": "outbound-api",
+      "api_version": "2010-04-01",
+      "price": null,
+      "price_unit": null,
+      "error_code": null,
+      "error_message": null,
+      "uri": "/2010-04-01/Accounts/ACxxxx/Messages/SMxxx.json",
+      "subresource_uris": {
+          "media": "/2010-04-01/Accounts/ACxxxx/Messages/SMxxx/Media.json"
+      }
+  }
+
+  ## Examples
+      iex> alias Igwet.Network.SMS
+      iex> params = SMS.test_params("test_params")
+      iex> params["to"]
+      "+13105555555"
+      iex> node = params[:sender]
+      iex> node.name
+      "from"
+      iex> node.phone
+      params["from"]
+  """
+
+  def test_params(prefix) do
+    params = %{
+      @from => "+12125551234",
+      @to => "+13105555555",
+      @body => "Hello, Twirled!",
+      @msg_svc_id => "msg-id",
+      @acct_id => "acct_id",
+      @sms_id => "sms_id",
+      @msg_id => "123344",
+      @n_media => 0,
+      'ProvideFeedback' => true,
+      'ForceDelivery' => true,
+      'ContentRetention' => true,
+      'AddressRetention' => true,
+      'SmartEncoded' => true,
+      "Debug" => true
+    }
+    {:ok, sender} = Network.create_node %{name: "from", phone: params["from"], key: prefix <> "+from"}
+    {:ok, receiver} = Network.create_node %{name: "to", phone: params["to"], key: prefix <> "+to"}
+    Network.set_node_in_group(sender, receiver)
+    Map.merge(params, %{
+      prefix: prefix,
+      sender: sender,
+      receiver: receiver,
+      initials: Enum.map([sender, receiver], & Network.get_initials(&1))
+    })
+  end
+
+  def phone2member(params, phone) do
+    name = "member:" <> phone
+    {:ok, member} = Network.create_node %{name: name, phone: phone, key: params[:prefix] <> "+" <> name}
+    Network.set_node_in_group(member, params[:receiver])
+    params
+  end
 
   # Should probably do this with function clauses
   defp ensure_parameter!(params, key) do
@@ -32,125 +104,114 @@ defmodule Igwet.Network.SMS do
   Create @received_list and add self
 
   ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.test_params() |> Sendmail.downcase_map()
-      iex> result = Sendmail.filter_headers params
-      iex> headers = result["message-headers"]
-      iex> headers[:from]
-      nil
-      iex> list = Keyword.get_values(headers, :received)
-      iex> length(list)
-      2
+      iex> alias Igwet.Network.SMS
+      iex> SMS.test_params("relay_sms")
+      ...> |> SMS.phone2member("+3125551212")
+      ...> |> SMS.phone2member("+8155551212")
+      ...> |> SMS.relay_sms()
+      [%{body: "f: Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "f: Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
   """
 
   def relay_sms(params) do
     params
-    |> expand_recipients()
-    |> save_as_node()
-    #|> params_to_sms_list()
-    #|> Enum.map(&deliver_now/1)
+    |> to_nodes()
+    |> add_recipients()
+    |> send_messages()
   end
 
   @doc """
   Convert webhook parameters to nodes
 
   ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.normalize_params(Sendmail.test_params())
-      iex> params["recipient"]
-      "com.igwet+admin@mg.igwet.com"
+      iex> alias Igwet.Network.SMS
+      iex> params = SMS.test_params("to_nodes")
+      iex> %{sender: sender, receiver: receiver, text: text} = SMS.to_nodes params
+      iex> sender.name
+      "from"
+      iex> sender.phone
+      params["from"]
+      iex> [head | _tail] = String.split(text, ":")
+      iex> head
+      "f"
   """
 
   def to_nodes(params) do
     ensure_parameter!(params, @from)
     ensure_parameter!(params, @to)
     ensure_parameter!(params, @body)
-    {from, to, body} = params
-    sender = Network.get_first_node!(:phone, from)
-    receiver = Network.get_first_node!(:phone, to)
-    message = Network.get_initials(sender) <> ": " <> body
-    {sender, receiver, message, params}
+    ensure_parameter!(params, @msg_id)
+
+    sender = Network.get_first_node!(:phone, params[@from])
+    receiver = Network.get_first_node!(:phone, params[@to])
+    text = Network.get_initials(sender) <> ": " <> params[@body]
+    chat = Network.get_first_node!(:name, "chat")
+    msg_key = ".msg+" <> sender.key <> "+" <> params[@msg_id]
+    {:ok, message} = Network.create_node %{name: text, type: chat, key: msg_key}
+    #Network.set_node_in_group(message, receiver)
+    Network.make_edge(message, "from", sender)
+
+    Map.merge(params, %{
+      message: message,
+      receiver: receiver,
+      sender: sender,
+      text: text,
+    })
   end
 
-
-
   @doc """
-  Lookup the recipient (raise if does not exist)
-  Replace the To field
-  Replace the Recipient with a list of emailable_nodes
+  Lookup recipients in receiver
+  Remove the sender
 
   ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.expand_recipients Sendmail.test_params()
-      iex> [head | tail] = params["recipient_list"]
-      iex> length(tail)
-      0
-      iex> head.name
-      "operator"
+      iex> alias Igwet.Network.SMS
+      iex> params = SMS.test_params("add_recipients")
+      ...>          |> SMS.phone2member("+3125551212")
+      ...>          |> SMS.phone2member("+8155551212")
+      ...>          |> SMS.to_nodes()
+      ...>          |> SMS.add_recipients
+      iex> params[:phones]
+      ["+3125551212","+8155551212"]
+      iex> list = params[:recipients]
+      iex> length(list)
+      2
   """
 
-  def expand_recipients(_params) do
+  def add_recipients(params) do
+    sender = params[:sender]
+    recipients = params[:receiver]
+                 |> Network.node_members()
+                 |> List.delete(sender)
+    edges = Enum.map(recipients, & Network.make_edge(params[:message], "to", &1))
+    Map.merge(params, %{
+      recipients: recipients,
+      phones: Enum.map(recipients, & &1.phone),
+      edges: edges
+    })
   end
 
   @doc """
-  Return a list of nodes (or their members) containing phone numbers
+  Send message to recipients
+  If DEBUG, just log.
+  iex> alias Igwet.Network.SMS
+  iex> SMS.test_params("add_recipients")
+  ...> |> Map.merge(%{phones: ["+3125551212","+8155551212"], text: "Hello, Twirled!"})
+  ...> |> SMS.send_messages()
+  [%{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
+  ## Examples
   """
-  def nodes_with_phones(node) do
-    case node.phone do
-      nil ->
-        Network.node_members(node)
-        |> Enum.map(&nodes_with_phones/1)
-        |> List.flatten()
 
-      _ ->
-        [node]
+  def send_messages(params) do
+    params[:phones]
+    |> Enum.map(& %{to: &1, from: params[:receiver].phone, body: params[:text], debug: params["Debug"]})
+    |> Enum.map(& send_message(&1))
+  end
+
+  def send_message(dict) do
+    Logger.debug("send_message: " <> inspect(dict))
+    if (!dict.debug) do
+      ExTwilio.Message.create dict
     end
+    dict
   end
 
-
-  @doc """
-  Store the message as a node with links to the From and To
-
-  ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.save_as_node Sendmail.test_params()
-      iex> %{key: key} = params["node"]
-      iex> key
-      "com.igwet+admin+operator"
-
-  """
-
-  def save_as_node(params) do
-    node = Network.get_first_node!(:name, "operator")
-
-    params
-    |> Map.put(@node, node)
-  end
-
-  @doc """
-  Sample message params
-
-  ## Examples
-      iex> alias Igwet.Network.Sendmail
-      iex> params = Sendmail.test_params
-      iex> params["recipient"]
-      "com.igwet+admin@mg.igwet.com"
-  """
-
-  def test_params() do
-    %{
-      @sender => "ernest.prabhakar@gmail.com",
-      "subject" => "Re: Sample POST request",
-      @from => "Bob <bob@mg.igwet.com>",
-      "Message-Id" => "<517ACC75.5010709@mg.igwet.com>",
-      "Date" => "Fri, 26 Apr 2013 11:50:29 -0700",
-      @to => "Alice <alice@mg.igwet.com>",
-      "Subject" => "Re: Sample POST request",
-      @msg_svc_id => "msg-id",
-      @acct_id => "acct_id",
-      @sms_id => "sms_id",
-      @msg_id => "123344",
-      @n_media => 0,
-    }
-  end
 end
