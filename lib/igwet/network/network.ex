@@ -249,7 +249,20 @@ defmodule Igwet.Network do
 
   """
   def node_members(node) do
-    in_node = get_predicate("in")
+    node_related(node, "in")
+  end
+
+  @doc """
+  Return all nodes with specificed relation to this node.
+
+  ## Examples
+
+      iex> node_related(node, predicate)
+      [%Igwet.Network.Node{},...]
+
+  """
+  def node_related(node, relation) do
+    in_node = get_predicate(relation)
 
     edges =
       Edge
