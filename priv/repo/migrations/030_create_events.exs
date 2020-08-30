@@ -12,6 +12,6 @@ defmodule Igwet.Repo.Migrations.CreateEvents do
       timestamps()
     end
 
-    create index(:events, [:node_id])
+    create index(:events, [:node_id, :date])
   end
 end

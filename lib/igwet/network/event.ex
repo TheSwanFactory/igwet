@@ -1,4 +1,4 @@
-defmodule Igwet.Igwet.Network.Event do
+defmodule Igwet.Network.Event do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -16,6 +16,6 @@ defmodule Igwet.Igwet.Network.Event do
   def changeset(event, attrs) do
     event
     |> cast(attrs, [:date, :duration, :capacity, :registered])
-    |> validate_required([:date, :duration, :capacity, :registered])
+    |> validate_required([:date, :duration, :capacity])
   end
 end
