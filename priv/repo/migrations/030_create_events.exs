@@ -1,8 +1,8 @@
-defmodule Igwet.Repo.Migrations.CreateEvents do
+defmodule Igwet.Repo.Migrations.CreateInstances do
   use Ecto.Migration
 
   def change do
-    create table(:events) do
+    create table(:instances) do
       add :date, :date
       add :duration, :integer
       add :capacity, :integer
@@ -12,6 +12,6 @@ defmodule Igwet.Repo.Migrations.CreateEvents do
       timestamps()
     end
 
-    create index(:events, [:node_id, :date])
+    create index(:instances, [:node_id, :date])
   end
 end

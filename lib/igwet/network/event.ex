@@ -1,8 +1,8 @@
-defmodule Igwet.Network.Event do
+defmodule Igwet.Network.Instance do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "events" do
+  schema "instances" do
     field :capacity, :integer
     field :date, :date
     field :duration, :integer
@@ -13,8 +13,8 @@ defmodule Igwet.Network.Event do
   end
 
   @doc false
-  def changeset(event, attrs) do
-    event
+  def changeset(instance, attrs) do
+    instance
     |> cast(attrs, [:date, :duration, :capacity, :registered])
     |> validate_required([:date, :duration, :capacity])
   end
