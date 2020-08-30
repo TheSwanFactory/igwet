@@ -1,11 +1,13 @@
 #!/usr/bin/env zsh
+# Usage: sh test/support/send_sms.sh
 
-FROM="+12125551234"
-TO="+13105555555"
+# Create nodes:  PHONE_IGWET (PHONE_ERNEST PHONE_TGR)
+
+source .env
 BODY="Hello,%20Twirled!"
-SID='123456789'
+MSG_SID='123456789'
 
-DATA="from=$FROM&to=$TO&body=$BODY&MessageSid=$SID"
-HOST="https://localhost:4000/webhook/twilio"
-
+DATA="from=$PHONE_TGR&to=$PHONE_IGWET&body=$BODY&MessageSid=$MSG_SID&AccountSid=$TWILIO_ACCOUNT_SID"
+HOST="https://localhost:$PORT/webhook/twilio"
+echo "$HOST: $DATA"
 curl -k -X POST -d "$DATA" $HOST
