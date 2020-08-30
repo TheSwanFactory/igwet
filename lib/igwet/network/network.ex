@@ -46,6 +46,39 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Find all nodes where _field_ matches _pattern_
+
+  ## Examples
+      iex> alias Igwet.Network
+      iex> Network.get_nodes_like_key(".%")
+      [%Node{}]
+
+  """
+
+  def get_nodes_like_key(pattern) do
+    from(a in Node,
+      where: like(a.key, ^pattern)
+    ) |> Repo.all
+  end
+
+  @doc """
+  Find all nodes where _field_ NOT matches _pattern_
+
+  ## Examples
+      iex> alias Igwet.Network
+      iex> Network.get_nodes_unlike_key(".%")
+      [%Node{}]
+
+  """
+
+  def get_nodes_unlike_key(pattern) do
+    from(a in Node,
+      where: not(like(a.key, ^pattern))
+    ) |> Repo.all
+  end
+
+
+  @doc """
   Get predicate.  Create if missing.
 
   """

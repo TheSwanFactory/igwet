@@ -21,7 +21,7 @@ defmodule IgwetWeb.GroupController do
     node = Network.get_node!(id)
     changeset = Network.change_node(node)
     my_members = Network.node_members(node)
-    all_members = Network.subjects_for_predicate("in")
+    all_members = Network.get_nodes_unlike_key(".%")
     render(conn, "edit.html", node: node, changeset: changeset, my_members: my_members, all_members: all_members)
   end
 
