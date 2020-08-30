@@ -1,6 +1,4 @@
 require Logger
-require Protocol
-Protocol.derive(Jason.Encoder, RuntimeError)
 
 defmodule IgwetWeb.WebhookControllerTest do
   use IgwetWeb.ConnCase

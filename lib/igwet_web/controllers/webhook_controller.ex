@@ -1,4 +1,7 @@
 # Sample email: http://bin.mailgun.net/b1748eea#7jmd
+require Protocol
+Protocol.derive(Jason.Encoder, RuntimeError)
+Protocol.derive(Jason.Encoder, Ecto.NoResultsError)
 
 defmodule IgwetWeb.WebhookController do
   use IgwetWeb, :controller
@@ -14,6 +17,7 @@ defmodule IgwetWeb.WebhookController do
   end
 
   def receive_sms(conn, params) do
+    Logger.debug("** params: " <> inspect(params))
     try do
       params
       |> SMS.relay_sms()
