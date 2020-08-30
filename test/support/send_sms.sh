@@ -1,7 +1,10 @@
-#!/usr/bin/env #!/usr/bin/env zsh
+#!/usr/bin/env zsh
 
-params = %{
-  @from => "+12125551234",
-  @to => "+13105555555",
-  @body => "Hello, Twirled!",
-}
+FROM="+12125551234"
+TO="+13105555555"
+BODY="Hello,%20Twirled!"
+
+DATA="from=$FROM&to=$TO&body=$BODY"
+HOST="http://localhost:4000/webhook/twilio"
+
+curl -X POST -d "$DATA" $HOST
