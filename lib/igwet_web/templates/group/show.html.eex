@@ -46,7 +46,7 @@
   </li>
 
   <ul>
-    <h3>Upcoming Events</h3>
+    <h3>Events</h3>
     <%= for event <- @events do %>
       <li>
         <%= link(event.name, to: group_path(@conn, :show, event)) %>
