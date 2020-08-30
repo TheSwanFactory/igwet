@@ -7,11 +7,11 @@ defmodule Igwet.Repo.Migrations.CreateInstances do
       add :duration, :integer
       add :capacity, :integer
       add :registered, :integer
-      add :node_id, references(:node, on_delete: :nothing)
+      add :event_id, references(:nodes, on_delete: :delete_all, type: :uuid)
 
       timestamps()
     end
 
-    create index(:instances, [:node_id, :date])
+    create index(:instances, [:event_id, :date])
   end
 end

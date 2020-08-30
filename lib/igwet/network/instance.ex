@@ -1,13 +1,14 @@
 defmodule Igwet.Network.Instance do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Igwet.Network.Node
 
   schema "instances" do
     field :capacity, :integer
     field :date, :date
     field :duration, :integer
     field :registered, :integer
-    field :node_id, :id
+    belongs_to(:event, Node)
 
     timestamps()
   end
