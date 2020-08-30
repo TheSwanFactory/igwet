@@ -109,6 +109,7 @@ defmodule Igwet.Network.SMS do
       ...> |> SMS.phone2member("+3125551212")
       ...> |> SMS.phone2member("+8155551212")
       ...> |> SMS.relay_sms()
+      ...> |> Enum.sort()
       [%{body: "f: Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "f: Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
   """
 
@@ -169,7 +170,7 @@ defmodule Igwet.Network.SMS do
       ...>          |> SMS.phone2member("+8155551212")
       ...>          |> SMS.to_nodes()
       ...>          |> SMS.add_recipients
-      iex> params[:phones]
+      iex> params[:phones] |> Enum.sort()
       ["+3125551212","+8155551212"]
       iex> list = params[:recipients]
       iex> length(list)
