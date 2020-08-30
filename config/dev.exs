@@ -7,7 +7,7 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :igwet, IgwetWeb.Endpoint,
-  http: [port: 4000],
+  https: [port: System.get_env("PORT"), keyfile: "priv/server.key", certfile: "priv/server.pem"],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,

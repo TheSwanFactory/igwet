@@ -46,6 +46,59 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Find all nodes where _field_ matches _pattern_
+
+  ## Examples
+      iex> alias Igwet.Network
+      iex> Network.get_nodes_like_key(".%")
+      [%Node{}]
+
+  """
+
+  def get_nodes_like_key(pattern) do
+    from(a in Node,
+      order_by: [asc: :inserted_at],
+      where: like(a.key, ^pattern)
+    ) |> Repo.all
+  end
+
+  @doc """
+  Find all nodes where _field_ NOT matches _pattern_
+
+  ## Examples
+      iex> alias Igwet.Network
+      iex> Network.get_nodes_unlike_key(".%")
+      [%Node{}]
+
+  """
+
+  def get_nodes_unlike_key(pattern) do
+    from(a in Node,
+      order_by: [asc: :inserted_at],
+      where: not(like(a.key, ^pattern))
+    ) |> Repo.all
+  end
+
+
+  @doc """
+  Get predicate.  Create if missing.
+
+  """
+  def get_predicate(value) do
+    first = Node
+            |> order_by([asc: :inserted_at])
+            |> where([n], n.name == ^value)
+            |> Repo.one()
+    if (nil != first) do
+      first
+    else
+      type = get_first_node!(:name, "predicate")
+      {:ok, node} = create_node %{name: value, type: type, key: "predicate" <> "+" <> value}
+      node
+    end
+  end
+
+  @doc """
   Check if node is in site admin group.
 
   ## Examples
@@ -84,11 +137,17 @@ defmodule Igwet.Network do
   """
   def find_edge(subject, predicate, object) do
     Edge
+      |> order_by([asc: :inserted_at])
       |> where([e],
         e.subject_id == ^subject.id and e.predicate_id == ^predicate.id and
           e.object_id == ^object.id
       )
       |> Repo.one()
+  end
+
+  def make_edge(subject, pred_name, object) do
+    predicate = get_first_node!(:name, pred_name)
+    create_edge(%{subject_id: subject.id, predicate_id: predicate.id, object_id: object.id})
   end
 
   @doc """
@@ -99,8 +158,7 @@ defmodule Igwet.Network do
     if (node_in_group?(node, group)) do
       false
     else
-      in_node = get_first_node!(:name, "in")
-      create_edge(%{subject_id: node.id, predicate_id: in_node.id, object_id: group.id})
+      make_edge(node, "in", group)
     end
   end
 
@@ -130,6 +188,7 @@ defmodule Igwet.Network do
     in_node = get_first_node!(:name, predicate)
 
     Edge
+    |> order_by([asc: :inserted_at])
     |> where([e], e.predicate_id == ^in_node.id)
     |> preload([:object])
     |> Repo.all()
@@ -150,6 +209,7 @@ defmodule Igwet.Network do
     in_node = get_first_node!(:name, predicate)
 
     Edge
+    |> order_by([asc: :inserted_at])
     |> where([e], e.predicate_id == ^in_node.id)
     |> preload([:subject])
     |> Repo.all()
@@ -171,6 +231,7 @@ defmodule Igwet.Network do
 
     edges =
       Edge
+      |> order_by([asc: :inserted_at])
       |> where([e], e.subject_id == ^node.id and e.predicate_id == ^in_node.id)
       |> preload([:object])
       |> Repo.all()
@@ -192,6 +253,7 @@ defmodule Igwet.Network do
 
     edges =
       Edge
+      |> order_by([asc: :inserted_at])
       |> where([e], e.object_id == ^node.id and e.predicate_id == ^in_node.id)
       |> preload([:subject])
       |> Repo.all()
