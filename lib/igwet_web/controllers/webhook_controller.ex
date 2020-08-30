@@ -1,4 +1,7 @@
 # Sample email: http://bin.mailgun.net/b1748eea#7jmd
+require Protocol
+Protocol.derive(Jason.Encoder, RuntimeError)
+Protocol.derive(Jason.Encoder, Ecto.NoResultsError)
 
 defmodule IgwetWeb.WebhookController do
   use IgwetWeb, :controller
@@ -8,15 +11,27 @@ defmodule IgwetWeb.WebhookController do
   alias Igwet.Network.SMS
   alias Igwet.Admin.Mailer
 
-
-  def receive_sms(_conn, params) do
-    Logger.debug("'params: '" <> inspect(params))
-    SMS.relay_sms(params)
-  end
-
   defp peer(conn) do
     %{address: host, port: port} = Plug.Conn.get_peer_data(conn)
     "#{Tuple.to_list(host) |> Enum.join(".")}:#{port}"
+  end
+
+  def receive_sms(conn, params) do
+    Logger.debug("** params: " <> inspect(params))
+    try do
+      params
+      |> SMS.relay_sms()
+
+      now = DateTime.to_string(DateTime.utc_now())
+      conn
+      |> put_status(:created)
+      |> json(%{created_at: now})
+    rescue
+      e ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: e})
+    end
   end
 
   def forward_email(conn, params) do
