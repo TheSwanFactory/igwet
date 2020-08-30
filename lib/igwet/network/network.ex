@@ -122,7 +122,7 @@ defmodule Igwet.Network do
 
   """
   def node_in_group?(node, group) do
-    in_node = get_first_node!(:name, "in")
+    in_node = get_predicate("in")
     nil != find_edge(node, in_node, group)
   end
 
@@ -166,7 +166,7 @@ defmodule Igwet.Network do
   Remove a member a group.
   """
   def unset_node_in_group(node, group) do
-    in_node = get_first_node!(:name, "in")
+    in_node = get_predicate("in")
     edge = find_edge(node, in_node, group)
     if (!edge) do
       false
@@ -227,7 +227,7 @@ defmodule Igwet.Network do
 
   """
   def node_groups(node) do
-    in_node = get_first_node!(:name, "in")
+    in_node = get_predicate("in")
 
     edges =
       Edge
@@ -249,7 +249,7 @@ defmodule Igwet.Network do
 
   """
   def node_members(node) do
-    in_node = get_first_node!(:name, "in")
+    in_node = get_predicate("in")
 
     edges =
       Edge

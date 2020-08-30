@@ -45,6 +45,15 @@
     <%= @node.key %>
   </li>
 
+  <ul>
+    <h3>Upcoming Events</h3>
+    <%= for event <- @events do %>
+      <li>
+        <%= link(event.name, to: group_path(@conn, :show, event)) %>
+      </li>
+    <% end %>
+  </ul>
+
 
   <ul>
     <h3>Parent Groups</h3>
