@@ -12,11 +12,10 @@ defmodule IgwetWeb.EventController do
     render(conn, "index.html", events: nodes)
   end
 
-#  def new(conn, %{"id" => _id}) do
-
-  def new(conn, _params) do
+ def new(conn, %{"id" => id}) do
+    group = Network.get_node!(id)
     changeset = Network.change_node(%Node{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, group: group)
   end
 
   def create(conn, %{"event" => event_params}) do

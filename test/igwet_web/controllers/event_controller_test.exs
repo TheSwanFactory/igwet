@@ -3,24 +3,29 @@ defmodule IgwetWeb.EventControllerTest do
 
   alias Igwet.Network
 
-  @create_attrs %{
+  @group_attrs %{
     about: "some about",
     email: "some email",
     key: "some key",
     name: "some name",
     phone: "some phone"
   }
+  @create_attrs %{
+    name: "event name",
+    key: "event key",
+    starting: DateTime.utc_now(),
+  }
   @update_attrs %{
-    about: "some updated about",
-    email: "some updated email",
-    key: "some updated key",
     name: "some updated name",
-    phone: "some updated phone"
+    key: "some updated key",
   }
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
 
   def fixture(:event) do
+    {:ok, group} = Network.create_node(@group_attrs)
     {:ok, event} = Network.create_node(@create_attrs)
+    Network.get_predicate("for")
+    Network.make_edge(event, "for", group)
     event
   end
 
@@ -33,7 +38,8 @@ defmodule IgwetWeb.EventControllerTest do
 
   describe "new event" do
     test "renders form", %{conn: conn} do
-      conn = get(conn, event_path(conn, :new))
+      {:ok, group} = Network.create_node(@group_attrs)
+      conn = get(conn, event_path(conn, :new, id: group.id))
       assert html_response(conn, 200) =~ "New Event"
     end
   end
@@ -72,7 +78,7 @@ defmodule IgwetWeb.EventControllerTest do
       assert redirected_to(conn) == event_path(conn, :show, event)
 
       conn = get(conn, event_path(conn, :show, event))
-      assert html_response(conn, 200) =~ "some updated about"
+      assert html_response(conn, 200) =~ "some updated name"
     end
 
     test "renders errors when data is invalid", %{conn: conn, event: event} do
