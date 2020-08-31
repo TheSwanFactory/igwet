@@ -2,7 +2,7 @@
 
 <span><%= link "Edit", to: group_path(@conn, :edit, @node) %></span>
 <span><%= link "Back", to: group_path(@conn, :index) %></span>
-<span><%= link "New Event", to: group_path(@conn, :new_event, @node) %></span>
+<span><%= link "New Event", to: event_path(@conn, :new, id: @node.id) %></span>
 
 <ul>
 

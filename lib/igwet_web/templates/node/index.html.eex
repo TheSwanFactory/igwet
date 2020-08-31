@@ -1,6 +1,6 @@
 <h2>Listing Nodes</h2>
 
-<span><%= link "New Group", to: node_path(@conn, :new) %></span>
+<span><%= link "New Node", to: node_path(@conn, :new) %></span>
 
 <table class="table">
   <thead>

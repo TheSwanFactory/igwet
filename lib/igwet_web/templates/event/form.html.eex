@@ -5,23 +5,35 @@
     </div>
   <% end %>
 
-  <%= label f, :name %>
-  <%= text_input f, :name %>
-  <%= error_tag f, :name %>
+  <h3>Event Details</h3>
 
-  <%= label f, :about %>
-  <%= text_input f, :about %>
-  <%= error_tag f, :about %>
+  <div class="form-group">
+    <%= label f, :name %>
+    <%= text_input f, :name %>
+    <%= error_tag f, :name %>
+  </div>
 
-  <%= datetime_select f, :starting, class: "form-control" %>
+  <div class="form-group">
+    <%= label f, :about %>
+    <%= text_input f, :about %>
+    <%= error_tag f, :about %>
+  </div>
 
-  <%= label f, "Duration, in minutes" %>
-  <%= number_input f, :duration %>
-  <%= error_tag f, :duration %>
+  <div class="form-group">
+    <%= datetime_select f, :starting, class: "form-control" %>
+  </div>
 
-  <%= label f, "Repeat every # days" %>
-  <%= number_input f, :recurrence %>
-  <%= error_tag f, :recurrence %>
+  <div class="form-group">
+    <%= label f, "Duration, in minutes" %>
+    <%= number_input f, :duration %>
+    <%= error_tag f, :duration %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, "Repeat every # days" %>
+    <%= number_input f, :recurrence %>
+    <%= error_tag f, :recurrence %>
+  </div>
 
   <div>
     <%= submit "Save" %>

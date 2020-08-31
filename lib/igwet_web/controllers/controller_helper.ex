@@ -2,7 +2,6 @@ defmodule IgwetWeb.ControllerHelper do
   import Plug.Conn
   import Phoenix.Controller
   alias Igwet.Admin
-  alias Igwet.Network
 
   def get_user(conn) do
     case Application.get_env(:igwet, :env) do
