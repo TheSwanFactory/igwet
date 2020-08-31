@@ -2,6 +2,7 @@ defmodule IgwetWeb.ControllerHelper do
   import Plug.Conn
   import Phoenix.Controller
   alias Igwet.Admin
+  alias Igwet.Network
 
   def get_user(conn) do
     case Application.get_env(:igwet, :env) do
@@ -56,7 +57,7 @@ defmodule IgwetWeb.ControllerHelper do
 
       nil ->
         conn
-        |> assign(:current_user, user)
+        |> assign(:current_user, nil)
         |> unauthorized("There is no user with a valid contact currently logged in.")
 
       false ->
@@ -67,4 +68,17 @@ defmodule IgwetWeb.ControllerHelper do
         )
     end
   end
+
+  def require_login(conn, _params) do
+    user = get_user(conn)
+    if (nil != user) do
+      conn
+      |> assign(:current_user, user)
+    else
+      conn
+      |> assign(:current_user, nil)
+      |> unauthorized("There is no user with a valid contact currently logged in.")
+    end
+  end
+
 end
