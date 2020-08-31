@@ -14,7 +14,7 @@ defmodule IgwetWeb.GroupController do
     node = Network.get_node!(id)
     groups = Network.node_groups(node)
     members = Network.node_members(node)
-    events = Network.node_related(node, "for")
+    events = Network.related_subjects(node, "for")
     render(conn, "show.html", node: node, groups: groups, members: members, events: events)
   end
 

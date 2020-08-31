@@ -6,6 +6,7 @@
       <th>Actions</th>
       <th>Name</th>
       <th>Initials</th>
+      <th>Type</th>
       <th>About</th>
       <th>Email</th>
       <th>Phone</th>
@@ -24,6 +25,7 @@
       </td>
       <td><%= node.name %></td>
       <td><%= node.initials %></td>
+      <td><%= Network.get_type(node) %></td>
       <td><%= node.about %></td>
       <td><%= node.email %></td>
       <td><%= node.phone %></td>

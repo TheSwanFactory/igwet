@@ -79,7 +79,6 @@ defmodule Igwet.Network do
     ) |> Repo.all
   end
 
-
   @doc """
   Get predicate.  Create if missing.
 
@@ -227,16 +226,7 @@ defmodule Igwet.Network do
 
   """
   def node_groups(node) do
-    in_node = get_predicate("in")
-
-    edges =
-      Edge
-      |> order_by([asc: :inserted_at])
-      |> where([e], e.subject_id == ^node.id and e.predicate_id == ^in_node.id)
-      |> preload([:object])
-      |> Repo.all()
-
-    Enum.map(edges, & &1.object)
+    related_objects(node, "in")
   end
 
   @doc """
@@ -249,7 +239,7 @@ defmodule Igwet.Network do
 
   """
   def node_members(node) do
-    node_related(node, "in")
+    related_subjects(node, "in")
   end
 
   @doc """
@@ -257,21 +247,43 @@ defmodule Igwet.Network do
 
   ## Examples
 
-      iex> node_related(node, predicate)
+      iex> related_subjects(node, predicate)
       [%Igwet.Network.Node{},...]
 
   """
-  def node_related(node, relation) do
-    in_node = get_predicate(relation)
+  def related_subjects(object, relation) do
+    pred_node = get_predicate(relation)
 
     edges =
       Edge
       |> order_by([asc: :inserted_at])
-      |> where([e], e.object_id == ^node.id and e.predicate_id == ^in_node.id)
+      |> where([e], e.object_id == ^object.id and e.predicate_id == ^pred_node.id)
       |> preload([:subject])
       |> Repo.all()
 
     Enum.map(edges, & &1.subject)
+  end
+
+  @doc """
+  Return all nodes with specificed relation to this node.
+
+  ## Examples
+
+      iex> related_subjects(node, predicate)
+      [%Igwet.Network.Node{},...]
+
+  """
+  def related_objects(subject, relation) do
+    pred_node = get_predicate(relation)
+
+    edges =
+      Edge
+      |> order_by([asc: :inserted_at])
+      |> where([e], e.subject_id == ^subject.id and e.predicate_id == ^pred_node.id)
+      |> preload([:object])
+      |> Repo.all()
+
+    Enum.map(edges, & &1.object)
   end
 
   @doc """
@@ -285,6 +297,24 @@ defmodule Igwet.Network do
   """
   def list_nodes do
     Repo.all(Node)
+  end
+
+  @doc """
+  Returns the type of a node.
+
+  ## Examples
+
+      iex> Network.get_type(node)
+
+  """
+  def get_type(node) do
+      first = related_objects(node, "type")
+              |> Enum.at(0)
+      if (first) do
+        first.name
+      else
+        nil
+      end
   end
 
   @doc """
