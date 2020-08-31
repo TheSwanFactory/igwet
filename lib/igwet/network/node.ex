@@ -15,7 +15,7 @@ defmodule Igwet.Network.Node do
     field(:email, :string)
     field(:initials, :string)
     field(:key, :string)
-    field(:meta, :string)
+    field(:meta, :map)
     field(:name, :string)
     field(:phone, :string)
     field(:url, :string)
