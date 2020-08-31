@@ -4,7 +4,7 @@ defmodule Igwet.Repo.Migrations.CreateInstances do
   def change do
     create table(:instances) do
       add :capacity, :integer
-      add :date, :date
+      add :starting, :naive_datetime
       add :duration, :integer
       add :lock_version, :integer, default: 1
       add :recurrence, :integer
@@ -14,6 +14,6 @@ defmodule Igwet.Repo.Migrations.CreateInstances do
       timestamps()
     end
 
-    create index(:instances, [:event_id, :date])
+    create index(:instances, [:event_id, :starting])
   end
 end

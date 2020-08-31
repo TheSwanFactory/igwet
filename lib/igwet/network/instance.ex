@@ -5,7 +5,7 @@ defmodule Igwet.Network.Instance do
 
   schema "instances" do
     field :capacity, :integer
-    field :date, :date
+    field :starting, :naive_datetime
     field :duration, :integer
     field :lock_version, :integer, default: 1
     field :recurrence, :integer
@@ -18,8 +18,8 @@ defmodule Igwet.Network.Instance do
   @doc false
   def changeset(instance, attrs) do
     instance
-    |> cast(attrs, [:date, :duration, :capacity, :registered])
-    |> validate_required([:date, :duration, :capacity, :registered])
+    |> cast(attrs, [:starting, :duration, :capacity, :registered, :recurrence])
+    |> validate_required([:starting, :duration, :capacity])
     |> optimistic_lock(:lock_version)
   end
 end

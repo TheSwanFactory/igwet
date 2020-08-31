@@ -13,6 +13,10 @@
   <%= text_input f, :about %>
   <%= error_tag f, :about %>
 
+  <%= datetime_select f, :starting, class: "form-control", 
+  default: {{@current_year, @current_month, @current_day},
+  {@current_hour, @current_minute, @current_second}} %>
+
   <div>
     <%= submit "Save" %>
   </div>
