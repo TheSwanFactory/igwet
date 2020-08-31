@@ -4,6 +4,11 @@
 <span><%= link "Back", to: node_path(@conn, :index) %></span>
 
 <ul>
+  
+  <li>
+    <strong>Type:</strong>
+    <%= Network.get_type(@node) %>
+  </li>
 
   <li>
     <strong>Name:</strong>

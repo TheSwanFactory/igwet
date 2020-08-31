@@ -147,7 +147,8 @@ defmodule Igwet.Network.SMS do
     text = Network.get_initials(sender) <> ": " <> params[@body]
     chat = Network.get_first_node!(:name, "chat")
     msg_key = ".msg+" <> sender.key <> "+" <> params[@msg_id]
-    {:ok, message} = Network.create_node %{name: text, type: chat, key: msg_key}
+    {:ok, message} = Network.create_node %{name: text, key: msg_key}
+    Network.make_edge(message, "type", chat)
     #Network.set_node_in_group(message, receiver)
     Network.make_edge(message, "from", sender)
 

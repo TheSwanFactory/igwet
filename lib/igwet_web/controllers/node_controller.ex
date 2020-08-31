@@ -20,6 +20,8 @@ defmodule IgwetWeb.NodeController do
   def create(conn, %{"node" => node_params}) do
     case Network.create_node(node_params) do
       {:ok, node} ->
+        group = Network.get_first_node!(:name, "group")
+        Network.make_edge(node, "type", group)
         conn
         |> put_flash(:info, "Node created successfully.")
         |> redirect(to: node_path(conn, :show, node))

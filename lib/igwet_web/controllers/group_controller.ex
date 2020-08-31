@@ -6,7 +6,8 @@ defmodule IgwetWeb.GroupController do
   plug(:require_admin)
 
   def index(conn, _params) do
-    nodes = Network.objects_for_predicate("in")
+    group = Network.get_first_node!(:name, "group")
+    nodes = Network.related_subjects(group, "type")
     render(conn, "index.html", nodes: nodes)
   end
 
