@@ -81,7 +81,7 @@ $ gigalixir ps:migrate
 To update the seeds in production use:
 ```
 $ source .env
-$ gigalixir remote_console -a $APP_NAME
+$ gigalixir remote_console
 1> Path.join(["#{:code.priv_dir(:igwet)}", "repo", "seeds.exs"]) |> Code.eval_file
 ```
 DANGER: Only do this once or you may blow away all your data.
