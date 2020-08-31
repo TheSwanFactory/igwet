@@ -5,11 +5,12 @@ defmodule Igwet.Network.Instance do
 
   schema "instances" do
     field :capacity, :integer
-    field :starting, :utc_datetime
     field :duration, :integer
     field :lock_version, :integer, default: 1
     field :recurrence, :integer
     field :registered, :integer
+    field :starting, :naive_datetime
+    field :timezone, :string, default: "US/Pacific"
     belongs_to(:event, Node)
 
     timestamps()
@@ -18,8 +19,8 @@ defmodule Igwet.Network.Instance do
   @doc false
   def changeset(instance, attrs) do
     instance
-    |> cast(attrs, [:starting, :duration, :capacity, :registered, :recurrence])
-    |> validate_required([:starting, :duration, :capacity])
+    |> cast(attrs, [:capacity, :duration, :recurrence, :registered, :starting, :timezone])
+    |> validate_required([:duration, :timezone, :starting])
     |> optimistic_lock(:lock_version)
   end
 end

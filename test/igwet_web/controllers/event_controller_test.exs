@@ -14,10 +14,17 @@ defmodule IgwetWeb.EventControllerTest do
     name: "event name",
     key: "event key",
     starting: DateTime.utc_now(),
+    timezone: "US/Pacific",
+    duration: 90,
+    recurrence: 7,
   }
   @update_attrs %{
     name: "some updated name",
     key: "some updated key",
+    starting: DateTime.utc_now(),
+    timezone: "US/Eastern",
+    duration: 60,
+    recurrence: 3,
   }
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
 
@@ -62,7 +69,7 @@ defmodule IgwetWeb.EventControllerTest do
   end
 
   describe "edit event" do
-    setup [:create_node]
+    setup [:create_event]
 
     test "renders form for editing chosen event", %{conn: conn, event: event} do
       conn = get(conn, event_path(conn, :edit, event))
@@ -71,7 +78,7 @@ defmodule IgwetWeb.EventControllerTest do
   end
 
   describe "update event" do
-    setup [:create_node]
+    setup [:create_event]
 
     test "redirects when data is valid", %{conn: conn, event: event} do
       conn = put(conn, event_path(conn, :update, event), event: @update_attrs)
@@ -88,7 +95,7 @@ defmodule IgwetWeb.EventControllerTest do
   end
 
   describe "delete event" do
-    setup [:create_node]
+    setup [:create_event]
 
     test "deletes chosen event", %{conn: conn, event: event} do
       conn = delete(conn, event_path(conn, :delete, event))
@@ -99,7 +106,7 @@ defmodule IgwetWeb.EventControllerTest do
     end
   end
 
-  defp create_node(_) do
+  defp create_event(_) do
     event = fixture(:event)
     %{event: event}
   end
