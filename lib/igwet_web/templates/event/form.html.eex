@@ -13,9 +13,15 @@
   <%= text_input f, :about %>
   <%= error_tag f, :about %>
 
-  <%= datetime_select f, :starting, class: "form-control", 
-  default: {{@current_year, @current_month, @current_day},
-  {@current_hour, @current_minute, @current_second}} %>
+  <%= datetime_select f, :starting, class: "form-control" %>
+
+  <%= label f, "Duration, in minutes" %>
+  <%= number_input f, :duration %>
+  <%= error_tag f, :duration %>
+
+  <%= label f, "Repeat every # days" %>
+  <%= number_input f, :recurrence %>
+  <%= error_tag f, :recurrence %>
 
   <div>
     <%= submit "Save" %>
