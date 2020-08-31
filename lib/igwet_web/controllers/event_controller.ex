@@ -13,8 +13,10 @@ defmodule IgwetWeb.EventController do
   end
 
  def new(conn, %{"id" => id}) do
+    meta = %Details{capacity: 100, duration: 90, recurrence: 7, timezone: "US/Pacific", starting: DateTime.utc_now }
+    defaults = %Node{name: "Our Church Service", about: "In-Person Event Details", meta: meta}
     group = Network.get_node!(id)
-    changeset = Network.change_node(%Node{}) 
+    changeset = Network.change_node(defaults)
     render(conn, "new.html", changeset: changeset, group: group)
   end
 

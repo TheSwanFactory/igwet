@@ -15,31 +15,41 @@
 
   <div class="form-group">
     <%= label f, :about %>
-    <%= text_input f, :about %>
+    <%= textarea f, :about %>
     <%= error_tag f, :about %>
   </div>
 
-  <div class="form-group">
-    <%= datetime_select f, :starting, class: "form-control" %>
-  </div>
+  <%= inputs_for f, :meta, fn fm -> %>
+    <div class="form-group">
+      <%= label fm, :timezone %>
+      <%= text_input fm, :timezone %>
+      <%= error_tag fm, :timezone %>
+    </div>
 
-  <div class="form-group">
-    <%= label f, "Duration, in minutes" %>
-    <%= number_input f, :duration %>
-    <%= error_tag f, :duration %>
-  </div>
+    <div class="form-group">
+      <%= label fm, :starting %>
+      <%= datetime_select fm, :starting, class: "form-control" %>
+      <%= error_tag fm, :starting %>
+    </div>
 
-  <div class="form-group">
-    <%= label f, "Capacity" %>
-    <%= number_input f, :capacity %>
-    <%= error_tag f, :capacity %>
-  </div>
+    <div class="form-group">
+      <%= label fm, "Duration, in minutes" %>
+      <%= number_input fm, :duration %>
+      <%= error_tag fm, :duration %>
+    </div>
 
-  <div class="form-group">
-    <%= label f, "Repeat every # days" %>
-    <%= number_input f, :recurrence %>
-    <%= error_tag f, :recurrence %>
-  </div>
+    <div class="form-group">
+      <%= label fm, "Capacity" %>
+      <%= number_input fm, :capacity %>
+      <%= error_tag fm, :capacity %>
+    </div>
+
+    <div class="form-group">
+      <%= label fm, "Repeat every # days" %>
+      <%= number_input fm, :recurrence %>
+      <%= error_tag fm, :recurrence %>
+    </div>
+  <% end %>
 
   <div>
     <%= submit "Save" %>
