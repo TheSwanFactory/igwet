@@ -23,7 +23,6 @@ defmodule IgwetWeb.Router do
     resources("/users", UserController)
     resources("/groups", GroupController)
     resources("/events", EventController)
-    resources("/events", EventController)
     resources("/messages", MessageController)
     resources("/nodes", NodeController)
     resources("/edges", EdgeController)

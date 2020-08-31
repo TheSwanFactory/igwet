@@ -12,21 +12,6 @@
     <%= @event.about %>
   </li>
 
-  <li>
-    <strong>Starting:</strong>
-    <%= @event.starting %>
-  </li>
-
-  <li>
-    <strong>Weekly:</strong>
-    <%= @event.weekly %>
-  </li>
-
-  <li>
-    <strong>Capacity:</strong>
-    <%= @event.capacity %>
-  </li>
-
 </ul>
 
 <span><%= link "Edit", to: event_path(@conn, :edit, @event) %></span>

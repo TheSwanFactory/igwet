@@ -17,9 +17,6 @@
     <tr>
       <td><%= event.name %></td>
       <td><%= event.about %></td>
-      <td><%= event.starting %></td>
-      <td><%= event.weekly %></td>
-      <td><%= event.capacity %></td>
 
       <td>
         <span><%= link "Show", to: event_path(@conn, :show, event) %></span>

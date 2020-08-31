@@ -18,6 +18,7 @@
           <ul class="nav nav-pills pull-right">
           <%= if @current_user do %>
             <li><a href="/">Home</a></li>
+            <li><a href="/events">Events</a></li>
             <li><a href="/groups">Groups</a></li>
             <li><a href="/nodes">Nodes</a></li>
             <li><a href="/users">Users</a></li>
