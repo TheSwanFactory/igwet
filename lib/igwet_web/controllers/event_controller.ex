@@ -14,7 +14,7 @@ defmodule IgwetWeb.EventController do
 
  def new(conn, %{"id" => id}) do
     group = Network.get_node!(id)
-    changeset = Network.change_node(%Node{})
+    changeset = Network.change_node(%Node{}) 
     render(conn, "new.html", changeset: changeset, group: group)
   end
 

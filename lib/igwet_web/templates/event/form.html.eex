@@ -30,6 +30,12 @@
   </div>
 
   <div class="form-group">
+    <%= label f, "Capacity" %>
+    <%= number_input f, :capacity %>
+    <%= error_tag f, :capacity %>
+  </div>
+
+  <div class="form-group">
     <%= label f, "Repeat every # days" %>
     <%= number_input f, :recurrence %>
     <%= error_tag f, :recurrence %>
