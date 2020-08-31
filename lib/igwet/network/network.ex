@@ -453,6 +453,11 @@ defmodule Igwet.Network do
     end
   end
 
+  @doc """
+  Updated instance based on event attributes.
+  """
+  def update_instance(_event, _attrs) do
+  end
 
   @doc """
   Get initials.

@@ -8,7 +8,6 @@ defmodule IgwetWeb.NodeController do
 
   def index(conn, _params) do
     nodes = Network.list_nodes()
-    #types = Network.type_map(nodes)
     render(conn, "index.html", nodes: nodes)
   end
 

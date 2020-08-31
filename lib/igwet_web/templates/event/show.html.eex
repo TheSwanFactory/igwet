@@ -23,11 +23,11 @@
   </li>
 
   <li>
-    <strong>Ccapacity:</strong>
-    <%= @event.ccapacity %>
+    <strong>Capacity:</strong>
+    <%= @event.capacity %>
   </li>
 
 </ul>
 
-<span><%= link "Edit", to: Routes.event_path(@conn, :edit, @event) %></span>
-<span><%= link "Back", to: Routes.event_path(@conn, :index) %></span>
+<span><%= link "Edit", to: event_path(@conn, :edit, @event) %></span>
+<span><%= link "Back", to: event_path(@conn, :index) %></span>

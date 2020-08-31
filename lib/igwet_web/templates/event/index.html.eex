@@ -7,7 +7,7 @@
       <th>About</th>
       <th>Starting</th>
       <th>Weekly</th>
-      <th>Ccapacity</th>
+      <th>Capacity</th>
 
       <th></th>
     </tr>
@@ -19,16 +19,16 @@
       <td><%= event.about %></td>
       <td><%= event.starting %></td>
       <td><%= event.weekly %></td>
-      <td><%= event.ccapacity %></td>
+      <td><%= event.capacity %></td>
 
       <td>
-        <span><%= link "Show", to: Routes.event_path(@conn, :show, event) %></span>
-        <span><%= link "Edit", to: Routes.event_path(@conn, :edit, event) %></span>
-        <span><%= link "Delete", to: Routes.event_path(@conn, :delete, event), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "Show", to: event_path(@conn, :show, event) %></span>
+        <span><%= link "Edit", to: event_path(@conn, :edit, event) %></span>
+        <span><%= link "Delete", to: event_path(@conn, :delete, event), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Event", to: Routes.event_path(@conn, :new) %></span>
+<span><%= link "New Event", to: event_path(@conn, :new) %></span>

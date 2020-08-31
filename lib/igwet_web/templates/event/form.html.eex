@@ -13,18 +13,6 @@
   <%= text_input f, :about %>
   <%= error_tag f, :about %>
 
-  <%= label f, :starting %>
-  <%= date_select f, :starting %>
-  <%= error_tag f, :starting %>
-
-  <%= label f, :weekly %>
-  <%= checkbox f, :weekly %>
-  <%= error_tag f, :weekly %>
-
-  <%= label f, :ccapacity %>
-  <%= number_input f, :ccapacity %>
-  <%= error_tag f, :ccapacity %>
-
   <div>
     <%= submit "Save" %>
   </div>
