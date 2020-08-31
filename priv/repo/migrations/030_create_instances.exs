@@ -4,7 +4,7 @@ defmodule Igwet.Repo.Migrations.CreateInstances do
   def change do
     create table(:instances) do
       add :capacity, :integer
-      add :starting, :naive_datetime
+      add :starting, :utc_datetime
       add :duration, :integer
       add :lock_version, :integer, default: 1
       add :recurrence, :integer

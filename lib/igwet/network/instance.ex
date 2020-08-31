@@ -5,7 +5,7 @@ defmodule Igwet.Network.Instance do
 
   schema "instances" do
     field :capacity, :integer
-    field :starting, :naive_datetime
+    field :starting, :utc_datetime
     field :duration, :integer
     field :lock_version, :integer, default: 1
     field :recurrence, :integer
