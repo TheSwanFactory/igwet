@@ -92,7 +92,7 @@ defmodule Igwet.Network do
       first
     else
       type = get_first_node!(:name, "predicate")
-      {:ok, node} = create_node %{name: value, type: type, key: "predicate" <> "+" <> value}
+      {:ok, node} = create_node %{name: value, type: type, key: type.key <> "+" <> value}
       node
     end
   end

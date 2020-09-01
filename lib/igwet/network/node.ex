@@ -23,7 +23,7 @@ defmodule Igwet.Network.Node do
     belongs_to(:address, Address)
     has_many(:edges, Edge, foreign_key: :subject_id)
     has_one(:user, User)
-    embeds_one :meta, Details
+    embeds_one :meta, Details, on_replace: :update
 
     timestamps()
   end
