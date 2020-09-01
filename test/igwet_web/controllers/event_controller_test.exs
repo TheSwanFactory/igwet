@@ -4,10 +4,10 @@ defmodule IgwetWeb.EventControllerTest do
   require Logger
 
   @group_attrs %{
-    about: "some about",
+    about: "some event about",
     email: "some email",
-    key: "some key",
-    name: "some name",
+    key: "some event group key",
+    name: "some event",
     phone: "some phone"
   }
   @create_attrs %{
@@ -23,8 +23,8 @@ defmodule IgwetWeb.EventControllerTest do
     }
   }
   @update_attrs %{
-    name: "some updated name",
-    key: "some updated key",
+    name: "some updated event",
+    key: "some updated event key",
     date: %{year: 2000, month: 12, day: 31, hour: 23, minute: 59},
     timezone: "US/Eastern",
     meta: %{
@@ -95,7 +95,7 @@ defmodule IgwetWeb.EventControllerTest do
       assert redirected_to(conn) == event_path(conn, :show, event)
 
       conn = get(conn, event_path(conn, :show, event))
-      assert html_response(conn, 200) =~ "some updated name"
+      assert html_response(conn, 200) =~ "some updated event"
     end
 
     test "renders errors when data is invalid", %{conn: conn, event: event} do
