@@ -3,26 +3,25 @@
 <table>
   <thead>
     <tr>
+      <th>Actions</th>
       <th>Name</th>
       <th>About</th>
-      <th>Starting</th>
-      <th>Weekly</th>
       <th>Capacity</th>
-
-      <th></th>
+      <th>Starting</th>
     </tr>
   </thead>
   <tbody>
 <%= for event <- @events do %>
     <tr>
-      <td><%= event.name %></td>
-      <td><%= event.about %></td>
-
       <td>
         <span><%= link "Show", to: event_path(@conn, :show, event) %></span>
         <span><%= link "Edit", to: event_path(@conn, :edit, event) %></span>
         <span><%= link "Delete", to: event_path(@conn, :delete, event), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
+      <td><%= event.name %></td>
+      <td><%= event.about %></td>
+      <td><%= event.meta.capacity %></td>
+      <td><%= event.meta.starting %></td>
     </tr>
 <% end %>
   </tbody>
