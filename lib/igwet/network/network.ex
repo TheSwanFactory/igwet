@@ -8,7 +8,6 @@ defmodule Igwet.Network do
   alias Igwet.Repo
   alias Igwet.Network.Node
   alias Igwet.Network.Edge
-  alias Igwet.Network.Instance
 
   @doc """
   Find first node matching a name/email/key
@@ -452,25 +451,6 @@ defmodule Igwet.Network do
       node = get_node!(value)
       unset_node_in_group(node, group)
     end
-  end
-
-  @doc """
-  Get or create the next instance for this event
-  """
-  def event_instance(event) do
-    Instance
-    |> where([i], i.node_id == ^event.id)
-#    |> where([i], i.date == Date.today())
-    |> Repo.one()
-  end
-
-  @doc """
-  Updated instance based on event attributes.
-  Specifically, ensure there exists at least one instance
-  that matches the new attributes
-  """
-  def update_instance(node, attrs) do
-    update_node(node, %{meta: attrs})
   end
 
   @doc """

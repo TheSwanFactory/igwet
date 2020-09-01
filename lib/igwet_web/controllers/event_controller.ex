@@ -25,7 +25,6 @@ defmodule IgwetWeb.EventController do
       {:ok, event} ->
         type = Network.get_first_node!(:name, "event")
         Network.make_edge(event, "type", type)
-        Network.update_instance(event, event_params)
         conn
         |> put_flash(:info, "Event created successfully.")
         |> redirect(to: event_path(conn, :show, event))
@@ -51,7 +50,6 @@ defmodule IgwetWeb.EventController do
 
     case Network.update_node(event, event_params) do
       {:ok, event} ->
-        Network.update_instance(event, event_params)
         conn
         |> put_flash(:info, "Event updated successfully.")
         |> redirect(to: event_path(conn, :show, event))
