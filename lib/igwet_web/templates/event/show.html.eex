@@ -1,18 +1,45 @@
 <h1>Show Event</h1>
 
 <ul>
+  <h3>Group</h3>
+  <%= for group <- @groups do %>
+    <li>
+      <%= link(group.name, to: group_path(@conn, :show, group)) %>
+    </li>
+  <% end %>
+</ul>
 
+<ul>
   <li>
-    <strong>Name:</strong>
-    <%= @event.name %>
+    <strong>Name:</strong> <%= @event.name %>
   </li>
-
   <li>
-    <strong>About:</strong>
-    <%= @event.about %>
+    <strong>About:</strong> <%= @event.about %>
+  </li>
+  <li>
+    <strong>Starting:</strong> <%= @event.meta.starting %>
+  </li>
+  <li>
+    <strong>Duration:</strong> <%= @event.meta.duration %>
+  </li>
+  <li>
+    <strong>Capacity:</strong> <%= @event.meta.capacity %>
+  </li>
+  <li>
+    <strong>Current Count:</strong> <%= @event.meta.current %>
   </li>
 
 </ul>
 
 <span><%= link "Edit", to: event_path(@conn, :edit, @event) %></span>
 <span><%= link "Back", to: event_path(@conn, :index) %></span>
+
+<ul>
+  <h3>Households</h3>
+  <%= for house <- @houses do %>
+    <li>
+      <%= link(house.email <> " (" <> house.name <> "): " <> house.meta.current,
+          to: node_path(@conn, :show, house)) %>:
+    </li>
+  <% end %>
+</ul>

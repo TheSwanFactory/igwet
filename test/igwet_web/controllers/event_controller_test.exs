@@ -1,7 +1,7 @@
 defmodule IgwetWeb.EventControllerTest do
   use IgwetWeb.ConnCase
-
   alias Igwet.Network
+  require Logger
 
   @group_attrs %{
     about: "some about",
@@ -16,9 +16,10 @@ defmodule IgwetWeb.EventControllerTest do
     meta: %{
       capacity: 100,
       duration: 90,
+      parent_id: nil,
       recurrence: 7,
       starting: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
-      timezone: "US/Pacific"
+      timezone: "US/Pacific",
     }
   }
   @update_attrs %{
@@ -26,19 +27,22 @@ defmodule IgwetWeb.EventControllerTest do
     key: "some updated key",
     meta: %{
       capacity: 60,
+      current: 30,
       duration: 120,
+      parent_id: nil,
       recurrence: 30,
       starting: %{year: 2000, month: 12, day: 31, hour: 23, minute: 59},
       timezone: "US/Eastern"
     }
   }
-  @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
+  @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil, meta: %{}}
 
   def fixture(:event) do
     {:ok, group} = Network.create_node(@group_attrs)
-    {:ok, event} = Network.create_node(@create_attrs)
-    Network.get_predicate("for")
-    Network.make_edge(event, "for", group)
+    {:ok, event} =
+      @create_attrs
+      |> put_in([:meta, :parent_id], group.id)
+      |> Network.create_node()
     event
   end
 
@@ -68,9 +72,9 @@ defmodule IgwetWeb.EventControllerTest do
       assert html_response(conn, 200) =~ "Show Event"
     end
 
-    test "renders errors when data is invalid", %{conn: conn} do
+    test "redirects when data is invalid", %{conn: conn} do
       conn = post(conn, event_path(conn, :create), node: @invalid_attrs)
-      assert html_response(conn, 200) =~ "New Event"
+      assert html_response(conn, 302) =~ "redirected"
     end
   end
 

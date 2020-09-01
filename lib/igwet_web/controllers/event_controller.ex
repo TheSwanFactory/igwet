@@ -5,6 +5,7 @@ defmodule IgwetWeb.EventController do
   alias Igwet.Network
   alias Igwet.Network.Node
   @tz "US/Pacific"
+  @default_details %Details{capacity: 100, current: 0, duration: 90, recurrence: 7, timezone: @tz}
 
   plug(:require_admin)
 
@@ -18,33 +19,32 @@ defmodule IgwetWeb.EventController do
    group = Network.get_node!(id)
     {:ok, now} = DateTime.shift_zone(DateTime.utc_now, "US/Pacific")
     key = group.key <> "+" <> DateTime.to_string(now)
-    meta = %Details{capacity: 100, duration: 90, recurrence: 7, timezone: @tz, starting: now }
+    meta = Map.merge(@default_details, %{starting: now, parent_id: group.id})
     defaults = %Node{name: "Our Church Service", about: "In-Person Event Details", meta: meta, key: key}
     changeset = Network.change_node(defaults)
     render(conn, "new.html", changeset: changeset, group: group)
   end
 
   def create(conn, %{"node" => event_params}) do
-    Logger.warn("** create event_params: " <> inspect(event_params))
     case Network.create_node(event_params) do
       {:ok, event} ->
-        Logger.warn("** create event: " <> inspect(event))
-        type = Network.get_first_node!(:name, "event")
-        Logger.warn("** create type: " <> inspect(type))
-        edge = Network.make_edge(event, "type", type)
-        Logger.warn("** create edge: " <> inspect(edge))
+        #Logger.warn("** created event: " <> inspect(event))
+        is_event = Network.get_first_node!(:name, "event")
+        Network.make_edge(event, "type", is_event)
         conn
         |> put_flash(:info, "Event created successfully.")
         |> redirect(to: event_path(conn, :show, event))
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+      {:error, %Ecto.Changeset{} = _changeset} ->
+        redirect(conn, to: group_path(conn, :index))
     end
   end
 
   def show(conn, %{"id" => id}) do
     event = Network.get_node!(id)
-    render(conn, "show.html", event: event)
+    groups = Network.related_objects(event, "for")
+    houses = Network.related_subjects(event, "at")
+    render(conn, "show.html", event: event, groups: groups, houses: houses)
   end
 
   def edit(conn, %{"id" => id}) do
