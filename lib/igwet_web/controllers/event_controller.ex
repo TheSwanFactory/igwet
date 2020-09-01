@@ -16,8 +16,8 @@ defmodule IgwetWeb.EventController do
 
  def new(conn, %{"id" => id}) do
    group = Network.get_node!(id)
-    now = DateTime.shift_zone(DateTime.utc_now, @tz)
-    key = group.key <> "+" + DateTime.to_string(now)
+    {:ok, now} = DateTime.shift_zone(DateTime.utc_now, "US/Pacific")
+    key = group.key <> "+" <> DateTime.to_string(now)
     meta = %Details{capacity: 100, duration: 90, recurrence: 7, timezone: @tz, starting: now }
     defaults = %Node{name: "Our Church Service", about: "In-Person Event Details", meta: meta, key: key}
     changeset = Network.change_node(defaults)
