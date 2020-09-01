@@ -5,7 +5,7 @@
     <h3>Events</h3>
     <%= for event <- @events do %>
       <li>
-        <%= link(event.name, to: group_path(@conn, :show, event)) %>
+        <%= link(event.name, to: event_path(@conn, :show, event)) %>
       </li>
     <% end %>
   </ul>
