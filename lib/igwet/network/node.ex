@@ -11,13 +11,14 @@ defmodule Igwet.Network.Node do
 
   schema "nodes" do
     field(:about, :string)
-    field(:date, :utc_datetime)
+    field(:date, :naive_datetime)
     field(:email, :string)
     field(:initials, :string)
     field(:key, :string)
     #field(:meta, :map)
     field(:name, :string)
     field(:phone, :string)
+    field(:timezone, :string, default: "US/Pacific")
     field(:url, :string)
 
     belongs_to(:address, Address)
@@ -31,7 +32,7 @@ defmodule Igwet.Network.Node do
   @doc false
   def changeset(%Node{} = node, attrs) do
     node
-    |> cast(attrs, [:about, :date, :email, :initials, :key, :name, :phone, :url])
+    |> cast(attrs, [:about, :date, :email, :initials, :key, :name, :phone, :timezone, :url])
     |> cast_embed(:meta)
     |> validate_required([:key, :name])
     |> unique_constraint(:key)
