@@ -1,8 +1,4 @@
 # Sample email: http://bin.mailgun.net/b1748eea#7jmd
-require Protocol
-Protocol.derive(Jason.Encoder, RuntimeError)
-Protocol.derive(Jason.Encoder, Ecto.NoResultsError)
-Protocol.derive(Jason.Encoder, Ecto.MultipleResultsError)
 
 defmodule IgwetWeb.WebhookController do
   use IgwetWeb, :controller
