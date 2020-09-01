@@ -53,7 +53,7 @@ defmodule IgwetWeb.EventControllerTest do
 
   describe "create event" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, event_path(conn, :create), event: @create_attrs)
+      conn = post(conn, event_path(conn, :create), node: @create_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == event_path(conn, :show, id)
@@ -63,7 +63,7 @@ defmodule IgwetWeb.EventControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, event_path(conn, :create), event: @invalid_attrs)
+      conn = post(conn, event_path(conn, :create), node: @invalid_attrs)
       assert html_response(conn, 200) =~ "New Event"
     end
   end
@@ -81,7 +81,7 @@ defmodule IgwetWeb.EventControllerTest do
     setup [:create_event]
 
     test "redirects when data is valid", %{conn: conn, event: event} do
-      conn = put(conn, event_path(conn, :update, event), event: @update_attrs)
+      conn = put(conn, event_path(conn, :update, event), node: @update_attrs)
       assert redirected_to(conn) == event_path(conn, :show, event)
 
       conn = get(conn, event_path(conn, :show, event))
@@ -89,7 +89,7 @@ defmodule IgwetWeb.EventControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, event: event} do
-      conn = put(conn, event_path(conn, :update, event), event: @invalid_attrs)
+      conn = put(conn, event_path(conn, :update, event), node: @invalid_attrs)
       assert html_response(conn, 200) =~ "Edit Event"
     end
   end

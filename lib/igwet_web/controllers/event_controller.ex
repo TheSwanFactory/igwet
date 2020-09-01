@@ -20,7 +20,7 @@ defmodule IgwetWeb.EventController do
     render(conn, "new.html", changeset: changeset, group: group)
   end
 
-  def create(conn, %{"event" => event_params}) do
+  def create(conn, %{"node" => event_params}) do
     case Network.create_node(event_params) do
       {:ok, event} ->
         type = Network.get_first_node!(:name, "event")
@@ -46,7 +46,7 @@ defmodule IgwetWeb.EventController do
     render(conn, "edit.html", event: event, changeset: changeset)
   end
 
-  def update(conn, %{"id" => id, "event" => event_params}) do
+  def update(conn, %{"id" => id, "node" => event_params}) do
     event = Network.get_node!(id)
 
     case Network.update_node(event, event_params) do
