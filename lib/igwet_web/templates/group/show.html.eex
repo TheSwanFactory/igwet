@@ -1,5 +1,15 @@
 <h2>Show Group</h2>
 
+<div><%= link "New Event", to: event_path(@conn, :new, id: @node.id) %>
+  <ul>
+    <h3>Events</h3>
+    <%= for event <- @events do %>
+      <li>
+        <%= link(event.name, to: event_path(@conn, :show, event)) %>
+      </li>
+    <% end %>
+  </ul>
+</div>
 <span><%= link "Edit", to: group_path(@conn, :edit, @node) %></span>
 <span><%= link "Back", to: group_path(@conn, :index) %></span>
 
@@ -44,7 +54,6 @@
     <strong>Key:</strong>
     <%= @node.key %>
   </li>
-
 
   <ul>
     <h3>Parent Groups</h3>

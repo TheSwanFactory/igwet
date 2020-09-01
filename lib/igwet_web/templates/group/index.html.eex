@@ -1,4 +1,6 @@
-<h2>Listing Group</h2>
+<h2>Listing Groups</h2>
+
+<span><%= link "New Group", to: group_path(@conn, :new) %></span>
 
 <table class="table">
   <thead>

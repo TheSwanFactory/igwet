@@ -25,13 +25,13 @@
 
   <div class="form-group">
     <%= label f, :email, class: "control-label" %>
-    <%= text_input f, :email, class: "form-control" %>
+    <%= email_input f, :email, class: "form-control" %>
     <%= error_tag f, :email %>
   </div>
 
   <div class="form-group">
     <%= label f, :phone, class: "control-label" %>
-    <%= text_input f, :phone, class: "form-control" %>
+    <%= telephone_input f, :phone, class: "form-control" %>
     <%= error_tag f, :phone %>
   </div>
 

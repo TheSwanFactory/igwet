@@ -1,0 +1,75 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <h3>Event Details</h3>
+
+  <div class="form-group">
+    <%= label f, :name %>
+    <%= text_input f, :name %>
+    <%= error_tag f, :name %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :about %>
+    <%= textarea f, :about %>
+    <%= error_tag f, :about %>
+  </div>
+
+  <%= inputs_for f, :meta, fn fm -> %>
+    <div class="form-group">
+      <%= label fm, :timezone %>
+      <%= text_input fm, :timezone %>
+      <%= error_tag fm, :timezone %>
+    </div>
+
+    <div class="form-group">
+      <%= label fm, :starting %>
+      <%= datetime_select fm, :starting, class: "form-control" %>
+      <%= error_tag fm, :starting %>
+    </div>
+
+    <div class="form-group">
+      <%= label fm, "Duration, in minutes" %>
+      <%= number_input fm, :duration %>
+      <%= error_tag fm, :duration %>
+    </div>
+
+    <div class="form-group">
+      <%= label fm, "Capacity" %>
+      <%= number_input fm, :capacity %>
+      <%= error_tag fm, :capacity %>
+    </div>
+
+    <div class="form-group">
+      <%= label fm, :current %>
+      <%= text_input fm, :current %>
+      <%= error_tag fm, :current %>
+    </div>
+
+    <div class="form-group">
+      <%= label fm, :parent_id %>
+      <%= text_input fm, :parent_id %>
+      <%= error_tag fm, :parent_id %>
+    </div>
+
+    <div class="form-group">
+      <%= label fm, "Repeat every # days" %>
+      <%= number_input fm, :recurrence %>
+      <%= error_tag fm, :recurrence %>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :key %>
+    <%= text_input f, :key %>
+    <%= error_tag f, :key %>
+  </div>
+
+  <div>
+    <%= submit "Save" %>
+  </div>
+<% end %>

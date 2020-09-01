@@ -79,7 +79,7 @@ defmodule Igwet.Network.Factory do
     Repo.insert!(%Edge{
       subject: subject,
       object: object,
-      predicate: Network.get_first_node!(:name, keyword)
+      predicate: Network.get_predicate(keyword)
     })
   end
 

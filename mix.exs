@@ -54,7 +54,10 @@ defmodule Igwet.Mixfile do
       {:ex_twilio, github: "danielberkompas/ex_twilio"},
       {:jason, ">= 1.2.1"},
       {:ecto_sql, ">= 3.4.5"},
-      {:version_tasks, "~> 0.11.4"}
+      {:version_tasks, "~> 0.11.4"},
+      {:castore, "~> 0.1.5"},
+      {:mint, "~> 1.0"},
+      {:tz, "~> 0.10.0"}
     ]
   end
 

@@ -5,17 +5,19 @@
     </div>
   <% end %>
 
-  <h3>Membership</h3>
-  <div class="form-group">
-    <ul>
-    <%= for member <- @all_members do %>
-      <li>
-        <input <%= if Enum.member?(@my_members, member), do: "checked", else: "" %> name="node[member:<%= member.key %>]" type="checkbox" value="<%= member.id %>">
-        <%= link(member.name, to: node_path(@conn, :show, member)) %>
-      </li>
-    <% end %>
-    </ul>
-  </div>
+  <%= if @all_members do %>
+    <h3>Membership</h3>
+    <div class="form-group">
+      <ul>
+      <%= for member <- @all_members do %>
+        <li>
+          <input <%= if Enum.member?(@my_members, member), do: "checked", else: "" %> name="node[member:<%= member.key %>]" type="checkbox" value="<%= member.id %>">
+          <%= link(member.name, to: node_path(@conn, :show, member)) %>
+        </li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
 
   <h3>Group Details</h3>
   <div class="form-group">
@@ -25,9 +27,15 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :initials, class: "control-label" %>
-    <%= text_input f, :initials, class: "form-control" %>
-    <%= error_tag f, :initials %>
+    <%= label f, :key, class: "control-label" %>
+    <%= text_input f, :key, class: "form-control" %>
+    <%= error_tag f, :key %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :url, class: "control-label" %>
+    <%= url_input f, :url, class: "form-control" %>
+    <%= error_tag f, :url %>
   </div>
 
   <div class="form-group">
@@ -38,13 +46,13 @@
 
   <div class="form-group">
     <%= label f, :email, class: "control-label" %>
-    <%= text_input f, :email, class: "form-control" %>
+    <%= email_input f, :email, class: "form-control" %>
     <%= error_tag f, :email %>
   </div>
 
   <div class="form-group">
     <%= label f, :phone, class: "control-label" %>
-    <%= text_input f, :phone, class: "form-control" %>
+    <%= telephone_input f, :phone, class: "form-control" %>
     <%= error_tag f, :phone %>
   </div>
 

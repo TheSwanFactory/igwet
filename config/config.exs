@@ -5,6 +5,8 @@
 # is restricted to this project.
 use Mix.Config
 
+config :elixir, :time_zone_database, Tz.TimeZoneDatabase
+
 # General application configuration
 config :igwet,
   ecto_repos: [Igwet.Repo],

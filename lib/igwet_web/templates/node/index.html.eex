@@ -1,9 +1,12 @@
 <h2>Listing Nodes</h2>
 
+<span><%= link "New Node", to: node_path(@conn, :new) %></span>
+
 <table class="table">
   <thead>
     <tr>
       <th>Actions</th>
+      <th>Type</th>
       <th>Name</th>
       <th>Initials</th>
       <th>About</th>
@@ -22,6 +25,7 @@
         <span><%= link "Edit", to: node_path(@conn, :edit, node), class: "btn btn-default btn-xs" %></span>
         <span><%= link "Delete", to: node_path(@conn, :delete, node), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
+      <td><%= Network.get_type(node) %></td>
       <td><%= node.name %></td>
       <td><%= node.initials %></td>
       <td><%= node.about %></td>
@@ -34,5 +38,3 @@
 <% end %>
   </tbody>
 </table>
-
-<span><%= link "New Node", to: node_path(@conn, :new) %></span>

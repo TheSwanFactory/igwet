@@ -15,7 +15,7 @@ defmodule Igwet.Network.Node do
     field(:email, :string)
     field(:initials, :string)
     field(:key, :string)
-    field(:meta, :string)
+    #field(:meta, :map)
     field(:name, :string)
     field(:phone, :string)
     field(:url, :string)
@@ -23,6 +23,7 @@ defmodule Igwet.Network.Node do
     belongs_to(:address, Address)
     has_many(:edges, Edge, foreign_key: :subject_id)
     has_one(:user, User)
+    embeds_one :meta, Details, on_replace: :update
 
     timestamps()
   end
@@ -30,7 +31,8 @@ defmodule Igwet.Network.Node do
   @doc false
   def changeset(%Node{} = node, attrs) do
     node
-    |> cast(attrs, [:about, :date, :email, :initials, :key, :meta, :name, :phone, :url])
+    |> cast(attrs, [:about, :date, :email, :initials, :key, :name, :phone, :url])
+    |> cast_embed(:meta)
     |> validate_required([:key, :name])
     |> unique_constraint(:key)
   end
