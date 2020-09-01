@@ -19,18 +19,19 @@
     <%= error_tag f, :about %>
   </div>
 
-  <%= inputs_for f, :meta, fn fm -> %>
-    <div class="form-group">
-      <%= label fm, :timezone %>
-      <%= text_input fm, :timezone %>
-      <%= error_tag fm, :timezone %>
-    </div>
+  <div class="form-group">
+    <%= label f, :date %>
+    <%= datetime_select f, :date, class: "form-control" %>
+    <%= error_tag f, :date %>
+  </div>
 
-    <div class="form-group">
-      <%= label fm, :starting %>
-      <%= datetime_select fm, :starting, class: "form-control" %>
-      <%= error_tag fm, :starting %>
-    </div>
+  <div class="form-group">
+    <%= label f, :timezone %>
+    <%= text_input f, :timezone %>
+    <%= error_tag f, :timezone %>
+  </div>
+
+  <%= inputs_for f, :meta, fn fm -> %>
 
     <div class="form-group">
       <%= label fm, "Duration, in minutes" %>

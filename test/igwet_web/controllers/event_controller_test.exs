@@ -13,26 +13,26 @@ defmodule IgwetWeb.EventControllerTest do
   @create_attrs %{
     name: "event name",
     key: "event key",
+    date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
+    timezone: "US/Pacific",
     meta: %{
       capacity: 100,
       duration: 90,
       parent_id: nil,
-      recurrence: 7,
-      starting: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
-      timezone: "US/Pacific",
+      recurrence: 7
     }
   }
   @update_attrs %{
     name: "some updated name",
     key: "some updated key",
+    date: %{year: 2000, month: 12, day: 31, hour: 23, minute: 59},
+    timezone: "US/Eastern",
     meta: %{
       capacity: 60,
       current: 30,
       duration: 120,
       parent_id: nil,
-      recurrence: 30,
-      starting: %{year: 2000, month: 12, day: 31, hour: 23, minute: 59},
-      timezone: "US/Eastern"
+      recurrence: 30
     }
   }
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil, meta: %{}}
