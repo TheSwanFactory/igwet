@@ -8,15 +8,12 @@ defmodule Details do
     field :current, :integer
     field :duration, :integer
     field :recurrence, :integer
-    field :starting, :naive_datetime
-    field :timezone, :string
     field :parent_id, :binary_id
   end
 
   @doc false
   def changeset(details, attrs) do
     details
-    |> cast(attrs, [:capacity, :current, :duration, :recurrence, :starting, :timezone, :parent_id])
-#    |> validate_required([:duration, :starting, :timezone])
+    |> cast(attrs, [:capacity, :current, :duration, :recurrence, :parent_id])
   end
 end

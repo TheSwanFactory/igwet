@@ -4,35 +4,35 @@ defmodule IgwetWeb.EventControllerTest do
   require Logger
 
   @group_attrs %{
-    about: "some about",
+    about: "some event about",
     email: "some email",
-    key: "some key",
-    name: "some name",
+    key: "some event group key",
+    name: "some event",
     phone: "some phone"
   }
   @create_attrs %{
     name: "event name",
     key: "event key",
+    date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
+    timezone: "US/Pacific",
     meta: %{
       capacity: 100,
       duration: 90,
       parent_id: nil,
-      recurrence: 7,
-      starting: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
-      timezone: "US/Pacific",
+      recurrence: 7
     }
   }
   @update_attrs %{
-    name: "some updated name",
-    key: "some updated key",
+    name: "some updated event",
+    key: "some updated event key",
+    date: %{year: 2000, month: 12, day: 31, hour: 23, minute: 59},
+    timezone: "US/Eastern",
     meta: %{
       capacity: 60,
       current: 30,
       duration: 120,
       parent_id: nil,
-      recurrence: 30,
-      starting: %{year: 2000, month: 12, day: 31, hour: 23, minute: 59},
-      timezone: "US/Eastern"
+      recurrence: 30
     }
   }
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil, meta: %{}}
@@ -95,7 +95,7 @@ defmodule IgwetWeb.EventControllerTest do
       assert redirected_to(conn) == event_path(conn, :show, event)
 
       conn = get(conn, event_path(conn, :show, event))
-      assert html_response(conn, 200) =~ "some updated name"
+      assert html_response(conn, 200) =~ "some updated event"
     end
 
     test "renders errors when data is invalid", %{conn: conn, event: event} do
