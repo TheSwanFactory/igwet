@@ -12,4 +12,13 @@ defmodule IgwetWeb.RsvpController do
     |> assign(:current_user, nil)
     |> render("index.html", events: nodes)
   end
+
+  def by_event(conn, %{"event_key" => key}) do
+    event = Network.get_first_node!(:key, key)
+    houses = Network.related_subjects(event, "at")
+    conn
+    |> assign(:current_user, nil)
+    |> render("show.html", event: event, houses: houses)
+  end
+
 end

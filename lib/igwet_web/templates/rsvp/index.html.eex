@@ -3,28 +3,20 @@
 <table>
   <thead>
     <tr>
-      <th>Actions</th>
+      <th>Date</th>
       <th>Name</th>
       <th>About</th>
       <th>Capacity</th>
-      <th>Date</th>
     </tr>
   </thead>
   <tbody>
 <%= for event <- @events do %>
     <tr>
-      <td>
-        <span><%= link "Show", to: event_path(@conn, :show, event) %></span>
-        <span><%= link "Edit", to: event_path(@conn, :edit, event) %></span>
-        <span><%= link "Delete", to: event_path(@conn, :delete, event), method: :delete, data: [confirm: "Are you sure?"] %></span>
-      </td>
-      <td><%= event.name %></td>
+      <td><%= event.date %></td>
+      <td><%= link event.name, to: "rsvp/" <> event.key %></td>
       <td><%= event.about %></td>
       <td><%= event.meta.capacity %></td>
-      <td><%= event.date %></td>
     </tr>
 <% end %>
   </tbody>
 </table>
-
-<span>Go to <%= link "Groups", to: group_path(@conn, :index) %> to create an Event</span>

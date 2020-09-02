@@ -1,15 +1,6 @@
 <h1>Show Event</h1>
 
 <ul>
-  <h3>Group</h3>
-  <%= for group <- @groups do %>
-    <li>
-      <%= link(group.name, to: group_path(@conn, :show, group)) %>
-    </li>
-  <% end %>
-</ul>
-
-<ul>
   <li>
     <strong>Name:</strong> <%= @event.name %>
   </li>
@@ -30,9 +21,6 @@
   </li>
 
 </ul>
-
-<span><%= link "Edit", to: event_path(@conn, :edit, @event) %></span>
-<span><%= link "Back", to: event_path(@conn, :index) %></span>
 
 <ul>
   <h3>Households</h3>
