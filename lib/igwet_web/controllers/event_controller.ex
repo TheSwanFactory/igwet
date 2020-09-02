@@ -5,7 +5,8 @@ defmodule IgwetWeb.EventController do
   alias Igwet.Network
   alias Igwet.Network.Node
   @tz "US/Pacific"
-  @default_details %Details{capacity: 100, current: 0, duration: 90, recurrence: 7, timezone: @tz}
+  @default_details %Details{capacity: 100, current: 0, duration: 90, recurrence: 7}
+  @default_event %Node{name: "Our Church Service", about: "In-Person Event Details", timezone: @tz}
 
   plug(:require_admin)
 
@@ -19,8 +20,8 @@ defmodule IgwetWeb.EventController do
    group = Network.get_node!(id)
     {:ok, now} = DateTime.shift_zone(DateTime.utc_now, "US/Pacific")
     key = group.key <> "+" <> DateTime.to_string(now)
-    meta = Map.merge(@default_details, %{starting: now, parent_id: group.id})
-    defaults = %Node{name: "Our Church Service", about: "In-Person Event Details", meta: meta, key: key}
+    meta = Map.merge(@default_details, %{parent_id: group.id})
+    defaults = Map.merge(@default_event, %{date: now, meta: meta, key: key})
     changeset = Network.change_node(defaults)
     render(conn, "new.html", changeset: changeset, group: group)
   end

@@ -17,7 +17,7 @@
     <strong>About:</strong> <%= @event.about %>
   </li>
   <li>
-    <strong>Starting:</strong> <%= @event.meta.starting %>
+    <strong>Date:</strong> <%= @event.date %>
   </li>
   <li>
     <strong>Duration:</strong> <%= @event.meta.duration %>
