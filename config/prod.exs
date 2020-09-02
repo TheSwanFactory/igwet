@@ -15,14 +15,13 @@ use Mix.Config
 # which you typically run after static files are built.
 config :igwet, IgwetWeb.Endpoint,
   load_from_system_env: true,
-  server: true,
-#  force_ssl: [rewrite_on: [:x_forwarded_proto]],
-  secret_key_base: "${SECRET_KEY_BASE}",
+  http: [:inet6, port: System.get_env("PORT") || 4000],
+  url: [scheme: "https", port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json",
-  https: [:inet6,
-         port: 443,
-         cipher_suite: :strong,
-         otp_app: :igwet]
+  server: true,
+  secret_key_base: "${SECRET_KEY_BASE}",
+  force_ssl: [rewrite_on: [:x_forwarded_proto], host: nil],
+  check_origin: ["//*.igwet.com", "//*.gigalixirapp.com"]
 
 # Configure Bamboo for Mailgun
 config :igwet, Igwet.Admin.Mailer,
