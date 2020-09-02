@@ -17,8 +17,8 @@ config :igwet, IgwetWeb.Endpoint,
   load_from_system_env: true,
   server: true,
 #  force_ssl: [rewrite_on: [:x_forwarded_proto]],
-  secret_key_base: "${SECRET_KEY_BASE}"
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  secret_key_base: "${SECRET_KEY_BASE}",
+  cache_static_manifest: "priv/static/cache_manifest.json",
   https: [:inet6,
          port: 443,
          cipher_suite: :strong,
