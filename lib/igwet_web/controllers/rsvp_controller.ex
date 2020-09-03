@@ -19,7 +19,7 @@ defmodule IgwetWeb.RsvpController do
     |> assign(:current_user, nil)
     |> assign(:group, Network.get_node!(event.meta.parent_id))
     |> assign(:houses, Network.related_subjects(event, "at"))
-    |> render("show.html", event: event)
+    |> render("event.html", event: event)
   end
 
   def by_email(conn, %{"event_key" => event_key, "email" => email}) do
@@ -28,7 +28,7 @@ defmodule IgwetWeb.RsvpController do
     |> assign(:current_user, nil)
     |> assign(:group, Network.get_node!(event.meta.parent_id))
     |> assign(:houses, Network.related_subjects(event, "at"))
-    |> render("show.html", event: event)
+    |> render("email.html", event: event)
   end
 
   def by_count(conn, %{"event_key" => event_key, "email" => email, "count" => count}) do

@@ -1,0 +1,22 @@
+<h1><%= @event.name %></h1>
+<h2><%= @group.name %></h2>
+<h3><%= @event.date %></h3>
+
+<ul>
+  <li>
+    <strong>Capacity:</strong> <%= @event.meta.capacity %>
+  </li>
+  <li>
+    <strong>Current Count:</strong> <%= @event.meta.current %>
+  </li>
+</ul>
+
+<ul>
+  <h3>Households</h3>
+  <%= for house <- @houses do %>
+    <li>
+      <%= link(house.email <> " (" <> house.name <> "): " <> house.meta.current,
+          to: node_path(@conn, :show, house)) %>:
+    </li>
+  <% end %>
+</ul>
