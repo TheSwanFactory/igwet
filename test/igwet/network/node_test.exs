@@ -92,5 +92,12 @@ defmodule Igwet.NetworkTest.Node do
       node = node_fixture()
       assert %Ecto.Changeset{} = Network.change_node(node)
     end
+
+    test "get_member_for_email/2 returns a node" do
+      group = node_fixture()
+      email = "test@example.com"
+      node = Network.get_member_for_email(email, group)
+      assert node !=nil
+    end
   end
 end

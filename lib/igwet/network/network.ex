@@ -98,6 +98,13 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Get member of this group.  Create or associate if missing.
+
+  """
+  def get_member_for_email(email, group) do
+  end
+
+  @doc """
   Check if node is in site admin group.
 
   ## Examples

@@ -24,20 +24,23 @@ defmodule IgwetWeb.RsvpController do
 
   def by_email(conn, %{"event_key" => event_key, "email" => email}) do
     event = Network.get_first_node!(:key, event_key)
+    group = Network.get_node!(event.meta.parent_id)
+    node = Network.get_member_for_email(email, group)
     conn
     |> assign(:current_user, nil)
-    |> assign(:group, Network.get_node!(event.meta.parent_id))
-    |> assign(:houses, Network.related_subjects(event, "at"))
+    |> assign(:group, group)
+    |> assign(:node, node)
     |> render("email.html", event: event)
   end
 
   def by_count(conn, %{"event_key" => event_key, "email" => email, "count" => count}) do
     event = Network.get_first_node!(:key, event_key)
+    group = Network.get_node!(event.meta.parent_id)
+    node = Network.get_member_for_email(email, group)
     conn
-    |> assign(:current_user, nil)
-    |> assign(:group, Network.get_node!(event.meta.parent_id))
-    |> assign(:houses, Network.related_subjects(event, "at"))
-    |> render("show.html", event: event)
+    |> put_flash(:info, "Edge created successfully.")
+    |> assign(:node, node)
+    |> redirect(to: rsvp_path(conn, :by_event, %{"event_key" => event_key}))
   end
 
 end
