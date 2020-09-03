@@ -1,25 +1,14 @@
-<h1>Show Event</h1>
+<h1><%= @event.name %></h1>
+<h2><%= @group.name %></h2>
+<h3><%= @event.date %></h3>
 
 <ul>
-  <li>
-    <strong>Name:</strong> <%= @event.name %>
-  </li>
-  <li>
-    <strong>About:</strong> <%= @event.about %>
-  </li>
-  <li>
-    <strong>Date:</strong> <%= @event.date %>
-  </li>
-  <li>
-    <strong>Duration:</strong> <%= @event.meta.duration %>
-  </li>
   <li>
     <strong>Capacity:</strong> <%= @event.meta.capacity %>
   </li>
   <li>
     <strong>Current Count:</strong> <%= @event.meta.current %>
   </li>
-
 </ul>
 
 <ul>

@@ -13,12 +13,31 @@ defmodule IgwetWeb.RsvpController do
     |> render("index.html", events: nodes)
   end
 
-  def by_event(conn, %{"event_key" => key}) do
-    event = Network.get_first_node!(:key, key)
-    houses = Network.related_subjects(event, "at")
+  def by_event(conn, %{"event_key" => event_key}) do
+    event = Network.get_first_node!(:key, event_key)
     conn
     |> assign(:current_user, nil)
-    |> render("show.html", event: event, houses: houses)
+    |> assign(:group, Network.get_node!(event.meta.parent_id))
+    |> assign(:houses, Network.related_subjects(event, "at"))
+    |> render("show.html", event: event)
+  end
+
+  def by_email(conn, %{"event_key" => event_key, "email" => email}) do
+    event = Network.get_first_node!(:key, event_key)
+    conn
+    |> assign(:current_user, nil)
+    |> assign(:group, Network.get_node!(event.meta.parent_id))
+    |> assign(:houses, Network.related_subjects(event, "at"))
+    |> render("show.html", event: event)
+  end
+
+  def by_count(conn, %{"event_key" => event_key, "email" => email, "count" => count}) do
+    event = Network.get_first_node!(:key, event_key)
+    conn
+    |> assign(:current_user, nil)
+    |> assign(:group, Network.get_node!(event.meta.parent_id))
+    |> assign(:houses, Network.related_subjects(event, "at"))
+    |> render("show.html", event: event)
   end
 
 end
