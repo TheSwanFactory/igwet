@@ -1,37 +1,35 @@
 defmodule Igwet.NetworkTest.Node do
+  require Logger
   use Igwet.DataCase
   alias Igwet.Network
+  alias Igwet.Network.Node
   doctest Igwet.Network.Node
-  require Logger
 
-  describe "nodes" do
-    alias Igwet.Network.Node
+  @valid_attrs %{
+    about: "some about",
+    email: "some email",
+    key: "some key",
+    name: "some name",
+    phone: "some phone"
+  }
+  @update_attrs %{
+    about: "next about",
+    email: "next email",
+    key: "next key",
+    name: "next name",
+    phone: "next phone"
+  }
+  @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
 
-    @valid_attrs %{
-      about: "some about",
-      email: "some email",
-      key: "some key",
-      name: "some name",
-      phone: "some phone"
-    }
-    @update_attrs %{
-      about: "next about",
-      email: "next email",
-      key: "next key",
-      name: "next name",
-      phone: "next phone"
-    }
-    @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
+  def node_fixture(attrs \\ %{}) do
+    {:ok, node} =
+      attrs
+      |> Enum.into(@valid_attrs)
+      |> Network.create_node()
+    node
+  end
 
-    def node_fixture(attrs \\ %{}) do
-      {:ok, node} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Network.create_node()
-
-      node
-    end
-
+  describe "get node" do
     test "get_first_node!/1 returns first node" do
       node = node_fixture()
       node_fixture(%{key: "different key"})
@@ -61,7 +59,9 @@ defmodule Igwet.NetworkTest.Node do
       assert node.name == "some name"
       assert node.phone == "some phone"
     end
+  end
 
+  describe "modify node" do
     test "create_node/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Network.create_node(@invalid_attrs)
     end
@@ -93,6 +93,24 @@ defmodule Igwet.NetworkTest.Node do
       node = node_fixture()
       assert %Ecto.Changeset{} = Network.change_node(node)
     end
+  end
+
+  describe "rsvp node" do
+      @event_attrs %{
+        name: "event name",
+        key: "event.key",
+        date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
+        timezone: "US/Pacific",
+        meta: %{capacity: 2, duration: 90, parent_id: nil, recurrence: 7}
+      }
+
+      def fixture(:event) do
+        {:ok, group} = Network.create_node(@update_attrs)
+        {:ok, event} = @event_attrs
+                       |> put_in([:meta, :parent_id], group.id)
+                       |> Network.create_node()
+        event
+      end
 
     test "get_member_for_email/2 gets node if exists" do
       node = node_fixture()
@@ -105,13 +123,16 @@ defmodule Igwet.NetworkTest.Node do
       group = node_fixture()
       email = "test@example.com"
       node = Network.get_member_for_email(email, group)
-#      Logger.warn inspect(node)
+  #      Logger.warn inspect(node)
       assert nil != node
       assert email == node.email
       assert "test" == node.name
     end
 
     test "attend!/2 returns :ok if enough open" do
+      _event = node_fixture(@event_attrs)
+      _node = node_fixture()
+
     end
 
     test "attend!/2 returns :error if NOT enough open" do
