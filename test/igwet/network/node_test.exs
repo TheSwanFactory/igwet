@@ -2,6 +2,7 @@ defmodule Igwet.NetworkTest.Node do
   use Igwet.DataCase
   alias Igwet.Network
   doctest Igwet.Network.Node
+  require Logger
 
   describe "nodes" do
     alias Igwet.Network.Node
@@ -104,9 +105,10 @@ defmodule Igwet.NetworkTest.Node do
       group = node_fixture()
       email = "test@example.com"
       node = Network.get_member_for_email(email, group)
+#      Logger.warn inspect(node)
       assert nil != node
       assert email == node.email
-      #assert "test" == node.name
+      assert "test" == node.name
     end
 
     test "attend!/2 returns :ok if enough open" do
