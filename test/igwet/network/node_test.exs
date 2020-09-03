@@ -93,11 +93,29 @@ defmodule Igwet.NetworkTest.Node do
       assert %Ecto.Changeset{} = Network.change_node(node)
     end
 
-    test "get_member_for_email/2 returns a node" do
+    test "get_member_for_email/2 gets node if exists" do
+      node = node_fixture()
+      group = node_fixture(@update_attrs)
+      member = Network.get_member_for_email(node.email, group)
+      assert node.phone == member.phone
+    end
+
+    test "get_member_for_email/2 creates node if needed" do
       group = node_fixture()
       email = "test@example.com"
       node = Network.get_member_for_email(email, group)
-      assert node !=nil
+      assert nil != node
+      assert email == node.email
+      #assert "test" == node.name
+    end
+
+    test "attend!/2 returns :ok if enough open" do
+    end
+
+    test "attend!/2 returns :error if NOT enough open" do
+    end
+
+    test "attend!/2 updates count if already exists" do
     end
   end
 end
