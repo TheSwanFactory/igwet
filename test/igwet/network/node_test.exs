@@ -21,6 +21,14 @@ defmodule Igwet.NetworkTest.Node do
   }
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
 
+  @event_attrs %{
+    name: "event name",
+    key: "event.key",
+    date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
+    timezone: "US/Pacific",
+    meta: %{capacity: 2, duration: 90, parent_id: nil, recurrence: 7}
+  }
+
   def node_fixture(attrs \\ %{}) do
     {:ok, node} =
       attrs
@@ -96,42 +104,23 @@ defmodule Igwet.NetworkTest.Node do
   end
 
   describe "rsvp node" do
-      @event_attrs %{
-        name: "event name",
-        key: "event.key",
-        date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
-        timezone: "US/Pacific",
-        meta: %{capacity: 2, duration: 90, parent_id: nil, recurrence: 7}
-      }
+    setup [:create_event]
 
-      def fixture(:event) do
-        {:ok, group} = Network.create_node(@update_attrs)
-        {:ok, event} = @event_attrs
-                       |> put_in([:meta, :parent_id], group.id)
-                       |> Network.create_node()
-        event
-      end
-
-    test "get_member_for_email/2 gets node if exists" do
-      node = node_fixture()
-      group = node_fixture(@update_attrs)
+    test "get_member_for_email/2 gets node if exists", %{node: node, group: group} do
       member = Network.get_member_for_email(node.email, group)
       assert node.phone == member.phone
     end
 
-    test "get_member_for_email/2 creates node if needed" do
-      group = node_fixture()
+    test "get_member_for_email/2 creates node if needed", %{group: group} do
       email = "test@example.com"
-      node = Network.get_member_for_email(email, group)
+      member = Network.get_member_for_email(email, group)
   #      Logger.warn inspect(node)
-      assert nil != node
-      assert email == node.email
-      assert "test" == node.name
+      assert nil != member
+      assert email == member.email
+      assert "test" == member.name
     end
 
     test "attend!/2 returns :ok if enough open" do
-      _event = node_fixture(@event_attrs)
-      _node = node_fixture()
 
     end
 
@@ -140,5 +129,14 @@ defmodule Igwet.NetworkTest.Node do
 
     test "attend!/2 updates count if already exists" do
     end
+  end
+
+  defp create_event(_) do
+    node = node_fixture()
+    group = node_fixture(@update_attrs)
+    event = @event_attrs
+            |> put_in([:meta, :parent_id], group.id)
+            |> node_fixture()
+    %{node: node, group: group, event: event}
   end
 end
