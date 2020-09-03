@@ -6,7 +6,7 @@
       <th>Date</th>
       <th>Name</th>
       <th>About</th>
-      <th>Capacity</th>
+      <th>Size</th>
     </tr>
   </thead>
   <tbody>
@@ -15,7 +15,7 @@
       <td><%= event.date %></td>
       <td><%= link event.name, to: "rsvp/" <> event.key %></td>
       <td><%= event.about %></td>
-      <td><%= event.meta.capacity %></td>
+      <td><%= event.size %></td>
     </tr>
 <% end %>
   </tbody>

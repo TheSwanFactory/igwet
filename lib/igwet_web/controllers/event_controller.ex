@@ -5,8 +5,8 @@ defmodule IgwetWeb.EventController do
   alias Igwet.Network
   alias Igwet.Network.Node
   @tz "US/Pacific"
-  @default_details %Details{capacity: 100, current: 0, duration: 90, recurrence: 7}
-  @default_event %Node{name: "Our Church Service", about: "In-Person Event Details", timezone: @tz}
+  @default_details %Details{duration: 90, recurrence: 7}
+  @default_event %Node{name: "Our Church Service", about: "In-Person Event Details", size: 100, timezone: @tz}
 
   plug(:require_admin)
 

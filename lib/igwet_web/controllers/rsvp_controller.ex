@@ -27,9 +27,9 @@ defmodule IgwetWeb.RsvpController do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     node = Network.get_member_for_email(email, group)
-    open = event.meta.capacity - event.meta.current
+    open = event.size - event.meta.current
     if (open < 1) do
-      msg = "Sorry: #{event.meta.current} of total capacity #{event.meta.capacity} already attending #{event.name}"
+      msg = "Sorry: #{event.meta.current} of total capacity #{event.size} already attending #{event.name}"
       conn
       |> put_flash(:notice, msg)
       |> redirect(to: rsvp_path(conn, :by_event, %{"event_key" => event_key}))
@@ -49,8 +49,8 @@ end
     msg = case Network.attend!(count, node, group) do
       {:ok, total} ->
         "Added #{count} for #{node.name} <#{node.email}>. Now #{total} attending #{event.name}"
-      {:error} ->
-        "Error: already #{event.meta.current} of total capacity #{event.meta.capacity} attending #{event.name}"
+      {:error, current} ->
+        "Error #{count}: already #{current} of total capacity #{event.size} attending #{event.name}"
     end
     conn
     |> put_flash(:error, msg)

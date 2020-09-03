@@ -15,8 +15,8 @@ defmodule IgwetWeb.EventControllerTest do
     key: "event key",
     date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
     timezone: "US/Pacific",
+    size: 100,
     meta: %{
-      capacity: 100,
       duration: 90,
       parent_id: nil,
       recurrence: 7
@@ -27,9 +27,8 @@ defmodule IgwetWeb.EventControllerTest do
     key: "some updated event key",
     date: %{year: 2000, month: 12, day: 31, hour: 23, minute: 59},
     timezone: "US/Eastern",
+    size: 60,
     meta: %{
-      capacity: 60,
-      current: 30,
       duration: 120,
       parent_id: nil,
       recurrence: 30

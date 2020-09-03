@@ -217,8 +217,8 @@ defmodule Igwet.Network do
     at = get_predicate("at")
     current = count_attendance(event)
     new_total = current + count
-    Logger.warn("attend!capacity=#{event.meta.capacity}")
-    if (new_total < event.meta.capacity) do
+    Logger.warn("attend!size=#{event.size}")
+    if (new_total < event.size) do
       Logger.warn("attend!new_total=#{new_total}")
       create_edge %{
         subject_id: node.id,

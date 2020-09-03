@@ -23,7 +23,7 @@
     <strong>Duration:</strong> <%= @event.meta.duration %>
   </li>
   <li>
-    <strong>Capacity:</strong> <%= @event.meta.capacity %>
+    <strong>Size:</strong> <%= @event.size %>
   </li>
   <li>
     <strong>Current Count:</strong> <%= @event.meta.current %>

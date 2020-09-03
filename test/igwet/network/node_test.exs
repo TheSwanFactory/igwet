@@ -26,8 +26,9 @@ defmodule Igwet.NetworkTest.Node do
     name: "event details",
     key: "event.key",
     date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
+    size: 5,
     timezone: "US/Pacific",
-    meta: %{capacity: 5, duration: 90, parent_id: nil, recurrence: 7}
+    meta: %{duration: 90, parent_id: nil, recurrence: 7}
   }
 
   def node_fixture(attrs \\ %{}) do
