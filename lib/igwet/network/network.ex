@@ -102,6 +102,25 @@ defmodule Igwet.Network do
 
   """
   def get_member_for_email(email, group) do
+    node = Node
+            |> order_by([asc: :inserted_at])
+            |> where([n], n.email == ^email)
+            |> Repo.one()
+    if (nil != node) do
+      if (!node_in_group?(node, group)) do
+        set_node_in_group(node, group)
+      end
+      node
+    else
+      {:ok, node} = create_node %{
+        name: group.name,
+        email: email,
+        type: get_predicate("contact"),
+        key: "#{group.key}+#{email}"
+      }
+      set_node_in_group(node, group)
+      node
+    end
   end
 
   @doc """
@@ -171,15 +190,34 @@ defmodule Igwet.Network do
 
   ## Examples
 
+      iex> make_attendance(count, node, event)
+      true
+
+  """
+
+  def make_attendance(count, node, event) do
+    at = get_predicate("at")
+    create_edge %{
+      subject_id: node.id,
+      predicate_id: at.id,
+      object_id: event.id,
+      as: to_string(count)
+    }
+  end
+
+  @doc """
+  Count over all nodes attending an event
+
+  ## Examples
+
       iex> make_attendance(count, node, group)
       true
 
   """
 
-  def make_attendance(count, node, group) do
-    at = get_predicate("at")
-    s = Integer.to_string(count)
-    create_edge(%{subject_id: node.id, predicate_id: at.id, object_id: group.id, as: s})
+  def count_attendance(event) do
+    related_subjects_as(event, "at")
+    |> Enum.reduce(0, fn x, acc -> Integer.parse(x.as) + acc end)
   end
 
   @doc """
@@ -276,16 +314,16 @@ defmodule Igwet.Network do
   end
 
   @doc """
-  Return all nodes with specificed relation to this node.
+  Return all subjects with that relation to this object.
 
   ## Examples
 
-      iex> related_subjects(node, predicate)
+      iex> related_subjects(object, pred_name)
       [%Igwet.Network.Node{},...]
 
   """
-  def related_subjects(object, relation) do
-    pred_node = get_predicate(relation)
+  def related_subjects(object, pred_name) do
+    pred_node = get_predicate(pred_name)
 
     edges =
       Edge
@@ -297,17 +335,30 @@ defmodule Igwet.Network do
     Enum.map(edges, & &1.subject)
   end
 
+  def related_subjects_as(object, pred_name) do
+    pred_node = get_predicate(pred_name)
+
+    edges =
+      Edge
+      |> order_by([asc: :inserted_at])
+      |> where([e], e.object_id == ^object.id and e.predicate_id == ^pred_node.id)
+      |> preload([:subject])
+      |> Repo.all()
+
+    Enum.map(edges, & %{node: &1.subject, as: &1.as})
+  end
+
   @doc """
-  Return all nodes with specificed relation to this node.
+  Return all objects with that subject has that relation to
 
   ## Examples
 
-      iex> related_subjects(node, predicate)
+      iex> related_objects(subject, pred_name)
       [%Igwet.Network.Node{},...]
 
   """
-  def related_objects(subject, relation) do
-    pred_node = get_predicate(relation)
+  def related_objects(subject, pred_name) do
+    pred_node = get_predicate(pred_name)
 
     edges =
       Edge
