@@ -23,7 +23,7 @@ defmodule Igwet.NetworkTest.Node do
 
   @event_attrs %{
     name: "event name",
-    name: "event details",
+    about: "event details",
     key: "event.key",
     date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
     size: 5,
@@ -131,8 +131,7 @@ defmodule Igwet.NetworkTest.Node do
       count = 3
       #Logger.warn inspect(event)
       result = Network.attend!(count, node, event)
-      assert count == result
-
+      assert result == {:ok, count}
     end
 
     test "attend!/3 returns :error if NOT enough open" do

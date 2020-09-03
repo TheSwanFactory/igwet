@@ -213,24 +213,21 @@ defmodule Igwet.Network do
   """
 
   def attend!(count, node, event) do
-    Logger.warn "attend!event\n" <> inspect(event.meta)
     at = get_predicate("at")
     current = count_attendance(event)
     new_total = current + count
-    Logger.warn("attend!size=#{event.size}")
-    if (new_total < event.size) do
-      Logger.warn("attend!new_total=#{new_total}")
+    if (new_total > event.size) do
+      {:error, current}
+    else
+      Logger.warn("attend!create_edge.new_total=#{new_total}")
       create_edge %{
         subject_id: node.id,
         predicate_id: at.id,
         object_id: event.id,
         as: to_string(count)
       }
-      update_node(event, %{meta: %{current: new_total}})
-      Logger.warn "update_node\n" <> inspect(event)
       {:ok, new_total}
     end
-    {:error, current}
   end
 
   @doc """

@@ -4,10 +4,10 @@
 
 <ul>
   <li>
-    <strong>Size:</strong> <%= @event.size %>
+    <strong>Allowed Attendees:</strong> <%= @event.size %>
   </li>
   <li>
-    <strong>Current Count:</strong> <%= @event.meta.current %>
+    <strong>Current Attendees:</strong> <%= @current %>
   </li>
 </ul>
 
