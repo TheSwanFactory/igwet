@@ -151,9 +151,35 @@ defmodule Igwet.Network do
       |> Repo.one()
   end
 
+  @doc """
+  Relate subject and object via predicate.
+
+  ## Examples
+
+      iex> make_edge(subject, pred_name, object)
+      true
+
+  """
+
   def make_edge(subject, pred_name, object) do
     predicate = get_first_node!(:name, pred_name)
     create_edge(%{subject_id: subject.id, predicate_id: predicate.id, object_id: object.id})
+  end
+
+  @doc """
+  Set count of node attending an event
+
+  ## Examples
+
+      iex> make_attendance(count, node, group)
+      true
+
+  """
+
+  def make_attendance(count, node, group) do
+    at = get_predicate("at")
+    s = Integer.to_string(count)
+    create_edge(%{subject_id: node.id, predicate_id: at.id, object_id: group.id, as: s})
   end
 
   @doc """

@@ -37,9 +37,10 @@ defmodule IgwetWeb.RsvpController do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     node = Network.get_member_for_email(email, group)
+    Network.make_attendance(count, node, group)
+    msg = "Set #{count} for #{node.name} <#{node.email}> attending #{group.name}"
     conn
-    |> put_flash(:info, "Edge created successfully.")
-    |> assign(:node, node)
+    |> put_flash(:info, msg)
     |> redirect(to: rsvp_path(conn, :by_event, %{"event_key" => event_key}))
   end
 
