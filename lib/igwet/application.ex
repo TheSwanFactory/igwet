@@ -15,7 +15,8 @@ defmodule Igwet.Application do
       # Start your own worker by calling: Igwet.Worker.start_link(arg1, arg2, arg3)
       # worker(Igwet.Worker, [arg1, arg2, arg3]),
       {Phoenix.PubSub, [name: Igwet.PubSub, adapter: Phoenix.PubSub.PG2]},
-      {Tz.UpdatePeriodically, []}
+      # At scale, need to keep Timezones up to date
+      #{Tz.UpdatePeriodically, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
