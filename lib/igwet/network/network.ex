@@ -87,6 +87,7 @@ defmodule Igwet.Network do
     first = Node
             |> order_by([asc: :inserted_at])
             |> where([n], n.name == ^value)
+            |> limit(1)
             |> Repo.one()
     if (nil != first) do
       first
@@ -105,6 +106,7 @@ defmodule Igwet.Network do
     node = Node
             |> order_by([asc: :inserted_at])
             |> where([n], n.email == ^email)
+            |> limit(1)
             |> Repo.one()
     if (nil != node) do
       if (!node_in_group?(node, group)) do
