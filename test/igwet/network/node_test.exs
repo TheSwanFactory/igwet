@@ -132,6 +132,7 @@ defmodule Igwet.NetworkTest.Node do
       #Logger.warn inspect(event)
       result = Network.attend!(count, node, event)
       assert result == {:ok, count}
+      assert count == Network.count_attendance(event)
     end
 
     test "attend!/3 returns :error if NOT enough open" do

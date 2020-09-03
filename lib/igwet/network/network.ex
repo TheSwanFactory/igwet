@@ -196,10 +196,12 @@ defmodule Igwet.Network do
       true
 
   """
-
   def count_attendance(event) do
     related_edges_for_object(event, "at")
-    |> Enum.reduce(0, fn e, acc -> Integer.parse(e.as) + acc end)
+    |> Enum.reduce(0, fn(edge, sum) ->
+      #Logger.warn("count_attendance\n"<>inspect(edge))
+      sum + String.to_integer("0#{edge.as}")
+    end)
   end
 
   @doc """
@@ -219,13 +221,13 @@ defmodule Igwet.Network do
     if (new_total > event.size) do
       {:error, current}
     else
-      Logger.warn("attend!create_edge.new_total=#{new_total}")
-      create_edge %{
+      {:ok, edge} = create_edge %{
         subject_id: node.id,
         predicate_id: at.id,
         object_id: event.id,
         as: to_string(count)
       }
+      Logger.warn("attend!create_edge\n#{edge.as}")
       {:ok, new_total}
     end
   end
