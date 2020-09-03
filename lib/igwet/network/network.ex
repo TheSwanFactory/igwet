@@ -186,6 +186,21 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Count over all nodes attending an event
+
+  ## Examples
+
+      iex> count_attendance(event)
+      true
+
+  """
+
+  def count_attendance(event) do
+    related_edges_for_object(event, "at")
+    |> Enum.reduce(0, fn e, acc -> Integer.parse(e.as) + acc end)
+  end
+
+  @doc """
   Set count of node attending an event
 
   ## Examples
@@ -195,29 +210,19 @@ defmodule Igwet.Network do
 
   """
 
-  def make_attendance(count, node, event) do
+  def attend!(count, node, event) do
     at = get_predicate("at")
-    create_edge %{
-      subject_id: node.id,
-      predicate_id: at.id,
-      object_id: event.id,
-      as: to_string(count)
-    }
-  end
-
-  @doc """
-  Count over all nodes attending an event
-
-  ## Examples
-
-      iex> make_attendance(count, node, group)
-      true
-
-  """
-
-  def count_attendance(event) do
-    related_subjects_as(event, "at")
-    |> Enum.reduce(0, fn x, acc -> Integer.parse(x.as) + acc end)
+    current = count_attendance(event)
+    new_total = current + count
+    if (new_total < event.meta.capacity) do
+      create_edge %{
+        subject_id: node.id,
+        predicate_id: at.id,
+        object_id: event.id,
+        as: to_string(count)
+      }
+      update_node(event, %Node{meta: %Details{current: new_total}})
+    end
   end
 
   @doc """
@@ -323,29 +328,17 @@ defmodule Igwet.Network do
 
   """
   def related_subjects(object, pred_name) do
-    pred_node = get_predicate(pred_name)
-
-    edges =
-      Edge
-      |> order_by([asc: :inserted_at])
-      |> where([e], e.object_id == ^object.id and e.predicate_id == ^pred_node.id)
-      |> preload([:subject])
-      |> Repo.all()
-
-    Enum.map(edges, & &1.subject)
+    related_edges_for_object(object, pred_name)
+    |> Enum.map(& &1.subject)
   end
 
-  def related_subjects_as(object, pred_name) do
+  def related_edges_for_object(object, pred_name) do
     pred_node = get_predicate(pred_name)
-
-    edges =
-      Edge
-      |> order_by([asc: :inserted_at])
-      |> where([e], e.object_id == ^object.id and e.predicate_id == ^pred_node.id)
-      |> preload([:subject])
-      |> Repo.all()
-
-    Enum.map(edges, & %{node: &1.subject, as: &1.as})
+    Edge
+    |> order_by([asc: :inserted_at])
+    |> where([e], e.object_id == ^object.id and e.predicate_id == ^pred_node.id)
+    |> preload([:subject])
+    |> Repo.all()
   end
 
   @doc """
