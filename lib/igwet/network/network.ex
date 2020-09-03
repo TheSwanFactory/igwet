@@ -217,18 +217,24 @@ defmodule Igwet.Network do
   def attend!(count, node, event) do
     at = get_predicate("at")
     current = count_attendance(event)
-    new_total = current + count
-    if (new_total > event.size) do
-      {:error, current}
-    else
-      {:ok, edge} = create_edge %{
-        subject_id: node.id,
-        predicate_id: at.id,
-        object_id: event.id,
-        as: to_string(count)
-      }
-      Logger.warn("attend!create_edge\n#{edge.as}")
-      {:ok, new_total}
+    existing = find_edge(node, at, event)
+    offset = if (!existing), do: 0, else: String.to_integer("0#{existing.as}")
+    
+    new_total = current + count - offset
+    cond do
+      new_total > event.size ->
+        {:error, current}
+      existing ->
+        update_edge existing, %{as: "#{count}"}
+        {:ok, new_total}
+      true ->
+        create_edge %{
+          subject_id: node.id,
+          predicate_id: at.id,
+          object_id: event.id,
+          as: "#{count}"
+        }
+        {:ok, new_total}
     end
   end
 

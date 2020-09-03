@@ -108,12 +108,6 @@ defmodule Igwet.NetworkTest.Node do
   describe "rsvp node" do
     setup [:create_event]
 
-    test "create_event fixtures",%{node: node, group: group, event: event} do
-      assert node.name =~ "some"
-      assert group.name =~ "next"
-      assert event.name =~ "event"
-    end
-
     test "get_member_for_email/2 gets node if exists", %{node: node, group: group} do
       member = Network.get_member_for_email(node.email, group)
       assert node.phone == member.phone
@@ -128,17 +122,27 @@ defmodule Igwet.NetworkTest.Node do
     end
 
     test "attend!/3 returns :ok if enough open", %{node: node, event: event} do
-      count = 3
       #Logger.warn inspect(event)
+      count = 3
       result = Network.attend!(count, node, event)
       assert result == {:ok, count}
       assert count == Network.count_attendance(event)
     end
 
-    test "attend!/3 returns :error if NOT enough open" do
+    test "attend!/3 returns :error if NOT enough open", %{node: node, event: event} do
+      next = node_fixture(%{name: "next", key: "com.next"})
+      result = Network.attend!(event.size, node, event)
+      assert result == {:ok, event.size}
+      result = Network.attend!(1, next, event)
+      assert result == {:error, event.size}
     end
 
-    test "attend!/3 updates count if already exists" do
+    test "attend!/3 updates count if already exists", %{node: node, event: event} do
+      result = Network.attend!(event.size, node, event)
+      assert result == {:ok, event.size}
+      result = Network.attend!(1, node, event)
+      assert result == {:ok, 1}
+      assert 1 == Network.count_attendance(event)
     end
   end
 
