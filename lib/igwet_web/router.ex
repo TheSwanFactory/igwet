@@ -34,6 +34,16 @@ defmodule IgwetWeb.Router do
     post("/twilio", WebhookController, :receive_sms)
   end
 
+  scope "/rsvp", IgwetWeb do
+    pipe_through(:browser)
+
+    get("/", RsvpController, :index)
+    get("/:event_key", RsvpController, :by_event)
+    get("/:event_key/:email", RsvpController, :by_email)
+    post("/:event_key/add_email", RsvpController, :add_email)
+    post("/:event_key/:email/:count", RsvpController, :by_count)
+  end
+
   scope "/auth", IgwetWeb do
     pipe_through(:browser)
 

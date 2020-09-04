@@ -6,7 +6,7 @@
       <th>Actions</th>
       <th>Name</th>
       <th>About</th>
-      <th>Capacity</th>
+      <th>Size</th>
       <th>Date</th>
     </tr>
   </thead>
@@ -20,7 +20,7 @@
       </td>
       <td><%= event.name %></td>
       <td><%= event.about %></td>
-      <td><%= event.meta.capacity %></td>
+      <td><%= event.size %></td>
       <td><%= event.date %></td>
     </tr>
 <% end %>

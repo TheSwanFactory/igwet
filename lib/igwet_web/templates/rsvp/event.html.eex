@@ -1,0 +1,27 @@
+<h1><%= @event.name %></h1>
+<h2><%= @group.name %></h2>
+<h3><%= @event.date %></h3>
+
+<p><em><%= @event.about %></em></p>
+<p>So far we have reserved <%= @current %> spaces out of <%= @event.size %> total.</p>
+
+<%= form_for @changeset, rsvp_path(@conn, :add_email, @event.key), fn f -> %>
+  <div class="form-group">
+    <%= label f, "To register, please enter your email:", class: "control-label" %>
+    <%= email_input f, :email, class: "form-control" %>
+    <%= error_tag f, :email %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<ul>
+  <h3>Registered Attendees: <%= Enum.count @attendees %></h3>
+  <%= for attendee <- @attendees do %>
+    <li>
+      <%= attendee.name <> " #{Network.member_attendance(attendee, @event)}" %>
+    </li>
+  <% end %>
+</ul>

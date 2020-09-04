@@ -20,6 +20,12 @@
   </div>
 
   <div class="form-group">
+    <%= label f, "Size" %>
+    <%= number_input f, :size %>
+    <%= error_tag f, :size %>
+  </div>
+
+  <div class="form-group">
     <%= label f, :date %>
     <%= datetime_select f, :date, class: "form-control" %>
     <%= error_tag f, :date %>
@@ -37,18 +43,6 @@
       <%= label fm, "Duration, in minutes" %>
       <%= number_input fm, :duration %>
       <%= error_tag fm, :duration %>
-    </div>
-
-    <div class="form-group">
-      <%= label fm, "Capacity" %>
-      <%= number_input fm, :capacity %>
-      <%= error_tag fm, :capacity %>
-    </div>
-
-    <div class="form-group">
-      <%= label fm, :current %>
-      <%= text_input fm, :current %>
-      <%= error_tag fm, :current %>
     </div>
 
     <div class="form-group">

@@ -20,7 +20,7 @@ defmodule Igwet.Network.Edge do
     relations = [:subject_id, :predicate_id, :object_id]
 
     edge
-    |> cast(attrs, relations, [:as])
+    |> cast(attrs, relations ++ [:as])
     |> validate_required(relations)
     |> assoc_constraint(:subject)
     |> assoc_constraint(:predicate)

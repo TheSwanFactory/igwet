@@ -7,7 +7,7 @@ defmodule IgwetWeb.GroupController do
   plug(:require_admin)
 
   def index(conn, _params) do
-    group = Network.get_first_node!(:name, "group")
+    group = Network.get_predicate("group")
     nodes = Network.related_subjects(group, "type")
     render(conn, "index.html", nodes: nodes)
   end
@@ -20,7 +20,7 @@ defmodule IgwetWeb.GroupController do
   def create(conn, %{"node" => node_params}) do
     case Network.create_node(node_params) do
       {:ok, node} ->
-        group = Network.get_first_node!(:name, "group")
+        group = Network.get_predicate("group")
         Network.make_edge(node, "type", group)
         conn
         |> put_flash(:info, "Node created successfully.")

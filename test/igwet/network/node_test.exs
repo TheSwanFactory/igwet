@@ -1,36 +1,45 @@
 defmodule Igwet.NetworkTest.Node do
+  require Logger
   use Igwet.DataCase
   alias Igwet.Network
+  alias Igwet.Network.Node
   doctest Igwet.Network.Node
 
-  describe "nodes" do
-    alias Igwet.Network.Node
+  @valid_attrs %{
+    about: "some about",
+    email: "some email",
+    key: "some key",
+    name: "some name",
+    phone: "some phone"
+  }
+  @update_attrs %{
+    about: "next about",
+    email: "next email",
+    key: "next key",
+    name: "next name",
+    phone: "next phone"
+  }
+  @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
 
-    @valid_attrs %{
-      about: "some about",
-      email: "some email",
-      key: "some key",
-      name: "some name",
-      phone: "some phone"
-    }
-    @update_attrs %{
-      about: "next about",
-      email: "next email",
-      key: "next key",
-      name: "next name",
-      phone: "next phone"
-    }
-    @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
+  @event_attrs %{
+    name: "event name",
+    about: "event details",
+    key: "event.key",
+    date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
+    size: 5,
+    timezone: "US/Pacific",
+    meta: %{duration: 90, parent_id: nil, recurrence: 7}
+  }
 
-    def node_fixture(attrs \\ %{}) do
-      {:ok, node} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Network.create_node()
+  def node_fixture(attrs \\ %{}) do
+    {:ok, node} =
+      attrs
+      |> Enum.into(@valid_attrs)
+      |> Network.create_node()
+    node
+  end
 
-      node
-    end
-
+  describe "get node" do
     test "get_first_node!/1 returns first node" do
       node = node_fixture()
       node_fixture(%{key: "different key"})
@@ -60,7 +69,9 @@ defmodule Igwet.NetworkTest.Node do
       assert node.name == "some name"
       assert node.phone == "some phone"
     end
+  end
 
+  describe "modify node" do
     test "create_node/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Network.create_node(@invalid_attrs)
     end
@@ -92,5 +103,74 @@ defmodule Igwet.NetworkTest.Node do
       node = node_fixture()
       assert %Ecto.Changeset{} = Network.change_node(node)
     end
+  end
+
+  describe "rsvp node" do
+    setup [:create_event]
+
+    test "get_member_for_email/2 gets node if exists", %{node: node, group: group} do
+      member = Network.get_member_for_email(node.email, group)
+      assert node.phone == member.phone
+    end
+
+    test "get_member_for_email/2 creates node if needed", %{group: group} do
+      email = "test@example.com"
+      member = Network.get_member_for_email(email, group)
+      assert nil != member
+      assert email == member.email
+      assert "test" == member.name
+    end
+
+    test "attend!/3 returns :ok if enough open", %{node: node, event: event} do
+      #Logger.warn inspect(event)
+      count = 3
+      result = Network.attend!(count, node, event)
+      assert result == {:ok, count}
+      assert count == Network.count_attendance(event)
+    end
+
+    test "attend!/3 returns :error if NOT enough open", %{node: node, event: event, next: next} do
+      result = Network.attend!(event.size, node, event)
+      assert result == {:ok, event.size}
+      result = Network.attend!(1, next, event)
+      assert result == {:error, event.size}
+    end
+
+    test "attend!/3 updates count if already exists", %{node: node, event: event} do
+      result = Network.attend!(event.size, node, event)
+      assert result == {:ok, event.size}
+      result = Network.attend!(1, node, event)
+      assert result == {:ok, 1}
+      assert 1 == Network.count_attendance(event)
+    end
+
+    test "member_attendance/2 tracks each attendee's count", %{node: node, event: event, next: next} do
+      node_count = 2
+      Network.attend!(node_count, node, event)
+      assert node_count == Network.member_attendance(node, event)
+
+      next_count = 3
+      Network.attend!(next_count, next, event)
+      assert next_count == Network.member_attendance(next, event)
+
+      assert 5 == Network.count_attendance(event)
+    end
+
+    test "related_subjects/2 returns attendees", %{node: node, event: event, next: next} do
+      Network.attend!(1, node, event)
+      Network.attend!(3, next, event)
+      attendees = Network.related_subjects(event, "at")
+      assert Enum.count(attendees) == 2
+    end
+  end
+
+  defp create_event(_) do
+    node = node_fixture()
+    next = node_fixture(%{name: "next", key: "com.next"})
+    group = node_fixture(@update_attrs)
+    event = @event_attrs
+            |> put_in([:meta, :parent_id], group.id)
+            |> node_fixture()
+    %{node: node, group: group, event: event, next: next}
   end
 end

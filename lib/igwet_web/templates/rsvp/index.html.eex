@@ -1,0 +1,22 @@
+<h1>Listing Events</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Name</th>
+      <th>About</th>
+      <th>Size</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for event <- @events do %>
+    <tr>
+      <td><%= event.date %></td>
+      <td><%= link event.name, to: "rsvp/" <> event.key %></td>
+      <td><%= event.about %></td>
+      <td><%= event.size %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>

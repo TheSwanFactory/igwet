@@ -4,8 +4,6 @@ defmodule Details do
   import Ecto.Changeset
 
   embedded_schema do
-    field :capacity, :integer
-    field :current, :integer
     field :duration, :integer
     field :recurrence, :integer
     field :parent_id, :binary_id
@@ -14,6 +12,6 @@ defmodule Details do
   @doc false
   def changeset(details, attrs) do
     details
-    |> cast(attrs, [:capacity, :current, :duration, :recurrence, :parent_id])
+    |> cast(attrs, [:duration, :recurrence, :parent_id])
   end
 end

@@ -5,19 +5,19 @@ defmodule IgwetWeb.EventController do
   alias Igwet.Network
   alias Igwet.Network.Node
   @tz "US/Pacific"
-  @default_details %Details{capacity: 100, current: 0, duration: 90, recurrence: 7}
-  @default_event %Node{name: "Our Church Service", about: "In-Person Event Details", timezone: @tz}
+  @default_details %Details{duration: 90, recurrence: 7}
+  @default_event %Node{name: "Our Church Service", about: "In-Person Event Details", size: 100, timezone: @tz}
 
   plug(:require_admin)
 
   def index(conn, _params) do
-    event = Network.get_first_node!(:name, "event")
+    event = Network.get_predicate("event")
     nodes = Network.related_subjects(event, "type")
     render(conn, "index.html", events: nodes)
   end
 
- def new(conn, %{"id" => id}) do
-   group = Network.get_node!(id)
+  def new(conn, %{"id" => id}) do
+    group = Network.get_node!(id)
     {:ok, now} = DateTime.shift_zone(DateTime.utc_now, "US/Pacific")
     key = group.key <> "+" <> DateTime.to_string(now)
     meta = Map.merge(@default_details, %{parent_id: group.id})
@@ -29,11 +29,13 @@ defmodule IgwetWeb.EventController do
   def create(conn, %{"node" => event_params}) do
     case Network.create_node(event_params) do
       {:ok, event} ->
-        #Logger.warn("** created event: " <> inspect(event))
-        is_event = Network.get_first_node!(:name, "event")
+        is_event = Network.get_predicate("event")
         Network.make_edge(event, "type", is_event)
+        group_id = event.meta.parent_id
+        group = Network.get_node!(group_id)
+        Network.make_edge(event, "for", group)
         conn
-        |> put_flash(:info, "Event created successfully.")
+        |> put_flash(:info, "Event created successfully for #{group.name}.")
         |> redirect(to: event_path(conn, :show, event))
 
       {:error, %Ecto.Changeset{} = _changeset} ->

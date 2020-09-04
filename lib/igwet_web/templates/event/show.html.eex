@@ -23,22 +23,19 @@
     <strong>Duration:</strong> <%= @event.meta.duration %>
   </li>
   <li>
-    <strong>Capacity:</strong> <%= @event.meta.capacity %>
+    <strong>Size:</strong> <%= @event.size %>
   </li>
-  <li>
-    <strong>Current Count:</strong> <%= @event.meta.current %>
-  </li>
-
 </ul>
 
 <span><%= link "Edit", to: event_path(@conn, :edit, @event) %></span>
 <span><%= link "Back", to: event_path(@conn, :index) %></span>
+<span><%= link "RSVP", to: rsvp_path(@conn, :by_event, @event.key) %></span>
 
 <ul>
   <h3>Households</h3>
   <%= for house <- @houses do %>
     <li>
-      <%= link(house.email <> " (" <> house.name <> "): " <> house.meta.current,
+      <%= link(house.email <> " (" <> house.name <> "): " <> house.size,
           to: node_path(@conn, :show, house)) %>:
     </li>
   <% end %>
