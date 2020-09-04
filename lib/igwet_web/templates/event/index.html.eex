@@ -16,6 +16,7 @@
       <td>
         <span><%= link "Show", to: event_path(@conn, :show, event) %></span>
         <span><%= link "Edit", to: event_path(@conn, :edit, event) %></span>
+        <span><%= link "RSVP", to: rsvp_path(@conn, :by_event, @event.key) %></span>
         <span><%= link "Delete", to: event_path(@conn, :delete, event), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
       <td><%= event.name %></td>
