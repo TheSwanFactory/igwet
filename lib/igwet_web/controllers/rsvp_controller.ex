@@ -4,6 +4,7 @@ defmodule IgwetWeb.RsvpController do
   use IgwetWeb, :controller
   require Logger
   alias Igwet.Network
+  alias Igwet.Network.Node
   @max_rsvp 6
 
   def index(conn, _params) do
@@ -17,11 +18,19 @@ defmodule IgwetWeb.RsvpController do
   def by_event(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     current = Network.count_attendance(event)
+    changeset = Network.change_node(%Node{})
+
     conn
     |> assign(:current_user, nil)
     |> assign(:group, Network.get_node!(event.meta.parent_id))
     |> assign(:houses, Network.related_subjects(event, "at"))
-    |> render("event.html", event: event, current: current)
+    |> render("event.html", event: event, current: current, changeset: changeset)
+  end
+
+  def add_email(conn, %{"event_key" => event_key, "node" => params}) do
+    Logger.warn("** add_email.params: " <> inspect(params))
+    path = rsvp_path(conn, :by_email, event_key, params["email"])
+    redirect conn, to: path
   end
 
   def by_email(conn, %{"event_key" => event_key, "email" => email}) do

@@ -11,6 +11,18 @@
   </li>
 </ul>
 
+<%= form_for @changeset, rsvp_path(@conn, :add_email, @event.key), fn f -> %>
+  <div class="form-group">
+    <%= label f, "Please enter your email to register:", class: "control-label" %>
+    <%= email_input f, :email, class: "form-control" %>
+    <%= error_tag f, :email %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
 <ul>
   <h3>Households</h3>
   <%= for house <- @houses do %>
