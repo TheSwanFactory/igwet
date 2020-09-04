@@ -4,11 +4,11 @@ defmodule IgwetWeb.EventControllerTest do
   require Logger
 
   @group_attrs %{
-    about: "some event about",
-    email: "some email",
+    about: "about group",
+    email: "some group email",
     key: "some event group key",
-    name: "some event",
-    phone: "some phone"
+    name: "group",
+    phone: "some group phone"
   }
   @create_attrs %{
     name: "event name",
@@ -36,13 +36,10 @@ defmodule IgwetWeb.EventControllerTest do
   }
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil, meta: %{}}
 
-  def fixture(:event) do
+  def attrs(:event) do
     {:ok, group} = Network.create_node(@group_attrs)
-    {:ok, event} =
-      @create_attrs
-      |> put_in([:meta, :parent_id], group.id)
-      |> Network.create_node()
-    event
+    @create_attrs
+    |> put_in([:meta, :parent_id], group.id)
   end
 
   describe "index" do
@@ -62,13 +59,26 @@ defmodule IgwetWeb.EventControllerTest do
 
   describe "create event" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, event_path(conn, :create), node: @create_attrs)
+      conn = post(conn, event_path(conn, :create), node: attrs(:event))
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == event_path(conn, :show, id)
 
       conn = get(conn, event_path(conn, :show, id))
       assert html_response(conn, 200) =~ "Show Event"
+    end
+
+    test "for group", %{conn: conn} do
+      my_attrs = attrs(:event)
+      post(conn, event_path(conn, :create), node: my_attrs)
+
+      my_event = Network.get_predicate(my_attrs.name)
+      assert Network.get_type(my_event) == "event"
+
+      edges = Igwet.Repo.all(Ecto.assoc(my_event, :edges))
+      assert Enum.count(edges) == 2
+      edge = Enum.at(edges, 1)
+      assert edge.object_id == my_event.meta.parent_id
     end
 
     test "redirects when data is invalid", %{conn: conn} do
@@ -116,7 +126,7 @@ defmodule IgwetWeb.EventControllerTest do
   end
 
   defp create_event(_) do
-    event = fixture(:event)
+    {:ok, event} = Network.create_node(attrs(:event))
     %{event: event}
   end
 end

@@ -183,7 +183,7 @@ defmodule Igwet.Network do
   """
 
   def make_edge(subject, pred_name, object) do
-    predicate = get_first_node!(:name, pred_name)
+    predicate = get_predicate(pred_name)
     create_edge(%{subject_id: subject.id, predicate_id: predicate.id, object_id: object.id})
   end
 
@@ -292,7 +292,7 @@ defmodule Igwet.Network do
 
   """
   def objects_for_predicate(predicate) do
-    in_node = get_first_node!(:name, predicate)
+    in_node = get_predicate(predicate)
 
     Edge
     |> order_by([asc: :inserted_at])
@@ -313,7 +313,7 @@ defmodule Igwet.Network do
 
   """
   def subjects_for_predicate(predicate) do
-    in_node = get_first_node!(:name, predicate)
+    in_node = get_predicate(predicate)
 
     Edge
     |> order_by([asc: :inserted_at])
@@ -496,7 +496,7 @@ defmodule Igwet.Network do
     if type == nil do
       {:error, %Ecto.Changeset{}}
     else
-      type_node = get_first_node!(:name, type)
+      type_node = get_predicate(type)
 
       new_attrs =
         if key == nil do

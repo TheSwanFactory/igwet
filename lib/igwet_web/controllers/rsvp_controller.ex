@@ -8,7 +8,7 @@ defmodule IgwetWeb.RsvpController do
   @max_rsvp 6
 
   def index(conn, _params) do
-    event = Network.get_first_node!(:name, "event")
+    event = Network.get_predicate("event")
     nodes = Network.related_subjects(event, "type")
     conn
     |> assign(:current_user, nil)

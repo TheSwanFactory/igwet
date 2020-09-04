@@ -29,6 +29,7 @@
 
 <span><%= link "Edit", to: event_path(@conn, :edit, @event) %></span>
 <span><%= link "Back", to: event_path(@conn, :index) %></span>
+<span><%= link "RSVP", to: rsvp_path(@conn, :by_event, @event.key) %></span>
 
 <ul>
   <h3>Households</h3>
