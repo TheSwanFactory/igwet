@@ -114,11 +114,12 @@ defmodule Igwet.Network do
       end
       node
     else
+      name = email |> String.split("@") |> Enum.at(0)
       {:ok, node} = create_node %{
-        name: email |> String.split("@") |> Enum.at(0),
+        name: name,
         email: email,
         type: get_predicate("contact"),
-        key: "#{group.key}+#{email}"
+        key: "#{group.key}+#{name}"
       }
       set_node_in_group(node, group)
       node

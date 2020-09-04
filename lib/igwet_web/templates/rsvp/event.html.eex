@@ -3,7 +3,7 @@
 <h3><%= @event.date %></h3>
 
 <p><em><%= @event.about %></em></p>
-<p>So far we have <%= @current %> spaces reserved out of <%= @event.size %> total.</p>
+<p>So far we have reserved <%= @current %> spaces out of <%= @event.size %> total.</p>
 
 <%= form_for @changeset, rsvp_path(@conn, :add_email, @event.key), fn f -> %>
   <div class="form-group">
@@ -18,11 +18,10 @@
 <% end %>
 
 <ul>
-  <h3>Registered Attendees</h3>
-  <%= Enum.count @attendees %>
+  <h3>Registered Attendees: <%= Enum.count @attendees %></h3>
   <%= for attendee <- @attendees do %>
     <li>
-      <%= attendee.name <> ": " <> Network.member_attendance(attendee, @event) %>:
+      <%= attendee.name <> " #{Network.member_attendance(attendee, @event)}" %>
     </li>
   <% end %>
 </ul>
