@@ -66,7 +66,7 @@ end
         "Error #{count}: already #{current} of total capacity #{event.size} attending #{event.name}"
     end
     conn
-    |> put_flash(:error, msg)
+    |> put_flash(:info, msg)
     |> redirect(to: rsvp_path(conn, :by_event, event_key))
   end
 
