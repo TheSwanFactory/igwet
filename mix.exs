@@ -4,7 +4,7 @@ defmodule Igwet.Mixfile do
   def project do
     [
       app: :igwet,
-      version: "0.2.0",
+      version: "0.2.1",
       elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -57,6 +57,7 @@ defmodule Igwet.Mixfile do
       {:version_tasks, "~> 0.11.4"},
       {:castore, "~> 0.1.5"},
       {:mint, "~> 1.0"},
+      {:nimble_strftime, "~> 0.1.1"},
       {:tz, "~> 0.10.0"}
     ]
   end

@@ -1,6 +1,6 @@
 <h1><%= @event.name %></h1>
 <h2><%= @group.name %></h2>
-<h3><%= @event.date %></h3>
+<h3><%= NimbleStrftime.format(@event.date, "%I:%M:%S %p %A %B %d, %Y") %></h3>
 
 <p><em><%= @event.about %></em></p>
 <p>So far we have reserved <%= @current %> spaces out of <%= @event.size %> total.</p>
