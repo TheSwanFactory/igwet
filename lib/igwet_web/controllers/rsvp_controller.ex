@@ -19,12 +19,13 @@ defmodule IgwetWeb.RsvpController do
     event = Network.get_first_node!(:key, event_key)
     current = Network.count_attendance(event)
     changeset = Network.change_node(%Node{})
-    households = Network.related_subjects(event, "at")
+    attendees = Network.related_subjects(event, "at")
+    Logger.warn inspect(attendees)
 
     conn
     |> assign(:current_user, nil)
     |> assign(:group, Network.get_node!(event.meta.parent_id))
-    |> assign(:houses, households)
+    |> assign(:attendees, attendees)
     |> render("event.html", event: event, current: current, changeset: changeset)
   end
 

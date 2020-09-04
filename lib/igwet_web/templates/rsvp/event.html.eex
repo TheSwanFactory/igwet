@@ -18,11 +18,11 @@
 <% end %>
 
 <ul>
-  <h3>Registered Households</h3>
-  <%= for house <- @houses do %>
+  <h3>Registered Attendees</h3>
+  <%= Enum.count @attendees %>
+  <%= for attendee <- @attendees do %>
     <li>
-      <%= link(house.name <> ": " <> Network.member_attendance(house, @group),
-          to: node_path(@conn, :show, house)) %>:
+      <%= attendee.name <> ": " <> Network.member_attendance(attendee, @event) %>:
     </li>
   <% end %>
 </ul>

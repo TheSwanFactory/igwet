@@ -152,6 +152,8 @@ defmodule Igwet.NetworkTest.Node do
       next_count = 3
       Network.attend!(next_count, next, event)
       assert next_count == Network.member_attendance(next, event)
+
+      assert 5 == Network.count_attendance(event)
     end
 
     test "related_subjects/2 returns attendees", %{node: node, event: event, next: next} do

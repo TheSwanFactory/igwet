@@ -1,7 +1,7 @@
 <h1><%= @event.name %></h1>
 <h2><%= @group.name %></h2>
 <h3><%= @event.date %><h3>
-<h4>Welcome, <%= @node.name %></h4>
+<h4>Welcome, <%= @node.email %> (<%= @node.name %>) </h4>
 <p>So far we have <%= @current %> spaces reserved out of <%= @event.size %> total.</p>
 <%= if (@node_count > 0) do %>
 <p>You currently have registered <%= @node_count %> person(s) to attend.</p>
