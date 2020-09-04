@@ -1,12 +1,12 @@
 <h1><%= @event.name %></h1>
 <h2><%= @group.name %></h2>
-<h3><%= @event.date %></h3>
+<h3><%= @event.date %><h3>
+<h4>Welcome, <%= @node.name %></h4>
+<p>So far we have <%= @current %> spaces reserved out of <%= @event.size %> total.</p>
+<p>Please select how many from your household will be attending:</p>
 
 <ul>
-  <li>
-    <strong>Allowed Attendees:</strong> <%= @event.size %>
-  </li>
-  <li>
-    <strong>Current Attendees:</strong> <%= @current %>
-  </li>
+  <%= for i <- 0..@open do %>
+    <li><%= button(i, to: rsvp_path(@conn, :by_count, @event.key, @node.email, i)) %></li>
+  <% end %>
 </ul>

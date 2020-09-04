@@ -28,7 +28,6 @@ defmodule IgwetWeb.RsvpController do
   end
 
   def add_email(conn, %{"event_key" => event_key, "node" => params}) do
-    Logger.warn("** add_email.params: " <> inspect(params))
     path = rsvp_path(conn, :by_email, event_key, params["email"])
     redirect conn, to: path
   end
@@ -40,7 +39,7 @@ defmodule IgwetWeb.RsvpController do
     current = Network.count_attendance(event)
     open = event.size - current
     if (open < 1) do
-      msg = "Sorry: #{current} of total capacity #{event.size} already attending #{event.name}"
+      msg = "Sorry: #{event.name} is already at its full capacity of #{event.size}"
       conn
       |> put_flash(:notice, msg)
       |> redirect(to: rsvp_path(conn, :by_event, %{"event_key" => event_key}))
@@ -57,7 +56,7 @@ end
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     node = Network.get_member_for_email(email, group)
-    msg = case Network.attend!(count, node, group) do
+    msg = case Network.attend!(String.to_integer(count), node, group) do
       {:ok, total} ->
         "Added #{count} for #{node.name} <#{node.email}>. Now #{total} attending #{event.name}"
       {:error, current} ->
@@ -65,7 +64,7 @@ end
     end
     conn
     |> put_flash(:error, msg)
-    |> redirect(to: rsvp_path(conn, :by_event, %{"event_key" => event_key}))
+    |> redirect(to: rsvp_path(conn, :by_event, event_key))
   end
 
 end
