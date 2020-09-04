@@ -129,8 +129,7 @@ defmodule Igwet.NetworkTest.Node do
       assert count == Network.count_attendance(event)
     end
 
-    test "attend!/3 returns :error if NOT enough open", %{node: node, event: event} do
-      next = node_fixture(%{name: "next", key: "com.next"})
+    test "attend!/3 returns :error if NOT enough open", %{node: node, event: event, next: next} do
       result = Network.attend!(event.size, node, event)
       assert result == {:ok, event.size}
       result = Network.attend!(1, next, event)
@@ -144,14 +143,32 @@ defmodule Igwet.NetworkTest.Node do
       assert result == {:ok, 1}
       assert 1 == Network.count_attendance(event)
     end
+
+    test "member_attendance/2 tracks each attendee's count", %{node: node, event: event, next: next} do
+      node_count = 2
+      Network.attend!(node_count, node, event)
+      assert node_count == Network.member_attendance(node, event)
+
+      next_count = 3
+      Network.attend!(next_count, next, event)
+      assert next_count == Network.member_attendance(next, event)
+    end
+
+    test "related_subjects/2 returns attendees", %{node: node, event: event, next: next} do
+      Network.attend!(2, node, event)
+      Network.attend!(3, next, event)
+      attendees = Network.related_subjects(event, "at")
+      Logger.warn inspect(attendees)
+    end
   end
 
   defp create_event(_) do
     node = node_fixture()
+    next = node_fixture(%{name: "next", key: "com.next"})
     group = node_fixture(@update_attrs)
     event = @event_attrs
             |> put_in([:meta, :parent_id], group.id)
             |> node_fixture()
-    %{node: node, group: group, event: event}
+    %{node: node, group: group, event: event, next: next}
   end
 end

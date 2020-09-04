@@ -21,7 +21,7 @@
   <h3>Registered Households</h3>
   <%= for house <- @houses do %>
     <li>
-      <%= link(house.name <> ": " <> house.meta.current,
+      <%= link(house.name <> ": " <> Network.member_attendance(house, @group),
           to: node_path(@conn, :show, house)) %>:
     </li>
   <% end %>
