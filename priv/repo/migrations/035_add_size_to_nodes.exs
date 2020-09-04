@@ -1,4 +1,4 @@
-defmodule Igwet.Repo.Migrations.AddTzToNodes do
+defmodule Igwet.Repo.Migrations.AddSizeToNodes do
   use Ecto.Migration
 
   def change do
