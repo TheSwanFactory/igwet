@@ -155,10 +155,10 @@ defmodule Igwet.NetworkTest.Node do
     end
 
     test "related_subjects/2 returns attendees", %{node: node, event: event, next: next} do
-      Network.attend!(2, node, event)
+      Network.attend!(1, node, event)
       Network.attend!(3, next, event)
       attendees = Network.related_subjects(event, "at")
-      Logger.warn inspect(attendees)
+      assert Enum.count(attendees) == 2
     end
   end
 
