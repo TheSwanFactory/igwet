@@ -238,8 +238,9 @@ defmodule Igwet.Network do
     current = count_attendance(event)
     existing = find_edge(node, at, event)
     offset = if (!existing), do: 0, else: String.to_integer("0#{existing.as}")
-
     new_total = current + count - offset
+
+    #Logger.warn "attend!new_total #{new_total} vs event.size #{event.size}"
     cond do
       new_total > event.size ->
         {:error, current}
@@ -247,7 +248,7 @@ defmodule Igwet.Network do
         update_edge existing, %{as: "#{count}"}
         {:ok, new_total}
       true ->
-        create_edge %{
+        {:ok, _edge} = create_edge %{
           subject_id: node.id,
           predicate_id: at.id,
           object_id: event.id,

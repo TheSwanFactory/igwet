@@ -20,7 +20,7 @@ defmodule IgwetWeb.RsvpController do
     current = Network.count_attendance(event)
     changeset = Network.change_node(%Node{})
     attendees = Network.related_subjects(event, "at")
-    Logger.warn inspect(attendees)
+    Logger.warn "by_event.attendees\n" <> inspect(attendees)
 
     conn
     |> assign(:current_user, nil)
@@ -59,7 +59,7 @@ end
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     node = Network.get_member_for_email(email, group)
-    msg = case Network.attend!(String.to_integer(count), node, group) do
+    msg = case Network.attend!(String.to_integer(count), node, event) do
       {:ok, total} ->
         "Added #{count} for #{node.name} <#{node.email}>. Now #{total} attending #{event.name}"
       {:error, current} ->

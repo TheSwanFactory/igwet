@@ -10,7 +10,7 @@ defmodule IgwetWeb.EventControllerTest do
     name: "group",
     phone: "some group phone"
   }
-  @create_attrs %{
+  @event_attrs %{
     name: "event name",
     key: "event key",
     date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
@@ -38,7 +38,7 @@ defmodule IgwetWeb.EventControllerTest do
 
   def attrs(:event) do
     {:ok, group} = Network.create_node(@group_attrs)
-    @create_attrs
+    @event_attrs
     |> put_in([:meta, :parent_id], group.id)
   end
 
