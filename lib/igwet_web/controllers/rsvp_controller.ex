@@ -36,6 +36,7 @@ defmodule IgwetWeb.RsvpController do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     node = Network.get_member_for_email(email, group)
+    node_count = Network.member_attendance(node, group)
     current = Network.count_attendance(event)
     open = event.size - current
     if (open < 1) do
@@ -48,6 +49,7 @@ defmodule IgwetWeb.RsvpController do
       |> assign(:current_user, nil)
       |> assign(:group, group)
       |> assign(:node, node)
+      |> assign(:node_count, node_count)
       |> render("email.html", event: event, current: current, open: min(open, @max_rsvp))
     end
 end

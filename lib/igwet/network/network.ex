@@ -205,6 +205,25 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Count for this node attending an event
+
+  ## Examples
+
+      iex> member_attendance(member, event)
+      true
+
+  """
+  def member_attendance(member, event) do
+    at = get_predicate("at")
+    edge = find_edge(member, at, event)
+    if (edge) do
+      String.to_integer("0#{edge.as}")
+    else
+      0
+    end
+  end
+
+  @doc """
   Set count of node attending an event
 
   ## Examples
@@ -219,7 +238,7 @@ defmodule Igwet.Network do
     current = count_attendance(event)
     existing = find_edge(node, at, event)
     offset = if (!existing), do: 0, else: String.to_integer("0#{existing.as}")
-    
+
     new_total = current + count - offset
     cond do
       new_total > event.size ->

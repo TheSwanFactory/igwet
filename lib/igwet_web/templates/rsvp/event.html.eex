@@ -2,18 +2,12 @@
 <h2><%= @group.name %></h2>
 <h3><%= @event.date %></h3>
 
-<ul>
-  <li>
-    <strong>Allowed Attendees:</strong> <%= @event.size %>
-  </li>
-  <li>
-    <strong>Current Attendees:</strong> <%= @current %>
-  </li>
-</ul>
+<p><em><%= @event.about %></em></p>
+<p>So far we have <%= @current %> spaces reserved out of <%= @event.size %> total.</p>
 
 <%= form_for @changeset, rsvp_path(@conn, :add_email, @event.key), fn f -> %>
   <div class="form-group">
-    <%= label f, "Please enter your email to register:", class: "control-label" %>
+    <%= label f, "To register, please enter your email:", class: "control-label" %>
     <%= email_input f, :email, class: "form-control" %>
     <%= error_tag f, :email %>
   </div>
@@ -24,10 +18,10 @@
 <% end %>
 
 <ul>
-  <h3>Households</h3>
+  <h3>Registered Households</h3>
   <%= for house <- @houses do %>
     <li>
-      <%= link(house.email <> " (" <> house.name <> "): " <> house.meta.current,
+      <%= link(house.name <> ": " <> house.meta.current,
           to: node_path(@conn, :show, house)) %>:
     </li>
   <% end %>
