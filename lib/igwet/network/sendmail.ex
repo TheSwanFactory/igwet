@@ -148,19 +148,21 @@ defmodule Igwet.Network.Sendmail do
 
     try do
       node = Network.get_first_node!(:email, sender_email)
-      keyed_email = Mailer.keyed_email(node)
-
-      updates = %{
-        @sender => keyed_email,
-        @from => {node.name, keyed_email},
-        @headers => [sender: keyed_email] ++ params[@headers]
-      }
-
+      updates = sender_params(node, params[@headers])
       Map.merge(params, updates)
     rescue
       e ->
         raise "Unrecognized sender `#{sender_email}`}\n#{inspect(e)}"
     end
+  end
+
+  def sender_params(node, headers) do
+    keyed_email = Mailer.keyed_email(node)
+    %{
+      @sender => keyed_email,
+      @from => {node.name, keyed_email},
+      @headers => [sender: keyed_email] ++ headers
+    }
   end
 
   @doc """
@@ -197,6 +199,38 @@ defmodule Igwet.Network.Sendmail do
   end
 
   @doc """
+  Return messages about event to all members of group
+
+  ## Examples
+      iex> alias Igwet.Network
+      iex> alias Igwet.Network.Sendmail
+      iex> group = Network.get_first_node!(:name, "admin")
+      iex> {:ok, event} = Network.create_node %{name: "subject", about: "body", key: "admin+event"}
+      iex> result = Sendmail.email_group_event(group, event)
+      iex> length(result)
+      1
+
+  """
+
+  def email_group_event(group, event) do
+    email =
+      new_email()
+      |> from(group.email)
+      |> subject(event.name)
+      |> text_body(event.about)
+      |> put_header(@sender, group.email)
+      |> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
+
+    members = Network.node_members(group)
+    Enum.map members, fn member ->
+      if (member.email) do
+        email |> to(member.email)
+      end
+    end
+  end
+
+
+  @doc """
   Return a list of nodes (or their members) containing emails
 
   ## Examples
@@ -223,6 +257,7 @@ defmodule Igwet.Network.Sendmail do
         [node]
     end
   end
+
 
   @doc """
   Return a list of nodes (or their members) containing phone numbers

@@ -11,5 +11,8 @@ defmodule Igwet.NetworkTest.Sendmail do
       Sendmail.test_email(node) |> Igwet.Admin.Mailer.deliver_now()
       assert_delivered_email(Sendmail.test_email(node))
     end
+
+    test "email_group_event/2" do
+    end
   end
 end
