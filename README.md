@@ -1,6 +1,6 @@
 [![Build Status](https://drernie.semaphoreci.com/badges/igwet.svg?style=shields)](https://drernie.semaphoreci.com)
 
-# IGWET
+# IGWET v0.2.2
 A secure messaging directory for Intra-Group Web/Email/Text.
 * www.igwet.com
 * theswanfactory.wordpress.com
