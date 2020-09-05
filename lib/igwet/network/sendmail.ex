@@ -207,18 +207,23 @@ defmodule Igwet.Network.Sendmail do
       iex> group = Network.get_first_node!(:name, "admin")
       iex> {:ok, event} = Network.create_node %{name: "subject", about: "body", key: "admin+event"}
       iex> result = Sendmail.email_group_event(group, event)
-      iex> length(result)
-      1
-
+      iex> message = Enum.at(result, 0)
+      iex> message.from
+      "com.igwet+admin@example.com"
+      iex> message.to
+      "ernest.prabhakar@gmail.com"
+      iex> message.subject
+      "subject"
   """
 
   def email_group_event(group, event) do
+    email = if (group.email != nil), do: group.email, else: Mailer.keyed_email(group)
     message =
       new_email()
-      |> from(group)
+      |> from(email)
       |> subject(event.name)
       |> text_body(event.about)
-      |> put_header(@sender, group.email)
+      |> put_header(@sender, email)
       |> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
 
     members = Network.node_members(group)
