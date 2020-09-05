@@ -148,21 +148,21 @@ defmodule Igwet.Network.Sendmail do
 
     try do
       node = Network.get_first_node!(:email, sender_email)
-      updates = sender_params(node, params[@headers])
-      Map.merge(params, updates)
+      keyed_email = Mailer.keyed_email(node)
+      sender_params(params, node.name, keyed_email)
     rescue
       e ->
         raise "Unrecognized sender `#{sender_email}`}\n#{inspect(e)}"
     end
   end
 
-  def sender_params(node, headers) do
-    keyed_email = Mailer.keyed_email(node)
-    %{
-      @sender => keyed_email,
-      @from => {node.name, keyed_email},
-      @headers => [sender: keyed_email] ++ headers
+  def sender_params(params, name, email) do
+    updates = %{
+      @sender => email,
+      @from => {name, email},
+      @headers => [sender: email] ++ params[@headers]
     }
+    Map.merge(params, updates)
   end
 
   @doc """
@@ -213,9 +213,9 @@ defmodule Igwet.Network.Sendmail do
   """
 
   def email_group_event(group, event) do
-    email =
+    message =
       new_email()
-      |> from(group.email)
+      |> from(group)
       |> subject(event.name)
       |> text_body(event.about)
       |> put_header(@sender, group.email)
@@ -224,7 +224,7 @@ defmodule Igwet.Network.Sendmail do
     members = Network.node_members(group)
     Enum.map members, fn member ->
       if (member.email) do
-        email |> to(member.email)
+        message |> to(member.email)
       end
     end
   end
