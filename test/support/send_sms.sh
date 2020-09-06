@@ -4,10 +4,12 @@
 # Create nodes:  PHONE_IGWET (PHONE_ERNEST PHONE_TGR)
 
 source .env
-BODY="Hello,%20Twirled!"
-MSG_SID='123456789'
+BODY="What%20Hath%20God%20Wrought!"
+MSG_SID='20200906162900'
+TEST_HOST=https://localhost:$PORT
+PROD_HOST=https://www.igwet.com
 
 DATA="from=$PHONE_ERNEST&to=$PHONE_IGWET&body=$BODY&MessageSid=$MSG_SID&AccountSid=$TWILIO_ACCOUNT_SID"
-HOST="https://localhost:$PORT/webhook/twilio"
-echo "$HOST: $DATA"
-curl -k -X POST -d "$DATA" $HOST
+URL="$PROD_HOST/webhook/twilio"
+echo "$URL: $DATA"
+curl -k -X POST -d "$DATA" $URL
