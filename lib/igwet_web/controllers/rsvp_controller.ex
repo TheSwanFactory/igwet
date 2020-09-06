@@ -5,6 +5,8 @@ defmodule IgwetWeb.RsvpController do
   require Logger
   alias Igwet.Network
   alias Igwet.Network.Node
+  alias Igwet.Network.Sendmail
+  alias Igwet.Admin.Mailer
   @max_rsvp 6
 
   def index(conn, _params) do
@@ -29,7 +31,7 @@ defmodule IgwetWeb.RsvpController do
     |> render("event.html", event: event, current: current, changeset: changeset)
   end
 
-  def send_emails(conn, %{"event_key" => event_key}) do
+  def send_email(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     if (!group.email) do
@@ -38,7 +40,10 @@ defmodule IgwetWeb.RsvpController do
       |> put_flash(:error, msg)
       |> redirect(to: group_path(conn, :edit, group))
     else
-      count = 0
+      message = Sendmail.email_group_event(group, event)
+      count = length(message.to)
+      result = Mailer.deliver_now(message)
+      Logger.debug("send_emails.result\n#{inspect(result)}")
       msg = "Succeess: #{count} emails sent"
       conn
       |> put_flash(:info, msg)

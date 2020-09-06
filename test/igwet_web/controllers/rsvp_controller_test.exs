@@ -8,13 +8,14 @@ defmodule IgwetWeb.RsvpControllerTest do
 
   @group_attrs %{
     about: "about group",
-    email: "some group email",
+    email: "some.group@email",
     key: "some.group.key",
     name: "group",
     phone: "some group phone"
   }
   @event_attrs %{
     name: "event name",
+    about: "about event",
     key: "event.key",
     date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
     timezone: "US/Pacific",
@@ -48,20 +49,25 @@ defmodule IgwetWeb.RsvpControllerTest do
   describe "attendees" do
     setup [:create_event]
 
-    test "GET /event -> 200", %{conn: conn, event: event} do
+    test "GET /rsvp/:event -> 200", %{conn: conn, event: event} do
       conn
       |> get("/rsvp/" <> event.key)
       |> response(200)
     end
 
-    test "GET /event/email -> 200", %{conn: conn, event: event} do
+    test "GET /rsvp/:event/:email -> 200", %{conn: conn, event: event} do
       conn
       |> get("/rsvp/" <> event.key <> "/" <> @node_email)
       |> response(200)
     end
 
+    test "POST /rsvp/send_email/:event/ -> 200", %{conn: conn, event: event} do
+      conn
+      |> post("/rsvp/send_email/#{event.key}")
+      |> response(302)
+    end
 
-    test "POST /event/email/count -> 200", %{conn: conn, event: event} do
+    test "POST /rsvp/:event/:email/:count -> 200", %{conn: conn, event: event} do
       path = ["/rsvp", event.key, @node_email, 3] |> Enum.join("/")
       conn
       |> post(path)
