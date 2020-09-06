@@ -40,6 +40,7 @@ defmodule IgwetWeb.Router do
     get("/", RsvpController, :index)
     get("/:event_key", RsvpController, :by_event)
     get("/:event_key/:email", RsvpController, :by_email)
+    post("/send_email/:event_key/", RsvpController, :send_email)
     post("/:event_key/add_email", RsvpController, :add_email)
     post("/:event_key/:email/:count", RsvpController, :by_count)
   end

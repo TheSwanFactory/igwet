@@ -1,13 +1,14 @@
 <h1>Show Event</h1>
 
-<ul>
-  <h3>Group</h3>
-  <%= for group <- @groups do %>
-    <li>
-      <%= link(group.name, to: group_path(@conn, :show, group)) %>
-    </li>
-  <% end %>
-</ul>
+<% for group <- @groups do %>
+  <h3>Group: <%= link(group.name, to: group_path(@conn, :show, group)) %></h3>
+<% end %>
+
+<div>
+  <span><%= link "Edit", to: event_path(@conn, :edit, @event), class: "btn btn-default btn-xs" %></span>
+  <span><%= link "Back", to: event_path(@conn, :index), class: "btn btn-default btn-xs" %></span>
+  <span><%= link "RSVP", to: rsvp_path(@conn, :by_event, @event.key), class: "btn btn-default btn-xs" %></span>
+</div>
 
 <ul>
   <li>
@@ -26,7 +27,4 @@
     <strong>Size:</strong> <%= @event.size %>
   </li>
 </ul>
-
-<span><%= link "Edit", to: event_path(@conn, :edit, @event) %></span>
-<span><%= link "Back", to: event_path(@conn, :index) %></span>
-<span><%= link "RSVP", to: rsvp_path(@conn, :by_event, @event.key) %></span>
+<span><%= link "Email RSVPs", to: rsvp_path(@conn, :send_email, @event.key), class: "btn btn-danger btn-xs" %></span>

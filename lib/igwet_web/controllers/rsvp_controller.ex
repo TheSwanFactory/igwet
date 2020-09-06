@@ -5,6 +5,8 @@ defmodule IgwetWeb.RsvpController do
   require Logger
   alias Igwet.Network
   alias Igwet.Network.Node
+  alias Igwet.Network.Sendmail
+  alias Igwet.Admin.Mailer
   @max_rsvp 6
 
   def index(conn, _params) do
@@ -29,6 +31,26 @@ defmodule IgwetWeb.RsvpController do
     |> render("event.html", event: event, current: current, changeset: changeset)
   end
 
+  def send_email(conn, %{"event_key" => event_key}) do
+    event = Network.get_first_node!(:key, event_key)
+    group = Network.get_node!(event.meta.parent_id)
+    if (!group.email) do
+      msg = "Error: first enter a Group email in order to send RSVPs"
+      conn
+      |> put_flash(:error, msg)
+      |> redirect(to: group_path(conn, :edit, group))
+    else
+      message = Sendmail.email_group_event(group, event)
+      count = length(message.to)
+      result = Mailer.deliver_now(message)
+      Logger.debug("send_emails.result\n#{inspect(result)}")
+      msg = "Succeess: #{count} emails sent"
+      conn
+      |> put_flash(:info, msg)
+      |> redirect(to: event_path(conn, :show, event))
+    end
+  end
+
   def add_email(conn, %{"event_key" => event_key, "node" => params}) do
     path = rsvp_path(conn, :by_email, event_key, params["email"])
     redirect conn, to: path
@@ -43,7 +65,7 @@ defmodule IgwetWeb.RsvpController do
     if (open < 1) do
       msg = "Sorry: #{event.name} is already at its full capacity of #{event.size}"
       conn
-      |> put_flash(:notice, msg)
+      |> put_flash(:info, msg)
       |> redirect(to: rsvp_path(conn, :by_event, %{"event_key" => event_key}))
     else
       conn

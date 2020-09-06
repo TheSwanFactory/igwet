@@ -1,16 +1,12 @@
 [![Build Status](https://drernie.semaphoreci.com/badges/igwet.svg?style=shields)](https://drernie.semaphoreci.com)
 
-# IGWET
-A secure messaging directory for Intra-Group Web/Email/Text.
-* www.igwet.com
-* theswanfactory.wordpress.com
+# IGWET v0.2.2
+An Open Source secure messaging directory for Intra-Group Web/Email/Text. Available as a commercial service at [www.igwet.com](https://www.igwet.com).
 
 IGWET is an inside-out social network designed to facilitate external relationships.
 Our initial product is a *secure messaging directory* for churches, conferences, singles groups, and other communities that want an easy yet safe way for members to connect with each other and non-members around shared interests, without having to share sensitive personal information.
 
-IGWET is written in Elixir using the Phoenix web application framework.
-* https://www.elixir-lang.org
-* http://phoenixframework.org
+IGWET is written in [Elixir](https://www.elixir-lang.org) using the [Phoenix](http://phoenixframework.org) web application framework.
 
 ## Installation
 
@@ -85,10 +81,3 @@ $ gigalixir remote_console
 1> Path.join(["#{:code.priv_dir(:igwet)}", "repo", "seeds.exs"]) |> Code.eval_file
 ```
 DANGER: Only do this once or you may blow away all your data.
-
-### Test Production Release
-```
-$ createdb phx
-$ MIX_ENV=prod mix distillery.release --env=prod
-$ MIX_ENV=prod PORT=4000 _build/prod/rel/igwet/bin/igwet foreground
-```

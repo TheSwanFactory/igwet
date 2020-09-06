@@ -14,10 +14,10 @@
 <%= for event <- @events do %>
     <tr>
       <td>
-        <span><%= link "Show", to: event_path(@conn, :show, event) %></span>
-        <span><%= link "Edit", to: event_path(@conn, :edit, event) %></span>
-        <span><%= link "RSVP", to: rsvp_path(@conn, :by_event, @event.key) %></span>
-        <span><%= link "Delete", to: event_path(@conn, :delete, event), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "Show", to: event_path(@conn, :show, event), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: event_path(@conn, :edit, event), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "RSVP", to: rsvp_path(@conn, :by_event, event.key), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: event_path(@conn, :delete, event), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
       <td><%= event.name %></td>
       <td><%= event.about %></td>

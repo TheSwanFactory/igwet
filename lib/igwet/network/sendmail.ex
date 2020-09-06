@@ -149,18 +149,20 @@ defmodule Igwet.Network.Sendmail do
     try do
       node = Network.get_first_node!(:email, sender_email)
       keyed_email = Mailer.keyed_email(node)
-
-      updates = %{
-        @sender => keyed_email,
-        @from => {node.name, keyed_email},
-        @headers => [sender: keyed_email] ++ params[@headers]
-      }
-
-      Map.merge(params, updates)
+      sender_params(params, node.name, keyed_email)
     rescue
       e ->
         raise "Unrecognized sender `#{sender_email}`}\n#{inspect(e)}"
     end
+  end
+
+  def sender_params(params, name, email) do
+    updates = %{
+      @sender => email,
+      @from => {name, email},
+      @headers => [sender: email] ++ params[@headers]
+    }
+    Map.merge(params, updates)
   end
 
   @doc """
@@ -197,6 +199,41 @@ defmodule Igwet.Network.Sendmail do
   end
 
   @doc """
+  Return messages about event to all members of group
+
+  ## Examples
+      iex> alias Igwet.Network
+      iex> alias Igwet.Network.Sendmail
+      iex> group = Network.get_first_node!(:name, "admin")
+      iex> {:ok, event} = Network.create_node %{name: "subject", about: "body", key: "admin+event"}
+      iex> message = Sendmail.email_group_event(group, event)
+      iex> message.from
+      {"admin", "com.igwet+admin@example.com"}
+      iex> length(message.to)
+      1
+      iex> Enum.at(message.to, 0)
+      {"operator", "ernest.prabhakar@gmail.com"}
+      iex> message.subject
+      "subject"
+  """
+
+  def email_group_event(group, event) do
+    email = if (group.email != nil), do: group.email, else: Mailer.keyed_email(group)
+    message =
+      new_email()
+      |> from({group.name, email})
+      |> subject(event.name)
+      |> text_body(event.about)
+      |> put_header(@sender, email)
+      |> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
+
+    Network.node_members(group)
+    |> Enum.filter( &(&1.email =~ "@") )
+    |> Enum.map( &({&1.name, &1.email}) )
+    |> (fn recipient_list -> to(message, recipient_list) end).()
+  end
+
+  @doc """
   Return a list of nodes (or their members) containing emails
 
   ## Examples
@@ -223,6 +260,7 @@ defmodule Igwet.Network.Sendmail do
         [node]
     end
   end
+
 
   @doc """
   Return a list of nodes (or their members) containing phone numbers
