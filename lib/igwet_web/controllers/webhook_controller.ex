@@ -13,6 +13,25 @@ defmodule IgwetWeb.WebhookController do
     "#{Tuple.to_list(host) |> Enum.join(".")}:#{port}"
   end
 
+  def log_sms(conn, params) do
+    Logger.debug("** params: " <> inspect(params))
+    try do
+      params
+      |> SMS.to_nodes()
+      |> SMS.add_recipients()
+
+      now = DateTime.to_string(DateTime.utc_now())
+      conn
+      |> put_status(:created)
+      |> json(%{created_at: now})
+    rescue
+      e ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: e})
+    end
+  end
+
   def receive_sms(conn, params) do
     Logger.debug("** params: " <> inspect(params))
     try do

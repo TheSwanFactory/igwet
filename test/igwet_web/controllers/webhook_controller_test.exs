@@ -13,6 +13,14 @@ defmodule IgwetWeb.WebhookControllerTest do
     {:ok, %{conn: conn}}
   end
 
+  test "POST /webhook/log_sms -> 201", %{conn: conn} do
+    "{\"created_at\":" <> time = conn
+    |> post("/webhook/log_sms", SMS.test_params("log_sms"))
+    |> response(201)
+
+    assert nil != time
+  end
+
   test "POST /webhook/twilio -> 201", %{conn: conn} do
     "{\"created_at\":" <> time = conn
     |> post("/webhook/twilio", SMS.test_params("webhook"))

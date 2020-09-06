@@ -31,6 +31,7 @@ defmodule IgwetWeb.Router do
 
   scope "/webhook", IgwetWeb do
     post("/", WebhookController, :forward_email)
+    post("/log_sms", WebhookController, :log_sms)
     post("/twilio", WebhookController, :receive_sms)
   end
 
