@@ -33,10 +33,13 @@ defmodule IgwetWeb.GroupController do
 
   def show(conn, %{"id" => id}) do
     node = Network.get_node!(id)
-    groups = Network.node_groups(node)
-    members = Network.node_members(node)
-    events = Network.related_subjects(node, "for")
-    render(conn, "show.html", node: node, groups: groups, members: members, events: events)
+    all = %{
+      groups: Network.node_groups(node),
+      members: Network.node_members(node),
+      events: Network.related_subjects(node, "for"),
+      messages: Network.related_subjects(node, "from"),
+    }
+    render(conn, "show.html", node: node, all: all)
   end
 
   def edit(conn, %{"id" => id}) do

@@ -3,7 +3,7 @@
 <div><%= link "New Event", to: event_path(@conn, :new, id: @node.id) %>
   <ul>
     <h3>Events</h3>
-    <%= for event <- @events do %>
+    <%= for event <- @all.events do %>
       <li>
         <%= link(event.name, to: event_path(@conn, :show, event)) %>
       </li>
@@ -57,7 +57,7 @@
 
   <ul>
     <h3>Parent Groups</h3>
-    <%= for group <- @groups do %>
+    <%= for group <- @all.groups do %>
       <li>
         <%= link(group.name, to: group_path(@conn, :show, group)) %>
       </li>
@@ -66,11 +66,21 @@
 
   <ul>
     <h3>Members</h3>
-    <%= for member <- @members do %>
+    <%= for member <- @all.members do %>
       <li>
-        <%= link(member.name, to: group_path(@conn, :show, member)) %>
+        <%= link(member.name, to: node_path(@conn, :show, member)) %>
       </li>
     <% end %>
   </ul>
+
+  <ul>
+    <h3>Messages</h3>
+    <%= for message <- @all.messages do %>
+      <li>
+        <%= link(message.name, to: node_path(@conn, :show, message)) %>
+      </li>
+    <% end %>
+  </ul>
+
 
 </ul>
