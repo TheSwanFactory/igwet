@@ -10,6 +10,6 @@ TEST_HOST=https://localhost:$PORT
 PROD_HOST=https://www.igwet.com
 
 DATA="from=$PHONE_ERNEST&to=$PHONE_IGWET&body=$BODY&MessageSid=$MSG_SID&AccountSid=$TWILIO_ACCOUNT_SID"
-URL="$PROD_HOST/webhook/twilio"
+URL="$TEST_HOST/webhook/log_sms"
 echo "$URL: $DATA"
 curl -k -X POST -d "$DATA" $URL

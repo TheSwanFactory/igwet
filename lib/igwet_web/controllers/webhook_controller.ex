@@ -14,7 +14,7 @@ defmodule IgwetWeb.WebhookController do
   end
 
   def log_sms(conn, params) do
-    Logger.debug("** params: " <> inspect(params))
+    Logger.warn("** log_sms.params:\n" <> inspect(params))
     try do
       params
       |> SMS.to_nodes()
@@ -33,7 +33,7 @@ defmodule IgwetWeb.WebhookController do
   end
 
   def receive_sms(conn, params) do
-    Logger.debug("** params: " <> inspect(params))
+    Logger.debug("** receive_sms.params: " <> inspect(params))
     try do
       params
       |> SMS.relay_sms()
@@ -51,6 +51,7 @@ defmodule IgwetWeb.WebhookController do
   end
 
   def forward_email(conn, params) do
+    Logger.debug("** forward_email.params: " <> inspect(params))
     now = DateTime.to_string(DateTime.utc_now())
     received = "from #{peer(conn)} by #{conn.host}; #{now}"
 
