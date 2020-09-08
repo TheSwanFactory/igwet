@@ -141,10 +141,10 @@ defmodule Igwet.Network.SMS do
 
     Logger.warn("** to_nodes.params[@from]: " <> params[@from])
     sender = Network.get_first_node!(:phone, params[@from])
-    Logger.warn("** to_nodes.sender:\n" <> inspect(sender))
-    Logger.warn("** to_nodes.params[@to]: " <> params[@to])
+    #Logger.warn("** to_nodes.sender:\n" <> inspect(sender))
+    #Logger.warn("** to_nodes.params[@to]: " <> params[@to])
     receiver = Network.get_first_node!(:phone, params[@to])
-    Logger.warn("** to_nodes.receiver:\n" <> inspect(receiver))
+    #Logger.warn("** to_nodes.receiver:\n" <> inspect(receiver))
     text = params[@body] #Network.get_initials(sender) <> ": " <>
     chat = Network.get_predicate("chat")
     msg_key = "chat+" <> sender.key <> "+" <> params[@msg_id]
