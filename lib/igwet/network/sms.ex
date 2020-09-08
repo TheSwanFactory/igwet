@@ -10,9 +10,9 @@ defmodule Igwet.Network.SMS do
   alias Igwet.Network
 #  import ExTwilio.Api
 
-  @from "from"
-  @to "to"
-  @body "body"
+  @from "From"
+  @to "To"
+  @body "Body"
   @n_media "NumMedia"
   @msg_id "MessageSid"
   @sms_id "SmsSid"
@@ -49,13 +49,13 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> params = SMS.test_params("test_params")
-      iex> params["to"]
+      iex> params["To"]
       "+13105555555"
       iex> node = params[:sender]
       iex> node.name
       "from"
       iex> node.phone
-      params["from"]
+      params["From"]
   """
 
   def test_params(prefix) do
@@ -75,8 +75,8 @@ defmodule Igwet.Network.SMS do
       'SmartEncoded' => true,
       "Debug" => true
     }
-    {:ok, sender} = Network.create_node %{name: "from", phone: params["from"], key: prefix <> "+from"}
-    {:ok, receiver} = Network.create_node %{name: "to", phone: params["to"], key: prefix <> "+to"}
+    {:ok, sender} = Network.create_node %{name: "from", phone: params["From"], key: prefix <> "+from"}
+    {:ok, receiver} = Network.create_node %{name: "to", phone: params["To"], key: prefix <> "+to"}
     Network.set_node_in_group(sender, receiver)
     Map.merge(params, %{
       prefix: prefix,
@@ -110,7 +110,7 @@ defmodule Igwet.Network.SMS do
       ...> |> SMS.phone2member("+8155551212")
       ...> |> SMS.relay_sms()
       ...> |> Enum.sort()
-      [%{body: "f: Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "f: Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
+      [%{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
   """
 
   def relay_sms(params) do
@@ -130,10 +130,7 @@ defmodule Igwet.Network.SMS do
       iex> sender.name
       "from"
       iex> sender.phone
-      params["from"]
-      iex> [head | _tail] = String.split(text, ":")
-      iex> head
-      "f"
+      params["From"]
   """
 
   def to_nodes(params) do
@@ -144,10 +141,17 @@ defmodule Igwet.Network.SMS do
 
     sender = Network.get_first_node!(:phone, params[@from])
     receiver = Network.get_first_node!(:phone, params[@to])
-    text = Network.get_initials(sender) <> ": " <> params[@body]
+    text = params[@body] #Network.get_initials(sender) <> ": " <>
     chat = Network.get_predicate("chat")
-    msg_key = ".msg+" <> sender.key <> "+" <> params[@msg_id]
-    {:ok, message} = Network.create_node %{name: text, key: msg_key}
+    msg_key = "chat+" <> sender.key <> "+" <> params[@msg_id]
+    {:ok, datetime} = DateTime.now(sender.timezone)
+    {:ok, message} = Network.create_node %{
+      about: inspect(params),
+      date: datetime,
+      key: msg_key,
+      name: text,
+      size: String.length(text),
+    }
     Network.make_edge(message, "type", chat)
     #Network.set_node_in_group(message, receiver)
     Network.make_edge(message, "from", sender)

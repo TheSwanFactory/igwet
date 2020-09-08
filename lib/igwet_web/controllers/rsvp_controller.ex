@@ -22,7 +22,7 @@ defmodule IgwetWeb.RsvpController do
     current = Network.count_attendance(event)
     changeset = Network.change_node(%Node{})
     attendees = Network.related_subjects(event, "at")
-    Logger.warn "by_event.attendees\n" <> inspect(attendees)
+    Logger.debug "by_event.attendees\n" <> inspect(attendees)
 
     conn
     |> assign(:current_user, nil)

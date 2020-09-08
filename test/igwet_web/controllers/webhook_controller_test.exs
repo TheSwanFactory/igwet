@@ -5,12 +5,34 @@ defmodule IgwetWeb.WebhookControllerTest do
   use Bamboo.Test
   doctest IgwetWeb.WebhookController
 
+  alias Igwet.Network
   alias Igwet.Network.SMS
   alias Igwet.Network.Sendmail
 
   setup %{conn: conn} do
     conn = put_req_header(conn, "content-type", "application/json")
     {:ok, %{conn: conn}}
+  end
+
+  test "POST /webhook/log_sms -> 201", %{conn: conn} do
+    params = SMS.test_params("log_sms")
+    node = Network.get_first_node!(:phone, params["From"])
+    assert nil != node
+    assert 0 == length(Network.related_subjects(node, "from"))
+
+    "{\"created_at\":" <> time = conn
+    |> post("/webhook/log_sms", params)
+    |> response(201)
+
+    assert nil != time
+    results = Network.related_subjects(node, "from")
+    assert 1 == length(results)
+    result = Enum.at(results,0)
+    assert "Hello, Twirled!" == result.name
+    assert 15 == result.size
+    assert nil != result.date
+    assert result.about =~ "Twirled"
+    #Logger.warn("result\n" <> inspect(result))
   end
 
   test "POST /webhook/twilio -> 201", %{conn: conn} do

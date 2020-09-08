@@ -27,7 +27,7 @@
   </p><p>
     Historically, such networked communities have not been able to win against hierarchical insitutions.
     Hierarchy enables rapid decision making and mass-conformity, which was a competitive advantage in the industrial era.
-    However, in a post-industrial Volatile-Uncertain-Complex-Ambiguous (VUCA) world, networks should have the edge by being able to rapidly assimilate new information and cheaply experiment with alternate solutions.
+    However, in a post-industrial Volatile-Uncertain-Complex-Ambiguous (<a href="https://www.forbes.com/sites/jeroenkraaijenbrink/2018/12/19/what-does-vuca-really-mean/#5a7caaa517d6">VUCA</a>) world, networks should have the edge by being able to rapidly assimilate new information and cheaply experiment with alternate solutions.
   </p><p>
     The challenge to date is that virtually all of the tools and media of the modern world implicitly assume (and encourage) top-down thinking.
     This makes it very difficult for new movements to achieve scale without falling into that trap.
@@ -56,7 +56,7 @@
     </dd><dt>
       Open, Portable, Cooperative
     </dt><dd>
-      IGWET incorporates several best practices to ensure its business is aligned with the needs of its communities.  One, all of the code is open source, and we encourage others to host their own IGWET servers and federate with us (probably via ActivityPub and the Fediverse).  Two, we are committed to making it easy for communities to seamlessly migrate their members and history between servers.  Three, we are committed to creating cooperative governance structures within and across servers.  Individual servers are welcome to operate as for-profit businesses, and choose whatever additional functionality and quality-of-service gauranteess they want to provide.  But to particpate in the federation, they need to ensure the governance of their policies is accountable to the communities they host.
+      IGWET incorporates several best practices to ensure its business is aligned with the needs of its communities.  One, all of the code is <b>open source</b>, and we encourage others to host their own IGWET servers and federate with us (probably via <a href="https://activitypub.rocks">ActivityPub</a> and the <a href="https://fediverse.party/en/fediverse">Fediverse</a>).  Two, we are committed to making it easy for communities to <b>seamlessly migrate</b> their members and history between servers.  Three, we are committed to creating <b>cooperative governance</b> structures within and across servers.  Individual servers are welcome to operate as for-profit businesses, and choose whatever additional functionality and quality-of-service gauranteess they want to provide.  But to particpate in the federation, they need to ensure the governance of their policies is accountable to the communities they host.
     </dd>
   </dl>
 
@@ -86,7 +86,7 @@
         <a href="https://theswanfactory.wordpress.com/2015/03/08/how-to-disrupt-facebook/">How to Disrupt Facebook</a>
       </li>
       <li><span class="author">Joe Edelman</a>,
-        <a href="http://livable.media/">Livable Media</a>: Four Ideas for Better Human Systems
+        <a href="https://medium.com/@edelwax/four-ideas-for-better-human-systems-7b1a5661a3fc">Four Ideas for Better Human Systems</a>:
       </li>
     </ul>
   </div>

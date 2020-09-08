@@ -13,8 +13,31 @@ defmodule IgwetWeb.WebhookController do
     "#{Tuple.to_list(host) |> Enum.join(".")}:#{port}"
   end
 
+  def status(_conn, params) do
+    Logger.warn("** status.params:\n" <> inspect(params))
+  end
+
+  def log_sms(conn, params) do
+    Logger.warn("** log_sms.params:\n" <> inspect(params))
+    try do
+      params
+      |> SMS.to_nodes()
+      |> SMS.add_recipients()
+
+      now = DateTime.to_string(DateTime.utc_now())
+      conn
+      |> put_status(:created)
+      |> json(%{created_at: now})
+    rescue
+      e ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: e})
+    end
+  end
+
   def receive_sms(conn, params) do
-    Logger.debug("** params: " <> inspect(params))
+    Logger.debug("** receive_sms.params: " <> inspect(params))
     try do
       params
       |> SMS.relay_sms()
@@ -32,6 +55,7 @@ defmodule IgwetWeb.WebhookController do
   end
 
   def forward_email(conn, params) do
+    Logger.debug("** forward_email.params: " <> inspect(params))
     now = DateTime.to_string(DateTime.utc_now())
     received = "from #{peer(conn)} by #{conn.host}; #{now}"
 
