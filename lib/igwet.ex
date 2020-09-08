@@ -1,6 +1,7 @@
 defmodule Igwet do
   require Protocol
   Protocol.derive(Jason.Encoder, RuntimeError)
+  Protocol.derive(Jason.Encoder, FunctionClauseError)
   Protocol.derive(Jason.Encoder, Ecto.NoResultsError)
   Protocol.derive(Jason.Encoder, Ecto.MultipleResultsError)
   @moduledoc """

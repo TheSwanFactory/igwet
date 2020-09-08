@@ -13,6 +13,10 @@ defmodule IgwetWeb.WebhookController do
     "#{Tuple.to_list(host) |> Enum.join(".")}:#{port}"
   end
 
+  def status(_conn, params) do
+    Logger.warn("** status.params:\n" <> inspect(params))
+  end
+
   def log_sms(conn, params) do
     Logger.warn("** log_sms.params:\n" <> inspect(params))
     try do

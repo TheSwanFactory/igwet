@@ -16,7 +16,7 @@ defmodule IgwetWeb.WebhookControllerTest do
 
   test "POST /webhook/log_sms -> 201", %{conn: conn} do
     params = SMS.test_params("log_sms")
-    node = Network.get_first_node!(:phone, params["from"])
+    node = Network.get_first_node!(:phone, params["From"])
     assert nil != node
     assert 0 == length(Network.related_subjects(node, "from"))
 
