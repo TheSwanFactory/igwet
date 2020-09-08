@@ -127,6 +127,33 @@ defmodule Igwet.Network do
   end
 
   @doc """
+  Get contact by phone number.  Create if missing.
+
+  """
+  def get_contact_for_twilio(params) do
+    from = params["From"]
+    node = Node
+            |> order_by([asc: :inserted_at])
+            |> where([n], n.phone == ^from)
+            |> limit(1)
+            |> Repo.one()
+    if (nil != node) do
+      node
+    else
+      city = params["FromCity"]
+      name = "#{city} #{from}"
+      {:ok, node} = create_node %{
+        name: name,
+        phone: from,
+        type: get_predicate("contact"),
+        key: "#{group.key}+#{name}"
+      }
+      set_node_in_group(node, group)
+      node
+    end
+  end
+
+  @doc """
   Check if node is in site admin group.
 
   ## Examples
