@@ -14,11 +14,11 @@ defmodule IgwetWeb.WebhookController do
   end
 
   def status(_conn, params) do
-    Logger.warn("** status.params:\n" <> inspect(params))
+    Logger.debug("** status.params:\n" <> inspect(params))
   end
 
   def log_sms(conn, params) do
-    Logger.warn("** log_sms.params:\n" <> inspect(params))
+    Logger.debug("** log_sms.params:\n" <> inspect(params))
     try do
       params
       |> SMS.to_nodes()

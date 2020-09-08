@@ -98,6 +98,10 @@ defmodule Igwet.Network do
     end
   end
 
+  defp key_from_string(string) do
+    String.replace(string, ~r/\W+/, "_")
+  end
+
   @doc """
   Get member of this group.  Create or associate if missing.
 
@@ -119,7 +123,7 @@ defmodule Igwet.Network do
         name: name,
         email: email,
         type: get_predicate("contact"),
-        key: "#{group.key}+#{name}"
+        key: key_from_string("#{group.key}+#{name}")
       }
       set_node_in_group(node, group)
       node
@@ -132,6 +136,7 @@ defmodule Igwet.Network do
   """
   def get_contact_for_twilio(params) do
     from = params["From"]
+    city = params["FromCity"]
     node = Node
             |> order_by([asc: :inserted_at])
             |> where([n], n.phone == ^from)
@@ -140,15 +145,13 @@ defmodule Igwet.Network do
     if (nil != node) do
       node
     else
-      city = params["FromCity"]
-      name = "#{city} #{from}"
+      name = "#{city}+#{from}"
       {:ok, node} = create_node %{
         name: name,
         phone: from,
         type: get_predicate("contact"),
-        key: "#{group.key}+#{name}"
+        key: key_from_string("sms.contact+#{name}")
       }
-      set_node_in_group(node, group)
       node
     end
   end
@@ -504,46 +507,14 @@ defmodule Igwet.Network do
 
   """
   def create_node(attrs \\ %{}) do
-    %Node{}
+    node = %Node{}
     |> Node.changeset(attrs)
     |> Repo.insert()
-  end
-
-  @doc """
-  Creates a node of a given type, generating key if necessary
-
-  ## Examples
-
-      iex> create_typed_node(%{field: value})
-      {:ok, %Node{}}
-
-
-  """
-  def create_typed_node!(attrs \\ %{}) do
-    %{key: key, type: type} = attrs
-
-    if type == nil do
-      {:error, %Ecto.Changeset{}}
-    else
-      type_node = get_predicate(type)
-
-      new_attrs =
-        if key == nil do
-          type_key = type_node.key
-          name_key = key_from_string(attrs["name"])
-          key = "#{type_key}.#{name_key}"
-          %{attrs | key: key}
-        else
-          attrs
-        end
-
-      {:ok, node} = create_node(new_attrs)
-      node
+    if (nil != attrs["type"]) do
+      type_node = get_predicate(node.type)
+      make_edge(node, "type", type_node)
     end
-  end
-
-  defp key_from_string(string) do
-    String.replace(string, ~r/\W+/, "_")
+    node
   end
 
   @doc """

@@ -156,7 +156,6 @@ defmodule Igwet.Network.SMS do
       name: text,
       size: String.length(text),
     }
-    Logger.warn("** to_nodes.params:\n" <> inspect(params))
     Network.make_edge(message, "type", chat)
     #Network.set_node_in_group(message, receiver)
     Network.make_edge(message, "from", sender)
