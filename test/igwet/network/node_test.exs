@@ -3,6 +3,7 @@ defmodule Igwet.NetworkTest.Node do
   use Igwet.DataCase
   alias Igwet.Network
   alias Igwet.Network.Node
+  alias Igwet.Network.Edge
   doctest Igwet.Network.Node
 
   @valid_attrs %{
@@ -10,14 +11,15 @@ defmodule Igwet.NetworkTest.Node do
     email: "some email",
     key: "some key",
     name: "some name",
-    phone: "+14085551212"
+    phone: "+14085551212",
+    type: "type.name",
   }
   @update_attrs %{
     about: "next about",
     email: "next email",
     key: "next key",
     name: "next name",
-    phone: "+17765551212"
+    phone: "+17765551212",
   }
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
 
@@ -71,6 +73,20 @@ defmodule Igwet.NetworkTest.Node do
       assert node.key == "some key"
       assert node.name == "some name"
       assert node.phone == @valid_attrs.phone
+    end
+
+    test "create_node/1 with type name creates an edge" do
+      assert {:ok, %Node{} = node} = Network.create_node(@valid_attrs)
+      edges = Edge
+      |> where([e], e.subject_id == ^node.id )
+      |> preload([:object, :predicate])
+      |> Repo.all()
+
+      assert 1 == length(edges)
+      edge = Enum.at(edges, 0)
+      assert nil != edge
+      assert "type.name" == edge.object.name
+      assert "type" == edge.predicate.name
     end
   end
 

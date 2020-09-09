@@ -92,8 +92,7 @@ defmodule Igwet.Network do
     if (nil != first) do
       first
     else
-      type = get_first_node!(:name, "predicate")
-      {:ok, node} = create_node %{name: value, type: type, key: type.key <> "+" <> value}
+      {:ok, node} = create_node %{name: value, type: "predicate", key: ".usr" <> "+" <> value}
       node
     end
   end
@@ -122,7 +121,7 @@ defmodule Igwet.Network do
       {:ok, node} = create_node %{
         name: name,
         email: email,
-        type: get_predicate("contact"),
+        type: "contact",
         key: key_from_string("#{group.key}+#{name}")
       }
       set_node_in_group(node, group)
@@ -149,7 +148,7 @@ defmodule Igwet.Network do
       {:ok, node} = create_node %{
         name: name,
         phone: from,
-        type: get_predicate("contact"),
+        type: "contact",
         key: key_from_string("sms.contact+#{name}")
       }
       node
@@ -507,14 +506,16 @@ defmodule Igwet.Network do
 
   """
   def create_node(attrs \\ %{}) do
-    node = %Node{}
-    |> Node.changeset(attrs)
-    |> Repo.insert()
-    if (nil != attrs["type"]) do
-      type_node = get_predicate(node.type)
-      make_edge(node, "type", type_node)
+    case Repo.insert(Node.changeset(%Node{}, attrs)) do
+      {:ok, node} ->
+        if (Map.has_key?(attrs, :type)) do
+          type_node = get_predicate(attrs.type)
+          make_edge(node, "type", type_node)
+        end
+        {:ok, node}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, changeset}
     end
-    node
   end
 
   @doc """
