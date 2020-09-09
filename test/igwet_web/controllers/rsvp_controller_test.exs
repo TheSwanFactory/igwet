@@ -75,10 +75,6 @@ defmodule IgwetWeb.RsvpControllerTest do
 
       node = Network.get_first_node!(:email, @node_email)
       assert node != nil
-      edges = Ecto.assoc(node, :edges) |> Igwet.Repo.all()
-      _edge = edges |> Enum.at(0) |> Ecto.assoc(:predicate) |> Igwet.Repo.all()
-
-      assert Enum.count(edges) == 2
       assert Network.member_attendance(node, event) == 3
       assert Network.count_attendance(event) == 3
     end

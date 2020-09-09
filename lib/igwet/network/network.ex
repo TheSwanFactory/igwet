@@ -92,10 +92,13 @@ defmodule Igwet.Network do
     if (nil != first) do
       first
     else
-      type = get_first_node!(:name, "predicate")
-      {:ok, node} = create_node %{name: value, type: type, key: type.key <> "+" <> value}
+      {:ok, node} = create_node %{name: value, type: "predicate", key: ".usr" <> "+" <> value}
       node
     end
+  end
+
+  defp key_from_string(string) do
+    String.replace(string, ~r/\W+/, "_")
   end
 
   @doc """
@@ -118,10 +121,34 @@ defmodule Igwet.Network do
       {:ok, node} = create_node %{
         name: name,
         email: email,
-        type: get_predicate("contact"),
-        key: "#{group.key}+#{name}"
+        type: "contact",
+        key: key_from_string("#{group.key}+#{name}")
       }
       set_node_in_group(node, group)
+      node
+    end
+  end
+
+  @doc """
+  Get contact by phone number.  Create if missing.
+
+  """
+  def get_contact_for_phone(number, stub) do
+    node = Node
+            |> order_by([asc: :inserted_at])
+            |> where([n], n.phone == ^number)
+            |> limit(1)
+            |> Repo.one()
+    if (nil != node) do
+      node
+    else
+      name = "#{stub}#{number}"
+      {:ok, node} = create_node %{
+        name: name,
+        phone: number,
+        type: "contact",
+        key: key_from_string("sms.contact+#{name}")
+      }
       node
     end
   end
@@ -477,46 +504,16 @@ defmodule Igwet.Network do
 
   """
   def create_node(attrs \\ %{}) do
-    %Node{}
-    |> Node.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Creates a node of a given type, generating key if necessary
-
-  ## Examples
-
-      iex> create_typed_node(%{field: value})
-      {:ok, %Node{}}
-
-
-  """
-  def create_typed_node!(attrs \\ %{}) do
-    %{key: key, type: type} = attrs
-
-    if type == nil do
-      {:error, %Ecto.Changeset{}}
-    else
-      type_node = get_predicate(type)
-
-      new_attrs =
-        if key == nil do
-          type_key = type_node.key
-          name_key = key_from_string(attrs["name"])
-          key = "#{type_key}.#{name_key}"
-          %{attrs | key: key}
-        else
-          attrs
+    case Repo.insert(Node.changeset(%Node{}, attrs)) do
+      {:ok, node} ->
+        if (Map.has_key?(attrs, :type)) do
+          type_node = get_predicate(attrs.type)
+          make_edge(node, "type", type_node)
         end
-
-      {:ok, node} = create_node(new_attrs)
-      node
+        {:ok, node}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, changeset}
     end
-  end
-
-  defp key_from_string(string) do
-    String.replace(string, ~r/\W+/, "_")
   end
 
   @doc """

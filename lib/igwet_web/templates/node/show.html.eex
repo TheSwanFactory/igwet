@@ -4,7 +4,7 @@
 <span><%= link "Back", to: node_path(@conn, :index) %></span>
 
 <ul>
-  
+
   <li>
     <strong>Type:</strong>
     <%= Network.get_type(@node) %>
@@ -69,4 +69,12 @@
     <% end %>
   </ul>
 
+  <ul>
+    <h3>Messages</h3>
+    <%= for message <- @messages do %>
+      <li>
+        <%= link(message.name, to: node_path(@conn, :show, message)) %>
+      </li>
+    <% end %>
+  </ul>
 </ul>

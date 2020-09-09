@@ -3,6 +3,7 @@ defmodule Igwet.NetworkTest.Node do
   use Igwet.DataCase
   alias Igwet.Network
   alias Igwet.Network.Node
+  alias Igwet.Network.Edge
   doctest Igwet.Network.Node
 
   @valid_attrs %{
@@ -10,26 +11,30 @@ defmodule Igwet.NetworkTest.Node do
     email: "some email",
     key: "some key",
     name: "some name",
-    phone: "some phone"
+    phone: "+14085551212",
+    type: "type.name",
   }
   @update_attrs %{
     about: "next about",
     email: "next email",
     key: "next key",
     name: "next name",
-    phone: "next phone"
+    phone: "+17765551212",
   }
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil}
 
   @event_attrs %{
-    name: "event name",
     about: "event details",
-    key: "event.key",
     date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
+    key: "event.key",
+    meta: %{duration: 90, parent_id: nil, recurrence: 7},
+    name: "event name",
+    phone: "+12105551212",
     size: 5,
     timezone: "US/Pacific",
-    meta: %{duration: 90, parent_id: nil, recurrence: 7}
   }
+
+  @twilio_params 	%{"AccountSid" => "ACSID", "ApiVersion" => "2010-04-01", "Body" => "ThisIsTheEnd", "From" => "+14085551212", "FromCity" => "SAN JOSE", "FromCountry" => "US", "FromState" => "CA", "FromZip" => "95076", "MessageSid" => "MessageSid12345", "MessagingServiceSid" => "MGSID", "NumMedia" => "0", "NumSegments" => "1", "SmsMessageSid" => "SmsMessageSid12345", "SmsSid" => "SmsSid12345", "SmsStatus" => "received", "To" => "+12105551212", "ToCity" => "SAN ANTONIO", "ToCountry" => "US", "ToState" => "TX", "ToZip" => "78215"}
 
   def node_fixture(attrs \\ %{}) do
     {:ok, node} =
@@ -67,7 +72,21 @@ defmodule Igwet.NetworkTest.Node do
       assert node.email == "some email"
       assert node.key == "some key"
       assert node.name == "some name"
-      assert node.phone == "some phone"
+      assert node.phone == @valid_attrs.phone
+    end
+
+    test "create_node/1 with type name creates an edge" do
+      assert {:ok, %Node{} = node} = Network.create_node(@valid_attrs)
+      edges = Edge
+      |> where([e], e.subject_id == ^node.id )
+      |> preload([:object, :predicate])
+      |> Repo.all()
+
+      assert 1 == length(edges)
+      edge = Enum.at(edges, 0)
+      assert nil != edge
+      assert "type.name" == edge.object.name
+      assert "type" == edge.predicate.name
     end
   end
 
@@ -84,7 +103,7 @@ defmodule Igwet.NetworkTest.Node do
       assert node.email == "next email"
       assert node.key == "next key"
       assert node.name == "next name"
-      assert node.phone == "next phone"
+      assert node.phone == @update_attrs.phone
     end
 
     test "update_node/2 with invalid data returns error changeset" do
@@ -105,13 +124,26 @@ defmodule Igwet.NetworkTest.Node do
     end
   end
 
+  describe "twilio webhook" do
+    setup [:create_event]
+    test "get_contact_for_phone/2 gets node if exists" do
+      contact = Network.get_contact_for_phone(@twilio_params["From"], @twilio_params["FromCity"])
+      assert @twilio_params["From"] == contact.phone
+      assert "type.name" == Network.get_type(contact)
+    end
+
+    test "get_contact_for_phone/2 creates contact if missing" do
+      phone = "+14325551212"
+      contact = Network.get_contact_for_phone(phone, @twilio_params["FromCity"])
+      assert phone == contact.phone
+      assert contact.name =~ @twilio_params["FromCity"]
+      assert "contact" == Network.get_type(contact)
+    end
+
+  end
+
   describe "rsvp node" do
     setup [:create_event]
-
-    test "get_member_for_email/2 gets node if exists", %{node: node, group: group} do
-      member = Network.get_member_for_email(node.email, group)
-      assert node.phone == member.phone
-    end
 
     test "get_member_for_email/2 creates node if needed", %{group: group} do
       email = "test@example.com"
