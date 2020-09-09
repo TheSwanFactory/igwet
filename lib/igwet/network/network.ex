@@ -133,21 +133,19 @@ defmodule Igwet.Network do
   Get contact by phone number.  Create if missing.
 
   """
-  def get_contact_for_twilio(params) do
-    from = params["From"]
-    city = params["FromCity"]
+  def get_contact_for_phone(number, stub) do
     node = Node
             |> order_by([asc: :inserted_at])
-            |> where([n], n.phone == ^from)
+            |> where([n], n.phone == ^number)
             |> limit(1)
             |> Repo.one()
     if (nil != node) do
       node
     else
-      name = "#{city}+#{from}"
+      name = "#{stub}#{number}"
       {:ok, node} = create_node %{
         name: name,
-        phone: from,
+        phone: number,
         type: "contact",
         key: key_from_string("sms.contact+#{name}")
       }

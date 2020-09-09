@@ -126,10 +126,20 @@ defmodule Igwet.NetworkTest.Node do
 
   describe "twilio webhook" do
     setup [:create_event]
-    test "get_contact_for_twilio/1 gets node if exists" do
-      contact = Network.get_contact_for_twilio(@twilio_params)
-      assert @twilio_params["@From"] == contact.phone
+    test "get_contact_for_phone/2 gets node if exists" do
+      contact = Network.get_contact_for_phone(@twilio_params["From"], @twilio_params["FromCity"])
+      assert @twilio_params["From"] == contact.phone
+      assert "type.name" == Network.get_type(contact)
     end
+
+    test "get_contact_for_phone/2 creates contact if missing" do
+      phone = "+14325551212"
+      contact = Network.get_contact_for_phone(phone, @twilio_params["FromCity"])
+      assert phone == contact.phone
+      assert contact.name =~ @twilio_params["FromCity"]
+      assert "contact" == Network.get_type(contact)
+    end
+
   end
 
   describe "rsvp node" do
