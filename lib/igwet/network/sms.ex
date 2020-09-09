@@ -10,9 +10,11 @@ defmodule Igwet.Network.SMS do
   alias Igwet.Network
 #  import ExTwilio.Api
 
+  @body "Body"
   @from "From"
   @to "To"
-  @body "Body"
+  @from_city "FromCity"
+  @to_city "ToCity"
   @n_media "NumMedia"
   @msg_id "MessageSid"
   @sms_id "SmsSid"
@@ -140,10 +142,10 @@ defmodule Igwet.Network.SMS do
     ensure_parameter!(params, @msg_id)
 
     Logger.warn("** to_nodes.params[@from]: " <> params[@from])
-    sender = Network.get_first_node!(:phone, params[@from])
+    sender = Network.get_contact_for_phone(params[@from], params[@from_city])
     #Logger.warn("** to_nodes.sender:\n" <> inspect(sender))
     #Logger.warn("** to_nodes.params[@to]: " <> params[@to])
-    receiver = Network.get_first_node!(:phone, params[@to])
+    receiver = Network.get_contact_for_phone(params[@to], params[@to_city])
     #Logger.warn("** to_nodes.receiver:\n" <> inspect(receiver))
     text = params[@body] #Network.get_initials(sender) <> ": " <>
     chat = Network.get_predicate("chat")
