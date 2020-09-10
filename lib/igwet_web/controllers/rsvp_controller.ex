@@ -73,6 +73,18 @@ end
     |> redirect(to: rsvp_path(conn, :by_event, event_key))
   end
 
+
+  def next_event(conn, %{"id" => id}) do
+    event = Network.get_node!(id)
+    group_id = event.meta.parent_id
+    group = Network.get_node!(group_id)
+    next_week = event.date + event.meta.recurrence
+    key = group.key <> "+" <> DateTime.to_string(next_week)
+    defaults = Map.merge(event, %{date: next_week, key: key})
+    changeset = Network.change_node(defaults)
+    render(conn, "new.html", changeset: changeset, group: group)
+  end
+    
   def send_email(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)

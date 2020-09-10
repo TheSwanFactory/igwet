@@ -45,6 +45,7 @@ defmodule IgwetWeb.Router do
     post("/for/:event_key/add_email", RsvpController, :add_email)
     post("/for/:event_key/:email/:count", RsvpController, :by_count)
     get("/send_email/:event_key", RsvpController, :send_email)
+    get("/next/:id", RsvpController, :next_event)
   end
 
   scope "/auth", IgwetWeb do
