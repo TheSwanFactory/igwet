@@ -49,26 +49,20 @@ defmodule IgwetWeb.RsvpControllerTest do
   describe "attendees" do
     setup [:create_event]
 
-    test "GET /rsvp/:event -> 200", %{conn: conn, event: event} do
+    test "GET /rsvp/for:event -> 200", %{conn: conn, event: event} do
       conn
-      |> get("/rsvp/" <> event.key)
+      |> get("/rsvp/for/" <> event.key)
       |> response(200)
     end
 
-    test "GET /rsvp/:event/:email -> 200", %{conn: conn, event: event} do
+    test "GET /rsvp/for:event/:email -> 200", %{conn: conn, event: event} do
       conn
-      |> get("/rsvp/" <> event.key <> "/" <> @node_email)
+      |> get("/rsvp/for/" <> event.key <> "/" <> @node_email)
       |> response(200)
     end
 
-    test "POST /rsvp/send_email/:event/ -> 200", %{conn: conn, event: event} do
-      conn
-      |> post("/rsvp/send_email/#{event.key}")
-      |> response(302)
-    end
-
-    test "POST /rsvp/:event/:email/:count -> 200", %{conn: conn, event: event} do
-      path = ["/rsvp", event.key, @node_email, 3] |> Enum.join("/")
+    test "POST /rsvp/for:event/:email/:count -> 200", %{conn: conn, event: event} do
+      path = ["/rsvp", "for", event.key, @node_email, 3] |> Enum.join("/")
       conn
       |> post(path)
       |> response(302)
@@ -77,6 +71,12 @@ defmodule IgwetWeb.RsvpControllerTest do
       assert node != nil
       assert Network.member_attendance(node, event) == 3
       assert Network.count_attendance(event) == 3
+    end
+
+    test "GET /rsvp/send_email/:event/ -> 200", %{conn: conn, event: event} do
+      conn
+      |> get("/rsvp/send_email/#{event.key}")
+      |> response(302)
     end
   end
 end
