@@ -41,5 +41,6 @@
 
     </div> <!-- /container -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <!-- script src="<%= static_path(@conn, "/node_modules/@asciidoctor/core/dist/browser/asciidoctor.js") %>"></script -->
   </body>
 </html>

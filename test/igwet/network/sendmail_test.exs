@@ -5,6 +5,10 @@ defmodule Igwet.NetworkTest.Sendmail do
 
   alias Igwet.Network.Sendmail
 
+  @group %{id: 4, name: "Group", email: "group@example.com", key: "group.key"}
+  @event %{name: "Event", email: "event@example.com", about: "This\n\nLine\n\nThat"}
+  @member %{name: "Member", email: "member@example.com"}
+
   describe "message" do
     test "email delivery" do
       node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
@@ -12,10 +16,18 @@ defmodule Igwet.NetworkTest.Sendmail do
       assert_delivered_email Sendmail.test_email(node)
     end
 
-    test "sender_params/2" do
+    test "event_message/2" do
+      message = Sendmail.event_message(@group, @event)
+      assert message.text_body =~ "Line"
     end
 
-    test "email_group_event/2" do
+    test "to_member/3" do
+      message =
+        Sendmail.event_message(@group, @event)
+        |> Sendmail.to_member(@member, "http://example.com/member_url")
+
+      #Logger.warn(inspect(message))
+      assert message.html_body =~ "Line"
     end
   end
 end
