@@ -248,9 +248,9 @@ defmodule Igwet.Network.Sendmail do
   @click_here "Click here to register (enter 0 if not coming)"
   def to_member(message, member, url) do
     prefix = "Dear #{member.name},\n"
-    click_url = Regex.replace("here", @click_here, "<a href='#{url}'>here</a>")
-    html = "#{prefix}<p>#{click_url}</p><pre>#{message.text_body}</pre>"
-    text = "#{prefix}\n\n#{click_url}:\n #{url}\n\n#{message.text_body}"
+    click_url = String.replace(@click_here, "here", "<a href='#{url}'>here</a>")
+    html = "#{prefix}<p>#{click_url}.</p><pre>#{message.text_body}</pre>"
+    text = "#{prefix}\n\n#{@click_here}:\n #{url}\n\n#{message.text_body}"
     message
     |> text_body(text)
     |> html_body(html)
