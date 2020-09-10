@@ -17,7 +17,7 @@ defmodule IgwetWeb.RsvpControllerTest do
     name: "event name",
     about: "about event",
     key: "event.key",
-    date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
+    date: ~N[2020-04-01 02:03:00],
     timezone: "US/Pacific",
     size: 100,
     meta: %{
@@ -44,6 +44,16 @@ defmodule IgwetWeb.RsvpControllerTest do
     conn
     |> get("/rsvp")
     |> response(200)
+  end
+
+  describe "event" do
+    setup [:create_event]
+
+    test "GET /rsvp/next/:event/ -> 200", %{conn: conn, event: event} do
+      conn
+      |> get("/rsvp/next/#{event.id}")
+      |> response(302)
+    end
   end
 
   describe "attendees" do

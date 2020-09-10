@@ -13,7 +13,7 @@ defmodule IgwetWeb.EventControllerTest do
   @event_attrs %{
     name: "event name",
     key: "event key",
-    date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
+    date: ~N[2020-04-01 02:03:00],
     timezone: "US/Pacific",
     size: 100,
     meta: %{
@@ -25,7 +25,7 @@ defmodule IgwetWeb.EventControllerTest do
   @update_attrs %{
     name: "some updated event",
     key: "some updated event key",
-    date: %{year: 2000, month: 12, day: 31, hour: 23, minute: 59},
+    date: ~N[2000-12-31 23:59:00],
     timezone: "US/Eastern",
     size: 60,
     meta: %{
