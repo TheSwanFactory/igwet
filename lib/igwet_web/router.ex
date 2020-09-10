@@ -40,11 +40,11 @@ defmodule IgwetWeb.Router do
     pipe_through(:browser)
 
     get("/", RsvpController, :index)
-    get("/:event_key", RsvpController, :by_event)
-    get("/:event_key/:email", RsvpController, :by_email)
-    post("/send_email/:event_key/", RsvpController, :send_email)
-    post("/:event_key/add_email", RsvpController, :add_email)
-    post("/:event_key/:email/:count", RsvpController, :by_count)
+    get("/for/:event_key", RsvpController, :by_event)
+    get("/for/:event_key/:email", RsvpController, :by_email)
+    post("/for/:event_key/add_email", RsvpController, :add_email)
+    post("/for/:event_key/:email/:count", RsvpController, :by_count)
+    get("/send_email/:event_key", RsvpController, :send_email)
   end
 
   scope "/auth", IgwetWeb do
