@@ -8,6 +8,7 @@ defmodule IgwetWeb.RsvpController do
   alias Igwet.Network.Sendmail
   alias Igwet.Admin.Mailer
   @max_rsvp 6
+  @server "https://www.iget.com"
 
   def index(conn, _params) do
     event = Network.get_predicate("event")
@@ -84,7 +85,7 @@ end
       message = Sendmail.event_message(group, event)
       result = for member <- Network.node_members(group) do
         if (member.email =~ "@") do
-          url = rsvp_path(conn, :by_email, event_key, member.email)
+          url = @server <> rsvp_path(conn, :by_email, event_key, member.email)
           Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
         end
       end
