@@ -81,7 +81,7 @@ end
     key = group.key <> "+" <> NaiveDateTime.to_string(next_week)
     defaults = event
     |> Map.merge(%{date: next_week, key: key})
-    |> Map.delete(:id)
+    #|> Map.delete(:id)
     redirect(conn, to: event_path(conn, :create, %{"node" => defaults}))
   end
 
