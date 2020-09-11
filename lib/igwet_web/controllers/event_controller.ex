@@ -27,19 +27,16 @@ defmodule IgwetWeb.EventController do
   end
 
   def create(conn, %{"node" => event_params}) do
-    case Network.create_node(event_params) do
+    case Network.create_event(event_params) do
       {:ok, event} ->
-        is_event = Network.get_predicate("event")
-        Network.make_edge(event, "type", is_event)
-        group_id = event.meta.parent_id
-        group = Network.get_node!(group_id)
-        Network.make_edge(event, "for", group)
         conn
-        |> put_flash(:info, "Event created successfully for #{group.name}.")
+        |> put_flash(:info, "Event created successfully.")
         |> redirect(to: event_path(conn, :show, event))
 
       {:error, %Ecto.Changeset{} = _changeset} ->
-        redirect(conn, to: group_path(conn, :index))
+        conn
+        |> put_flash(:error, "Event creation failed.\n#{inspect(event_params)}")
+        |> redirect(to: group_path(conn, :index))
     end
   end
 

@@ -516,6 +516,19 @@ defmodule Igwet.Network do
     end
   end
 
+  def create_event(attrs \\ %{}) do
+    case create_node(attrs) do
+      {:ok, event} ->
+        is_event = get_predicate("event")
+        make_edge(event, "type", is_event)
+        group = get_node!(event.meta.parent_id)
+        make_edge(event, "for", group)
+        {:ok, event}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, changeset}
+    end
+  end
+
   @doc """
   Updates a node.
 
