@@ -223,11 +223,11 @@ defmodule Igwet.Network.Sendmail do
     email = if (group.email != nil), do: group.email, else: Mailer.keyed_email(group)
     message =
       new_email()
-      |> from({group.name, @agent})
+      |> from({group.name, email})
       |> subject(event.name)
       |> text_body(msg_text)
       |> html_body("<pre>#{msg_text}</pre>")
-      |> put_header(@sender, @agent)
+      |> put_header(@sender, email)
       |> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
 
     Network.node_members(group)
@@ -237,12 +237,11 @@ defmodule Igwet.Network.Sendmail do
   end
 
   def event_message(group, event) do
-    email = if (group.email != nil), do: group.email, else: Mailer.keyed_email(group)
     new_email()
-    |> from({group.name, email})
+    |> from({group.name, @agent})
     |> subject(event.name)
     |> text_body(event.about)
-    |> put_header(@sender, email)
+    |> put_header(@sender, @agent)
     |> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
   end
 
