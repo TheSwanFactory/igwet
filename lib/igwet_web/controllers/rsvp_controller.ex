@@ -79,10 +79,22 @@ end
     group = Network.get_node!(group_id)
     next_week = NaiveDateTime.add(event.date, event.meta.recurrence * 24 * 60 * 60)
     key = group.key <> "+" <> NaiveDateTime.to_string(next_week)
-    defaults = event
-    |> Map.merge(%{date: next_week, key: key})
-    #|> Map.delete(:id)
-    redirect(conn, to: event_path(conn, :create, %{"node" => defaults}))
+    details = Map.from_struct(event.meta)
+    event_params = event
+    |> Map.merge(%{date: next_week, key: key, meta: details})
+    |> Map.delete(:id)
+    |> Map.from_struct()
+    case Network.create_event(event_params) do
+      {:ok, event} ->
+        conn
+        |> put_flash(:info, "Event created successfully.")
+        |> redirect(to: event_path(conn, :show, event))
+
+      {:error, %Ecto.Changeset{} = _changeset} ->
+        conn
+        |> put_flash(:error, "Event creation failed.\n#{inspect(event_params)}")
+        |> redirect(to: event_path(conn, :index))
+    end
   end
 
   def send_email(conn, %{"event_key" => event_key}) do

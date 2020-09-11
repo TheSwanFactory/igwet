@@ -59,19 +59,19 @@ defmodule IgwetWeb.RsvpControllerTest do
   describe "attendees" do
     setup [:create_event]
 
-    test "GET /rsvp/for:event -> 200", %{conn: conn, event: event} do
+    test "GET /rsvp/for/:event -> 200", %{conn: conn, event: event} do
       conn
       |> get("/rsvp/for/" <> event.key)
       |> response(200)
     end
 
-    test "GET /rsvp/for:event/:email -> 200", %{conn: conn, event: event} do
+    test "GET /rsvp/for/:event/:email -> 200", %{conn: conn, event: event} do
       conn
       |> get("/rsvp/for/" <> event.key <> "/" <> @node_email)
       |> response(200)
     end
 
-    test "POST /rsvp/for:event/:email/:count -> 200", %{conn: conn, event: event} do
+    test "POST /rsvp/for/:event/:email/:count -> 200", %{conn: conn, event: event} do
       path = ["/rsvp", "for", event.key, @node_email, 3] |> Enum.join("/")
       conn
       |> post(path)
