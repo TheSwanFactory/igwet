@@ -11,6 +11,7 @@ defmodule Igwet.Network.Sendmail do
 
   import Bamboo.Email
 
+  @agent "postmaster@mg.igwet.com"
   @from "from"
   @headers "message-headers"
   @node "node"
@@ -236,12 +237,11 @@ defmodule Igwet.Network.Sendmail do
   end
 
   def event_message(group, event) do
-    email = if (group.email != nil), do: group.email, else: Mailer.keyed_email(group)
     new_email()
-    |> from({group.name, email})
+    |> from({group.name, @agent})
     |> subject(event.name)
     |> text_body(event.about)
-    |> put_header(@sender, email)
+    |> put_header(@sender, @agent)
     |> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
   end
 

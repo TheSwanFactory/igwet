@@ -20,7 +20,7 @@
         <span><%= link "Delete", to: event_path(@conn, :delete, event), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
       <td><%= event.name %></td>
-      <td><%= event.about %></td>
+      <td style='white-space: pre-line;'><%= event.about %></td>
       <td><%= event.size %></td>
       <td><%= event.date %></td>
     </tr>

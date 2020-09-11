@@ -7,6 +7,7 @@
 <div>
   <span><%= link "Edit", to: event_path(@conn, :edit, @event), class: "btn btn-default btn-xs" %></span>
   <span><%= link "Back", to: event_path(@conn, :index), class: "btn btn-default btn-xs" %></span>
+  <span><%= link "Next", to: rsvp_path(@conn, :next_event, @event), class: "btn btn-default btn-xs" %></span>
   <span><%= link "RSVP", to: rsvp_path(@conn, :by_event, @event.key), class: "btn btn-default btn-xs" %></span>
 </div>
 
@@ -14,7 +15,7 @@
   <li>
     <strong>Name:</strong> <%= @event.name %>
   </li>
-  <li>
+  <li style='white-space: pre-line;'>
     <strong>About:</strong> <%= @event.about %>
   </li>
   <li>

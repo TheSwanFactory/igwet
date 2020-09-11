@@ -8,6 +8,7 @@ defmodule IgwetWeb.RsvpController do
   alias Igwet.Network.Sendmail
   alias Igwet.Admin.Mailer
   @max_rsvp 6
+  @server "https://www.iget.com"
 
   def index(conn, _params) do
     event = Network.get_predicate("event")
@@ -72,6 +73,30 @@ end
     |> redirect(to: rsvp_path(conn, :by_event, event_key))
   end
 
+  def next_event(conn, %{"id" => id}) do
+    event = Network.get_node!(id)
+    group_id = event.meta.parent_id
+    group = Network.get_node!(group_id)
+    next_week = NaiveDateTime.add(event.date, event.meta.recurrence * 24 * 60 * 60)
+    key = group.key <> "+" <> NaiveDateTime.to_string(next_week)
+    details = Map.from_struct(event.meta)
+    event_params = event
+    |> Map.merge(%{date: next_week, key: key, meta: details})
+    |> Map.delete(:id)
+    |> Map.from_struct()
+    case Network.create_event(event_params) do
+      {:ok, event} ->
+        conn
+        |> put_flash(:info, "Event created successfully.")
+        |> redirect(to: event_path(conn, :show, event))
+
+      {:error, %Ecto.Changeset{} = _changeset} ->
+        conn
+        |> put_flash(:error, "Event creation failed.\n#{inspect(event_params)}")
+        |> redirect(to: event_path(conn, :index))
+    end
+  end
+
   def send_email(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
@@ -84,7 +109,7 @@ end
       message = Sendmail.event_message(group, event)
       result = for member <- Network.node_members(group) do
         if (member.email =~ "@") do
-          url = rsvp_path(conn, :by_email, event_key, member.email)
+          url = @server <> rsvp_path(conn, :by_email, event_key, member.email)
           Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
         end
       end

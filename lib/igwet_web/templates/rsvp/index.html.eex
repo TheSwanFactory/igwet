@@ -14,7 +14,7 @@
     <tr>
       <td><%= event.date %></td>
       <td><%= link event.name, to: "rsvp/" <> event.key %></td>
-      <td><%= event.about %></td>
+      <td style='white-space: pre-line;'><%= event.about %></td>
       <td><%= event.size %></td>
     </tr>
 <% end %>
