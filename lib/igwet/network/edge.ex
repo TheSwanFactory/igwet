@@ -11,6 +11,7 @@ defmodule Igwet.Network.Edge do
     belongs_to(:predicate, Node)
     belongs_to(:object, Node)
     field(:as, :string)
+    field(:relation, :string)
 
     timestamps()
   end
