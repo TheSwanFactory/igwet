@@ -70,7 +70,7 @@ defmodule IgwetWeb.ControllerHelper do
 
   def require_login(conn, _params) do
     user = get_user(conn)
-    if (nil != user) do
+    if (!is_nil user) do
       conn
       |> assign(:current_user, user)
     else

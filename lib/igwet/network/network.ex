@@ -89,7 +89,7 @@ defmodule Igwet.Network do
             |> where([n], n.name == ^value)
             |> limit(1)
             |> Repo.one()
-    if (nil != first) do
+    if (!is_nil first) do
       first
     else
       {:ok, node} = create_node %{name: value, type: "predicate", key: ".usr" <> "+" <> value}
@@ -111,7 +111,7 @@ defmodule Igwet.Network do
             |> where([n], n.email == ^email)
             |> limit(1)
             |> Repo.one()
-    if (nil != node) do
+    if (!is_nil node) do
       if (!node_in_group?(node, group)) do
         set_node_in_group(node, group)
       end
@@ -139,7 +139,7 @@ defmodule Igwet.Network do
             |> where([n], n.phone == ^number)
             |> limit(1)
             |> Repo.one()
-    if (nil != node) do
+    if (!is_nil node) do
       node
     else
       name = "#{stub}#{number}"
@@ -178,7 +178,7 @@ defmodule Igwet.Network do
   """
   def node_in_group?(node, group) do
     in_node = get_predicate("in")
-    nil != find_edge(node, in_node, group)
+    !is_nil find_edge(node, in_node, group)
   end
 
   @doc """

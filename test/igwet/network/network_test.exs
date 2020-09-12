@@ -32,7 +32,7 @@ defmodule Igwet.NetworkTest do
       is_in = context[:in]
       group = context[:admin_group]
 
-      assert nil != Network.find_edge(user, is_in, group)
+      assert !is_nil Network.find_edge(user, is_in, group)
       assert nil == Network.find_edge(group, is_in, user)
     end
 
@@ -72,14 +72,14 @@ defmodule Igwet.NetworkTest do
 
     test "get_initials", context do
       user = context[:test_node]
-      assert user.initials == nil
+      assert is_nil user.initials
       assert Network.get_initials(user) == "tn"
       assert Network.get_node!(user.id).initials == "tn"
     end
 
     test "get_predicate", _context do
       node = Network.get_predicate("of")
-      assert nil != node
+      assert !is_nil node
       assert Network.get_predicate("of") == node
     end
 

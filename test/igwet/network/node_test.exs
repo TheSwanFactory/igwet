@@ -84,7 +84,7 @@ defmodule Igwet.NetworkTest.Node do
 
       assert 1 == length(edges)
       edge = Enum.at(edges, 0)
-      assert nil != edge
+      assert !is_nil edge
       assert "type.name" == edge.object.name
       assert "type" == edge.predicate.name
     end
@@ -148,7 +148,7 @@ defmodule Igwet.NetworkTest.Node do
     test "get_member_for_email/2 creates node if needed", %{group: group} do
       email = "test@example.com"
       member = Network.get_member_for_email(email, group)
-      assert nil != member
+      assert !is_nil member
       assert email == member.email
       assert "test" == member.name
     end
