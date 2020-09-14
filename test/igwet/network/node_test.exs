@@ -3,7 +3,6 @@ defmodule Igwet.NetworkTest.Node do
   use Igwet.DataCase
   alias Igwet.Network
   alias Igwet.Network.Node
-  alias Igwet.Network.Edge
   doctest Igwet.Network.Node
 
   @valid_attrs %{
@@ -32,6 +31,7 @@ defmodule Igwet.NetworkTest.Node do
     phone: "+12105551212",
     size: 5,
     timezone: "US/Pacific",
+    type: "event",
   }
 
   @twilio_params 	%{"AccountSid" => "ACSID", "ApiVersion" => "2010-04-01", "Body" => "ThisIsTheEnd", "From" => "+14085551212", "FromCity" => "SAN JOSE", "FromCountry" => "US", "FromState" => "CA", "FromZip" => "95076", "MessageSid" => "MessageSid12345", "MessagingServiceSid" => "MGSID", "NumMedia" => "0", "NumSegments" => "1", "SmsMessageSid" => "SmsMessageSid12345", "SmsSid" => "SmsSid12345", "SmsStatus" => "received", "To" => "+12105551212", "ToCity" => "SAN ANTONIO", "ToCountry" => "US", "ToState" => "TX", "ToZip" => "78215"}
@@ -75,18 +75,9 @@ defmodule Igwet.NetworkTest.Node do
       assert node.phone == @valid_attrs.phone
     end
 
-    test "create_node/1 with type name creates an edge" do
+    test "create_node/1 with type name sets type" do
       assert {:ok, %Node{} = node} = Network.create_node(@valid_attrs)
-      edges = Edge
-      |> where([e], e.subject_id == ^node.id )
-      |> preload([:object, :predicate])
-      |> Repo.all()
-
-      assert 1 == length(edges)
-      edge = Enum.at(edges, 0)
-      assert !is_nil edge
-      assert "type.name" == edge.object.name
-      assert "type" == edge.predicate.name
+      assert "type.name" == node.type
     end
   end
 
@@ -129,7 +120,7 @@ defmodule Igwet.NetworkTest.Node do
     test "get_contact_for_phone/2 gets node if exists" do
       contact = Network.get_contact_for_phone(@twilio_params["From"], @twilio_params["FromCity"])
       assert @twilio_params["From"] == contact.phone
-      assert "type.name" == Network.get_type(contact)
+      assert "type.name" == contact.type
     end
 
     test "get_contact_for_phone/2 creates contact if missing" do
@@ -137,7 +128,7 @@ defmodule Igwet.NetworkTest.Node do
       contact = Network.get_contact_for_phone(phone, @twilio_params["FromCity"])
       assert phone == contact.phone
       assert contact.name =~ @twilio_params["FromCity"]
-      assert "contact" == Network.get_type(contact)
+      assert "contact" == contact.type
     end
 
   end
