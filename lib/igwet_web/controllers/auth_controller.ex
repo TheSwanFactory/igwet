@@ -5,6 +5,7 @@ defmodule IgwetWeb.AuthController do
 
   alias Igwet.Admin.User.FromAuth
   alias Igwet.DataMigrator
+  require Logger
 
   def logout(conn, _params) do
     conn
