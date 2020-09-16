@@ -25,10 +25,9 @@ defmodule Igwet.DataMigrator do
 
   defp inline_parent(node) do
     if (!is_nil(node.meta) and !is_nil(node.meta.parent_id)) do
-      #parent = Network.get_node! node.meta.parent_id
       Network.update_node node, %{parent_id: node.meta.parent_id}
       node2 = Network.get_node!(node.id)
-      Logger.warn("inline_parent\n#{inspect(node2)}")
+      Logger.warn("inline_parent:#{node2.parent} @ #{node2.id} <-#{node.meta.parent_id}")
     end
   end
 
@@ -43,10 +42,10 @@ defmodule Igwet.DataMigrator do
   end
 
   defp inline_type(edge) do
-    Network.update_node edge.subject, %{relation: edge.object.name}
+    Network.update_node edge.subject, %{type: edge.object.name}
     node = Network.get_node!(edge.subject_id)
     if (is_nil node.type) do
-      Logger.warn("inline_type:#{edge.object.name}\n #{inspect(node)}")
+      Logger.warn("inline_type.missing:#{edge.object.name} @ #{node.name}:#{node.id}")
     end
   end
 
@@ -54,7 +53,8 @@ defmodule Igwet.DataMigrator do
     edge
     |> Edge.changeset(%{relation: edge.predicate.name})
     |> Repo.update()
-    if (is_nil edge.subject.type) do
+    if (is_nil edge.relation) do
+      Logger.warn("inline_relation.missing:#{edge.predicate.name} @ #{edge.id}")
       #Logger.warn("inline_relation: #{edge.predicate.name}\n #{inspect(edge)}")
     end
   end
