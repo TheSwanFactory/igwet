@@ -1,6 +1,7 @@
 defmodule Igwet.DataMigrator do
   import Ecto.{Query} #Changeset
   alias Igwet.Network
+  alias Igwet.Network.Edge
   alias Igwet.Network.Node
   alias Igwet.Repo
 
@@ -19,9 +20,10 @@ defmodule Igwet.DataMigrator do
   end
 
   defp inline_parent(node) do
-    _parent_id = node.meta.parent_id
-    #node.parent_id = parent_id
-    Network.update_node node
+    if (node.meta.parent_id) do
+      parent = Network.get_node! node.meta.parent_id
+      Network.update_node node, %{parent: parent}
+    end
   end
 
   defp collapse_edge(edge) do
@@ -34,12 +36,12 @@ defmodule Igwet.DataMigrator do
   end
 
   defp inline_type(edge) do
-    node = %Node{id: edge.subject_id, type: edge.object.name}
-    Network.update_node node
+    Network.update_node edge.subject, %{relation: edge.object.name}
   end
 
   defp inline_relation(edge) do
-    #edge.relation = edge.predicate.name
-    #Network.update_edge edge
+    edge
+    |> Edge.changeset(%{relation: edge.predicate.name})
+    |> Repo.update()
   end
 end
