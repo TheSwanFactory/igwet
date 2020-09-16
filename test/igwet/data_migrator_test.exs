@@ -12,14 +12,18 @@ defmodule Igwet.NetworkTest.DataMigrator do
   describe "migrate relationships inline" do
     setup [:create_event]
 
-    test "fixture nodes lack inlines", %{node: node, event: event} do
-      assert node
-      assert event
+    test "fixture nodes lack inlines", %{node: node, event: event, p_for: p_for} do
+      assert is_nil node.type
+      assert !Ecto.assoc_loaded?(event.parent)
+      edge = Network.find_edge(event, p_for, node)
+      assert !is_nil edge
+      assert is_nil edge.relation
     end
 
-    test "migrated nodes are inline", %{node: node, event: event} do
+    test "migrated nodes are inline", %{node: node, event: event, p_for: p_for} do
       assert node
       assert event
+      assert p_for
     end
   end
 
@@ -37,6 +41,6 @@ defmodule Igwet.NetworkTest.DataMigrator do
     _edge_group = Network.create_edge(%{subject_id: group.id, predicate_id: p_type.id, object_id: p_group.id})
     _edge_event = Network.create_edge(%{subject_id: event.id, predicate_id: p_type.id, object_id: p_event.id})
     _edge_for = Network.create_edge(%{subject_id: event.id, predicate_id: p_for.id, object_id: group.id})
-    %{node: group, event: event}
+    %{node: group, event: event, p_for: p_for}
   end
 end

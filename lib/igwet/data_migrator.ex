@@ -40,6 +40,6 @@ defmodule Igwet.DataMigrator do
 
   defp inline_relation(edge) do
     #edge.relation = edge.predicate.name
-    Network.update_edge edge
+    #Network.update_edge edge
   end
 end
