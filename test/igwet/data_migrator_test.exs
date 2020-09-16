@@ -29,7 +29,7 @@ defmodule Igwet.NetworkTest.DataMigrator do
     p_event = Network.get_predicate("event")
     p_for = Network.get_predicate("for")
     {:ok, group} = Network.create_node(@bare_attrs)
-    event = Network.create_node %{
+    {:ok, event} = Network.create_node %{
       name: "event name",
       meta: %{duration: 90, parent_id: group.id, recurrence: 7},
       key: "event.key",
