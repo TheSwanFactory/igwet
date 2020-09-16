@@ -48,8 +48,8 @@ defmodule Igwet.NetworkTest.Node do
     test "get_first_node!/1 returns first node" do
       node = node_fixture()
       node_fixture(%{key: "different key"})
-      assert Network.get_first_node!(:name, node.name) == node
-      assert Network.get_first_node!(:phone, node.phone) == node
+      assert Network.get_first_node!(:name, node.name).id == node.id
+      assert Network.get_first_node!(:phone, node.phone).id == node.id
     end
 
     test "get_first_node_named!/1 raises if no node with that name" do
@@ -63,7 +63,8 @@ defmodule Igwet.NetworkTest.Node do
 
     test "get_node!/1 returns the node with given id" do
       node = node_fixture()
-      assert Network.get_node!(node.id) == node
+      next_node = Network.get_node!(node.id)
+      assert next_node.id == node.id
     end
 
     test "create_node/1 with valid data creates a node" do
@@ -98,7 +99,8 @@ defmodule Igwet.NetworkTest.Node do
     end
 
     test "update_node/2 with invalid data returns error changeset" do
-      node = node_fixture()
+      node1 = node_fixture()
+      node = Network.get_node!(node1.id)
       assert {:error, %Ecto.Changeset{}} = Network.update_node(node, @invalid_attrs)
       assert node == Network.get_node!(node.id)
     end

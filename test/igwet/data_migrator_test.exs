@@ -23,11 +23,11 @@ defmodule Igwet.NetworkTest.DataMigrator do
 
     test "after", %{node: node, event: event, p_for: p_for} do
       DataMigrator.run()
-      assert !is_nil node.type
       assert Ecto.assoc_loaded?(event.parent)
       edge = Network.find_edge(event, p_for, node)
       assert !is_nil edge
       assert !is_nil edge.relation
+      assert !is_nil node.type
     end
   end
 
