@@ -477,7 +477,10 @@ defmodule Igwet.Network do
       ** (Ecto.NoResultsError)
 
   """
-  def get_node!(id), do: Repo.get!(Node, id)
+  def get_node!(id) do
+    Repo.get!(Node, id)
+    |> Repo.preload([:parent])
+  end
 
   @doc """
   Gets a single node based on its unique key

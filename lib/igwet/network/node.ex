@@ -23,9 +23,9 @@ defmodule Igwet.Network.Node do
     field(:url, :string)
 
     belongs_to(:address, Address)
+    belongs_to(:parent, Node)
     has_many(:edges, Edge, foreign_key: :subject_id)
     has_one(:user, User)
-    has_one(:parent, Node)
     embeds_one :meta, Details, on_replace: :update
 
     timestamps()
@@ -35,7 +35,7 @@ defmodule Igwet.Network.Node do
   def changeset(%Node{} = node, attrs) do
     node
     |> cast(attrs, [:about, :date, :email, :initials, :key, :name, :phone, :size, :timezone, :type, :url])
-    #|> cast_assoc(:parent)
+    |> cast_assoc(:parent)
     |> cast_embed(:meta)
     |> validate_required([:key, :name])
     |> unique_constraint(:key)
