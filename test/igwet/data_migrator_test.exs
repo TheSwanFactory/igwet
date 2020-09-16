@@ -1,6 +1,7 @@
 defmodule Igwet.NetworkTest.DataMigrator do
   require Logger
   use Igwet.DataCase
+  alias Igwet.DataMigrator
   alias Igwet.Network
 
   @bare_attrs %{
@@ -9,10 +10,10 @@ defmodule Igwet.NetworkTest.DataMigrator do
     name: "some name",
   }
 
-  describe "migrate relationships inline" do
+  describe "migrating relationships" do
     setup [:create_event]
 
-    test "fixture nodes lack inlines", %{node: node, event: event, p_for: p_for} do
+    test "before", %{node: node, event: event, p_for: p_for} do
       assert is_nil node.type
       assert !Ecto.assoc_loaded?(event.parent)
       edge = Network.find_edge(event, p_for, node)
@@ -20,10 +21,13 @@ defmodule Igwet.NetworkTest.DataMigrator do
       assert is_nil edge.relation
     end
 
-    test "migrated nodes are inline", %{node: node, event: event, p_for: p_for} do
-      assert node
-      assert event
-      assert p_for
+    test "after", %{node: node, event: event, p_for: p_for} do
+      DataMigrator.run()
+      assert !is_nil node.type
+      assert Ecto.assoc_loaded?(event.parent)
+      edge = Network.find_edge(event, p_for, node)
+      assert !is_nil edge
+      assert !is_nil edge.relation
     end
   end
 
