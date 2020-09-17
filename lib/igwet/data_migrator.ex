@@ -3,17 +3,9 @@ defmodule Igwet.DataMigrator do
   import Ecto.{Query}
   alias Igwet.Network
   alias Igwet.Network.Edge
-  alias Igwet.Network.Node
   alias Igwet.Repo
 
   def run do
-    from(
-      n in Node,
-      preload: [:parent]
-    )
-    |> Repo.all()
-    |> Enum.each(&inline_parent/1)
-
     from(
       e in Edge,
       preload: [:subject, :predicate, :object]
@@ -21,14 +13,6 @@ defmodule Igwet.DataMigrator do
     |> Repo.all()
     |> Enum.each(&collapse_edge/1)
     :ok
-  end
-
-  defp inline_parent(node) do
-    if (!is_nil(node.meta) and !is_nil(node.meta.parent_id)) do
-      Network.update_node node, %{parent_id: node.meta.parent_id}
-      node2 = Network.get_node!(node.id)
-      Logger.warn("inline_parent:#{node2.parent} @ #{node2.id} <-#{node.meta.parent_id}")
-    end
   end
 
   defp collapse_edge(edge) do

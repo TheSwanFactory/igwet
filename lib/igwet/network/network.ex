@@ -479,7 +479,6 @@ defmodule Igwet.Network do
   """
   def get_node!(id) do
     Repo.get!(Node, id)
-    |> Repo.preload([:parent])
   end
 
   @doc """

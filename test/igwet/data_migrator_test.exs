@@ -15,7 +15,6 @@ defmodule Igwet.NetworkTest.DataMigrator do
 
     test "before", %{node: node, event: event, p_for: p_for} do
       assert is_nil node.type
-      assert !Ecto.assoc_loaded?(event.parent)
       edge = Network.find_edge(event, p_for, node)
       assert !is_nil edge
       assert is_nil edge.relation
@@ -29,11 +28,9 @@ defmodule Igwet.NetworkTest.DataMigrator do
       assert old_type == node2.type
       assert is_nil Network.get_type_edge(node)
 
-      event2 = Network.get_node!(event.id)
-      assert Ecto.assoc_loaded?(event2.parent)
       edge = Network.find_edge(event, p_for, node)
       assert !is_nil edge
-      assert !is_nil edge.relation
+      assert "for" == edge.relation
     end
   end
 
