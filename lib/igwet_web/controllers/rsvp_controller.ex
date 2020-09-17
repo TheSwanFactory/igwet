@@ -8,7 +8,7 @@ defmodule IgwetWeb.RsvpController do
   alias Igwet.Network.Sendmail
   alias Igwet.Admin.Mailer
   @max_rsvp 6
-  @server "https://www.iget.com"
+  @server "https://www.igwet.com"
 
   def index(conn, _params) do
     event = Network.get_predicate("event")

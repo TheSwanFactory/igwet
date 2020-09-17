@@ -488,7 +488,7 @@ defmodule Igwet.Network do
 
   ## Examples
 
-      iex> keys = Application.get_env(:iget, :seed_keys)
+      iex> keys = Application.get_env(:igwet, :seed_keys)
       iex> get_node_by_key!(keys[:in])
       %Node{}
 
