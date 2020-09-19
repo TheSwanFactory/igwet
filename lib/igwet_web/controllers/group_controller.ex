@@ -7,8 +7,7 @@ defmodule IgwetWeb.GroupController do
   plug(:require_admin)
 
   def index(conn, _params) do
-    group = Network.get_predicate("group")
-    nodes = Network.related_subjects(group, "type")
+    nodes = Network.get_nodes_of_type("group")
     render(conn, "index.html", nodes: nodes)
   end
 
@@ -46,7 +45,7 @@ defmodule IgwetWeb.GroupController do
     node = Network.get_node!(id)
     changeset = Network.change_node(node)
     my_members = Network.node_members(node)
-    all_members = Network.get_nodes_unlike_key(".%")
+    all_members = Network.get_nodes_of_type("contact")
     render(conn, "edit.html", node: node, changeset: changeset, my_members: my_members, all_members: all_members)
   end
 

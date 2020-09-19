@@ -67,15 +67,15 @@ defmodule Igwet.Network do
 
   ## Examples
       iex> alias Igwet.Network
-      iex> Network.get_nodes_unlike_key(".%")
+      iex> Network.get_nodes_of_type("contact")
       [%Node{}]
 
   """
 
-  def get_nodes_unlike_key(pattern) do
+  def get_nodes_of_type(pattern) do
     from(a in Node,
       order_by: [asc: :inserted_at],
-      where: not(like(a.key, ^pattern))
+      where: like(a.type, ^pattern)
     ) |> Repo.all
   end
 
@@ -397,7 +397,7 @@ defmodule Igwet.Network do
     pred_node = get_predicate(pred_name)
     Edge
     |> order_by([asc: :inserted_at])
-    |> where([e], e.object_id == ^object.id and e.predicate_id == ^pred_node.id)
+    |> where([e], e.object_id == ^object.id and (e.predicate_id == ^pred_node.id or e.relation == ^pred_name))
     |> preload([:subject])
     |> Repo.all()
   end
@@ -417,7 +417,7 @@ defmodule Igwet.Network do
     edges =
       Edge
       |> order_by([asc: :inserted_at])
-      |> where([e], e.subject_id == ^subject.id and e.predicate_id == ^pred_node.id)
+      |> where([e], e.subject_id == ^subject.id and (e.predicate_id == ^pred_node.id or e.relation == ^pred_name))
       |> preload([:object])
       |> Repo.all()
 
@@ -448,8 +448,6 @@ defmodule Igwet.Network do
   def get_type(node) do
     if (node.type) do
       node.type
-    else
-      get_type_edge(node)
     end
   end
 
