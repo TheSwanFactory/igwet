@@ -33,6 +33,7 @@ defmodule IgwetWeb.RsvpControllerTest do
     {:ok, group} = Network.create_node(@group_attrs)
     @event_attrs
     |> put_in([:meta, :parent_id], group.id)
+    |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
   end
 
   defp create_event(_) do

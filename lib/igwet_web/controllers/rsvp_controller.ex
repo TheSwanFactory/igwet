@@ -84,6 +84,8 @@ end
     |> Map.merge(%{date: next_week, key: key, meta: details})
     |> Map.delete(:id)
     |> Map.from_struct()
+    |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
+
     case Network.create_event(event_params) do
       {:ok, event} ->
         conn

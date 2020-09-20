@@ -17,10 +17,9 @@ defmodule IgwetWeb.GroupController do
   end
 
   def create(conn, %{"node" => node_params}) do
-    case Network.create_node(node_params) do
+    params = Map.put(node_params, "type", "group")
+    case Network.create_node(params) do
       {:ok, node} ->
-        group = Network.get_predicate("group")
-        Network.make_edge(node, "type", group)
         conn
         |> put_flash(:info, "Node created successfully.")
         |> redirect(to: group_path(conn, :show, node))

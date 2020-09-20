@@ -11,7 +11,6 @@ defmodule Igwet.Network.Factory do
   @host_key "host"
   @in_key "in"
   @sys_key ".sys"
-  @type_key "type"
 
   @doc """
   Converts an arbitrary string into a suitable key
@@ -105,11 +104,6 @@ defmodule Igwet.Network.Factory do
 
   """
   def create_child_node!(attrs \\ %{}) do
-    type_node =
-      if Map.has_key?(attrs, :type) do
-        Network.get_first_node!(:name, attrs.type)
-      end
-
     in_node =
       if Map.has_key?(attrs, :in) do
         Network.get_first_node!(:name, attrs.in)
@@ -128,7 +122,6 @@ defmodule Igwet.Network.Factory do
     attrs = Map.put(attrs, :key, key)
     {:ok, node} = Network.create_node(attrs)
     if in_node, do: create_relation!(node, in_node, @in_key)
-    if type_node, do: create_relation!(node, type_node, @type_key)
     node
   end
 end

@@ -78,9 +78,7 @@ defmodule IgwetWeb.EventControllerTest do
       assert my_event.type == "event"
 
       edges = Igwet.Repo.all(Ecto.assoc(my_event, :edges))
-      assert Enum.count(edges) == 2
-      #edge = Enum.at(edges, 1)
-      #assert edge.object_id == my_event.meta.parent_id
+      assert Enum.count(edges) == 1
     end
 
     test "redirects when data is invalid", %{conn: conn} do

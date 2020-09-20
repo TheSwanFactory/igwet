@@ -521,10 +521,9 @@ defmodule Igwet.Network do
   end
 
   def create_event(attrs \\ %{}) do
-    case create_node(attrs) do
+    params = Map.put(attrs, "type", "event")
+    case create_node(params) do
       {:ok, event} ->
-        is_event = get_predicate("event")
-        make_edge(event, "type", is_event)
         group = get_node!(event.meta.parent_id)
         make_edge(event, "for", group)
         {:ok, event}

@@ -145,7 +145,6 @@ defmodule Igwet.Network.SMS do
     sender = Network.get_contact_for_phone(params[@from], params[@from_city])
     receiver = Network.get_contact_for_phone(params[@to], params[@to_city])
     text = params[@body] #Network.get_initials(sender) <> ": " <>
-    chat = Network.get_predicate("chat")
     msg_key = "chat+" <> sender.key <> "+" <> params[@msg_id]
     {:ok, datetime} = DateTime.now(sender.timezone)
     {:ok, message} = Network.create_node %{
@@ -154,8 +153,8 @@ defmodule Igwet.Network.SMS do
       key: msg_key,
       name: text,
       size: String.length(text),
+      type: "chat"
     }
-    Network.make_edge(message, "type", chat)
     #Network.set_node_in_group(message, receiver)
     Network.make_edge(message, "from", sender)
 
