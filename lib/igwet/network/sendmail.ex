@@ -238,7 +238,7 @@ defmodule Igwet.Network.Sendmail do
 
   def event_message(group, event) do
     new_email()
-    |> from({group.name, @agent})
+    |> from({group.name, group.email})
     |> subject(event.name)
     |> text_body(event.about)
     |> put_header(@sender, @agent)
