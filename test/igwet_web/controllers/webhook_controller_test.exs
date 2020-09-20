@@ -17,20 +17,20 @@ defmodule IgwetWeb.WebhookControllerTest do
   test "POST /webhook/log_sms -> 201", %{conn: conn} do
     params = SMS.test_params("log_sms")
     node = Network.get_first_node!(:phone, params["From"])
-    assert nil != node
+    assert !is_nil node
     assert 0 == length(Network.related_subjects(node, "from"))
 
     "{\"created_at\":" <> time = conn
     |> post("/webhook/log_sms", params)
     |> response(201)
 
-    assert nil != time
+    assert !is_nil time
     results = Network.related_subjects(node, "from")
     assert 1 == length(results)
     result = Enum.at(results,0)
     assert "Hello, Twirled!" == result.name
     assert 15 == result.size
-    assert nil != result.date
+    assert !is_nil result.date
     assert result.about =~ "Twirled"
     #Logger.warn("result\n" <> inspect(result))
   end
@@ -40,7 +40,7 @@ defmodule IgwetWeb.WebhookControllerTest do
     |> post("/webhook/twilio", SMS.test_params("webhook"))
     |> response(201)
 
-    assert nil != time
+    assert !is_nil time
   end
 
   test "POST /webhook -> 201", %{conn: conn} do

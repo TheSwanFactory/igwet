@@ -78,7 +78,7 @@ defmodule IgwetWeb.RsvpControllerTest do
       |> response(302)
 
       node = Network.get_first_node!(:email, @node_email)
-      assert node != nil
+      assert !is_nil node
       assert Network.member_attendance(node, event) == 3
       assert Network.count_attendance(event) == 3
     end

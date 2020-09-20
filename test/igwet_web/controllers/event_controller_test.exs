@@ -8,7 +8,8 @@ defmodule IgwetWeb.EventControllerTest do
     email: "some group email",
     key: "some event group key",
     name: "group",
-    phone: "some group phone"
+    phone: "some group phone",
+    type: "group",
   }
   @event_attrs %{
     name: "event name",
@@ -16,6 +17,7 @@ defmodule IgwetWeb.EventControllerTest do
     date: ~N[2020-04-01 02:03:00],
     timezone: "US/Pacific",
     size: 100,
+    type: "event",
     meta: %{
       duration: 90,
       parent_id: nil,
@@ -73,12 +75,10 @@ defmodule IgwetWeb.EventControllerTest do
       post(conn, event_path(conn, :create), node: my_attrs)
 
       my_event = Network.get_predicate(my_attrs.name)
-      assert Network.get_type(my_event) == "event"
+      assert my_event.type == "event"
 
       edges = Igwet.Repo.all(Ecto.assoc(my_event, :edges))
-      assert Enum.count(edges) == 2
-      #edge = Enum.at(edges, 1)
-      #assert edge.object_id == my_event.meta.parent_id
+      assert Enum.count(edges) == 1
     end
 
     test "redirects when data is invalid", %{conn: conn} do

@@ -67,15 +67,15 @@ defmodule Igwet.Network do
 
   ## Examples
       iex> alias Igwet.Network
-      iex> Network.get_nodes_unlike_key(".%")
+      iex> Network.get_nodes_of_type("contact")
       [%Node{}]
 
   """
 
-  def get_nodes_unlike_key(pattern) do
+  def get_nodes_of_type(pattern) do
     from(a in Node,
       order_by: [asc: :inserted_at],
-      where: not(like(a.key, ^pattern))
+      where: like(a.type, ^pattern)
     ) |> Repo.all
   end
 
@@ -89,7 +89,7 @@ defmodule Igwet.Network do
             |> where([n], n.name == ^value)
             |> limit(1)
             |> Repo.one()
-    if (nil != first) do
+    if (!is_nil first) do
       first
     else
       {:ok, node} = create_node %{name: value, type: "predicate", key: ".usr" <> "+" <> value}
@@ -111,7 +111,7 @@ defmodule Igwet.Network do
             |> where([n], n.email == ^email)
             |> limit(1)
             |> Repo.one()
-    if (nil != node) do
+    if (!is_nil node) do
       if (!node_in_group?(node, group)) do
         set_node_in_group(node, group)
       end
@@ -139,7 +139,7 @@ defmodule Igwet.Network do
             |> where([n], n.phone == ^number)
             |> limit(1)
             |> Repo.one()
-    if (nil != node) do
+    if (!is_nil node) do
       node
     else
       name = "#{stub}#{number}"
@@ -178,7 +178,7 @@ defmodule Igwet.Network do
   """
   def node_in_group?(node, group) do
     in_node = get_predicate("in")
-    nil != find_edge(node, in_node, group)
+    !is_nil find_edge(node, in_node, group)
   end
 
   @doc """
@@ -194,8 +194,8 @@ defmodule Igwet.Network do
     Edge
       |> order_by([asc: :inserted_at])
       |> where([e],
-        e.subject_id == ^subject.id and e.predicate_id == ^predicate.id and
-          e.object_id == ^object.id
+        e.subject_id == ^subject.id and e.object_id == ^object.id and
+        (e.predicate_id == ^predicate.id or e.relation == ^predicate.name)
       )
       |> Repo.one()
   end
@@ -397,7 +397,7 @@ defmodule Igwet.Network do
     pred_node = get_predicate(pred_name)
     Edge
     |> order_by([asc: :inserted_at])
-    |> where([e], e.object_id == ^object.id and e.predicate_id == ^pred_node.id)
+    |> where([e], e.object_id == ^object.id and (e.predicate_id == ^pred_node.id or e.relation == ^pred_name))
     |> preload([:subject])
     |> Repo.all()
   end
@@ -417,7 +417,7 @@ defmodule Igwet.Network do
     edges =
       Edge
       |> order_by([asc: :inserted_at])
-      |> where([e], e.subject_id == ^subject.id and e.predicate_id == ^pred_node.id)
+      |> where([e], e.subject_id == ^subject.id and (e.predicate_id == ^pred_node.id or e.relation == ^pred_name))
       |> preload([:object])
       |> Repo.all()
 
@@ -446,6 +446,12 @@ defmodule Igwet.Network do
 
   """
   def get_type(node) do
+    if (node.type) do
+      node.type
+    end
+  end
+
+  def get_type_edge(node) do
       first = related_objects(node, "type")
               |> Enum.at(0)
       if (first) do
@@ -469,7 +475,9 @@ defmodule Igwet.Network do
       ** (Ecto.NoResultsError)
 
   """
-  def get_node!(id), do: Repo.get!(Node, id)
+  def get_node!(id) do
+    Repo.get!(Node, id)
+  end
 
   @doc """
   Gets a single node based on its unique key
@@ -478,7 +486,7 @@ defmodule Igwet.Network do
 
   ## Examples
 
-      iex> keys = Application.get_env(:iget, :seed_keys)
+      iex> keys = Application.get_env(:igwet, :seed_keys)
       iex> get_node_by_key!(keys[:in])
       %Node{}
 
@@ -506,10 +514,6 @@ defmodule Igwet.Network do
   def create_node(attrs \\ %{}) do
     case Repo.insert(Node.changeset(%Node{}, attrs)) do
       {:ok, node} ->
-        if (Map.has_key?(attrs, :type)) do
-          type_node = get_predicate(attrs.type)
-          make_edge(node, "type", type_node)
-        end
         {:ok, node}
       {:error, %Ecto.Changeset{} = changeset} ->
         {:error, changeset}
@@ -517,10 +521,9 @@ defmodule Igwet.Network do
   end
 
   def create_event(attrs \\ %{}) do
-    case create_node(attrs) do
+    params = Map.put(attrs, "type", "event")
+    case create_node(params) do
       {:ok, event} ->
-        is_event = get_predicate("event")
-        make_edge(event, "type", is_event)
         group = get_node!(event.meta.parent_id)
         make_edge(event, "for", group)
         {:ok, event}

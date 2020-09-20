@@ -8,7 +8,6 @@ defmodule IgwetWeb.RsvpController do
   alias Igwet.Network.Sendmail
   alias Igwet.Admin.Mailer
   @max_rsvp 6
-  @server "https://www.iget.com"
 
   def index(conn, _params) do
     event = Network.get_predicate("event")
@@ -84,6 +83,8 @@ end
     |> Map.merge(%{date: next_week, key: key, meta: details})
     |> Map.delete(:id)
     |> Map.from_struct()
+    |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
+
     case Network.create_event(event_params) do
       {:ok, event} ->
         conn
@@ -109,7 +110,8 @@ end
       message = Sendmail.event_message(group, event)
       result = for member <- Network.node_members(group) do
         if (member.email =~ "@") do
-          url = @server <> rsvp_path(conn, :by_email, event_key, member.email)
+          url = IgwetWeb.Endpoint.url <> rsvp_path(conn, :by_email, event_key, member.email)
+          Logger.warn("send_email.url."<>url)
           Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
         end
       end

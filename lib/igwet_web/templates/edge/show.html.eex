@@ -2,8 +2,9 @@
 
 <ul>
   <li><strong>Subject:</strong> <%= @edge.subject.name %> <em>(<%= @edge.subject.key %>)</em></li>
-  <li><strong>Subject:</strong> <%= @edge.predicate.name %> <em>(<%= @edge.predicate.key %>)</em></li>
-  <li><strong>Subject:</strong> <%= @edge.object.name %> <em>(<%= @edge.object.key %>)</em></li>
+  <li><strong>Predicate:</strong> <%= @edge.predicate.name %> <em>(<%= @edge.predicate.key %>)</em></li>
+  <li><strong>Relation:</strong> <%= @edge.relation %></li>
+  <li><strong>Object:</strong> <%= @edge.object.name %> <em>(<%= @edge.object.key %>)</em></li>
   <li><strong>As:</strong> <%= @edge.as %></li>
 </ul>
 

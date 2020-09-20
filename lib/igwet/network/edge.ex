@@ -11,6 +11,7 @@ defmodule Igwet.Network.Edge do
     belongs_to(:predicate, Node)
     belongs_to(:object, Node)
     field(:as, :string)
+    field(:relation, :string)
 
     timestamps()
   end
@@ -20,8 +21,8 @@ defmodule Igwet.Network.Edge do
     relations = [:subject_id, :predicate_id, :object_id]
 
     edge
-    |> cast(attrs, relations ++ [:as])
-    |> validate_required(relations)
+    |> cast(attrs, relations ++ [:as, :relation])
+    |> validate_required([:subject_id, :object_id])
     |> assoc_constraint(:subject)
     |> assoc_constraint(:predicate)
     |> assoc_constraint(:object)

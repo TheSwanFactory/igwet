@@ -3,7 +3,6 @@ defmodule Igwet.NetworkTest.Node do
   use Igwet.DataCase
   alias Igwet.Network
   alias Igwet.Network.Node
-  alias Igwet.Network.Edge
   doctest Igwet.Network.Node
 
   @valid_attrs %{
@@ -32,6 +31,7 @@ defmodule Igwet.NetworkTest.Node do
     phone: "+12105551212",
     size: 5,
     timezone: "US/Pacific",
+    type: "event",
   }
 
   @twilio_params 	%{"AccountSid" => "ACSID", "ApiVersion" => "2010-04-01", "Body" => "ThisIsTheEnd", "From" => "+14085551212", "FromCity" => "SAN JOSE", "FromCountry" => "US", "FromState" => "CA", "FromZip" => "95076", "MessageSid" => "MessageSid12345", "MessagingServiceSid" => "MGSID", "NumMedia" => "0", "NumSegments" => "1", "SmsMessageSid" => "SmsMessageSid12345", "SmsSid" => "SmsSid12345", "SmsStatus" => "received", "To" => "+12105551212", "ToCity" => "SAN ANTONIO", "ToCountry" => "US", "ToState" => "TX", "ToZip" => "78215"}
@@ -48,8 +48,8 @@ defmodule Igwet.NetworkTest.Node do
     test "get_first_node!/1 returns first node" do
       node = node_fixture()
       node_fixture(%{key: "different key"})
-      assert Network.get_first_node!(:name, node.name) == node
-      assert Network.get_first_node!(:phone, node.phone) == node
+      assert Network.get_first_node!(:name, node.name).id == node.id
+      assert Network.get_first_node!(:phone, node.phone).id == node.id
     end
 
     test "get_first_node_named!/1 raises if no node with that name" do
@@ -63,7 +63,8 @@ defmodule Igwet.NetworkTest.Node do
 
     test "get_node!/1 returns the node with given id" do
       node = node_fixture()
-      assert Network.get_node!(node.id) == node
+      next_node = Network.get_node!(node.id)
+      assert next_node.id == node.id
     end
 
     test "create_node/1 with valid data creates a node" do
@@ -75,18 +76,9 @@ defmodule Igwet.NetworkTest.Node do
       assert node.phone == @valid_attrs.phone
     end
 
-    test "create_node/1 with type name creates an edge" do
+    test "create_node/1 with type name sets type" do
       assert {:ok, %Node{} = node} = Network.create_node(@valid_attrs)
-      edges = Edge
-      |> where([e], e.subject_id == ^node.id )
-      |> preload([:object, :predicate])
-      |> Repo.all()
-
-      assert 1 == length(edges)
-      edge = Enum.at(edges, 0)
-      assert nil != edge
-      assert "type.name" == edge.object.name
-      assert "type" == edge.predicate.name
+      assert "type.name" == node.type
     end
   end
 
@@ -107,7 +99,8 @@ defmodule Igwet.NetworkTest.Node do
     end
 
     test "update_node/2 with invalid data returns error changeset" do
-      node = node_fixture()
+      node1 = node_fixture()
+      node = Network.get_node!(node1.id)
       assert {:error, %Ecto.Changeset{}} = Network.update_node(node, @invalid_attrs)
       assert node == Network.get_node!(node.id)
     end
@@ -129,7 +122,7 @@ defmodule Igwet.NetworkTest.Node do
     test "get_contact_for_phone/2 gets node if exists" do
       contact = Network.get_contact_for_phone(@twilio_params["From"], @twilio_params["FromCity"])
       assert @twilio_params["From"] == contact.phone
-      assert "type.name" == Network.get_type(contact)
+      assert "type.name" == contact.type
     end
 
     test "get_contact_for_phone/2 creates contact if missing" do
@@ -137,7 +130,7 @@ defmodule Igwet.NetworkTest.Node do
       contact = Network.get_contact_for_phone(phone, @twilio_params["FromCity"])
       assert phone == contact.phone
       assert contact.name =~ @twilio_params["FromCity"]
-      assert "contact" == Network.get_type(contact)
+      assert "contact" == contact.type
     end
 
   end
@@ -148,7 +141,7 @@ defmodule Igwet.NetworkTest.Node do
     test "get_member_for_email/2 creates node if needed", %{group: group} do
       email = "test@example.com"
       member = Network.get_member_for_email(email, group)
-      assert nil != member
+      assert !is_nil member
       assert email == member.email
       assert "test" == member.name
     end

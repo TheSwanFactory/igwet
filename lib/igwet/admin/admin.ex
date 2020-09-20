@@ -28,7 +28,7 @@ defmodule Igwet.Admin do
   """
   def is_admin(user) do
     cond do
-      user == nil -> nil
+      is_nil user -> nil
       !Ecto.assoc_loaded?(user.node) -> nil
       true -> Network.node_is_admin?(user.node)
     end

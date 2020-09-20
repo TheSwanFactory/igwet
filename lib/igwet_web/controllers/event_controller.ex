@@ -11,8 +11,7 @@ defmodule IgwetWeb.EventController do
   plug(:require_admin)
 
   def index(conn, _params) do
-    event = Network.get_predicate("event")
-    nodes = Network.related_subjects(event, "type")
+    nodes = Network.get_nodes_of_type("event")
     render(conn, "index.html", events: nodes)
   end
 

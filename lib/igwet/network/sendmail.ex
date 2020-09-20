@@ -220,7 +220,7 @@ defmodule Igwet.Network.Sendmail do
 
   def email_group_event(group, event) do
     msg_text = event.about
-    email = if (group.email != nil), do: group.email, else: Mailer.keyed_email(group)
+    email = if (is_nil group.email), do: Mailer.keyed_email(group), else: group.email
     message =
       new_email()
       |> from({group.name, email})
@@ -238,7 +238,7 @@ defmodule Igwet.Network.Sendmail do
 
   def event_message(group, event) do
     new_email()
-    |> from({group.name, @agent})
+    |> from({group.name, group.email})
     |> subject(event.name)
     |> text_body(event.about)
     |> put_header(@sender, @agent)
