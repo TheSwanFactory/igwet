@@ -6,6 +6,7 @@
       <th>Actions</th>
       <th>Subject</th>
       <th>Predicate</th>
+      <th>Relation</th>
       <th>Object</th>
       <th>As</th>
     </tr>
@@ -20,6 +21,7 @@
       </td>
       <td><%= edge.subject.key %></td>
       <td><%= edge.predicate.key %></td>
+      <td><%= edge.relation %></td>
       <td><%= edge.object.key %></td>
       <td><%= edge.as %></td>
     </tr>
