@@ -6,6 +6,7 @@ defmodule IgwetWeb.RsvpController do
   alias Igwet.Network
   alias Igwet.Network.Node
   alias Igwet.Network.Sendmail
+  alias Igwet.Network.SMS
   alias Igwet.Admin.Mailer
   @max_rsvp 6
   @server "https://www.igwet.com"
@@ -54,6 +55,7 @@ defmodule IgwetWeb.RsvpController do
       conn
       |> assign(:current_user, nil)
       |> assign(:group, group)
+      |> assign(:node, node)
       |> assign(:node_count, Network.member_attendance(node, group))
       |> render("email.html", event: event, current: current, open: min(open, @max_rsvp))
     end
@@ -71,6 +73,7 @@ end
     end
     conn
     |> put_flash(:info, msg)
+    |> assign(:node, node)
     |> assign(:node_count, count)
     |> redirect(to: rsvp_path(conn, :by_email, event_key, email))
   end
@@ -90,6 +93,8 @@ end
 
     case Network.create_event(event_params) do
       {:ok, event} ->
+        url = @server <> rsvp_path(conn, :by_event, key)
+        SMS.notify_group_event(group, url)
         conn
         |> put_flash(:info, "Event created successfully.")
         |> redirect(to: event_path(conn, :show, event))

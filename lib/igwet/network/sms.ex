@@ -198,6 +198,16 @@ defmodule Igwet.Network.SMS do
   end
 
   @doc """
+  Send URL to group phone number
+  If DEBUG, just log.
+  iex> alias Igwet.Network.SMS
+  iex>
+  """
+
+  def notify_group_event(_group, _url) do
+  end
+
+  @doc """
   Send message to recipients
   If DEBUG, just log.
   iex> alias Igwet.Network.SMS
