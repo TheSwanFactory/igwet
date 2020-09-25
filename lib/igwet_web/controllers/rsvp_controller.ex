@@ -34,7 +34,9 @@ defmodule IgwetWeb.RsvpController do
 
   def add_email(conn, %{"event_key" => event_key, "node" => params}) do
     path = rsvp_path(conn, :by_email, event_key, params["email"])
-    redirect conn, to: path
+    conn
+    |> assign(:count, nil)
+    |> redirect(to: path)
   end
 
   def by_email(conn, %{"event_key" => event_key, "email" => email}) do
@@ -52,7 +54,6 @@ defmodule IgwetWeb.RsvpController do
       conn
       |> assign(:current_user, nil)
       |> assign(:group, group)
-      |> assign(:node, node)
       |> assign(:node_count, Network.member_attendance(node, group))
       |> render("email.html", event: event, current: current, open: min(open, @max_rsvp))
     end
@@ -70,7 +71,8 @@ end
     end
     conn
     |> put_flash(:info, msg)
-    |> redirect(to: rsvp_path(conn, :by_event, event_key))
+    |> assign(:node_count, count)
+    |> redirect(to: rsvp_path(conn, :by_email, event_key, email))
   end
 
   def next_event(conn, %{"id" => id}) do
