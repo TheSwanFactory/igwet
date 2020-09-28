@@ -204,7 +204,16 @@ defmodule Igwet.Network.SMS do
   iex>
   """
 
-  def notify_group_event(_group, _url) do
+  def notify_group_event(group_phone, event_title, event_url) do
+    message = "New URL for #{event_title}: #{event_url}"
+    host = Network.get_first_node!(:name, IGWET)
+    %{
+      to: group_phone,
+      from: host.phone,
+      body: message,
+      debug: true,
+    }
+    |> send_message()
   end
 
   @doc """
@@ -212,9 +221,9 @@ defmodule Igwet.Network.SMS do
   If DEBUG, just log.
   iex> alias Igwet.Network.SMS
   iex> SMS.test_params("add_recipients")
-  ...> |> Map.merge(%{phones: ["+3125551212","+8155551212"], text: "Hello, Twirled!"})
+  ...> |> Map.merge(%{phones: ["+13125551212","+18155551212"], text: "Hello, Twirled!"})
   ...> |> SMS.send_messages()
-  [%{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
+  [%{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+18155551212"}]
   ## Examples
   """
 
