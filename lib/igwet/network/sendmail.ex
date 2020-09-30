@@ -249,7 +249,7 @@ defmodule Igwet.Network.Sendmail do
   def to_member(message, member, url) do
     prefix = "Dear #{member.name},\n"
     click_url = String.replace(@click_here, "here", "<a href='#{url}'>here</a>")
-    html = "#{prefix}<p>#{click_url}.</p><div style='white-space: pre-line;'>#{message.text_body}</div>"
+    html = "#{prefix}<div style='white-space: pre-line;'>#{click_url}.\n<hr>#{message.text_body}</div>"
     text = "#{prefix}\n\n#{@click_here}:\n #{url}\n\n#{message.text_body}"
     message
     |> text_body(text)
