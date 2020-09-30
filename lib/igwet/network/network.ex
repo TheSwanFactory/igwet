@@ -242,10 +242,12 @@ defmodule Igwet.Network do
   """
   def member_attendance(member, event) do
     edge = find_edge(member, "at", event)
+    Logger.warn "member_attendance #{member.name} @ #{event.name}:\n#{inspect(edge)}"
+
     if (edge) do
       String.to_integer("0#{edge.as}")
     else
-      0
+      -1
     end
   end
 
@@ -259,26 +261,28 @@ defmodule Igwet.Network do
 
   """
 
-  def attend!(count, node, event) do
+  def attend!(count, member, event) do
     current = count_attendance(event)
-    existing = find_edge(node, "at", event)
+    existing = find_edge(member, "at", event)
+    Logger.warn "attend!existing #{inspect(existing)}"
     offset = if (!existing), do: 0, else: String.to_integer("0#{existing.as}")
     new_total = current + count - offset
 
-    #Logger.warn "attend!new_total #{new_total} vs event.size #{event.size}"
+    Logger.warn "attend!new_total #{new_total} vs event.size #{event.size}"
     cond do
       new_total > event.size ->
         {:error, current}
       existing ->
-        update_edge existing, %{as: "#{count}"}
+        update_edge existing, %{as: "#{count}", relation: "at"}
         {:ok, new_total}
       true ->
-        {:ok, _edge} = create_edge %{
-          subject_id: node.id,
+        {:ok, edge} = create_edge %{
+          subject_id: member.id,
           relation: "at",
           object_id: event.id,
           as: "#{count}"
         }
+        Logger.warn "attend!edge #{inspect(edge)}"
         {:ok, new_total}
     end
   end

@@ -45,7 +45,7 @@ defmodule IgwetWeb.RsvpController do
     group = Network.get_node!(event.meta.parent_id)
     node = Network.get_member_for_email(email, group)
     current = Network.count_attendance(event)
-    count = Network.member_attendance(node, group)
+    count = Network.member_attendance(node, event)
     open = event.size - current
     Logger.warn("by_email.count: #{count}")
     if (open < 1) do
