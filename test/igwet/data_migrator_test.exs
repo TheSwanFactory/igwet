@@ -13,6 +13,7 @@ defmodule Igwet.NetworkTest.DataMigrator do
   describe "migrating relationships" do
     setup [:create_event]
 
+    @tag :skip
     test "before", %{node: node, event: event, p_for: p_for} do
       assert is_nil node.type
       edge = Network.find_edge(event, p_for, node)
@@ -20,6 +21,7 @@ defmodule Igwet.NetworkTest.DataMigrator do
       assert is_nil edge.relation
     end
 
+    @tag :skip
     test "after", %{node: node, event: event, p_for: p_for} do
       old_type = Network.get_type_edge(node)
       DataMigrator.run()
