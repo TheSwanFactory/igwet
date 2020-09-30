@@ -242,8 +242,7 @@ defmodule Igwet.Network do
   """
   def member_attendance(member, event) do
     edge = find_edge(member, "at", event)
-    Logger.warn "member_attendance #{member.name} @ #{event.name}:\n#{inspect(edge)}"
-
+    #Logger.warn "member_attendance #{member.name} @ #{event.name}:\n#{inspect(edge)}"
     if (edge) do
       String.to_integer("0#{edge.as}")
     else
@@ -264,11 +263,11 @@ defmodule Igwet.Network do
   def attend!(count, member, event) do
     current = count_attendance(event)
     existing = find_edge(member, "at", event)
-    Logger.warn "attend!existing #{inspect(existing)}"
+    #Logger.warn "attend!existing #{inspect(existing)}"
     offset = if (!existing), do: 0, else: String.to_integer("0#{existing.as}")
     new_total = current + count - offset
 
-    Logger.warn "attend!new_total #{new_total} vs event.size #{event.size}"
+    #Logger.warn "attend!new_total #{new_total} vs event.size #{event.size}"
     cond do
       new_total > event.size ->
         {:error, current}
@@ -276,13 +275,13 @@ defmodule Igwet.Network do
         update_edge existing, %{as: "#{count}", relation: "at"}
         {:ok, new_total}
       true ->
-        {:ok, edge} = create_edge %{
+        {:ok, _edge} = create_edge %{
           subject_id: member.id,
           relation: "at",
           object_id: event.id,
           as: "#{count}"
         }
-        Logger.warn "attend!edge #{inspect(edge)}"
+        #Logger.warn "attend!edge #{inspect(edge)}"
         {:ok, new_total}
     end
   end
@@ -528,6 +527,24 @@ defmodule Igwet.Network do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:error, changeset}
     end
+  end
+
+  @doc """
+  Next event.  Create an event _recurrence_ days after this one
+
+
+  """
+  def next_event(event, group) do
+    next_week = NaiveDateTime.add(event.date, event.meta.recurrence * 24 * 60 * 60)
+    key = group.key <> "+" <> NaiveDateTime.to_string(next_week)
+    details = Map.from_struct(event.meta)
+
+    event
+    |> Map.merge(%{date: next_week, key: key, meta: details})
+    |> Map.delete(:id)
+    |> Map.from_struct()
+    |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
+    |> create_event()
   end
 
   @doc """

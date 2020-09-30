@@ -47,7 +47,7 @@ defmodule IgwetWeb.RsvpController do
     current = Network.count_attendance(event)
     count = Network.member_attendance(node, event)
     open = event.size - current
-    Logger.warn("by_email.count: #{count}")
+    #Logger.warn("by_email.count: #{count}")
     if (open < 1) do
       msg = "Sorry: #{event.name} is already at its full capacity of #{event.size}"
       conn
@@ -73,7 +73,7 @@ end
       {:error, current} ->
         "Error #{count}: already #{current} of total capacity #{event.size} attending #{event.name}"
     end
-    Logger.warn("by_count.count: #{count}")
+    #Logger.warn("by_count.count: #{count}")
     conn
     |> put_flash(:info, msg)
 #    |> assign(:node, node)
@@ -85,18 +85,9 @@ end
     event = Network.get_node!(id)
     group_id = event.meta.parent_id
     group = Network.get_node!(group_id)
-    next_week = NaiveDateTime.add(event.date, event.meta.recurrence * 24 * 60 * 60)
-    key = group.key <> "+" <> NaiveDateTime.to_string(next_week)
-    details = Map.from_struct(event.meta)
-    event_params = event
-    |> Map.merge(%{date: next_week, key: key, meta: details})
-    |> Map.delete(:id)
-    |> Map.from_struct()
-    |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
-
-    case Network.create_event(event_params) do
+    case Network.next_event(event, group) do
       {:ok, event} ->
-        url = @server <> rsvp_path(conn, :by_event, key)
+        url = @server <> rsvp_path(conn, :by_event, event.key)
         SMS.group_event_message(group.phone, event.name, url)
         |> SMS.send_message()
 
@@ -106,7 +97,7 @@ end
 
       {:error, %Ecto.Changeset{} = _changeset} ->
         conn
-        |> put_flash(:error, "Event creation failed.\n#{inspect(event_params)}")
+        |> put_flash(:error, "Event creation failed.\n#{inspect(event)}")
         |> redirect(to: event_path(conn, :index))
     end
   end
