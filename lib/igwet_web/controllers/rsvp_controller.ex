@@ -94,7 +94,9 @@ end
     case Network.create_event(event_params) do
       {:ok, event} ->
         url = @server <> rsvp_path(conn, :by_event, key)
-        SMS.notify_group_event(group, url)
+        SMS.group_event_message(group.phone, event.name, url)
+        |> SMS.send_message()
+
         conn
         |> put_flash(:info, "Event created successfully.")
         |> redirect(to: event_path(conn, :show, event))
