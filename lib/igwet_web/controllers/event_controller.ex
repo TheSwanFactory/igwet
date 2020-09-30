@@ -41,9 +41,13 @@ defmodule IgwetWeb.EventController do
 
   def show(conn, %{"id" => id}) do
     event = Network.get_node!(id)
-    groups = Network.related_objects(event, "for")
-    houses = Network.related_subjects(event, "at")
-    render(conn, "show.html", event: event, groups: groups, houses: houses)
+    attendees = Network.related_subjects(event, "at")
+    group = if (event.meta && event.meta.parent_id) do
+       Network.get_node!(event.meta.parent_id)
+    end
+    conn
+    |> assign(:group, group)
+    |> render("show.html", event: event, attendees: attendees)
   end
 
   def edit(conn, %{"id" => id}) do
