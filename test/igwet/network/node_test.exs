@@ -8,7 +8,7 @@ defmodule Igwet.NetworkTest.Node do
   @valid_attrs %{
     about: "some about",
     email: "some email",
-    key: "some key",
+    key: "some.key",
     name: "some name",
     phone: "+14085551212",
     type: "type.name",
@@ -24,10 +24,10 @@ defmodule Igwet.NetworkTest.Node do
 
   @event_attrs %{
     about: "event details",
-    date: %{year: 2020, month: 4, day: 1, hour: 2, minute: 3},
+    date: %{year: 2020, month: 4, day: 23, hour: 2, minute: 3},
     key: "event.key",
     meta: %{duration: 90, parent_id: nil, recurrence: 7},
-    name: "event name",
+    name: "4/23: event name 8:35am",
     phone: "+12105551212",
     size: 5,
     timezone: "US/Pacific",
@@ -71,7 +71,7 @@ defmodule Igwet.NetworkTest.Node do
       assert {:ok, %Node{} = node} = Network.create_node(@valid_attrs)
       assert node.about == "some about"
       assert node.email == "some email"
-      assert node.key == "some key"
+      assert node.key == "some.key"
       assert node.name == "some name"
       assert node.phone == @valid_attrs.phone
     end
@@ -186,6 +186,17 @@ defmodule Igwet.NetworkTest.Node do
       Network.attend!(3, next, event)
       attendees = Network.related_subjects(event, "at")
       assert Enum.count(attendees) == 2
+    end
+  end
+
+  describe "event" do
+    setup [:create_event]
+    test "next", %{node: node, event: event} do
+      {:ok, next} = Network.next_event(event, node)
+      Logger.warn(inspect(next))
+      assert next
+      assert next.key == "some.key+2020-04-30"
+      assert next.name =~ "04-30: event"
     end
   end
 

@@ -108,11 +108,11 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> SMS.test_params("relay_sms")
-      ...> |> SMS.phone2member("+3125551212")
-      ...> |> SMS.phone2member("+8155551212")
+      ...> |> SMS.phone2member("+13125551212")
+      ...> |> SMS.phone2member("+18155551212")
       ...> |> SMS.relay_sms()
       ...> |> Enum.sort()
-      [%{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
+      [%{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+13125551212"}, %{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+18155551212"}]
   """
 
   def relay_sms(params) do
@@ -173,12 +173,12 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> params = SMS.test_params("add_recipients")
-      ...>          |> SMS.phone2member("+3125551212")
-      ...>          |> SMS.phone2member("+8155551212")
+      ...>          |> SMS.phone2member("+13125551212")
+      ...>          |> SMS.phone2member("+18155551212")
       ...>          |> SMS.to_nodes()
       ...>          |> SMS.add_recipients
       iex> params[:phones] |> Enum.sort()
-      ["+3125551212","+8155551212"]
+      ["+13125551212","+18155551212"]
       iex> list = params[:recipients]
       iex> length(list)
       2
@@ -198,13 +198,34 @@ defmodule Igwet.Network.SMS do
   end
 
   @doc """
+  Create event message to group phone number
+  iex> alias Igwet.Network.SMS
+  iex> msg = SMS.group_event_message("+5551212", "title", "url")
+  iex> msg.to
+  "+5551212"
+  iex> msg.body
+  "New URL for title: url"
+  """
+
+  def group_event_message(group_phone, event_title, event_url) do
+    message = "New URL for #{event_title}: #{event_url}"
+    host = Network.get_first_node!(:name, "IGWET")
+    %{
+      to: group_phone,
+      from: host.phone,
+      body: message,
+      debug: false,
+    }
+  end
+
+  @doc """
   Send message to recipients
   If DEBUG, just log.
   iex> alias Igwet.Network.SMS
   iex> SMS.test_params("add_recipients")
-  ...> |> Map.merge(%{phones: ["+3125551212","+8155551212"], text: "Hello, Twirled!"})
+  ...> |> Map.merge(%{phones: ["+13125551212","+18155551212"], text: "Hello, Twirled!"})
   ...> |> SMS.send_messages()
-  [%{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+3125551212"}, %{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+8155551212"}]
+  [%{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+13125551212"}, %{body: "Hello, Twirled!", debug: true, from: "+13105555555", to: "+18155551212"}]
   ## Examples
   """
 

@@ -6,6 +6,7 @@ defmodule IgwetWeb.RsvpController do
   alias Igwet.Network
   alias Igwet.Network.Node
   alias Igwet.Network.Sendmail
+  alias Igwet.Network.SMS
   alias Igwet.Admin.Mailer
   @max_rsvp 6
   @server "https://www.igwet.com"
@@ -34,7 +35,9 @@ defmodule IgwetWeb.RsvpController do
 
   def add_email(conn, %{"event_key" => event_key, "node" => params}) do
     path = rsvp_path(conn, :by_email, event_key, params["email"])
-    redirect conn, to: path
+    conn
+    |> assign(:count, nil)
+    |> redirect(to: path)
   end
 
   def by_email(conn, %{"event_key" => event_key, "email" => email}) do
@@ -42,7 +45,9 @@ defmodule IgwetWeb.RsvpController do
     group = Network.get_node!(event.meta.parent_id)
     node = Network.get_member_for_email(email, group)
     current = Network.count_attendance(event)
+    count = Network.member_attendance(node, event)
     open = event.size - current
+    #Logger.warn("by_email.count: #{count}")
     if (open < 1) do
       msg = "Sorry: #{event.name} is already at its full capacity of #{event.size}"
       conn
@@ -53,7 +58,7 @@ defmodule IgwetWeb.RsvpController do
       |> assign(:current_user, nil)
       |> assign(:group, group)
       |> assign(:node, node)
-      |> assign(:node_count, Network.member_attendance(node, group))
+      |> assign(:node_count, count)
       |> render("email.html", event: event, current: current, open: min(open, @max_rsvp))
     end
 end
@@ -68,33 +73,31 @@ end
       {:error, current} ->
         "Error #{count}: already #{current} of total capacity #{event.size} attending #{event.name}"
     end
+    #Logger.warn("by_count.count: #{count}")
     conn
     |> put_flash(:info, msg)
-    |> redirect(to: rsvp_path(conn, :by_event, event_key))
+#    |> assign(:node, node)
+#    |> assign(:node_count, count)
+    |> redirect(to: rsvp_path(conn, :by_email, event_key, email))
   end
 
   def next_event(conn, %{"id" => id}) do
     event = Network.get_node!(id)
     group_id = event.meta.parent_id
     group = Network.get_node!(group_id)
-    next_week = NaiveDateTime.add(event.date, event.meta.recurrence * 24 * 60 * 60)
-    key = group.key <> "+" <> NaiveDateTime.to_string(next_week)
-    details = Map.from_struct(event.meta)
-    event_params = event
-    |> Map.merge(%{date: next_week, key: key, meta: details})
-    |> Map.delete(:id)
-    |> Map.from_struct()
-    |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
-
-    case Network.create_event(event_params) do
+    case Network.next_event(event, group) do
       {:ok, event} ->
+        url = @server <> rsvp_path(conn, :by_event, event.key)
+        SMS.group_event_message(group.phone, event.name, url)
+        |> SMS.send_message()
+
         conn
         |> put_flash(:info, "Event created successfully.")
         |> redirect(to: event_path(conn, :show, event))
 
       {:error, %Ecto.Changeset{} = _changeset} ->
         conn
-        |> put_flash(:error, "Event creation failed.\n#{inspect(event_params)}")
+        |> put_flash(:error, "Event creation failed.\n#{inspect(event)}")
         |> redirect(to: event_path(conn, :index))
     end
   end
