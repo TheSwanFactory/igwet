@@ -534,13 +534,26 @@ defmodule Igwet.Network do
 
 
   """
+  def pad(number) do
+    number |> Integer.to_string |> String.pad_leading(2, "0")
+  end
+
   def next_event(event, group) do
     next_week = NaiveDateTime.add(event.date, event.meta.recurrence * 24 * 60 * 60)
-    key = group.key <> "+" <> NaiveDateTime.to_string(next_week)
-    details = Map.from_struct(event.meta)
+    prefix = "#{pad(next_week.month)}-#{pad(next_week.day)}"
+    suffix = "#{next_week.year}-#{prefix}"
+    key = group.key <> "+" <> suffix
 
+    split = String.split(event.name, ": ")
+    name = if (length(split) == 2) do
+      "#{prefix}: #{Enum.at(split, 1)}"
+    else
+      "#{prefix}: #{event.name}"
+    end
+
+    details = Map.from_struct(event.meta)
     event
-    |> Map.merge(%{date: next_week, key: key, meta: details})
+    |> Map.merge(%{date: next_week, key: key, meta: details, name: name})
     |> Map.delete(:id)
     |> Map.from_struct()
     |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
