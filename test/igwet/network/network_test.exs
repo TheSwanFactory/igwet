@@ -29,11 +29,10 @@ defmodule Igwet.NetworkTest do
 
     test "find_edge", context do
       user = context[:admin_node]
-      is_in = context[:in]
       group = context[:admin_group]
 
-      assert !is_nil Network.find_edge(user, is_in, group)
-      assert nil == Network.find_edge(group, is_in, user)
+      assert !is_nil Network.find_edge(user, "in", group)
+      assert nil == Network.find_edge(group, "in", user)
     end
 
     test "objects_for_predicate", context do
