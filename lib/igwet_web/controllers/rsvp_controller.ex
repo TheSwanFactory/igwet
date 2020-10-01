@@ -116,7 +116,11 @@ end
         if (member.email =~ "@") do
           url = @server <> rsvp_path(conn, :by_email, event_key, member.email)
           Logger.warn("send_email.url."<>url)
-          Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
+          try do
+            Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
+          rescue
+            e in Bamboo.ApiError -> Logger.error("failed.send_email.member\n#{inspect(member)}\n#{inspect(e)}")
+          end
         end
       end
       Logger.debug("send_emails.result\n#{inspect(result)}")
