@@ -13,7 +13,10 @@ defmodule Igwet.DataImport do
   def merge_key(attrs, group) do
     node = Network.create_node attrs
     Logger.warn "create_node.node:\n#{inspect(node)}"
-    %{index: attrs.index, parent_index: attrs.parent, node_id: node.id}
+    %{index: attrs.index, parent_index: attrs.parent, node_id: node.id, key: group.key}
+  end
+
+  def link_nodes(_node_map, _group) do
   end
 
   def csv_map(path) do
