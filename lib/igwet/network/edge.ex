@@ -18,7 +18,7 @@ defmodule Igwet.Network.Edge do
 
   @doc false
   def changeset(%Edge{} = edge, attrs) do
-    relations = [:subject_id, :predicate_id, :object_id]
+    relations = [:subject_id, :object_id]
 
     edge
     |> cast(attrs, relations ++ [:as, :relation])

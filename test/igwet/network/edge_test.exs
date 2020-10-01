@@ -6,7 +6,7 @@ defmodule Igwet.NetworkTest.Edge do
   describe "edges" do
     alias Igwet.Network.Edge
 
-    @invalid_attrs %{subject_id: nil, predicate_id: nil, object_id: nil}
+    @invalid_attrs %{subject_id: nil, relation: nil, object_id: nil}
 
     def make_node(name) do
       Network.create_node(%{name: name, key: "key.#{name}"})
@@ -14,9 +14,9 @@ defmodule Igwet.NetworkTest.Edge do
 
     def edge_attrs(name \\ "name") do
       {:ok, subject} = make_node("from.#{name}")
-      {:ok, predicate} = make_node("by.#{name}")
+      relation = "by.#{name}"
       {:ok, object} = make_node("to.#{name}")
-      %{subject_id: subject.id, predicate_id: predicate.id, object_id: object.id}
+      %{subject_id: subject.id, relation: relation, object_id: object.id}
     end
 
     def edge_fixture(name \\ "fixture") do

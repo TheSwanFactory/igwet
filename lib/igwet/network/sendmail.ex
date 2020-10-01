@@ -245,11 +245,11 @@ defmodule Igwet.Network.Sendmail do
     |> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
   end
 
-  @click_here "Click here to register (enter 0 if not coming)"
+  @click_here "We look forward to seeing you!\nClick here to tell us how many will attend this week (enter 0 if not coming).\n Note: if you use this personalized link, you don't need to use the public link sent to everyone"
   def to_member(message, member, url) do
     prefix = "Dear #{member.name},\n"
     click_url = String.replace(@click_here, "here", "<a href='#{url}'>here</a>")
-    html = "#{prefix}<p>#{click_url}.</p><div style='white-space: pre-line;'>#{message.text_body}</div>"
+    html = "#{prefix}<div style='white-space: pre-line;'>#{click_url}.\n<hr>#{message.text_body}</div>"
     text = "#{prefix}\n\n#{@click_here}:\n #{url}\n\n#{message.text_body}"
     message
     |> text_body(text)

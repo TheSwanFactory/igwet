@@ -1,7 +1,7 @@
 <h1>Show Event</h1>
 
-<% for group <- @groups do %>
-  <h3>Group: <%= link(group.name, to: group_path(@conn, :show, group)) %></h3>
+<% if (@group) do %>
+  <h3>Group: <%= link(@group.name, to: group_path(@conn, :show, @group)) %></h3>
 <% end %>
 
 <div>

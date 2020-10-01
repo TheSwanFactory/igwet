@@ -177,8 +177,7 @@ defmodule Igwet.Network do
 
   """
   def node_in_group?(node, group) do
-    in_node = get_predicate("in")
-    !is_nil find_edge(node, in_node, group)
+    !is_nil find_edge(node, "in", group)
   end
 
   @doc """
@@ -190,12 +189,13 @@ defmodule Igwet.Network do
       true
 
   """
-  def find_edge(subject, predicate, object) do
+  def find_edge(subject, relation, object) do
+    predicate = get_predicate(relation)
     Edge
       |> order_by([asc: :inserted_at])
       |> where([e],
         e.subject_id == ^subject.id and e.object_id == ^object.id and
-        (e.predicate_id == ^predicate.id or e.relation == ^predicate.name)
+        (e.predicate_id == ^predicate.id or e.relation == ^relation)
       )
       |> Repo.one()
   end
@@ -211,8 +211,7 @@ defmodule Igwet.Network do
   """
 
   def make_edge(subject, pred_name, object) do
-    predicate = get_predicate(pred_name)
-    create_edge(%{subject_id: subject.id, predicate_id: predicate.id, object_id: object.id})
+    create_edge(%{subject_id: subject.id, relation: pred_name, object_id: object.id})
   end
 
   @doc """
@@ -242,12 +241,12 @@ defmodule Igwet.Network do
 
   """
   def member_attendance(member, event) do
-    at = get_predicate("at")
-    edge = find_edge(member, at, event)
+    edge = find_edge(member, "at", event)
+    #Logger.warn "member_attendance #{member.name} @ #{event.name}:\n#{inspect(edge)}"
     if (edge) do
       String.to_integer("0#{edge.as}")
     else
-      0
+      -1
     end
   end
 
@@ -261,10 +260,10 @@ defmodule Igwet.Network do
 
   """
 
-  def attend!(count, node, event) do
-    at = get_predicate("at")
+  def attend!(count, member, event) do
     current = count_attendance(event)
-    existing = find_edge(node, at, event)
+    existing = find_edge(member, "at", event)
+    #Logger.warn "attend!existing #{inspect(existing)}"
     offset = if (!existing), do: 0, else: String.to_integer("0#{existing.as}")
     new_total = current + count - offset
 
@@ -273,15 +272,16 @@ defmodule Igwet.Network do
       new_total > event.size ->
         {:error, current}
       existing ->
-        update_edge existing, %{as: "#{count}"}
+        update_edge existing, %{as: "#{count}", relation: "at"}
         {:ok, new_total}
       true ->
         {:ok, _edge} = create_edge %{
-          subject_id: node.id,
-          predicate_id: at.id,
+          subject_id: member.id,
+          relation: "at",
           object_id: event.id,
           as: "#{count}"
         }
+        #Logger.warn "attend!edge #{inspect(edge)}"
         {:ok, new_total}
     end
   end
@@ -302,8 +302,7 @@ defmodule Igwet.Network do
   Remove a member a group.
   """
   def unset_node_in_group(node, group) do
-    in_node = get_predicate("in")
-    edge = find_edge(node, in_node, group)
+    edge = find_edge(node, "in", group)
     if (!edge) do
       false
     else
@@ -320,12 +319,11 @@ defmodule Igwet.Network do
       [%Igwet.Network.Node{}]
 
   """
-  def objects_for_predicate(predicate) do
-    in_node = get_predicate(predicate)
-
+  def objects_for_predicate(relation) do
+    predicate = get_predicate(relation)
     Edge
     |> order_by([asc: :inserted_at])
-    |> where([e], e.predicate_id == ^in_node.id)
+    |> where([e], e.predicate_id == ^predicate.id or e.relation == ^relation)
     |> preload([:object])
     |> Repo.all()
     |> Enum.map(& &1.object)
@@ -341,12 +339,11 @@ defmodule Igwet.Network do
       [%Igwet.Network.Node{}]
 
   """
-  def subjects_for_predicate(predicate) do
-    in_node = get_predicate(predicate)
-
+  def subjects_for_predicate(relation) do
+    predicate = get_predicate(relation)
     Edge
     |> order_by([asc: :inserted_at])
-    |> where([e], e.predicate_id == ^in_node.id)
+    |> where([e], e.predicate_id == ^predicate.id or e.relation == ^relation)
     |> preload([:subject])
     |> Repo.all()
     |> Enum.map(& &1.subject)
@@ -530,6 +527,37 @@ defmodule Igwet.Network do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:error, changeset}
     end
+  end
+
+  @doc """
+  Next event.  Create an event _recurrence_ days after this one
+
+
+  """
+  def pad(number) do
+    number |> Integer.to_string |> String.pad_leading(2, "0")
+  end
+
+  def next_event(event, group) do
+    next_week = NaiveDateTime.add(event.date, event.meta.recurrence * 24 * 60 * 60)
+    prefix = "#{pad(next_week.month)}-#{pad(next_week.day)}"
+    suffix = "#{next_week.year}-#{prefix}"
+    key = group.key <> "+" <> suffix
+
+    split = String.split(event.name, ": ")
+    name = if (length(split) == 2) do
+      "#{prefix}: #{Enum.at(split, 1)}"
+    else
+      "#{prefix}: #{event.name}"
+    end
+
+    details = Map.from_struct(event.meta)
+    event
+    |> Map.merge(%{date: next_week, key: key, meta: details, name: name})
+    |> Map.delete(:id)
+    |> Map.from_struct()
+    |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
+    |> create_event()
   end
 
   @doc """
