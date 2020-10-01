@@ -1,5 +1,5 @@
 defmodule Igwet.NetworkTest.DataImport do
-  #require Logger
+  require Logger
   use Igwet.DataCase
   alias Igwet.DataImport
   #alias Igwet.Network
@@ -11,7 +11,9 @@ defmodule Igwet.NetworkTest.DataImport do
   describe "read csv" do
     test "csv_map" do
       map = DataImport.csv_map(@csv_path)
+      Logger.warn "csv_map.map:\n" <> inspect(map)
       assert !is_nil map
+      assert length(map) == 7
     end
   end
 end
