@@ -49,6 +49,7 @@ defmodule IgwetWeb.RsvpControllerTest do
   describe "event" do
     setup [:create_event]
 
+    @tag :skip
     test "GET /rsvp/next/:event/ -> 200", %{conn: conn, event: event} do
       conn
       |> get("/rsvp/next/#{event.id}")
