@@ -9,9 +9,9 @@ defmodule Igwet.DataImport do
   Convert string keys into atoms
 
   ## Examples
-      iex> alias Igwet.DataImport
-      iex> DataImport.map_strings_to_atoms %{"KEY" => "value"}
-      %{key: "value"}
+  iex> alias Igwet.DataImport
+  iex> DataImport.map_strings_to_atoms %{"KEY" => "value"}
+  %{key: "value"}
 
   """
 
@@ -24,14 +24,20 @@ defmodule Igwet.DataImport do
   Create a unique key and merge it into the map
 
   ## Examples
-      iex> alias Igwet.DataImport
+  iex> alias Igwet.DataImport
+  iex> alias Igwet.Network.Node
+  iex> alias Igwet.Network
+  iex> {:ok, group} = Network.create_node %{name: "group", key: "is.group"}
+  iex> DataImport.merge_key(%{}, group).key
+  "is.group+001"
 
   """
 
   def merge_key(attrs, group) do
-    node = Network.create_node attrs
-    Logger.warn "create_node.node:\n#{inspect(node)}"
-    %{index: attrs.index, parent_index: attrs.parent, node_id: node.id, key: group.key}
+    count = 0
+    suffix = count |> Integer.to_string |> String.pad_leading(3, "0")
+    attrs
+    |> Map.put(:key, "#{group.key}+#{suffix}")
   end
 
   def link_nodes(_node_map, _group) do
