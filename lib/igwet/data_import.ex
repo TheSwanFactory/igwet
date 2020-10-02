@@ -79,19 +79,24 @@ defmodule Igwet.DataImport do
   end
 
   @doc """
-  Update nodes to map based on index
+  Link node parents using index
 
   ## Examples
   iex> alias Igwet.DataImport
   iex> alias Igwet.Network
-  iex> {:ok, group} = Network.create_node %{name: "group", key: "is.group"}
-  iex> DataImport.merge_key(%{}, group).key
-  "is.group+001"
+  iex> {:ok, parent} = Network.create_node %{name: "parent", key: "is.parent"}
+  iex> {:ok, child} = Network.create_node %{name: "child", key: "is.child"}
+  iex> pmap = %{index: 1, parent_index: nil, node_id: parent.id}
+  iex> cmap = %{index: 2, parent_index: 1, node_id: child.id}
+  iex> result = DataImport.link_nodes([pmap, cmap])
+  iex> length(result)
+  2
 
   """
 
 
-  def link_nodes(_node_map, _group) do
+  def link_nodes(node_map) do
+    node_map
   end
 
 end
