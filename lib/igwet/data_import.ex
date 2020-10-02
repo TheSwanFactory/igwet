@@ -5,10 +5,28 @@ defmodule Igwet.DataImport do
   alias Igwet.Network
   #alias Igwet.Repo
 
+  @doc """
+  Convert string keys into atoms
+
+  ## Examples
+      iex> alias Igwet.DataImport
+      iex> DataImport.map_strings_to_atoms %{"KEY" => "value"}
+      %{key: "value"}
+
+  """
+
   def map_strings_to_atoms(string_key_map) do
     # https://stackoverflow.com/questions/31990134/how-to-convert-map-keys-from-strings-to-atoms-in-elixir
     for {key, val} <- string_key_map, into: %{}, do: {String.downcase(key) |> String.to_atom(), val}
   end
+
+  @doc """
+  Create a unique key and merge it into the map
+
+  ## Examples
+      iex> alias Igwet.DataImport
+
+  """
 
   def merge_key(attrs, group) do
     node = Network.create_node attrs
@@ -18,6 +36,8 @@ defmodule Igwet.DataImport do
 
   def link_nodes(_node_map, _group) do
   end
+
+
 
   def csv_map(path) do
     Logger.warn "csv_map.path: #{path}"

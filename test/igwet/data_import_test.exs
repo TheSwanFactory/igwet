@@ -2,6 +2,7 @@ defmodule Igwet.NetworkTest.DataImport do
   require Logger
   use Igwet.DataCase
   alias Igwet.DataImport
+  doctest Igwet.DataImport
   #alias Igwet.Network
 
   @test_csv "ingest-test.csv"
