@@ -25,7 +25,6 @@ defmodule Igwet.DataImport do
 
   ## Examples
   iex> alias Igwet.DataImport
-  iex> alias Igwet.Network.Node
   iex> alias Igwet.Network
   iex> {:ok, group} = Network.create_node %{name: "group", key: "is.group"}
   iex> DataImport.merge_key(%{}, group).key
@@ -34,7 +33,7 @@ defmodule Igwet.DataImport do
   """
 
   def merge_key(attrs, group) do
-    count = 0
+    count = length(Network.node_members(group)) + 1
     suffix = count |> Integer.to_string |> String.pad_leading(3, "0")
     attrs
     |> Map.put(:key, "#{group.key}+#{suffix}")
@@ -46,7 +45,7 @@ defmodule Igwet.DataImport do
 
 
   def csv_map(path) do
-    Logger.warn "csv_map.path: #{path}"
+    #Logger.warn "csv_map.path: #{path}"
     File.stream!(path)
     |> CSV.decode!(headers: true)
     |> Enum.map(&map_strings_to_atoms/1)
