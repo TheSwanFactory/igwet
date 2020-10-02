@@ -21,6 +21,17 @@ defmodule Igwet.DataImport do
   end
 
   @doc """
+  Read a file and convert it into a list of atom-maps
+  """
+
+  def csv_map(path) do
+    #Logger.warn "csv_map.path: #{path}"
+    File.stream!(path)
+    |> CSV.decode!(headers: true)
+    |> Enum.map(&map_strings_to_atoms/1)
+  end
+
+  @doc """
   Create a unique key and merge it into the map
 
   ## Examples
@@ -39,25 +50,41 @@ defmodule Igwet.DataImport do
     |> Map.put(:key, "#{group.key}+#{suffix}")
   end
 
-  def link_nodes(_node_map, _group) do
-  end
+  @doc """
+  Create nodes using key from group
 
+  ## Examples
+  iex> alias Igwet.DataImport
+  iex> alias Igwet.Network
+  iex> {:ok, group} = Network.create_node %{name: "group", key: "is.group"}
+  iex> attrs = %{name: "n", index: 2, parent: 1}
+  iex> node_maps = DataImport.create_nodes([attrs], group)
+  iex> length(node_maps)
+  1
 
-
-  def csv_map(path) do
-    #Logger.warn "csv_map.path: #{path}"
-    File.stream!(path)
-    |> CSV.decode!(headers: true)
-    |> Enum.map(&map_strings_to_atoms/1)
-  end
+  """
 
   def create_nodes(map_list, group) do
     for attrs <- map_list do
-      attrs
-      |> merge_key(group)
-      |> Network.create_node
+      {:ok, node} = attrs |> merge_key(group) |> Network.create_node
+      %{index: attrs.index, parent_id: attrs.parent, node_id: node.id}
     end
-    |> link_nodes(group)
+  end
+
+  @doc """
+  Update nodes to map based on index
+
+  ## Examples
+  iex> alias Igwet.DataImport
+  iex> alias Igwet.Network
+  iex> {:ok, group} = Network.create_node %{name: "group", key: "is.group"}
+  iex> DataImport.merge_key(%{}, group).key
+  "is.group+001"
+
+  """
+
+
+  def link_nodes(_node_map, _group) do
   end
 
 end
