@@ -86,11 +86,16 @@ defmodule Igwet.DataImport do
   iex> alias Igwet.Network
   iex> {:ok, parent} = Network.create_node %{name: "parent", key: "is.parent"}
   iex> {:ok, child} = Network.create_node %{name: "child", key: "is.child"}
-  iex> pmap = %{index: 1, parent_index: nil, node_id: parent.id}
-  iex> cmap = %{index: 2, parent_index: 1, node_id: child.id}
+  iex> pmap = %{index: 1, parent_index: nil, node: parent}
+  iex> cmap = %{index: 2, parent_index: 1, node: child}
   iex> result = DataImport.link_nodes([pmap, cmap])
   iex> length(result)
   2
+  iex> node = Enum.at(result, 1).node
+  iex> is_nil node.meta
+  false
+  iex> node.meta.parent
+  parent.id
 
   """
 
