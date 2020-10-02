@@ -61,13 +61,20 @@ defmodule Igwet.DataImport do
   iex> node_maps = DataImport.create_nodes([attrs], group)
   iex> length(node_maps)
   1
+  iex> map = Enum.at(node_maps, 0)
+  iex> is_nil map.node_id
+  false
+  iex> map.index
+  2
+  iex> map.parent_index
+  1
 
   """
 
   def create_nodes(map_list, group) do
     for attrs <- map_list do
       {:ok, node} = attrs |> merge_key(group) |> Network.create_node
-      %{index: attrs.index, parent_id: attrs.parent, node_id: node.id}
+      %{index: attrs.index, parent_index: attrs.parent, node_id: node.id}
     end
   end
 
