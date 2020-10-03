@@ -75,9 +75,25 @@ defmodule Igwet.DataImport do
 
   def upsert_nodes(map_list, group) do
     for attrs <- map_list do
-      {:ok, node} = attrs |> merge_key(group) |> Network.create_node
-      #Logger.warn("upsert_nodes:\n#{inspect(node)}")
+      {:ok, node} = attrs |> merge_key(group) |> upsert_on_email()
       %{node: node, node_index: attrs.index, parent_index: attrs.parent}
+    end
+  end
+
+  def node_if_email(attrs) do
+    if (!Map.has_key? attrs, :email) do
+      nil
+    else
+      Network.get_first_node!(:email, attrs.email)
+    end
+  end
+
+  def upsert_on_email(attrs) do
+    node = node_if_email(attrs)
+    if (node) do
+        Network.update_node node, attrs
+    else
+      Network.create_node attrs
     end
   end
 

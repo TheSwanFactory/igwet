@@ -21,8 +21,12 @@ defmodule Igwet.NetworkTest.DataImport do
     assert length(map) == 7
   end
 
-  test "upsert_nodes" do
-    exists = Network.create_node @prior_attrs
-    assert !is_nil exists
+  test "upsert_on_email" do
+    {:ok, exists}  = Network.create_node @prior_attrs
+    attrs = %{name: "new", key: "new.key", email: @prior_attrs.email, index: 1, parent: 2}
+    DataImport.upsert_on_email(attrs)
+    updated = Network.get_node!(exists.id)
+    assert !is_nil updated
+    assert updated.name == attrs.name
   end
 end
