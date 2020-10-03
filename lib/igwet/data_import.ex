@@ -94,10 +94,10 @@ defmodule Igwet.DataImport do
   iex> result = DataImport.link_nodes([pmap, cmap])
   iex> length(result)
   2
-  iex> is_nil Enum.at(result, 0).meta.parent_id
-  true
-  iex> is_nil Enum.at(result, 1).meta.parent_id
-  false
+  iex> Enum.at(result, 0).meta.parent_id
+  nil
+  iex> Enum.at(result, 1).meta.parent_id
+  parent.id
 
   """
 
