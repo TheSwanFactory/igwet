@@ -26,7 +26,7 @@ defmodule Igwet.NetworkTest.DataImport do
     assert length(map) == 7
   end
 
-  test "upsert_on_email" do
+  test "upsert_on_email exists" do
     {:ok, exists}  = Network.create_node @prior_attrs
     attrs = %{name: "new", key: "new.key", email: @prior_attrs.email, index: 1, parent: 2}
     DataImport.upsert_on_email(attrs)
@@ -35,6 +35,16 @@ defmodule Igwet.NetworkTest.DataImport do
     assert updated.name == attrs.name
   end
 
+  test "upsert_on_email missing" do
+    {:ok, exists}  = Network.create_node @prior_attrs
+    attrs = %{name: "new", key: "new.key", email: "invalid@example.com", index: 1, parent: 2}
+    DataImport.upsert_on_email(attrs)
+    result = Network.get_node!(exists.id)
+    assert !is_nil result
+    assert result.name == @prior_attrs.name
+  end
+
+  @tag :skip
   test "csv_for_group" do
     {:ok, group}  = Network.create_node @group_attrs
     result = DataImport.csv_for_group(@csv_path, group)
