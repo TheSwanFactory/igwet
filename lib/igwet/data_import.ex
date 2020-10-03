@@ -40,7 +40,7 @@ defmodule Igwet.DataImport do
   iex> merged.key
   "is.group+001"
   iex> merged.meta
-  %{parent_id: nil}
+  %{parent_id: group.id}
 
   """
 
@@ -49,7 +49,7 @@ defmodule Igwet.DataImport do
     suffix = count |> Integer.to_string |> String.pad_leading(3, "0")
     attrs
     |> Map.put(:key, "#{group.key}+#{suffix}")
-    |> Map.put(:meta, %{parent_id: nil})
+    |> Map.put(:meta, %{parent_id: group.id})
   end
 
   @doc """
