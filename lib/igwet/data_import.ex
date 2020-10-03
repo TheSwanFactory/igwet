@@ -136,4 +136,14 @@ defmodule Igwet.DataImport do
     new_node
   end
 
+  @doc """
+  Full import
+  """
+
+  def csv_for_group(path, group) do
+    csv_map(path)
+    |> upsert_nodes(group)
+    |> link_nodes()
+  end
+
 end

@@ -14,6 +14,11 @@ defmodule Igwet.NetworkTest.DataImport do
     name: "exists",
   }
 
+  @group_attrs %{
+    key: "group.key",
+    name: "group",
+  }
+
   test "csv_map" do
     map = DataImport.csv_map(@csv_path)
     #Logger.warn "csv_map.map:\n" <> inspect(map)
@@ -29,4 +34,12 @@ defmodule Igwet.NetworkTest.DataImport do
     assert !is_nil updated
     assert updated.name == attrs.name
   end
+
+  test "csv_for_group" do
+    {:ok, group}  = Network.create_node @group_attrs
+    result = DataImport.csv_for_group(@csv_path, group)
+    Logger.warn "csv_for_group.result:\n" <> inspect(result)
+    assert !is_nil result
+  end
+
 end
