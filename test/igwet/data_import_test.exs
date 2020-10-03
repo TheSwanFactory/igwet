@@ -9,13 +9,18 @@ defmodule Igwet.NetworkTest.DataImport do
   #@test_dir Application.app_dir(:igwet, "../..")
   @csv_path Path.absname(@test_csv, "test/support")
 
-  describe "read csv" do
-    test "csv_map" do
-      map = DataImport.csv_map(@csv_path)
-      #Logger.warn "csv_map.map:\n" <> inspect(map)
-      assert !is_nil map
-      assert length(map) == 7
-    end
+  test "csv_map" do
+    map = DataImport.csv_map(@csv_path)
+    #Logger.warn "csv_map.map:\n" <> inspect(map)
+    assert !is_nil map
+    assert length(map) == 7
+  end
+
+  test "upsert_nodes" do
+    map = DataImport.csv_map(@csv_path)
+    #Logger.warn "csv_map.map:\n" <> inspect(map)
+    assert !is_nil map
+    assert length(map) == 7
   end
 end
 

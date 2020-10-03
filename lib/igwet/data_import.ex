@@ -60,7 +60,7 @@ defmodule Igwet.DataImport do
   iex> alias Igwet.Network
   iex> {:ok, group} = Network.create_node %{name: "group", key: "is.group"}
   iex> attrs = %{name: "n", index: 2, parent: 1}
-  iex> node_maps = DataImport.create_nodes([attrs], group)
+  iex> node_maps = DataImport.upsert_nodes([attrs], group)
   iex> length(node_maps)
   1
   iex> map = Enum.at(node_maps, 0)
@@ -73,10 +73,10 @@ defmodule Igwet.DataImport do
 
   """
 
-  def create_nodes(map_list, group) do
+  def upsert_nodes(map_list, group) do
     for attrs <- map_list do
       {:ok, node} = attrs |> merge_key(group) |> Network.create_node
-      #Logger.warn("create_nodes:\n#{inspect(node)}")
+      #Logger.warn("upsert_nodes:\n#{inspect(node)}")
       %{node: node, node_index: attrs.index, parent_index: attrs.parent}
     end
   end
