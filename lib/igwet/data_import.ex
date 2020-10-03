@@ -1,9 +1,7 @@
 defmodule Igwet.DataImport do
   require Logger
-  #import Ecto.{Query}
-  #alias Igwet.Network.Edge
+  #alias Igwet.Network.Node
   alias Igwet.Network
-  #alias Igwet.Repo
 
   @doc """
   Convert string keys into atoms
@@ -66,7 +64,7 @@ defmodule Igwet.DataImport do
   iex> length(node_maps)
   1
   iex> map = Enum.at(node_maps, 0)
-  iex> is_nil map.node_id
+  iex> is_nil map.node
   false
   iex> map.node_index
   2
@@ -79,7 +77,7 @@ defmodule Igwet.DataImport do
     for attrs <- map_list do
       {:ok, node} = attrs |> merge_key(group) |> Network.create_node
       #Logger.warn("create_nodes:\n#{inspect(node)}")
-      %{node_id: node, node_index: attrs.index, parent_index: attrs.parent}
+      %{node: node, node_index: attrs.index, parent_index: attrs.parent}
     end
   end
 
@@ -91,31 +89,35 @@ defmodule Igwet.DataImport do
   iex> alias Igwet.Network
   iex> {:ok, parent} = Network.create_node %{name: "parent", key: "is.parent", meta: %{parent_id: nil}}
   iex> {:ok, child} = Network.create_node %{name: "child", key: "is.child", meta: %{parent_id: nil}}
-  iex> pmap = %{node_index: 1, parent_index: nil, node_id: parent.id}
-  iex> cmap = %{node_index: 2, parent_index: 1, node_id: child.id}
+  iex> pmap = %{node_index: 1, parent_index: nil, node: parent}
+  iex> cmap = %{node_index: 2, parent_index: 1, node: child}
   iex> result = DataImport.link_nodes([pmap, cmap])
   iex> length(result)
   2
-  iex> entry = Enum.at(result, 1)
-  %{}
+  iex> is_nil Enum.at(result, 0).meta.parent_id
+  true
+  iex> is_nil Enum.at(result, 1).meta.parent_id
+  false
 
   """
 
 
   def link_nodes(node_map) do
     for entry <- node_map do
-      Logger.warn("link_nodes.entry: #{inspect(entry)}")
+      #Logger.warn("link_nodes.entry: #{inspect(entry)}")
       if (entry.parent_index) do
         p_entry = node_map |> Enum.find(fn e -> e.node_index == entry.parent_index end)
-        add_parent(entry.node_id, p_entry.node_id)
+        add_parent(entry.node, p_entry.node)
       else
-        entry.node_id
+        entry.node
       end
     end
   end
 
-  def add_parent(node_id, parent_id) do
-    %{id: node_id, meta: %{parent_id: parent_id}}
+  defp add_parent(node, parent) do
+    attrs = %{meta: %{parent_id: parent.id}}
+    {:ok, new_node} = Network.update_node node, attrs
+    new_node
   end
 
 end
