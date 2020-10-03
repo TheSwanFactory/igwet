@@ -38,8 +38,11 @@ defmodule Igwet.DataImport do
   iex> alias Igwet.DataImport
   iex> alias Igwet.Network
   iex> {:ok, group} = Network.create_node %{name: "group", key: "is.group"}
-  iex> DataImport.merge_key(%{}, group).key
+  iex> merged = DataImport.merge_key(%{}, group)
+  iex> merged.key
   "is.group+001"
+  iex> merged.meta
+  %{parent_id: nil}
 
   """
 
@@ -48,6 +51,7 @@ defmodule Igwet.DataImport do
     suffix = count |> Integer.to_string |> String.pad_leading(3, "0")
     attrs
     |> Map.put(:key, "#{group.key}+#{suffix}")
+    |> Map.put(:meta, %{parent_id: nil})
   end
 
   @doc """
@@ -64,7 +68,7 @@ defmodule Igwet.DataImport do
   iex> map = Enum.at(node_maps, 0)
   iex> is_nil map.node_id
   false
-  iex> map.index
+  iex> map.node_index
   2
   iex> map.parent_index
   1
@@ -74,7 +78,8 @@ defmodule Igwet.DataImport do
   def create_nodes(map_list, group) do
     for attrs <- map_list do
       {:ok, node} = attrs |> merge_key(group) |> Network.create_node
-      %{index: attrs.index, parent_index: attrs.parent, node_id: node.id}
+      #Logger.warn("create_nodes:\n#{inspect(node)}")
+      %{node_id: node, node_index: attrs.index, parent_index: attrs.parent}
     end
   end
 
@@ -84,24 +89,33 @@ defmodule Igwet.DataImport do
   ## Examples
   iex> alias Igwet.DataImport
   iex> alias Igwet.Network
-  iex> {:ok, parent} = Network.create_node %{name: "parent", key: "is.parent"}
-  iex> {:ok, child} = Network.create_node %{name: "child", key: "is.child"}
-  iex> pmap = %{index: 1, parent_index: nil, node: parent}
-  iex> cmap = %{index: 2, parent_index: 1, node: child}
+  iex> {:ok, parent} = Network.create_node %{name: "parent", key: "is.parent", meta: %{parent_id: nil}}
+  iex> {:ok, child} = Network.create_node %{name: "child", key: "is.child", meta: %{parent_id: nil}}
+  iex> pmap = %{node_index: 1, parent_index: nil, node_id: parent.id}
+  iex> cmap = %{node_index: 2, parent_index: 1, node_id: child.id}
   iex> result = DataImport.link_nodes([pmap, cmap])
   iex> length(result)
   2
-  iex> node = Enum.at(result, 1).node
-  iex> is_nil node.meta
-  false
-  iex> node.meta.parent
-  parent.id
+  iex> entry = Enum.at(result, 1)
+  %{}
 
   """
 
 
   def link_nodes(node_map) do
-    node_map
+    for entry <- node_map do
+      Logger.warn("link_nodes.entry: #{inspect(entry)}")
+      if (entry.parent_index) do
+        p_entry = node_map |> Enum.find(fn e -> e.node_index == entry.parent_index end)
+        add_parent(entry.node_id, p_entry.node_id)
+      else
+        entry.node_id
+      end
+    end
+  end
+
+  def add_parent(node_id, parent_id) do
+    %{id: node_id, meta: %{parent_id: parent_id}}
   end
 
 end
