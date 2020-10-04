@@ -50,6 +50,7 @@ defmodule Igwet.NetworkTest.DataImport do
     result = DataImport.csv_for_group(@csv_path, group)
     Logger.warn "csv_for_group.result:\n" <> inspect(result)
     assert !is_nil result
+    assert length(result) == 7
   end
 
 end

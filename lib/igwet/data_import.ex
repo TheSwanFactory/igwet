@@ -36,16 +36,16 @@ defmodule Igwet.DataImport do
   iex> alias Igwet.DataImport
   iex> alias Igwet.Network
   iex> {:ok, group} = Network.create_node %{name: "group", key: "is.group"}
-  iex> merged = DataImport.merge_key(%{}, group)
+  iex> merged = DataImport.merge_key(%{}, group, 13)
   iex> merged.key
-  "is.group+001"
+  "is.group+013"
   iex> merged.meta
   %{parent_id: group.id}
 
   """
 
-  def merge_key(attrs, group) do
-    count = length(Network.node_members(group)) + 1
+  def merge_key(attrs, group, i) do
+    count = length(Network.node_members(group)) + i
     suffix = count |> Integer.to_string |> String.pad_leading(3, "0")
     attrs
     |> Map.put(:key, "#{group.key}+#{suffix}")
@@ -74,10 +74,12 @@ defmodule Igwet.DataImport do
   """
 
   def upsert_nodes(map_list, group) do
-    for attrs <- map_list do
-      {:ok, node} = attrs |> merge_key(group) |> upsert_on_email()
+    map_list
+    |> Enum.with_index()
+    |> Enum.map(fn({attrs, i}) ->
+      {:ok, node} = attrs |> merge_key(group, i) |> upsert_on_email()
       %{node: node, node_index: attrs.index, parent_index: attrs.parent}
-    end
+    end)
   end
 
   def node_if_email(attrs) do
