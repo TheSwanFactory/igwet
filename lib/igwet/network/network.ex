@@ -45,6 +45,17 @@ defmodule Igwet.Network do
     |> Repo.one!()
   end
 
+def get_first_email(email) do
+    from(
+      Node,
+      order_by: [asc: :inserted_at],
+      limit: 1
+    )
+    |> where(email: ^email)
+    |> Repo.one()
+  end
+
+
   @doc """
   Find all nodes where _field_ matches _pattern_
 

@@ -84,7 +84,7 @@ defmodule Igwet.DataImport do
     if (!Map.has_key? attrs, :email) do
       nil
     else
-      Network.get_first_node!(:email, attrs.email)
+      Network.get_first_email(attrs.email)
     end
   end
 
