@@ -44,7 +44,6 @@ defmodule Igwet.NetworkTest.DataImport do
     assert result.name == @prior_attrs.name
   end
 
-  @tag :skip
   test "csv_for_group" do
     {:ok, group}  = Network.create_node @group_attrs
     result = DataImport.csv_for_group(@csv_path, group)

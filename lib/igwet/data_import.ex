@@ -122,10 +122,11 @@ defmodule Igwet.DataImport do
 
   def link_nodes(node_map) do
     for entry <- node_map do
-      #Logger.warn("link_nodes.entry: #{inspect(entry)}")
       if (entry.parent_index) do
         p_entry = node_map |> Enum.find(fn e -> e.node_index == entry.parent_index end)
-        add_parent(entry.node, p_entry.node)
+        if (p_entry) do
+          add_parent(entry.node, p_entry.node)
+        end
       else
         entry.node
       end
