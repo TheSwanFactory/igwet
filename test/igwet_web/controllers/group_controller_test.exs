@@ -20,6 +20,7 @@ defmodule IgwetWeb.GroupControllerTest do
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil, meta: %{}}
   @test_path "test/support"
   @test_csv "ingest-test.csv"
+  @csv_path Path.absname(@test_csv, @test_path)
 
   describe "index" do
     test "lists all groups", %{conn: conn} do
@@ -77,7 +78,7 @@ defmodule IgwetWeb.GroupControllerTest do
     setup [:create_group]
 
     test "redirects when data is valid", %{conn: conn, group: group} do
-      upload = %Plug.Upload{content_type: "group/csv", filename: @test_csv, path: @test_path}
+      upload = %Plug.Upload{content_type: "group/csv", filename: @test_csv, path: @csv_path}
       params = Map.put(@update_attrs, "import", upload)
       conn = put(conn, group_path(conn, :update, group), node: params)
       assert redirected_to(conn) == group_path(conn, :show, group)

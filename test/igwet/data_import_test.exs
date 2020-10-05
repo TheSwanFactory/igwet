@@ -48,8 +48,10 @@ defmodule Igwet.NetworkTest.DataImport do
   test "csv_for_group" do
     {:ok, group}  = Network.create_node @group_attrs
     nodes = DataImport.csv_for_group(@csv_path, group)
+    members = Network.node_members(group)
     assert !is_nil nodes
     assert length(nodes) == 7
+    assert length(members) == 7
     for node <- nodes do
       assert !is_nil node
       assert !is_nil node.meta
@@ -63,7 +65,7 @@ defmodule Igwet.NetworkTest.DataImport do
 
   test "check_upload with valid import" do
     {:ok, group}  = Network.create_node @group_attrs
-    upload = %Plug.Upload{content_type: "text/csv", filename: @test_csv, path: @test_path}
+    upload = %Plug.Upload{content_type: "text/csv", filename: @test_csv, path: @csv_path}
     nodes = DataImport.check_upload(upload, group)
     assert !is_nil nodes
     assert length(nodes) == 7

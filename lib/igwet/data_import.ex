@@ -160,10 +160,9 @@ defmodule Igwet.DataImport do
   # %Plug.Upload{content_type: "image/jpg", filename: "cute-kitty.jpg", path: "/var/folders/_6/xbsnn7tx6g9dblyx149nrvbw0000gn/T//plug-1434/multipart-558399-917557-1"}
 
   def check_upload(upload, group) do
-    #Logger.warn("check_upload #{inspect(upload)}")
-    if (upload && upload.filename) do
-      Path.absname(upload.filename, upload.path)
-      |> csv_for_group(group)
+    Logger.warn("check_upload #{inspect(upload)}")
+    if (upload && upload.path) do
+      csv_for_group(upload.path, group)
     end
   end
 
