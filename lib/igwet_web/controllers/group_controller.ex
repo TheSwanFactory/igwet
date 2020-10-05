@@ -25,7 +25,7 @@ defmodule IgwetWeb.GroupController do
         |> redirect(to: group_path(conn, :show, node))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, all_members: nil)
     end
   end
 
@@ -60,7 +60,7 @@ defmodule IgwetWeb.GroupController do
         |> redirect(to: group_path(conn, :show, node))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", node: node, changeset: changeset)
+        render(conn, "edit.html", node: node, changeset: changeset, all_members: nil)
     end
   end
 

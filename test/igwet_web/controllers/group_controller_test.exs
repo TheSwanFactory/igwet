@@ -52,10 +52,9 @@ defmodule IgwetWeb.GroupControllerTest do
       assert my_group.type == "group"
     end
 
-    @tag :skip
-    test "redirects when data is invalid", %{conn: conn} do
+    test "redirects back to edit data is invalid", %{conn: conn} do
       conn = post(conn, group_path(conn, :create), node: @invalid_attrs)
-      assert html_response(conn, 302) =~ "redirected"
+      assert html_response(conn, 200) =~ "New Group"
     end
   end
 
@@ -79,7 +78,6 @@ defmodule IgwetWeb.GroupControllerTest do
       assert html_response(conn, 200) =~ "some updated group"
     end
 
-    @tag :skip
     test "renders errors when data is invalid", %{conn: conn, group: group} do
       conn = put(conn, group_path(conn, :update, group), node: @invalid_attrs)
       assert html_response(conn, 200) =~ "Edit Group"
