@@ -126,6 +126,8 @@ defmodule Igwet.DataImport do
         p_entry = node_map |> Enum.find(fn e -> e.node_index == entry.parent_index end)
         if (p_entry) do
           add_parent(entry.node, p_entry.node)
+        else
+          entry.node
         end
       else
         entry.node
