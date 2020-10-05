@@ -3,6 +3,7 @@ defmodule IgwetWeb.GroupController do
 
   alias Igwet.Network
   alias Igwet.Network.Node
+  alias Igwet.Network.DateImport
 
   plug(:require_admin)
 
@@ -20,6 +21,7 @@ defmodule IgwetWeb.GroupController do
     params = Map.put(node_params, "type", "group")
     case Network.create_node(params) do
       {:ok, node} ->
+        #DateImport.check_file(node, params["import"])
         conn
         |> put_flash(:info, "Node created successfully.")
         |> redirect(to: group_path(conn, :show, node))
@@ -53,6 +55,7 @@ defmodule IgwetWeb.GroupController do
 
     case Network.update_node(node, node_params) do
       {:ok, node} ->
+        #DateImport.check_file(node_params["import"], node)
         members = Network.node_members(node)
         Network.update_members(node, members, node_params)
         conn

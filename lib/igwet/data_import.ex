@@ -146,9 +146,11 @@ defmodule Igwet.DataImport do
   """
 
   def csv_for_group(path, group) do
-    csv_map(path)
-    |> upsert_nodes(group)
-    |> link_nodes()
+    if (path) do
+      csv_map(path)
+      |> upsert_nodes(group)
+      |> link_nodes()
+    end
   end
 
 end
