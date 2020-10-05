@@ -7,7 +7,7 @@ defmodule IgwetWeb.GroupControllerTest do
     about: "about group",
     email: "some group email",
     key: "some group group key",
-    name: "group",
+    name: "test group",
     phone: "some group phone",
     type: "group",
   }
@@ -18,11 +18,6 @@ defmodule IgwetWeb.GroupControllerTest do
     timezone: "US/Eastern",
   }
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil, meta: %{}}
-
-  def attrs(:group) do
-    {:ok, group} = Network.create_node(@group_attrs)
-    group
-  end
 
   describe "index" do
     test "lists all groups", %{conn: conn} do
@@ -40,10 +35,8 @@ defmodule IgwetWeb.GroupControllerTest do
   end
 
   describe "create group" do
-
-    @tag :skip
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, group_path(conn, :create), node: attrs(:group))
+      conn = post(conn, group_path(conn, :create), node: @group_attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == group_path(conn, :show, id)
@@ -52,12 +45,10 @@ defmodule IgwetWeb.GroupControllerTest do
       assert html_response(conn, 200) =~ "Show Group"
     end
 
-    @tag :skip
     test "for group", %{conn: conn} do
-      my_attrs = attrs(:group)
-      post(conn, group_path(conn, :create), node: my_attrs)
+      post(conn, group_path(conn, :create), node: @group_attrs)
 
-      my_group = Network.get_predicate(my_attrs.name)
+      my_group = Network.get_predicate(@group_attrs.name)
       assert my_group.type == "group"
     end
 
@@ -68,7 +59,6 @@ defmodule IgwetWeb.GroupControllerTest do
     end
   end
 
-  @tag :skip
   describe "edit group" do
     setup [:create_group]
 
@@ -81,7 +71,6 @@ defmodule IgwetWeb.GroupControllerTest do
   describe "update group" do
     setup [:create_group]
 
-    @tag :skip
     test "redirects when data is valid", %{conn: conn, group: group} do
       conn = put(conn, group_path(conn, :update, group), node: @update_attrs)
       assert redirected_to(conn) == group_path(conn, :show, group)
@@ -100,7 +89,6 @@ defmodule IgwetWeb.GroupControllerTest do
   describe "delete group" do
     setup [:create_group]
 
-    @tag :skip
     test "deletes chosen group", %{conn: conn, group: group} do
       conn = delete(conn, group_path(conn, :delete, group))
       assert redirected_to(conn) == group_path(conn, :index)
@@ -111,7 +99,7 @@ defmodule IgwetWeb.GroupControllerTest do
   end
 
   defp create_group(_) do
-    {:ok, group} = Network.create_node(attrs(:group))
+    {:ok, group} = Network.create_node(@group_attrs)
     %{group: group}
   end
 end
