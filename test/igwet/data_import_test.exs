@@ -53,7 +53,7 @@ defmodule Igwet.NetworkTest.DataImport do
       assert !is_nil node
       assert !is_nil node.meta
       assert !is_nil node.meta.parent_id
-      Logger.warn "csv_for_group.entry: #{node.type} #{node.name} #{node.key} #{node.meta.parent_id}"
+      #Logger.warn "csv_for_group.entry: #{node.type} #{node.name} #{node.key} #{node.meta.parent_id}"
     end
     assert Enum.at(nodes, 0).meta.parent_id == group.id
     assert Enum.at(nodes, 1).meta.parent_id == Enum.at(nodes, 0).id
