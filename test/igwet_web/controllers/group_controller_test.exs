@@ -18,6 +18,8 @@ defmodule IgwetWeb.GroupControllerTest do
     timezone: "US/Eastern",
   }
   @invalid_attrs %{about: nil, email: nil, key: nil, name: nil, phone: nil, meta: %{}}
+  @test_path "test/support"
+  @test_csv "ingest-test.csv"
 
   describe "index" do
     test "lists all groups", %{conn: conn} do
@@ -63,12 +65,8 @@ defmodule IgwetWeb.GroupControllerTest do
 
     test "renders form for editing chosen group", %{conn: conn, group: group} do
       conn = get(conn, group_path(conn, :edit, group))
-      assert html_response(conn, 200) =~ "Edit Group"
-    end
-
-    test "renders multipart form for uploading files", %{conn: conn, group: group} do
-      conn = get(conn, group_path(conn, :edit, group))
       result = html_response(conn, 200)
+      assert result =~ "Edit Group"
       assert result =~ "multipart"
       assert result =~ "file"
       assert result =~ "node[import]"
@@ -79,7 +77,9 @@ defmodule IgwetWeb.GroupControllerTest do
     setup [:create_group]
 
     test "redirects when data is valid", %{conn: conn, group: group} do
-      conn = put(conn, group_path(conn, :update, group), node: @update_attrs)
+      upload = %Plug.Upload{content_type: "group/csv", filename: @test_csv, path: @test_path}
+      params = Map.put(@update_attrs, "import", upload)
+      conn = put(conn, group_path(conn, :update, group), node: params)
       assert redirected_to(conn) == group_path(conn, :show, group)
 
       conn = get(conn, group_path(conn, :show, group))
