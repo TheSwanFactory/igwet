@@ -5,8 +5,9 @@ defmodule Igwet.NetworkTest.DataImport do
   doctest Igwet.DataImport
   alias Igwet.Network
 
+  @test_path "test/support"
   @test_csv "ingest-test.csv"
-  @csv_path Path.absname(@test_csv, "test/support")
+  @csv_path Path.absname(@test_csv, @test_path)
 
   @prior_attrs %{
     email: "exists@example.com",
@@ -44,13 +45,6 @@ defmodule Igwet.NetworkTest.DataImport do
     assert result.name == @prior_attrs.name
   end
 
-  test "csv_for_group empty path" do
-    {:ok, group}  = Network.create_node @group_attrs
-    map = %{"node" => @csv_path}
-    nodes = DataImport.csv_for_group(map["import"], group)
-    assert is_nil nodes
-  end
-
   test "csv_for_group" do
     {:ok, group}  = Network.create_node @group_attrs
     nodes = DataImport.csv_for_group(@csv_path, group)
@@ -65,7 +59,19 @@ defmodule Igwet.NetworkTest.DataImport do
     assert Enum.at(nodes, 0).meta.parent_id == group.id
     assert Enum.at(nodes, 1).meta.parent_id == Enum.at(nodes, 0).id
     assert Enum.at(nodes, 6).meta.parent_id == Enum.at(nodes, 5).id
-
   end
 
+  test "check_upload with valid import" do
+    {:ok, group}  = Network.create_node @group_attrs
+    upload = %Plug.Upload{content_type: "text/csv", filename: @test_csv, path: @test_path}
+    nodes = DataImport.check_upload(upload, group)
+    assert !is_nil nodes
+    assert length(nodes) == 7
+  end
+
+  test "check_upload with empty import" do
+    {:ok, group}  = Network.create_node @group_attrs
+    nodes = DataImport.check_upload(nil, group)
+    assert is_nil nodes
+  end
 end
