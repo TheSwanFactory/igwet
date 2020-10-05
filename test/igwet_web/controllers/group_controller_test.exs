@@ -65,6 +65,14 @@ defmodule IgwetWeb.GroupControllerTest do
       conn = get(conn, group_path(conn, :edit, group))
       assert html_response(conn, 200) =~ "Edit Group"
     end
+
+    test "renders multipart form for uploading files", %{conn: conn, group: group} do
+      conn = get(conn, group_path(conn, :edit, group))
+      result = html_response(conn, 200)
+      assert result =~ "multipart"
+      assert result =~ "file"
+      assert result =~ "node[import]"
+    end
   end
 
   describe "update group" do
