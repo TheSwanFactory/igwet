@@ -78,6 +78,9 @@ defmodule Igwet.DataImport do
     |> Enum.with_index()
     |> Enum.map(fn({attrs, i}) ->
       {:ok, node} = attrs |> merge_key(group, i) |> upsert_on_email()
+      if (node.type == "contact") do
+        Network.set_node_in_group(node, group)
+      end
       %{node: node, node_index: attrs.index, parent_index: attrs.parent}
     end)
   end
