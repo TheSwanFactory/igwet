@@ -47,8 +47,9 @@ defmodule Igwet.DataImport do
   def merge_key(attrs, group, i) do
     count = length(Network.node_members(group)) + i
     suffix = count |> Integer.to_string |> String.pad_leading(3, "0")
+    now = DateTime.to_unix(DateTime.utc_now())
     attrs
-    |> Map.put(:key, "#{group.key}+#{suffix}")
+    |> Map.put(:key, "#{group.key}+#{suffix}.#{now}")
     |> Map.put(:meta, %{parent_id: group.id})
   end
 
