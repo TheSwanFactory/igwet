@@ -51,7 +51,7 @@ defmodule Igwet.NetworkTest.DataImport do
     members = Network.node_members(group)
     assert !is_nil nodes
     assert length(nodes) == 7
-    assert length(members) == 7
+    assert length(members) == 4
     for node <- nodes do
       assert !is_nil node
       assert !is_nil node.meta

@@ -37,8 +37,8 @@ defmodule Igwet.DataImport do
   iex> alias Igwet.Network
   iex> {:ok, group} = Network.create_node %{name: "group", key: "is.group"}
   iex> merged = DataImport.merge_key(%{}, group, 13)
-  iex> merged.key
-  "is.group+013"
+  iex> merged.key =~ "is.group+013"
+  true
   iex> merged.meta
   %{parent_id: group.id}
 
