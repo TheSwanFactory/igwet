@@ -55,9 +55,9 @@ defmodule IgwetWeb.GroupController do
 
     case Network.update_node(node, node_params) do
       {:ok, node} ->
-        DataImport.check_upload(node_params["import"], node)
         members = Network.node_members(node)
         Network.update_members(node, members, node_params)
+        DataImport.check_upload(node_params["import"], node)
         conn
         |> put_flash(:info, "Node updated successfully.")
         |> redirect(to: group_path(conn, :show, node))
