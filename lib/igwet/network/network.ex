@@ -594,15 +594,10 @@ def get_first_email(email) do
   """
   def update_members(group, members, attrs) do
     ids = Enum.map(members, & &1.id)
-    Logger.debug("** update_members.ids "<> inspect(ids))
-    Logger.debug("** update_members.attrs "<> inspect(attrs))
 
     for {key, value} <- attrs do
-      Logger.debug("*** update_members: "<> inspect(key))
       if k = Regex.run(~r/member:(.*)/, key, capture: :all_but_first) do
-        Logger.debug("*** update_members "<>inspect(k)<>" = "<>inspect(value))
         if !Enum.member?(ids, value) do
-          Logger.debug("*** update_members:set_node_in_group "<>inspect(value))
           node = get_node!(value)
           set_node_in_group(node, group)
         end
@@ -610,7 +605,6 @@ def get_first_email(email) do
     end
     obsolete = ids -- Map.values(attrs)
     for value <- obsolete do
-      Logger.debug("*** update_members:UNset_node_in_group "<>inspect(value))
       node = get_node!(value)
       unset_node_in_group(node, group)
     end

@@ -24,7 +24,6 @@ defmodule IgwetWeb.RsvpController do
     current = Network.count_attendance(event)
     changeset = Network.change_node(%Node{})
     attendees = Network.related_subjects(event, "at")
-    Logger.debug "by_event.attendees\n" <> inspect(attendees)
 
     conn
     |> assign(:current_user, nil)
@@ -115,7 +114,7 @@ end
       result = for member <- Network.node_members(group) do
         if (member.email =~ "@") do
           url = @server <> rsvp_path(conn, :by_email, event_key, member.email)
-          Logger.warn("send_email.url."<>url)
+          #Logger.warn("send_email.url."<>url)
           try do
             Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
           rescue
@@ -123,7 +122,6 @@ end
           end
         end
       end
-      Logger.debug("send_emails.result\n#{inspect(result)}")
       conn
       |> put_flash(:info, "Succeess: emails sent")
       |> redirect(to: event_path(conn, :show, event))
