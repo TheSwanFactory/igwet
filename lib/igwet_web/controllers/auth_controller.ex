@@ -1,11 +1,7 @@
 defmodule IgwetWeb.AuthController do
   use IgwetWeb, :controller
-
   plug(Ueberauth)
-
   alias Igwet.Admin.User.FromAuth
-  alias Igwet.DataMigrator
-  require Logger
 
   def logout(conn, _params) do
     conn

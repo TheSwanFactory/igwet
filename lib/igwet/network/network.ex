@@ -596,7 +596,7 @@ def get_first_email(email) do
     ids = Enum.map(members, & &1.id)
 
     for {key, value} <- attrs do
-      if k = Regex.run(~r/member:(.*)/, key, capture: :all_but_first) do
+      if Regex.run(~r/member:(.*)/, key, capture: :all_but_first) do
         if !Enum.member?(ids, value) do
           node = get_node!(value)
           set_node_in_group(node, group)

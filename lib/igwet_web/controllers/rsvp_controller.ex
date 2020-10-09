@@ -111,7 +111,7 @@ end
       |> redirect(to: group_path(conn, :edit, group))
     else
       message = Sendmail.event_message(group, event)
-      result = for member <- Network.node_members(group) do
+      for member <- Network.node_members(group) do
         if (member.email =~ "@") do
           url = @server <> rsvp_path(conn, :by_email, event_key, member.email)
           #Logger.warn("send_email.url."<>url)
