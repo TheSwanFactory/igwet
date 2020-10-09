@@ -1,0 +1,8 @@
+Index,Type,Name,Parent,Phone,Email
+1,family,Doe,,(408) 555-1212,
+2,contact,John,1,(408) 555-1234,john.doe@gmail.com
+3,contact,Mary,1,(408) 555-4321,mary.doe@gmail.com
+4,family,Roe,,(650) 555-1212,
+5,contact,Richard,4,(650) 555-1234,dick.roe@example.com
+6,contact,Elizabeth,4,(650) 555-4321,liz.roe@example.com
+7,work,ebay.com,6,(650) 555-0987,liz.roe@work.com

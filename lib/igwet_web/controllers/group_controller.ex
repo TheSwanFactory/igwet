@@ -3,6 +3,7 @@ defmodule IgwetWeb.GroupController do
 
   alias Igwet.Network
   alias Igwet.Network.Node
+  alias Igwet.DataImport
 
   plug(:require_admin)
 
@@ -20,12 +21,13 @@ defmodule IgwetWeb.GroupController do
     params = Map.put(node_params, "type", "group")
     case Network.create_node(params) do
       {:ok, node} ->
+        DataImport.check_upload(params["import"], node)
         conn
         |> put_flash(:info, "Node created successfully.")
         |> redirect(to: group_path(conn, :show, node))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, all_members: nil)
     end
   end
 
@@ -55,12 +57,13 @@ defmodule IgwetWeb.GroupController do
       {:ok, node} ->
         members = Network.node_members(node)
         Network.update_members(node, members, node_params)
+        DataImport.check_upload(node_params["import"], node)
         conn
         |> put_flash(:info, "Node updated successfully.")
         |> redirect(to: group_path(conn, :show, node))
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", node: node, changeset: changeset)
+        render(conn, "edit.html", node: node, changeset: changeset, all_members: nil)
     end
   end
 

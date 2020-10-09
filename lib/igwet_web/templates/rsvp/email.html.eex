@@ -1,13 +1,17 @@
 <h1><%= @event.name %></h1>
 <h2><%= @group.name %></h2>
 <h3><%= @event.date %><h3>
-<h4>Welcome, <%= @node.email %> (<%= @node.name %>) </h4>
 <p>So far we have <%= @current %> spaces reserved out of <%= @event.size %> total.</p>
 <%= if (@node_count < 0) do %>
+<h4>Welcome, <%= @node.email %> (<%= @node.name %>) </h4>
 <p>Please select how many from your household will be attending in-person (or 0 if none):</p>
 <% else %>
-<p>You currently have registered <%= @node_count %> person(s) to attend.</p>
-<p>If you would like to change your registration, please select a new choice below:</p>
+<h2>Success!
+<h4>Thank you for registering, <%= @node.name %> &lt; <%= @node.email %>  &gt; </h4>
+<p>You have successfully registered <%= @node_count %> person(s) to attend.</p>
+<p>Click <a href="<%= rsvp_path(@conn, :by_event, @event.key) %>">here</a> to see who else has registered</p>
+<hr/>
+<p><em>If you would like to <b>change</b> your registration, please select a new choice below:</em></p>
 <% end %>
 
 <ul>

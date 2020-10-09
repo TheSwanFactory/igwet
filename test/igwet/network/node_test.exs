@@ -193,7 +193,7 @@ defmodule Igwet.NetworkTest.Node do
     setup [:create_event]
     test "next", %{node: node, event: event} do
       {:ok, next} = Network.next_event(event, node)
-      Logger.warn(inspect(next))
+      #Logger.warn(inspect(next))
       assert next
       assert next.key == "some.key+2020-04-30"
       assert next.name =~ "04-30: event"
