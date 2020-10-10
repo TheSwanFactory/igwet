@@ -20,14 +20,15 @@ defmodule IgwetWeb.AuthController do
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case FromAuth.find_or_create(auth) do
       {:ok, user} ->
-        Logger.debug("** AuthController.callback.user" <> inspect(user))
+        #Logger.debug("** AuthController.callback.user" <> inspect(user))
         msg = "Successfully authenticated #{user.name} <#{user.email}> as node '#{user.node.key}'."
-        Logger.debug("** AuthController.callback.msg" <> msg)
-        conn
+        Logger.debug("** AuthController.callback.msg\n" <> msg)
+        result = conn
         |> put_flash(:info, msg)
         |> put_session(:current_user, user)
         |> redirect(to: "/")
-
+        Logger.debug("** AuthController.callback.result\n" <> inspect(result))
+        result
       {:error, reason} ->
         Logger.debug("** AuthController.callback.reason" <> inspect(reason))
         conn
