@@ -25,8 +25,10 @@ defmodule IgwetWeb.AuthController do
         Logger.debug("** AuthController.callback.msg\n" <> msg)
         conn1 = put_flash(conn, :info, msg)
         conn2 = put_session(conn1, :current_user, user)
+        Logger.debug("** AuthController.callback.user\n" <> inspect(user))
         Logger.debug("** AuthController.callback.conn2\n" <> inspect(conn2))
         try do
+          Logger.debug("** AuthController.callback.REDIRECT\n")
           conn3 = redirect(conn2, to: "/")
           Logger.debug("** AuthController.callback.conn3\n" <> inspect(conn3))
           conn3
