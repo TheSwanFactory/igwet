@@ -1,7 +1,9 @@
 defmodule IgwetWeb.PageController do
   use IgwetWeb, :controller
+  require Logger
 
-  def index(conn, _params) do
+  def index(conn, params) do
+    Logger.debug("** PageController.index" <> inspect(params))
     conn
     |> assign(:name, "IGWET")
     |> assign(:version, Application.spec(:igwet, :vsn))
