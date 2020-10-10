@@ -24,12 +24,18 @@ defmodule IgwetWeb.AuthController do
         msg = "Successfully authenticated #{user.name} <#{user.email}> as node '#{user.node.key}'."
         Logger.debug("** AuthController.callback.msg\n" <> msg)
         conn1 = put_flash(conn, :info, msg)
-        Logger.debug("** AuthController.callback.conn1\n" <> inspect(conn1))
         conn2 = put_session(conn1, :current_user, user)
         Logger.debug("** AuthController.callback.conn2\n" <> inspect(conn2))
-        conn3 = redirect(conn2, to: "/")
-        Logger.debug("** AuthController.callback.conn3\n" <> inspect(conn3))
-        conn3
+        try do
+          conn3 = redirect(conn2, to: "/")
+          Logger.debug("** AuthController.callback.conn3\n" <> inspect(conn3))
+          conn3
+        rescue e ->
+          Logger.debug("** AuthController.callback.e\n" <> inspect(e))
+          conn3 = redirect(conn, to: "/")
+          Logger.debug("** AuthController.callback.conn3A\n" <> inspect(conn3))
+          conn3
+        end
       {:error, reason} ->
         Logger.debug("** AuthController.callback.reason" <> inspect(reason))
         conn
