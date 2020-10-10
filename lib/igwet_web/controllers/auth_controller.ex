@@ -2,6 +2,7 @@ defmodule IgwetWeb.AuthController do
   use IgwetWeb, :controller
   plug(Ueberauth)
   alias Igwet.Admin.User.FromAuth
+  require Logger
 
   def logout(conn, _params) do
     conn
@@ -19,6 +20,7 @@ defmodule IgwetWeb.AuthController do
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     case FromAuth.find_or_create(auth) do
       {:ok, user} ->
+        Logger.debug("** AuthController.callback.user" <> inspect(user))
         conn
         |> put_flash(
           :info,
@@ -28,6 +30,7 @@ defmodule IgwetWeb.AuthController do
         |> redirect(to: "/")
 
       {:error, reason} ->
+        Logger.debug("** AuthController.callback.reason" <> inspect(reason))
         conn
         |> put_flash(:error, reason)
         |> redirect(to: "/")

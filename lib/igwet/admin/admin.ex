@@ -7,6 +7,7 @@ defmodule Igwet.Admin do
   alias Igwet.Repo
   alias Igwet.Admin.User
   alias Igwet.Network
+  require Logger
 
   def test_admin_user(is_admin) do
     if is_admin do
@@ -97,6 +98,7 @@ defmodule Igwet.Admin do
 
   """
   def find_or_create_user(attrs) do
+    Logger.debug("admin.find_or_create_user" <> inspect(attrs))
     query = User |> where([u], u.authid == ^attrs.authid)
 
     if !Repo.one(query) do
