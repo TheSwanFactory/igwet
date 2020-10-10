@@ -98,7 +98,6 @@ defmodule Igwet.Admin do
 
   """
   def find_or_create_user(attrs) do
-    Logger.debug("admin.find_or_create_user" <> inspect(attrs))
     query = User |> where([u], u.authid == ^attrs.authid)
 
     if !Repo.one(query) do

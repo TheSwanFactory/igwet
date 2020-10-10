@@ -21,11 +21,10 @@ defmodule IgwetWeb.AuthController do
     case FromAuth.find_or_create(auth) do
       {:ok, user} ->
         Logger.debug("** AuthController.callback.user" <> inspect(user))
+        msg = "Successfully authenticated #{user.name} <#{user.email}> as node '#{user.node.key}'."
+        Logger.debug("** AuthController.callback.msg" <> msg)
         conn
-        |> put_flash(
-          :info,
-          "Successfully authenticated #{user.name} <#{user.email}> as node '#{user.node.key}'."
-        )
+        |> put_flash(:info, msg)
         |> put_session(:current_user, user)
         |> redirect(to: "/")
 

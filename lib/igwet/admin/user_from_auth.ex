@@ -15,7 +15,6 @@ defmodule Igwet.Admin.User.FromAuth do
   Generates user from provider response if valid password
   """
   def find_or_create(%Auth{provider: :identity} = auth) do
-    Logger.debug("Auth{provider: :identity} " <> inspect(auth))
     case validate_pass(auth.credentials) do
       :ok -> {:ok, auth_user(auth)}
       {:error, reason} -> {:error, reason}
@@ -26,7 +25,6 @@ defmodule Igwet.Admin.User.FromAuth do
   Generates user from anonymous auth data
   """
   def find_or_create(%Auth{} = auth) do
-    Logger.debug("** %Auth{} = auth: " <> inspect(auth))
     {:ok, auth_user(auth)}
   end
 
