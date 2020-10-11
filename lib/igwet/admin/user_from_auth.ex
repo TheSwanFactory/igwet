@@ -8,8 +8,9 @@ defmodule Igwet.Admin.User.FromAuth do
   alias Ueberauth.Auth
   alias Igwet.Admin
   alias Igwet.Admin.User
-  alias Igwet.Network.Node
-  alias Igwet.Repo
+  #alias Igwet.Network.Node
+  alias Igwet.DataImport
+  #alias Igwet.Repo
 
   @doc """
   Generates user from provider response if valid password
@@ -32,9 +33,9 @@ defmodule Igwet.Admin.User.FromAuth do
     info = basic_info(auth)
     #Logger.debug("** info: " <> inspect(info))
     user = Admin.find_or_create_user(info)
-    #Logger.debug("** user: " <> inspect(user))
-    node = Node |> where([n], n.email == ^user.email) |> Repo.one()
-    #Logger.debug("** node: " <> inspect(node))
+    Logger.debug("** user: " <> inspect(user))
+    {:ok, node} = user |> Map.from_struct |> Map.put(:key, user.authid) |> DataImport.upsert_on_email()
+    Logger.debug("** node: " <> inspect(node))
     params = %{node: node, last_login: NaiveDateTime.utc_now()}
     #@Logger.debug("** params: " <> inspect(params))
     {:ok, updated} = Admin.update_user(user, params)
