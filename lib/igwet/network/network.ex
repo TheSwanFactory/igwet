@@ -399,6 +399,7 @@ def get_first_email(email) do
   def related_subjects(object, pred_name) do
     related_edges_for_object(object, pred_name)
     |> Enum.map(& &1.subject)
+    |> Enum.sort_by(& &1.name)
   end
 
   def related_edges_for_object(object, pred_name) do
@@ -429,7 +430,9 @@ def get_first_email(email) do
       |> preload([:object])
       |> Repo.all()
 
-    Enum.map(edges, & &1.object)
+    edges
+    |> Enum.map(& &1.object)
+    |> Enum.sort_by(& &1.name)
   end
 
   @doc """
