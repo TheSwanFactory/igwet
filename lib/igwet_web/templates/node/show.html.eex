@@ -50,6 +50,21 @@
     <%= @node.key %>
   </li>
 
+  <%= if (@node.meta) do %>
+    <li>
+      <strong>Duration:</strong>
+      <%= @node.meta.duration %>
+    </li>
+    <li>
+      <strong>Parent ID:</strong>
+      <%= @node.meta.parent_id %>
+    </li>
+    <li>
+      <strong>Recurrence:</strong>
+      <%= @node.meta.recurrence %>
+    </li>
+  <% end %>
+
 
   <ul>
     <h3>Groups</h3>
