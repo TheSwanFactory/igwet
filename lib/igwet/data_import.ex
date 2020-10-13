@@ -99,7 +99,9 @@ defmodule Igwet.DataImport do
     if (node) do
         Network.update_node node, attrs
     else
-      Network.create_node attrs
+      attrs
+      |> Map.put(:type, "contact")
+      |> Network.create_node
     end
   end
 
