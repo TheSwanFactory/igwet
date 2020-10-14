@@ -115,9 +115,14 @@ end
       missing_group_email(conn, group)
     else
       attendees = Network.related_subjects(event, "at")
-      members = Network.node_members(group)
-      rest = members -- attendees
+      rest = Network.node_members(group) -- attendees
       Logger.warn("remind_rest.rest\n"<>inspect(rest))
+      url = @server <> rsvp_path(conn, :by_event, event_key)
+      try do
+        Sendmail.event_reminder(group, rest, url) |> Mailer.deliver_now()
+      rescue
+        e in Bamboo.ApiError -> Logger.error("failed.send_email.member\n#{inspect(rest)}\n#{inspect(e)}")
+      end
       conn
       |> put_flash(:info, "Succeess: reminder email sent to #{group.email}\n")
       |> redirect(to: event_path(conn, :show, event))
