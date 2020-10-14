@@ -4,10 +4,12 @@
 <p>So far we have <%= @current %> spaces reserved out of <%= @event.size %> total.</p>
 <%= if (@node_count < 0) do %>
 <h4>Welcome, <%= @node.email %> (<%= @node.name %>) </h4>
-<p>Please select how many from your household will be attending in-person (or 0 if none):</p>
+<p>Please select how many from your household will be attending in-person,<br>
+  "Zoom" if attending online,<br>
+   or "0" if not at all:</p>
 <% else %>
 <h2>Success!
-<h4>Thank you for registering, <%= @node.name %> &lt; <%= @node.email %>  &gt; </h4>
+<h4>Thank you for registering, <%= @node.name %> &lt;<%= @node.email%>&gt;</h4>
 <p>You have successfully registered <%= @node_count %> person(s) to attend.</p>
 <p>Click <a href="<%= rsvp_path(@conn, :by_event, @event.key) %>">here</a> to see who else has registered</p>
 <hr/>
@@ -15,6 +17,7 @@
 <% end %>
 
 <ul>
+  <li><%= button("Zoom", to: rsvp_path(@conn, :by_count, @event.key, @node.email, "Zoom")) %></li>
   <%= for i <- 0..@open do %>
     <li><%= button(i, to: rsvp_path(@conn, :by_count, @event.key, @node.email, i)) %></li>
   <% end %>

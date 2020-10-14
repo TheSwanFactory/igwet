@@ -227,6 +227,9 @@ def get_first_email(email) do
     create_edge(%{subject_id: subject.id, relation: pred_name, object_id: object.id})
   end
 
+  defp number_in_person(value) do
+    count = if (value == "Zoom"), do: 0, else: String.to_integer("0#{value}")
+  end
   @doc """
   Count over all nodes attending an event
 
@@ -240,7 +243,7 @@ def get_first_email(email) do
     related_edges_for_object(event, "at")
     |> Enum.reduce(0, fn(edge, sum) ->
       #Logger.warn("count_attendance\n"<>inspect(edge))
-      sum + String.to_integer("0#{edge.as}")
+      sum + number_in_person(edge.as)
     end)
   end
 
@@ -257,7 +260,7 @@ def get_first_email(email) do
     edge = find_edge(member, "at", event)
     #Logger.warn "member_attendance #{member.name} @ #{event.name}:\n#{inspect(edge)}"
     if (edge) do
-      String.to_integer("0#{edge.as}")
+      number_in_person(edge.as)
     else
       -1
     end
@@ -273,11 +276,12 @@ def get_first_email(email) do
 
   """
 
-  def attend!(count, member, event) do
+  def attend!(result, member, event) do
+    count = number_in_person(result)
     current = count_attendance(event)
     existing = find_edge(member, "at", event)
     #Logger.warn "attend!existing #{inspect(existing)}"
-    offset = if (!existing), do: 0, else: String.to_integer("0#{existing.as}")
+    offset = if (!existing), do: 0, else: number_in_person(existing.as)
     new_total = current + count - offset
 
     #Logger.warn "attend!new_total #{new_total} vs event.size #{event.size}"
@@ -285,7 +289,7 @@ def get_first_email(email) do
       new_total > event.size ->
         {:error, current}
       existing ->
-        update_edge existing, %{as: "#{count}", relation: "at"}
+        update_edge existing, %{as: "#{result}", relation: "at"}
         {:ok, new_total}
       true ->
         {:ok, _edge} = create_edge %{
