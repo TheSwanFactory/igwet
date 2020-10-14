@@ -101,18 +101,34 @@ end
     end
   end
 
+  defp missing_group_email(conn, group) do
+    msg = "Error: first enter a Group email in order to send RSVPs"
+    conn
+    |> put_flash(:error, msg)
+    |> redirect(to: group_path(conn, :edit, group))
+  end
+
   def remind_rest(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     if (!group.email) do
-      msg = "Error: first enter a Group email in order to send RSVPs"
-      conn
-      |> put_flash(:error, msg)
-      |> redirect(to: group_path(conn, :edit, group))
+      missing_group_email(conn, group)
     else
+      attendees = Network.related_subjects(event, "at")
+      members = Network.node_members(group)
+      rest = members -- attendees
+      Logger.warn("remind_rest.rest\n"<>inspect(rest))
       conn
-      |> put_flash(:info, "Succeess: reminder email sent to #{group.email}")
+      |> put_flash(:info, "Succeess: reminder email sent to #{group.email}\n")
       |> redirect(to: event_path(conn, :show, event))
+    end
+  end
+
+  def email_member(message, member, url) do
+    try do
+      Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
+    rescue
+      e in Bamboo.ApiError -> Logger.error("failed.send_email.member\n#{inspect(member)}\n#{inspect(e)}")
     end
   end
 
@@ -120,21 +136,13 @@ end
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     if (!group.email) do
-      msg = "Error: first enter a Group email in order to send RSVPs"
-      conn
-      |> put_flash(:error, msg)
-      |> redirect(to: group_path(conn, :edit, group))
+      missing_group_email(conn, group)
     else
       message = Sendmail.event_message(group, event)
       for member <- Network.node_members(group) do
         if (member.email =~ "@") do
           url = @server <> rsvp_path(conn, :by_email, event_key, member.email)
-          #Logger.warn("send_email.url."<>url)
-          try do
-            Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
-          rescue
-            e in Bamboo.ApiError -> Logger.error("failed.send_email.member\n#{inspect(member)}\n#{inspect(e)}")
-          end
+          email_member(message, member, url)
         end
       end
       conn
