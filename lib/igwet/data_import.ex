@@ -78,12 +78,24 @@ defmodule Igwet.DataImport do
     map_list
     |> Enum.with_index()
     |> Enum.map(fn({attrs, i}) ->
-      {:ok, node} = attrs |> merge_key(group, i) |> upsert_on_email()
+      {:ok, node} = attrs
+      |> merge_key(group, i)
+      |> downcase_email()
+      |> upsert_on_email()
       if (node.type == "contact") do
         Network.set_node_in_group(node, group)
       end
       %{node: node, node_index: attrs.index, parent_index: attrs.parent}
     end)
+  end
+
+  def downcase_email(attrs) do
+    if (!Map.has_key? attrs, :email) do
+      attrs
+    else
+      email = String.downcase(attrs.email)
+      Map.put(attrs, :email, email)
+    end
   end
 
   def node_if_email(attrs) do

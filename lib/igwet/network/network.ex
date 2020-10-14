@@ -28,7 +28,8 @@ defmodule Igwet.Network do
 
     case field do
       :email ->
-        where(first, email: ^value)
+        email = String.downcase(value)
+        where(first, email: ^email)
 
       :key ->
         where(first, key: ^value)
@@ -116,7 +117,8 @@ def get_first_email(email) do
   Get member of this group.  Create or associate if missing.
 
   """
-  def get_member_for_email(email, group) do
+  def get_member_for_email(email_raw, group) do
+    email = String.downcase(email_raw)
     node = Node
             |> order_by([asc: :inserted_at])
             |> where([n], n.email == ^email)
