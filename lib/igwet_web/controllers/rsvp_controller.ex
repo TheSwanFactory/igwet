@@ -101,6 +101,21 @@ end
     end
   end
 
+  def remind_rest(conn, %{"event_key" => event_key}) do
+    event = Network.get_first_node!(:key, event_key)
+    group = Network.get_node!(event.meta.parent_id)
+    if (!group.email) do
+      msg = "Error: first enter a Group email in order to send RSVPs"
+      conn
+      |> put_flash(:error, msg)
+      |> redirect(to: group_path(conn, :edit, group))
+    else
+      conn
+      |> put_flash(:info, "Succeess: reminder email sent to #{group.email}")
+      |> redirect(to: event_path(conn, :show, event))
+    end
+  end
+
   def send_email(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
