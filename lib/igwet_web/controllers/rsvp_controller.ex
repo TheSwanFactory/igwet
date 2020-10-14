@@ -66,7 +66,7 @@ end
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     node = Network.get_member_for_email(email, group)
-    msg = case Network.attend!(String.to_integer(count), node, event) do
+    msg = case Network.attend!(count, node, event) do
       {:ok, total} ->
         "Added #{count} for #{node.name} <#{node.email}>. Now #{total} attending #{event.name}"
       {:error, current} ->

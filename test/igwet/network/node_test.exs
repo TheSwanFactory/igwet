@@ -146,6 +146,25 @@ defmodule Igwet.NetworkTest.Node do
       assert "test" == member.name
     end
 
+    test "attend!/3 accepts strings", %{node: node, event: event} do
+      #Logger.warn inspect(event)
+      count = 3
+      string = "#{count}"
+      result = Network.attend!(string, node, event)
+      assert result == {:ok, count}
+      assert count == Network.count_attendance(event)
+    end
+
+    test "attend!/3 accepts 'Zoom'", %{node: node, event: event} do
+      #Logger.warn inspect(event)
+      count = 0
+      string = "Zoom"
+      result = Network.attend!(string, node, event)
+      assert result == {:ok, count}
+      assert count == Network.count_attendance(event)
+    end
+
+
     test "attend!/3 returns :ok if enough open", %{node: node, event: event} do
       #Logger.warn inspect(event)
       count = 3
