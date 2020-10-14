@@ -124,7 +124,7 @@ end
     end
   end
 
-  def email_member(message, member, url) do
+  defp email_member(message, member, url) do
     try do
       Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
     rescue
