@@ -200,49 +200,16 @@ defmodule Igwet.Network.Sendmail do
   end
 
   @doc """
-  Return messages about event to all members of group
+  Create message about event for group
 
-  ## Examples
-      iex> alias Igwet.Network
-      iex> alias Igwet.Network.Sendmail
-      iex> group = Network.get_first_node!(:name, "admin")
-      iex> {:ok, event} = Network.create_node %{name: "subject", about: "body", key: "admin+event"}
-      iex> message = Sendmail.email_group_event(group, event)
-      iex> message.from
-      {"admin", "com.igwet+admin@example.com"}
-      iex> length(message.to)
-      1
-      iex> Enum.at(message.to, 0)
-      {"operator", "ernest.prabhakar@gmail.com"}
-      iex> message.subject
-      "subject"
   """
-
-  def email_group_event(group, event) do
-    msg_text = event.about
-    email = if (is_nil group.email), do: Mailer.keyed_email(group), else: group.email
-    message =
-      new_email()
-      |> from({group.name, email})
-      |> subject(event.name)
-      |> text_body(msg_text)
-      |> html_body("<pre>#{msg_text}</pre>")
-      |> put_header(@sender, email)
-      |> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
-
-    Network.node_members(group)
-    |> Enum.filter( &(&1.email =~ "@") )
-    |> Enum.map( &({&1.name, &1.email}) )
-    |> (fn recipient_list -> to(message, recipient_list) end).()
-  end
-
   def event_message(group, event) do
     new_email()
     |> from({group.name, group.email})
     |> subject(event.name)
     |> text_body(event.about)
     |> put_header(@sender, @agent)
-    |> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
+    #|> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
   end
 
   @click_here "We look forward to seeing you!\nClick here to tell us how many will attend this week (enter 0 if not coming).\n Note: if you use this personalized link, you don't need to use the public link sent to everyone"
