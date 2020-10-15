@@ -46,21 +46,16 @@ defmodule IgwetWeb.RsvpController do
     current = Network.count_attendance(event)
     count = Network.member_attendance(node, event)
     open = event.size - current
-    #Logger.warn("by_email.count: #{count}")
-    if (open < 1) do
-      msg = "Sorry: #{event.name} is already at its full capacity of #{event.size}"
-      conn
-      |> put_flash(:info, msg)
-      |> redirect(to: rsvp_path(conn, :by_event, %{"event_key" => event_key}))
-    else
-      conn
-      |> assign(:current_user, nil)
-      |> assign(:group, group)
-      |> assign(:node, node)
-      |> assign(:node_count, count)
-      |> render("email.html", event: event, current: current, open: min(open, @max_rsvp))
-    end
-end
+    msg = if (open > 0), do: "", else: "Sorry: #{event.name} is already at its full capacity of #{event.size}"
+    Logger.warn("by_email.open: #{open}\n[#{msg}]")
+    conn
+    |> put_flash(:error, msg)
+    |> assign(:current_user, nil)
+    |> assign(:group, group)
+    |> assign(:node, node)
+    |> assign(:node_count, count)
+    |> render("email.html", event: event, current: current, open: min(open, @max_rsvp))
+  end
 
   def by_count(conn, %{"event_key" => event_key, "email" => email, "count" => count}) do
     event = Network.get_first_node!(:key, event_key)
