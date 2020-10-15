@@ -228,7 +228,7 @@ def get_first_email(email) do
   end
 
   defp number_in_person(value) do
-    count = if (value == "Zoom"), do: 0, else: String.to_integer("0#{value}")
+    if (value == "Zoom"), do: 0, else: String.to_integer("0#{value}")
   end
   @doc """
   Count over all nodes attending an event

@@ -118,13 +118,12 @@ end
       rest = Network.node_members(group) -- attendees
       Logger.warn("remind_rest.rest\n"<>inspect(rest))
       url = @server <> rsvp_path(conn, :by_event, event_key)
-      try do
-        Sendmail.event_reminder(group, rest, url) |> Mailer.deliver_now()
-      rescue
-        e in Bamboo.ApiError -> Logger.error("failed.send_email.member\n#{inspect(rest)}\n#{inspect(e)}")
-      end
+      emails = rest
+      |> Enum.map(fn m -> "#{m.name} <#{m.email}>" end)
+      |> Enum.join(",")
+      message = "Subject: #{event.name}\nBody: #{url}\n To: #{emails}"
       conn
-      |> put_flash(:info, "Succeess: reminder email sent to #{group.email}\n")
+      |> put_flash(:info, "Reminders\n#{message}")
       |> redirect(to: event_path(conn, :show, event))
     end
   end
