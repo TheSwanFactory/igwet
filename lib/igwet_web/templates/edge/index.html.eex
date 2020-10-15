@@ -5,7 +5,6 @@
     <tr>
       <th>Actions</th>
       <th>Subject</th>
-      <th>Predicate</th>
       <th>Relation</th>
       <th>Object</th>
       <th>As</th>

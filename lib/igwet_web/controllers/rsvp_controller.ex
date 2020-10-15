@@ -46,21 +46,16 @@ defmodule IgwetWeb.RsvpController do
     current = Network.count_attendance(event)
     count = Network.member_attendance(node, event)
     open = event.size - current
-    #Logger.warn("by_email.count: #{count}")
-    if (open < 1) do
-      msg = "Sorry: #{event.name} is already at its full capacity of #{event.size}"
-      conn
-      |> put_flash(:info, msg)
-      |> redirect(to: rsvp_path(conn, :by_event, %{"event_key" => event_key}))
-    else
-      conn
-      |> assign(:current_user, nil)
-      |> assign(:group, group)
-      |> assign(:node, node)
-      |> assign(:node_count, count)
-      |> render("email.html", event: event, current: current, open: min(open, @max_rsvp))
-    end
-end
+    msg = if (open > 0), do: "", else: "Sorry: #{event.name} is already at its full capacity of #{event.size}"
+    Logger.warn("by_email.open: #{open}\n[#{msg}]")
+    conn
+    |> put_flash(:error, msg)
+    |> assign(:current_user, nil)
+    |> assign(:group, group)
+    |> assign(:node, node)
+    |> assign(:node_count, count)
+    |> render("email.html", event: event, current: current, open: min(open, @max_rsvp))
+  end
 
   def by_count(conn, %{"event_key" => event_key, "email" => email, "count" => count}) do
     event = Network.get_first_node!(:key, event_key)
@@ -101,25 +96,52 @@ end
     end
   end
 
+  defp missing_group_email(conn, group) do
+    msg = "Error: first enter a Group email in order to send RSVPs"
+    conn
+    |> put_flash(:error, msg)
+    |> redirect(to: group_path(conn, :edit, group))
+  end
+
+  def remind_rest(conn, %{"event_key" => event_key}) do
+    event = Network.get_first_node!(:key, event_key)
+    group = Network.get_node!(event.meta.parent_id)
+    if (!group.email) do
+      missing_group_email(conn, group)
+    else
+      attendees = Network.related_subjects(event, "at")
+      rest = Network.node_members(group) -- attendees
+      Logger.warn("remind_rest.rest\n"<>inspect(rest))
+      url = @server <> rsvp_path(conn, :by_event, event_key)
+      emails = rest
+      |> Enum.map(fn m -> "#{m.name} <#{m.email}>" end)
+      |> Enum.join(",")
+      message = "Subject: #{event.name}\nBody: #{url}\n To: #{emails}"
+      conn
+      |> put_flash(:info, "Reminders\n#{message}")
+      |> redirect(to: event_path(conn, :show, event))
+    end
+  end
+
+  defp email_member(message, member, url) do
+    try do
+      Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
+    rescue
+      e in Bamboo.ApiError -> Logger.error("failed.send_email.member\n#{inspect(member)}\n#{inspect(e)}")
+    end
+  end
+
   def send_email(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     if (!group.email) do
-      msg = "Error: first enter a Group email in order to send RSVPs"
-      conn
-      |> put_flash(:error, msg)
-      |> redirect(to: group_path(conn, :edit, group))
+      missing_group_email(conn, group)
     else
       message = Sendmail.event_message(group, event)
       for member <- Network.node_members(group) do
         if (member.email =~ "@") do
           url = @server <> rsvp_path(conn, :by_email, event_key, member.email)
-          #Logger.warn("send_email.url."<>url)
-          try do
-            Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
-          rescue
-            e in Bamboo.ApiError -> Logger.error("failed.send_email.member\n#{inspect(member)}\n#{inspect(e)}")
-          end
+          email_member(message, member, url)
         end
       end
       conn
