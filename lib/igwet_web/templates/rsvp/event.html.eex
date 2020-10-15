@@ -18,10 +18,10 @@
 <% end %>
 
 <ul>
-  <h3>Registered Attendees: <%= Enum.count @attendees %></h3>
+  <h3><%= Enum.count @attendees %> Registered Attendees</h3>
   <%= for attendee <- @attendees do %>
     <li>
-      <%= attendee.name <> " #{Network.member_attendance(attendee, @event)}" %>
+      <%= attendee.name <> " #{Network.find_edge(attendee, "at", @event).as}" %>
     </li>
   <% end %>
 </ul>
