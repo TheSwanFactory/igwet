@@ -29,3 +29,4 @@
   </li>
 </ul>
 <span><%= link "Email RSVPs", to: rsvp_path(@conn, :send_email, @event.key), class: "btn btn-danger btn-xs" %></span>
+<span><%= link "Remind Rest", to: rsvp_path(@conn, :remind_rest, @event.key), class: "btn btn-danger btn-xs" %></span>

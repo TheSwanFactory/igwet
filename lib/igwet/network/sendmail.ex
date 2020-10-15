@@ -212,7 +212,20 @@ defmodule Igwet.Network.Sendmail do
     #|> put_header("List-Archive", "<https://www.igwet.com/groups/#{group.id}")
   end
 
-  @click_here "We look forward to seeing you!\nClick here to tell us how many will attend this week (enter 0 if not coming).\n Note: if you use this personalized link, you don't need to use the public link sent to everyone"
+  def event_reminder(group, rest, url) do
+    for member <- rest do
+      Logger.warn inspect(member)
+    end
+    new_email()
+    |> from({group.name, group.email})
+    #|> subject(event.name)
+    |> text_body(url)
+    |> put_header(@sender, group.email)
+    |> to({group.name, group.email})
+  end
+
+
+  @click_here "We look forward to seeing you!\nClick here to tell us how many will attend in-person this week (enter 'Zoom' if remote, 0 if not coming)"
   def to_member(message, member, url) do
     prefix = "Dear #{member.name},\n"
     click_url = String.replace(@click_here, "here", "<a href='#{url}'>here</a>")
