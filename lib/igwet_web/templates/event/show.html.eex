@@ -30,3 +30,13 @@
 </ul>
 <span><%= link "Email RSVPs", to: rsvp_path(@conn, :send_email, @event.key), class: "btn btn-danger btn-xs" %></span>
 <span><%= link "Remind Rest", to: rsvp_path(@conn, :remind_rest, @event.key), class: "btn btn-danger btn-xs" %></span>
+<h3>Reminders</h3>
+<div><%= @reminders %></div>
+<h3><%= Enum.count @attendees %> Registered Attendees</h3>
+<ul>
+  <%= for attendee <- @attendees do %>
+    <li>
+      <%= attendee.name %>
+    </li>
+  <% end %>
+</ul>

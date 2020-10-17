@@ -45,9 +45,17 @@ defmodule IgwetWeb.EventController do
     group = if (event.meta && event.meta.parent_id) do
        Network.get_node!(event.meta.parent_id)
     end
+    rest = Network.node_members(group) -- attendees
+    #url = @server <> rsvp_path(conn, :by_event, event.key)
+    emails = rest
+    |> Enum.map(fn m -> "#{m.name} <#{m.email}>" end)
+    |> Enum.join(", ")
+    Logger.warn("remind_rest.emails\n"<>inspect(emails))
     conn
     |> assign(:group, group)
-    |> render("show.html", event: event, attendees: attendees)
+    |> assign(:reminders, emails)
+    |> assign(:attendees, attendees)
+    |> render("show.html", event: event)
   end
 
   def edit(conn, %{"id" => id}) do
