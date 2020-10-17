@@ -139,7 +139,7 @@ defmodule IgwetWeb.RsvpController do
     else
       message = Sendmail.event_message(group, event)
       for member <- Network.node_members(group) do
-        if (member.email =~ "@") do
+        if (member.email && (member.email =~ "@")) do
           url = @server <> rsvp_path(conn, :by_email, event_key, member.email)
           email_member(message, member, url)
         end
