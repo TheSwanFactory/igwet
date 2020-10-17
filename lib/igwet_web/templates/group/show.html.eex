@@ -69,6 +69,7 @@
     <%= for member <- @all.members do %>
       <li>
         <%= link(member.name, to: node_path(@conn, :show, member)) %>
+        &lt;<%= member.email %>&gt;
       </li>
     <% end %>
   </ul>
