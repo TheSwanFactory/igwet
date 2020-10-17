@@ -111,14 +111,15 @@ defmodule IgwetWeb.RsvpController do
     else
       attendees = Network.related_subjects(event, "at")
       rest = Network.node_members(group) -- attendees
-      Logger.warn("remind_rest.rest\n"<>inspect(rest))
       url = @server <> rsvp_path(conn, :by_event, event_key)
       emails = rest
       |> Enum.map(fn m -> "#{m.name} <#{m.email}>" end)
-      |> Enum.join(",")
-      message = "Subject: #{event.name}\nBody: #{url}\n To: #{emails}"
+      |> Enum.join(", ")
+      Logger.warn("remind_rest.emails\n"<>inspect(emails))
+      message = "To: #{length(rest)} members | Subject: #{event.name}\n | Body: #{url}\n "
       conn
-      |> put_flash(:info, "Reminders\n#{message}")
+      |> put_flash(:info, message)
+      |> assign(:reminders, emails)
       |> redirect(to: event_path(conn, :show, event))
     end
   end
