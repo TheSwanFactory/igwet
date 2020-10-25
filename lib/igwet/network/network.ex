@@ -9,6 +9,7 @@ defmodule Igwet.Network do
   alias Igwet.Network.Node
   alias Igwet.Network.Edge
 
+  @sec_per_day 24 * 60 * 60
   @doc """
   Find first node matching a name/email/key
 
@@ -558,8 +559,8 @@ def get_first_email(email) do
     number |> Integer.to_string |> String.pad_leading(2, "0")
   end
 
-  def next_event(event, group) do
-    next_week = NaiveDateTime.add(event.date, event.meta.recurrence * 24 * 60 * 60)
+  def next_event(event, group, repeat \\ 1) do
+    next_week = NaiveDateTime.add(event.date, event.meta.recurrence * @sec_per_day * repeat)
     prefix = "#{pad(next_week.month)}-#{pad(next_week.day)}"
     suffix = "#{next_week.year}-#{prefix}"
     key = group.key <> "+" <> suffix
@@ -586,14 +587,22 @@ def get_first_email(email) do
 
   """
   def upcoming_event!(event) do
-    {:ok, _now} = DateTime.now(event.timezone)
     group = if (event.meta && event.meta.parent_id && event.meta.recurrence > 0) do
        get_node!(event.meta.parent_id)
     else
       raise "upcoming_event!: not recurring event `#{event}`"
     end
-    {:ok, next} = next_event(event, group)
-    next
+    {:ok, now} = DateTime.now(event.timezone)
+    {:ok, current} = DateTime.from_naive(event.date, event.timezone)
+
+    delta = DateTime.diff(now, current)/@sec_per_day
+    Logger.warn("upcoming_event!.delta=#{delta}")
+    if (delta < 0) do
+      event
+    else
+      {:ok, upcoming} = next_event(event, group)
+      upcoming
+    end
   end
 
   @doc """
