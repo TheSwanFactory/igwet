@@ -586,7 +586,14 @@ def get_first_email(email) do
 
   """
   def upcoming_event!(event) do
-    event
+    {:ok, _now} = DateTime.now(event.timezone)
+    group = if (event.meta && event.meta.parent_id && event.meta.recurrence > 0) do
+       get_node!(event.meta.parent_id)
+    else
+      raise "upcoming_event!: not recurring event `#{event}`"
+    end
+    {:ok, next} = next_event(event, group)
+    next
   end
 
   @doc """
