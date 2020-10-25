@@ -47,7 +47,6 @@ defmodule IgwetWeb.RsvpController do
     count = Network.member_attendance(node, event)
     open = event.size - current
     msg = if (open > 0), do: "", else: "Sorry: #{event.name} is already at its full capacity of #{event.size}"
-    Logger.warn("by_email.open: #{open}\n[#{msg}]")
     conn
     |> put_flash(:error, msg)
     |> assign(:current_user, nil)
@@ -115,7 +114,6 @@ defmodule IgwetWeb.RsvpController do
       emails = rest
       |> Enum.map(fn m -> "#{m.name} <#{m.email}>" end)
       |> Enum.join(", ")
-      Logger.warn("remind_rest.emails\n"<>inspect(emails))
       message = "To: #{length(rest)} members | Subject: #{event.name}\n | Body: #{url}\n "
       conn
       |> put_flash(:info, message)
