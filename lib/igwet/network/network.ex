@@ -585,7 +585,7 @@ def get_first_email(email) do
   Latest event.  Create or find an recurred event after today
 
   """
-  def get_upcoming(event) do
+  def upcoming_event!(event) do
     event
   end
 

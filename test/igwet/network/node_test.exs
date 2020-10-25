@@ -217,6 +217,13 @@ defmodule Igwet.NetworkTest.Node do
       assert next.key == "some.key+2020-04-30"
       assert next.name =~ "04-30: event"
     end
+
+    test "upcoming", %{event: event} do
+      upcoming = Network.upcoming_event!(event)
+      #Logger.warn(inspect(next))
+      assert upcoming
+      assert upcoming.key =~ "event.key"
+    end
   end
 
   defp create_event(_) do
