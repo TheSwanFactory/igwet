@@ -222,7 +222,12 @@ defmodule Igwet.NetworkTest.Node do
       upcoming = Network.upcoming_event!(event)
       #Logger.warn(inspect(next))
       assert upcoming
-      assert upcoming.key =~ "event.key"
+      assert upcoming. key =~ "event.key"
+      assert upcoming.date
+      assert upcoming.timezone
+      {:ok, now} = DateTime.now(upcoming.timezone)
+      {:ok, upcoming} = DateTime.from_naive(upcoming.date, upcoming.timezone)
+      assert :lt == DateTime.compare(now, upcoming)
     end
   end
 
