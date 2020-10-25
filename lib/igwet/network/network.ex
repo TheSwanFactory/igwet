@@ -580,6 +580,15 @@ def get_first_email(email) do
     |> create_event()
   end
 
+
+  @doc """
+  Latest event.  Create or find an recurred event after today
+
+  """
+  def get_upcoming(event) do
+    event
+  end
+
   @doc """
   Updates a node.
 
