@@ -581,7 +581,6 @@ def get_first_email(email) do
     |> create_event()
   end
 
-
   @doc """
   Latest event.  Create or find an recurred event after today
 
@@ -595,12 +594,12 @@ def get_first_email(email) do
     {:ok, now} = DateTime.now(event.timezone)
     {:ok, current} = DateTime.from_naive(event.date, event.timezone)
 
-    delta = DateTime.diff(now, current)/@sec_per_day
+    delta = DateTime.diff(now, current)/(@sec_per_day * event.meta.recurrence)
     Logger.warn("upcoming_event!.delta=#{delta}")
     if (delta < 0) do
       event
     else
-      {:ok, upcoming} = next_event(event, group)
+      {:ok, upcoming} = next_event(event, group, trunc(delta) + 1)
       upcoming
     end
   end

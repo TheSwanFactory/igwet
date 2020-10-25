@@ -219,12 +219,15 @@ defmodule Igwet.NetworkTest.Node do
     end
 
     test "upcoming", %{event: event} do
+      sec_per_day = 24 * 60 * 60
       upcoming = Network.upcoming_event!(event)
       #Logger.warn(inspect(next))
       assert upcoming
       assert upcoming. key =~ "next key"
       {:ok, now} = DateTime.now(upcoming.timezone)
       {:ok, upcoming} = DateTime.from_naive(upcoming.date, upcoming.timezone)
+      delta_days = DateTime.diff(now, upcoming)/sec_per_day
+      Logger.warn("upcoming.delta_days #{delta_days}")
       assert :lt == DateTime.compare(now, upcoming)
     end
   end
