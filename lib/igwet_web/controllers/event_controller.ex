@@ -50,7 +50,6 @@ defmodule IgwetWeb.EventController do
       |> Enum.map(fn m -> "#{m.name} <#{m.email}>" end)
       |> Enum.join(", ")
     end
-    Logger.warn("remind_rest.emails\n"<>inspect(emails))
     #url = @server <> rsvp_path(conn, :by_event, event.key)
     conn
     |> assign(:group, group)

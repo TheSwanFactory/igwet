@@ -27,19 +27,12 @@ defmodule Igwet.DataMigrator do
 
   defp inline_type(edge) do
     Network.update_node edge.subject, %{type: edge.object.name}
-    node = Network.get_node!(edge.subject_id)
-    if (is_nil node.type) do
-      Logger.warn("inline_type.missing:#{edge.object.name} @ #{node.name}:#{node.id}")
-    end
+    #node = Network.get_node!(edge.subject_id)
   end
 
   defp inline_relation(edge) do
     edge
     |> Edge.changeset(%{relation: edge.predicate.name})
     |> Repo.update()
-    if (is_nil edge.relation) do
-      Logger.warn("inline_relation.missing:#{edge.predicate.name} @ #{edge.id}")
-      #Logger.warn("inline_relation: #{edge.predicate.name}\n #{inspect(edge)}")
-    end
   end
 end

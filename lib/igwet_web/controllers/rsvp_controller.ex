@@ -19,6 +19,13 @@ defmodule IgwetWeb.RsvpController do
     |> render("index.html", events: nodes)
   end
 
+  def to_upcoming(conn, %{"event_key" => event_key}) do
+    event = Network.last_event!(event_key)
+    upcoming = Network.upcoming_event!(event)
+    path = rsvp_path(conn, :by_event, upcoming.key)
+    redirect(conn, to: path)
+  end
+
   def by_event(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     current = Network.count_attendance(event)
@@ -47,7 +54,6 @@ defmodule IgwetWeb.RsvpController do
     count = Network.member_attendance(node, event)
     open = event.size - current
     msg = if (open > 0), do: "", else: "Sorry: #{event.name} is already at its full capacity of #{event.size}"
-    Logger.warn("by_email.open: #{open}\n[#{msg}]")
     conn
     |> put_flash(:error, msg)
     |> assign(:current_user, nil)
@@ -115,7 +121,6 @@ defmodule IgwetWeb.RsvpController do
       emails = rest
       |> Enum.map(fn m -> "#{m.name} <#{m.email}>" end)
       |> Enum.join(", ")
-      Logger.warn("remind_rest.emails\n"<>inspect(emails))
       message = "To: #{length(rest)} members | Subject: #{event.name}\n | Body: #{url}\n "
       conn
       |> put_flash(:info, message)

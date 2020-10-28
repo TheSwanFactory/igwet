@@ -60,6 +60,12 @@ defmodule IgwetWeb.RsvpControllerTest do
   describe "attendees" do
     setup [:create_event]
 
+    test "GET /rsvp/to/:event -> 200", %{conn: conn, event: event} do
+      conn
+      |> get("/rsvp/to/" <> event.key)
+      |> response(302)
+    end
+
     test "GET /rsvp/for/:event -> 200", %{conn: conn, event: event} do
       conn
       |> get("/rsvp/for/" <> event.key)

@@ -9,6 +9,7 @@ defmodule Igwet.Network do
   alias Igwet.Network.Node
   alias Igwet.Network.Edge
 
+  @sec_per_day 24 * 60 * 60
   @doc """
   Find first node matching a name/email/key
 
@@ -550,16 +551,28 @@ def get_first_email(email) do
   end
 
   @doc """
-  Next event.  Create an event _recurrence_ days after this one
+  Find the most recent event partially matching this key
 
+  """
+  def last_event!(event_key) do
+    pattern = "%#{event_key}%"
+    from(a in Node,
+      order_by: [desc: :inserted_at],
+      where: like(a.key, ^pattern),
+      limit: 1
+    ) |> Repo.one!()
+  end
+
+  @doc """
+  Next event.  Create an event _recurrence_ days after this one
 
   """
   def pad(number) do
     number |> Integer.to_string |> String.pad_leading(2, "0")
   end
 
-  def next_event(event, group) do
-    next_week = NaiveDateTime.add(event.date, event.meta.recurrence * 24 * 60 * 60)
+  def next_event(event, group, repeat \\ 1) do
+    next_week = NaiveDateTime.add(event.date, event.meta.recurrence * @sec_per_day * repeat)
     prefix = "#{pad(next_week.month)}-#{pad(next_week.day)}"
     suffix = "#{next_week.year}-#{prefix}"
     key = group.key <> "+" <> suffix
@@ -578,6 +591,28 @@ def get_first_email(email) do
     |> Map.from_struct()
     |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
     |> create_event()
+  end
+
+  @doc """
+  Latest event.  Create or find an recurred event after today
+
+  """
+  def upcoming_event!(event) do
+    group = if (event.meta && event.meta.parent_id && event.meta.recurrence > 0) do
+       get_node!(event.meta.parent_id)
+    else
+      raise "upcoming_event!: not recurring event `#{event}`"
+    end
+    {:ok, now} = DateTime.now(event.timezone)
+    {:ok, current} = DateTime.from_naive(event.date, event.timezone)
+
+    delta = DateTime.diff(now, current)/(@sec_per_day * event.meta.recurrence)
+    if (delta < 0) do
+      event
+    else
+      {:ok, upcoming} = next_event(event, group, trunc(delta) + 1)
+      upcoming
+    end
   end
 
   @doc """
