@@ -595,7 +595,6 @@ def get_first_email(email) do
     {:ok, current} = DateTime.from_naive(event.date, event.timezone)
 
     delta = DateTime.diff(now, current)/(@sec_per_day * event.meta.recurrence)
-    Logger.warn("upcoming_event!.delta=#{delta}")
     if (delta < 0) do
       event
     else
