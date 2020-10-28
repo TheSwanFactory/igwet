@@ -95,11 +95,11 @@
     <div id="footer" class="small">
       <span id="version"><%= "Version #{@version}" %></span>
       |
-      <span id="copyright">Copyright (C) 2018 <a href="http://theswanfactory.wordpress.com">The Swan Factory, Inc.</a></span>
+      <span id="copyright">Copyright (C) 2020 <a href="http://theswanfactory.wordpress.com">Ernest N. Prabhakar, Ph. D.</a></span>
       |
       <span id="source"><a href="https://github.com/TheSwanFactory/igwet">View Source</a></span>
       |
-      <span id="contact"><a href="http://theswanfactory.wordpress.com/contact/">Contact Us</a></span>
+      <span id="contact"><a href="mailto:ernest.prabhakar@gmail.com">Contact Us</a></span>
     </div>
 </div>
 </div>
