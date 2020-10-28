@@ -19,18 +19,11 @@ defmodule IgwetWeb.RsvpController do
     |> render("index.html", events: nodes)
   end
 
-
   def to_upcoming(conn, %{"event_key" => event_key}) do
-    event = Network.get_first_node!(:key, event_key)
-    current = Network.count_attendance(event)
-    changeset = Network.change_node(%Node{})
-    attendees = Network.related_subjects(event, "at")
-
-    conn
-    |> assign(:current_user, nil)
-    |> assign(:group, Network.get_node!(event.meta.parent_id))
-    |> assign(:attendees, attendees)
-    |> render("event.html", event: event, current: current, changeset: changeset)
+    event = Network.last_event!(event_key)
+    upcoming = Network.upcoming_event!(event)
+    path = rsvp_path(conn, :by_event, upcoming.key)
+    redirect(conn, to: path)
   end
 
   def by_event(conn, %{"event_key" => event_key}) do
