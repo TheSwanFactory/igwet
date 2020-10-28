@@ -554,13 +554,13 @@ def get_first_email(email) do
   Find the most recent event partially matching this key
 
   """
-  def last_event(event_key) do
+  def last_event!(event_key) do
     pattern = "%#{event_key}%"
     from(a in Node,
       order_by: [desc: :inserted_at],
       where: like(a.key, ^pattern),
       limit: 1
-    ) |> Repo.one()
+    ) |> Repo.one!()
   end
 
   @doc """
