@@ -551,8 +551,20 @@ def get_first_email(email) do
   end
 
   @doc """
-  Next event.  Create an event _recurrence_ days after this one
+  Find the most recent event partially matching this key
 
+  """
+  def last_event(event_key) do
+    pattern = "%#{event_key}%"
+    from(a in Node,
+      order_by: [desc: :inserted_at],
+      where: like(a.key, ^pattern),
+      limit: 1
+    ) |> Repo.one()
+  end
+
+  @doc """
+  Next event.  Create an event _recurrence_ days after this one
 
   """
   def pad(number) do

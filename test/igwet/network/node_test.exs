@@ -218,6 +218,22 @@ defmodule Igwet.NetworkTest.Node do
       assert next.name =~ "04-30: event"
     end
 
+    test "last found", %{node: node, event: event} do
+      :timer.sleep(1000)
+      {:ok, _next} = Network.next_event(event, node)
+      all = Network.get_nodes_like_key("some.key%")
+      assert length(all) == 2
+      last = Network.last_event("some.key")
+      assert last
+      assert last.key == "some.key+2020-04-30"
+      assert last.name =~ "04-30: event"
+    end
+
+    test "last not found" do
+      last = Network.last_event("monkey")
+      assert is_nil last
+    end
+
     test "upcoming", %{event: event} do
       upcoming = Network.upcoming_event!(event)
       assert upcoming
