@@ -585,8 +585,12 @@ def get_first_email(email) do
     end
 
     details = Map.from_struct(event.meta)
+    hidden = Map.merge(details, %{hidden: true})
+    update_node(event, %{meta: hidden})
+
+    unhidden = Map.merge(details, %{hidden: false})
     event
-    |> Map.merge(%{date: next_week, key: key, meta: details, name: name})
+    |> Map.merge(%{date: next_week, key: key, meta: unhidden, name: name})
     |> Map.delete(:id)
     |> Map.from_struct()
     |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
