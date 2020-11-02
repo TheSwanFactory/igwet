@@ -12,6 +12,7 @@
   </thead>
   <tbody>
 <%= for event <- @events do %>
+  <%= if event.meta && !event.meta.hidden do %>
     <tr>
       <td>
         <span><%= link "Show", to: event_path(@conn, :show, event), class: "btn btn-default btn-xs" %></span>
@@ -24,6 +25,7 @@
       <td><%= event.size %></td>
       <td><%= event.date %></td>
     </tr>
+  <% end %>
 <% end %>
   </tbody>
 </table>
