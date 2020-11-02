@@ -26,6 +26,7 @@ defmodule IgwetWeb.RsvpController do
     else
       :by_event
     end
+    Logger.warn("to_upcoming.method: #{method}")
     event = Network.last_event!(event_key)
     upcoming = Network.upcoming_event!(event)
     path = rsvp_path(conn, method, upcoming.key)
