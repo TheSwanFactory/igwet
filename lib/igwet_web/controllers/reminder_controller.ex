@@ -9,7 +9,7 @@ defmodule IgwetWeb.ReminderController do
 
   def index(conn, _params) do
     nodes = Network.get_nodes_of_type("reminder")
-    render(conn, "index.html", events: nodes)
+    render(conn, "index.html", nodes: nodes)
   end
 
   def new(conn, _params) do
