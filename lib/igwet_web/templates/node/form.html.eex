@@ -25,7 +25,7 @@
 
   <div class="form-group">
     <%= label f, :about, class: "control-label" %>
-    <%= text_input f, :about, class: "form-control" %>
+    <%= textarea f, :about, class: "form-control" %>
     <%= error_tag f, :about %>
   </div>
 
