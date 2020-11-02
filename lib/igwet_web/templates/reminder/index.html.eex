@@ -1,6 +1,6 @@
 <h2>Listing Reminders</h2>
 
-<span><%= link "New Node", to: node_path(@conn, :new) %></span>
+<span><%= link "New Node", to: reminder_path(@conn, :new) %></span>
 
 <table class="table">
   <thead>
@@ -21,9 +21,9 @@
 <%= for node <- @nodes do %>
     <tr>
       <td class="text-left">
-        <span><%= link "Show", to: node_path(@conn, :show, node), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: node_path(@conn, :edit, node), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: node_path(@conn, :delete, node), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <span><%= link "Show", to: reminder_path(@conn, :show, node), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Edit", to: reminder_path(@conn, :edit, node), class: "btn btn-default btn-xs" %></span>
+        <span><%= link "Delete", to: reminder_path(@conn, :delete, node), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
       </td>
       <td><%= Network.get_type(node) %></td>
       <td><%= node.name %></td>

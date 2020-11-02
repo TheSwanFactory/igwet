@@ -1,5 +1,5 @@
 <h2>Edit Reminder</h2>
 
-<%= render "form.html", Map.put(assigns, :action, node_path(@conn, :update, @node)) %>
+<%= render "form.html", Map.put(assigns, :action, reminder_path(@conn, :update, @node)) %>
 
-<span><%= link "Back", to: node_path(@conn, :index) %></span>
+<span><%= link "Back", to: reminder_path(@conn, :index) %></span>

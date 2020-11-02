@@ -1,7 +1,7 @@
 <h2>Show Reminder</h2>
 
-<span><%= link "Edit", to: node_path(@conn, :edit, @node) %></span>
-<span><%= link "Back", to: node_path(@conn, :index) %></span>
+<span><%= link "Edit", to: reminder_path(@conn, :edit, @node) %></span>
+<span><%= link "Back", to: reminder_path(@conn, :index) %></span>
 
 <ul>
 
@@ -70,7 +70,7 @@
     <h3>Groups</h3>
     <%= for group <- @groups do %>
       <li>
-        <%= link(group.name, to: node_path(@conn, :show, group)) %>
+        <%= link(group.name, to: reminder_path(@conn, :show, group)) %>
       </li>
     <% end %>
   </ul>
@@ -79,7 +79,7 @@
     <h3>Members</h3>
     <%= for member <- @members do %>
       <li>
-        <%= link(member.name, to: node_path(@conn, :show, member)) %>
+        <%= link(member.name, to: reminder_path(@conn, :show, member)) %>
       </li>
     <% end %>
   </ul>
@@ -88,7 +88,7 @@
     <h3>Messages</h3>
     <%= for message <- @messages do %>
       <li>
-        <%= link(message.name, to: node_path(@conn, :show, message)) %>
+        <%= link(message.name, to: reminder_path(@conn, :show, message)) %>
       </li>
     <% end %>
   </ul>

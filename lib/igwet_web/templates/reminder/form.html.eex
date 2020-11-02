@@ -18,16 +18,42 @@
   </div>
 
   <div class="form-group">
-    <%= label f, :initials, class: "control-label" %>
-    <%= text_input f, :initials, class: "form-control" %>
-    <%= error_tag f, :initials %>
-  </div>
-
-  <div class="form-group">
     <%= label f, :about, class: "control-label" %>
     <%= textarea f, :about, class: "form-control" %>
     <%= error_tag f, :about %>
   </div>
+
+  <div class="form-group">
+    <%= label f, :date %>
+    <%= datetime_select f, :date, class: "form-control" %>
+    <%= error_tag f, :date %>
+  </div>
+
+  <%= inputs_for f, :meta, fn fm -> %>
+    <div class="form-group">
+      <%= label fm, "Repeat every # days" %>
+      <%= number_input fm, :recurrence %>
+      <%= error_tag fm, :recurrence %>
+    </div>
+
+    <div class="form-group">
+      <%= label fm, "Hidden" %>
+      <%= checkbox fm, :hidden %>
+      <%= error_tag fm, :hidden %>
+    </div>
+
+    <div class="form-group">
+      <%= label fm, :parent_id %>
+      <%= text_input fm, :parent_id %>
+      <%= error_tag fm, :parent_id %>
+    </div>
+
+    <div class="form-group">
+      <%= label fm, "Duration (0 for ever)" %>
+      <%= number_input fm, :duration %>
+      <%= error_tag fm, :duration %>
+    </div>
+  <% end %>
 
   <div class="form-group">
     <%= label f, :email, class: "control-label" %>
