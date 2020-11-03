@@ -214,7 +214,7 @@ defmodule Igwet.NetworkTest.Node do
       {:ok, next} = Network.next_event(event, node)
       #Logger.warn(inspect(next))
       assert next
-      assert next.key == "some.key+2020-04-30"
+      assert next.key == "some.key.4en8_2020-04-30"
       assert next.name =~ "04-30: event"
     end
 
@@ -225,7 +225,7 @@ defmodule Igwet.NetworkTest.Node do
       assert length(all) == 2
       last = Network.last_event!("some.key")
       assert last
-      assert last.key == "some.key+2020-04-30"
+      assert last.key == "some.key.4en8_2020-04-30"
       assert last.name =~ "04-30: event"
     end
 

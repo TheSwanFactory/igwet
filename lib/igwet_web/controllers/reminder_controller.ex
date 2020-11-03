@@ -13,7 +13,8 @@ defmodule IgwetWeb.ReminderController do
   end
 
   def new(conn, _params) do
-    changeset = Network.change_node(%Node{})
+    {:ok, now} = DateTime.shift_zone(DateTime.utc_now, "US/Pacific")
+    changeset = Network.change_node(%Node{date: now, type: "reminder"})
     render(conn, "new.html", changeset: changeset)
   end
 

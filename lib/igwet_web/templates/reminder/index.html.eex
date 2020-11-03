@@ -1,6 +1,6 @@
 <h2>Listing Reminders</h2>
 
-<span><%= link "New Node", to: reminder_path(@conn, :new) %></span>
+<span><%= link "New Reminder", to: reminder_path(@conn, :new) %></span>
 
 <table class="table">
   <thead>
