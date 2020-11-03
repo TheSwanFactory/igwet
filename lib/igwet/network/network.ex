@@ -575,7 +575,7 @@ def get_first_email(email) do
     next_week = NaiveDateTime.add(event.date, event.meta.recurrence * @sec_per_day * repeat)
     prefix = "#{pad(next_week.month)}-#{pad(next_week.day)}"
     suffix = "#{next_week.year}-#{prefix}"
-    key = group.key <> "+" <> suffix
+    key = group.key <> "." <> get_initials(node) <> "_" <> suffix
 
     split = String.split(event.name, ": ")
     name = if (length(split) == 2) do
