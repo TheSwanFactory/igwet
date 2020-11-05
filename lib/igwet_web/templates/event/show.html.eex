@@ -25,6 +25,12 @@
     <strong>Duration:</strong> <%= @event.meta.duration %>
   </li>
   <li>
+    <strong>Hidden:</strong> <%= @event.meta.hidden %>
+  </li>
+  <li>
+    <strong>Recurrence:</strong> <%= @event.meta.recurrence %>
+  </li>
+  <li>
     <strong>Size:</strong> <%= @event.size %>
   </li>
 </ul>

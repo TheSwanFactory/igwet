@@ -19,10 +19,17 @@ defmodule IgwetWeb.RsvpController do
     |> render("index.html", events: nodes)
   end
 
-  def to_upcoming(conn, %{"event_key" => event_key}) do
+  def to_upcoming(conn, params) do
+    event_key = params["event_key"]
+    method = if (Map.has_key?(params, "action")) do
+      String.to_atom(params["action"])
+    else
+      :by_event
+    end
+    Logger.warn("to_upcoming.method: #{method}")
     event = Network.last_event!(event_key)
     upcoming = Network.upcoming_event!(event)
-    path = rsvp_path(conn, :by_event, upcoming.key)
+    path = rsvp_path(conn, method, upcoming.key)
     redirect(conn, to: path)
   end
 

@@ -1,0 +1,95 @@
+<h2>Show Reminder</h2>
+
+<span><%= link "Edit", to: reminder_path(@conn, :edit, @node) %></span>
+<span><%= link "Back", to: reminder_path(@conn, :index) %></span>
+
+<ul>
+
+  <li>
+    <strong>Type:</strong>
+    <%= Network.get_type(@node) %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @node.name %>
+  </li>
+
+  <li>
+    <strong>Initials:</strong>
+    <%= @node.initials %>
+  </li>
+
+  <li>
+    <strong>About:</strong>
+    <%= @node.about %>
+  </li>
+
+  <li>
+    <strong>Email:</strong>
+    <%= @node.email %>
+  </li>
+
+  <li>
+    <strong>Phone:</strong>
+    <%= @node.phone %>
+  </li>
+
+  <li>
+    <strong>URL:</strong>
+    <%= @node.url %>
+  </li>
+
+  <li>
+    <strong>Date:</strong>
+    <%= @node.date %>
+  </li>
+
+  <li>
+    <strong>Key:</strong>
+    <%= @node.key %>
+  </li>
+
+  <%= if (@node.meta) do %>
+    <li>
+      <strong>Duration:</strong>
+      <%= @node.meta.duration %>
+    </li>
+    <li>
+      <strong>Parent ID:</strong>
+      <%= @node.meta.parent_id %>
+    </li>
+    <li>
+      <strong>Recurrence:</strong>
+      <%= @node.meta.recurrence %>
+    </li>
+  <% end %>
+
+
+  <ul>
+    <h3>Groups</h3>
+    <%= for group <- @groups do %>
+      <li>
+        <%= link(group.name, to: reminder_path(@conn, :show, group)) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <ul>
+    <h3>Members</h3>
+    <%= for member <- @members do %>
+      <li>
+        <%= link(member.name, to: reminder_path(@conn, :show, member)) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <ul>
+    <h3>Messages</h3>
+    <%= for message <- @messages do %>
+      <li>
+        <%= link(message.name, to: reminder_path(@conn, :show, message)) %>
+      </li>
+    <% end %>
+  </ul>
+</ul>

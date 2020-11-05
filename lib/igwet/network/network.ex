@@ -575,7 +575,7 @@ def get_first_email(email) do
     next_week = NaiveDateTime.add(event.date, event.meta.recurrence * @sec_per_day * repeat)
     prefix = "#{pad(next_week.month)}-#{pad(next_week.day)}"
     suffix = "#{next_week.year}-#{prefix}"
-    key = group.key <> "+" <> suffix
+    key = group.key <> "." <> get_initials(event) <> "_" <> suffix
 
     split = String.split(event.name, ": ")
     name = if (length(split) == 2) do
@@ -585,8 +585,12 @@ def get_first_email(email) do
     end
 
     details = Map.from_struct(event.meta)
+    hidden = Map.merge(details, %{hidden: true})
+    update_node(event, %{meta: hidden})
+
+    unhidden = Map.merge(details, %{hidden: false})
     event
-    |> Map.merge(%{date: next_week, key: key, meta: details, name: name})
+    |> Map.merge(%{date: next_week, key: key, meta: unhidden, name: name})
     |> Map.delete(:id)
     |> Map.from_struct()
     |> Map.new(fn {key, value} -> {Atom.to_string(key), value} end)
@@ -601,7 +605,7 @@ def get_first_email(email) do
     group = if (event.meta && event.meta.parent_id && event.meta.recurrence > 0) do
        get_node!(event.meta.parent_id)
     else
-      raise "upcoming_event!: not recurring event `#{event}`"
+      raise "upcoming_event!: not recurring event `#{inspect(event)}`"
     end
     {:ok, now} = DateTime.now(event.timezone)
     {:ok, current} = DateTime.from_naive(event.date, event.timezone)

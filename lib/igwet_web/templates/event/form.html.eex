@@ -39,11 +39,17 @@
 
   <%= inputs_for f, :meta, fn fm -> %>
 
-    <div class="form-group">
-      <%= label fm, "Duration, in minutes" %>
-      <%= number_input fm, :duration %>
-      <%= error_tag fm, :duration %>
-    </div>
+  <div class="form-group">
+    <%= label fm, "Duration, in minutes" %>
+    <%= number_input fm, :duration %>
+    <%= error_tag fm, :duration %>
+  </div>
+
+  <div class="form-group">
+    <%= label fm, "Hidden" %>
+    <%= checkbox fm, :hidden %>
+    <%= error_tag fm, :hidden %>
+  </div>
 
     <div class="form-group">
       <%= label fm, :parent_id %>

@@ -20,13 +20,14 @@ defmodule IgwetWeb.Router do
 
     get("/", PageController, :index)
     get("/logout", AuthController, :logout)
-    resources("/users", UserController)
+    resources("/addresses", AddressController)
     resources("/groups", GroupController)
+    resources("/edges", EdgeController)
     resources("/events", EventController)
     resources("/messages", MessageController)
     resources("/nodes", NodeController)
-    resources("/edges", EdgeController)
-    resources("/addresses", AddressController)
+    resources("/reminders", ReminderController)
+    resources("/users", UserController)
   end
 
   scope "/webhook", IgwetWeb do
