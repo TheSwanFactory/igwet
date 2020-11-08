@@ -58,7 +58,8 @@ defmodule Igwet.Mixfile do
       {:castore, "~> 0.1.5"},
       {:mint, "~> 1.0"},
       {:nimble_strftime, "~> 0.1.1"},
-      {:tz, "~> 0.10.0"}
+      {:tz, "~> 0.10.0"},
+      {:quantum, "~> 3.0"}
     ]
   end
 
