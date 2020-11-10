@@ -29,6 +29,10 @@ config :igwet, Igwet.Admin.Mailer,
   domain: System.get_env("MG_DOMAIN"),
   api_key: System.get_env("MG_API_KEY")
 
+# Configure Quantum Storage
+config :igwet, Igwet.Scheduler,
+  storage: Quantum.Storage.Implementation
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
