@@ -4,6 +4,7 @@ defmodule IgwetWeb.ReminderController do
 
   alias Igwet.Network
   alias Igwet.Network.Node
+  #alias Igwet.Scheduler
 
   plug(:require_admin)
 
