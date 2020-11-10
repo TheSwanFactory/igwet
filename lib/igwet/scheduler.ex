@@ -4,8 +4,9 @@ defmodule Igwet.Scheduler do
 
   def node_job(node) do
     cron = node_cron(node)
+    name = String.to_atom(node.key)
     new_job()
-    |> Quantum.Job.set_name(node.key)
+    |> Quantum.Job.set_name(name)
     |> Quantum.Job.set_timezone(node.timezone)
     |> Quantum.Job.set_schedule(cron)
     |> Quantum.Job.set_task(fn -> :ok end)
@@ -17,7 +18,7 @@ defmodule Igwet.Scheduler do
     if (!is_nil(node.date) and recurrence == 7) do
       hour = node.date.hour
       minute = node.date.minute
-      CronExpression.Composer.compose %CronExpression{minute: [minute], hour: [hour]}
+      %CronExpression{minute: [minute], hour: [hour]}
     end
   end
 

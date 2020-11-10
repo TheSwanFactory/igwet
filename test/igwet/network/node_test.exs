@@ -4,6 +4,7 @@ defmodule Igwet.NetworkTest.Node do
   alias Igwet.Network
   alias Igwet.Network.Node
   alias Igwet.Scheduler
+  import Crontab.CronExpression
   doctest Igwet.Network.Node
 
   @valid_attrs %{
@@ -245,7 +246,13 @@ defmodule Igwet.NetworkTest.Node do
     test "node_cron", %{event: event} do
       cron = Scheduler.node_cron(event)
       assert !is_nil cron
-      assert "\"3 2 * * * *\"" == inspect(cron)
+      assert ~e[3 2 * * * *] == cron
+    end
+
+    test "node_job", %{event: event} do
+      job = Scheduler.node_job(event)
+      assert !is_nil job
+      assert "job" == inspect(job)
     end
   end
 
