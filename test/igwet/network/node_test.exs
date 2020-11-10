@@ -3,6 +3,7 @@ defmodule Igwet.NetworkTest.Node do
   use Igwet.DataCase
   alias Igwet.Network
   alias Igwet.Network.Node
+  alias Igwet.Scheduler
   doctest Igwet.Network.Node
 
   @valid_attrs %{
@@ -239,6 +240,12 @@ defmodule Igwet.NetworkTest.Node do
 
       again = Network.upcoming_event!(upcoming)
       assert again == upcoming
+    end
+
+    test "node_cron", %{event: event} do
+      cron = Scheduler.node_cron(event)
+      assert !is_nil cron
+      assert "\"3 2 * * * *\"" == inspect(cron)
     end
   end
 

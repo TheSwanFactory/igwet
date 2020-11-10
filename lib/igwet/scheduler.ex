@@ -14,10 +14,10 @@ defmodule Igwet.Scheduler do
 
   def node_cron(node) do
     recurrence = if (node.meta), do: node.meta.recurrence, else: 7
-    if (node.date and recurrence == 7) do
+    if (!is_nil(node.date) and recurrence == 7) do
       hour = node.date.hour
       minute = node.date.minute
-      CronExpression.Composer.compose %CronExpression{minute: minute, hour: hour}
+      CronExpression.Composer.compose %CronExpression{minute: [minute], hour: [hour]}
     end
   end
 
