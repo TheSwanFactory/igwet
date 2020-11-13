@@ -24,17 +24,12 @@ defmodule Igwet.Scheduler do
   end
 
   def get_job(node) do
-    name = String.to_atom(node.key)
-    job = find_job(name)
-    if (job) do
-      job
-    else
-      node_job(node)
-    end
+    job = node.key |> String.to_atom() |> find_job()
+    if (job), do: job, else: node_job(node)
   end
 
-  def node_set_status(node, flag) do
-    job = get_job(node)
+  def node_set_status(node, _flag) do
+    get_job(node)
   end
 
 end
