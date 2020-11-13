@@ -11,6 +11,7 @@ defmodule Igwet.Scheduler do
     |> Quantum.Job.set_schedule(cron)
     |> Quantum.Job.set_task(fn -> :ok end)
     |> add_job()
+    find_job(name)
   end
 
   def node_cron(node) do
@@ -22,8 +23,18 @@ defmodule Igwet.Scheduler do
     end
   end
 
+  def get_job(node) do
+    name = String.to_atom(node.key)
+    job = find_job(name)
+    if (job) do
+      job
+    else
+      node_job(node)
+    end
+  end
+
   def node_set_status(node, flag) do
-    node
+    job = get_job(node)
   end
 
 end

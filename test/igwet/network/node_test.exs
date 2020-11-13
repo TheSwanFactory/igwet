@@ -252,9 +252,17 @@ defmodule Igwet.NetworkTest.Node do
     test "node_job", %{event: event} do
       job = Scheduler.node_job(event)
       assert !is_nil job
-      assert :ok == job
+      assert job.state == :active
     end
 
+    test "get_job", %{event: event} do
+      job = Scheduler.get_job(event)
+      assert !is_nil job
+      job2 = Scheduler.get_job(event)
+      assert job == job2
+    end
+
+    @tag :skip
     test "node_set_status", %{event: event} do
       job = Scheduler.node_set_status(event, true)
       assert !is_nil job
