@@ -22,4 +22,8 @@ defmodule Igwet.Scheduler do
     end
   end
 
+  def node_set_status(node, flag) do
+    node
+  end
+
 end
