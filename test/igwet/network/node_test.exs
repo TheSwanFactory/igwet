@@ -270,7 +270,7 @@ defmodule Igwet.NetworkTest.Node do
       job = Scheduler.node_set_status(event, false)
       assert !is_nil job
       Logger.warn inspect(job)
-      #assert job.state == :active
+      assert job.state == :inactive
       #job2 = Scheduler.node_set_status(event, true)
       #assert job == job2
       #assert job.state == :active
