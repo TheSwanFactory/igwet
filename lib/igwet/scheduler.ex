@@ -30,13 +30,12 @@ defmodule Igwet.Scheduler do
 
   def node_set_status(node, flag) do
     job = get_job(node)
-    name = node.key |> String.to_atom()
     if (flag) do
-      activate_job(name)
+      activate_job(job.name)
     else
-      deactivate_job(name)
+      deactivate_job(job.name)
     end
-    job
+    find_job(job.name)
   end
 
 end
