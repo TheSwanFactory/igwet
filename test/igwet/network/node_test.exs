@@ -243,7 +243,6 @@ defmodule Igwet.NetworkTest.Node do
       assert again == upcoming
     end
 
-    @tag :skip
     test "node_cron", %{event: event} do
       cron = Scheduler.node_cron(event)
       assert !is_nil cron
@@ -267,13 +266,13 @@ defmodule Igwet.NetworkTest.Node do
 
     #@tag :skip
     test "node_set_status", %{event: event} do
-      job = Scheduler.node_set_status(event, false)
+      status_event = Map.put(event, :key, event.key <> ".status")
+      job = Scheduler.node_set_status(status_event, false)
       assert !is_nil job
-      Logger.warn inspect(job)
       assert job.state == :inactive
-      #job2 = Scheduler.node_set_status(event, true)
-      #assert job == job2
-      #assert job.state == :active
+      job2 = Scheduler.node_set_status(status_event, true)
+      assert job2.name == job.name
+      assert job2.state == :active
     end
   end
 
