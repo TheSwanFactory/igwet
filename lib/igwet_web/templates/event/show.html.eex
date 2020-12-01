@@ -19,6 +19,9 @@
     <strong>About:</strong> <%= @event.about %>
   </li>
   <li>
+    <strong>Phone:</strong> <%= @event.phone %>
+  </li>
+  <li>
     <strong>Date:</strong> <%= @event.date %>
   </li>
   <li>

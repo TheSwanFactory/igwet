@@ -144,6 +144,14 @@ defmodule IgwetWeb.RsvpController do
     end
   end
 
+  defp sms_event_owner(message, event) do
+    if (event.phone) do
+      %{debug: true, to: event.phone, body: message}
+      |> Map.put(:from, "${PHONE_IGWET}")
+      |> SMS.send_message()
+    end
+  end
+
   def send_email(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
@@ -160,6 +168,7 @@ defmodule IgwetWeb.RsvpController do
       end
       msg = "#{Enum.count(result)} emails sent\n #{inspect result}"
       Logger.warn("send_email.result #{msg}")
+      sms_event_owner(msg, event)
       conn
       |> put_flash(:info, "Success: #{msg}")
       |> redirect(to: rsvp_path(conn, :by_event, event.key))
