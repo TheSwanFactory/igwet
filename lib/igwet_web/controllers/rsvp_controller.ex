@@ -147,7 +147,7 @@ defmodule IgwetWeb.RsvpController do
   defp sms_event_owner(message, event) do
     if (event.phone) do
       %{debug: true, to: event.phone, body: message}
-      |> Map.put(:from, "${PHONE_IGWET}")
+      |> Map.put(:from, System.get_env("PHONE_IGWET"))
       |> SMS.send_message()
     end
   end
@@ -167,7 +167,6 @@ defmodule IgwetWeb.RsvpController do
         end
       end
       msg = "#{Enum.count(result)} emails sent\n #{inspect result}"
-      Logger.warn("send_email.result #{msg}")
       sms_event_owner(msg, event)
       conn
       |> put_flash(:info, "Success: #{msg}")
