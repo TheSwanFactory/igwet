@@ -24,7 +24,7 @@ defmodule IgwetWeb.ReminderController do
       {:ok, node} ->
         conn
         |> put_flash(:info, "Node created successfully.")
-        |> redirect(to: node_path(conn, :show, node))
+        |> redirect(to: reminder_path(conn, :show, node))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -52,8 +52,8 @@ defmodule IgwetWeb.ReminderController do
     case Network.update_node(node, node_params) do
       {:ok, node} ->
         conn
-        |> put_flash(:info, "Node updated successfully.")
-        |> redirect(to: node_path(conn, :show, node))
+        |> put_flash(:info, "Reminder updated successfully.")
+        |> redirect(to: reminder_path(conn, :show, node))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", node: node, changeset: changeset)
@@ -66,6 +66,6 @@ defmodule IgwetWeb.ReminderController do
 
     conn
     |> put_flash(:info, "Node deleted successfully.")
-    |> redirect(to: node_path(conn, :index))
+    |> redirect(to: reminder_path(@conn, :index))
   end
 end
