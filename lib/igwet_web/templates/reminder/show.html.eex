@@ -5,7 +5,7 @@
 
 
 <h4>Quantum Job</h4>
-<% job = Scheduler.get_job(@node) %>
+<% job = Scheduler.get_job_for_node(@node) %>
 <ul>
     <li>
       <strong>Name:</strong>
@@ -18,6 +18,10 @@
     <li>
       <strong>State:</strong>
       <%= job.state %>
+    </li>
+    <li>
+      <strong>Task:</strong>
+      <%= inspect job.task %>
     </li>
     <li>
       <strong>Timezone:</strong>

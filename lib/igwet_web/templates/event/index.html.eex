@@ -8,6 +8,7 @@
       <th>About</th>
       <th>Size</th>
       <th>Date</th>
+      <th>Key</th>
     </tr>
   </thead>
   <tbody>
@@ -24,6 +25,7 @@
       <td style='white-space: pre-line;'><%= event.about %></td>
       <td><%= event.size %></td>
       <td><%= event.date %></td>
+      <td><%= event.key %></td>
     </tr>
   <% end %>
 <% end %>

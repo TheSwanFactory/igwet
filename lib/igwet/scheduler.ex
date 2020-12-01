@@ -2,7 +2,7 @@ defmodule Igwet.Scheduler do
   use Quantum, otp_app: :igwet_app
   alias Crontab.CronExpression
 
-  def node_job(node) do
+  def create_job_for_node(node) do
     cron = node_cron(node)
     name = String.to_atom(node.key)
     new_job()
@@ -23,13 +23,17 @@ defmodule Igwet.Scheduler do
     end
   end
 
-  def get_job(node) do
+  def get_job_for_node(node) do
     job = node.key |> String.to_atom() |> find_job()
-    if (job), do: job, else: node_job(node)
+    if (job), do: job, else: create_job_for_node(node)
+  end
+
+  def delete_job_for_node(node) do
+    node.key |> String.to_atom() |> delete_job()
   end
 
   def node_set_status(node, flag) do
-    job = get_job(node)
+    job = get_job_for_node(node)
     if (flag) do
       activate_job(job.name)
     else
