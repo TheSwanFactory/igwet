@@ -47,13 +47,6 @@ defmodule IgwetWeb.ReminderController do
     render(conn, "edit.html", node: node, changeset: changeset)
   end
 
-  def test(conn, %{"id" => id}) do
-    node = Network.get_node!(id)
-    changeset = Network.change_node(node)
-    render(conn, "edit.html", node: node, changeset: changeset)
-  end
-
-
   def update(conn, %{"id" => id, "node" => node_params}) do
     node = Network.get_node!(id)
 
@@ -78,5 +71,13 @@ defmodule IgwetWeb.ReminderController do
     conn
     |> put_flash(:info, "Reminder deleted successfully.")
     |> redirect(to: reminder_path(conn, :index))
+  end
+
+  def test(conn, %{"id" => id}) do
+    node = Network.get_node!(id)
+    Scheduler.run_job_for_node(node)
+    conn
+    |> put_flash(:info, node.about)
+    |> redirect(to: reminder_path(conn, :show, node))
   end
 end

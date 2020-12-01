@@ -32,6 +32,10 @@ defmodule Igwet.Scheduler do
     node.key |> String.to_atom() |> delete_job()
   end
 
+  def run_job_for_node(node) do
+    node.key |> String.to_atom() |> run_job()
+  end
+
   def node_set_status(node, flag) do
     job = get_job_for_node(node)
     if (flag) do
