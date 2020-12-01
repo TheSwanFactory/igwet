@@ -151,15 +151,18 @@ defmodule IgwetWeb.RsvpController do
       missing_group_email(conn, group)
     else
       message = Sendmail.event_message(group, event)
-      for member <- Network.node_members(group) do
+      result = for member <- Network.node_members(group) do
         if (member.email && (member.email =~ "@")) do
           url = @server <> rsvp_path(conn, :by_email, event_key, member.email)
           email_member(message, member, url)
+          member.email
         end
       end
+      msg = "#{Enum.count(result)} emails sent\n #{inspect result}"
+      Logger.warn("send_email.result #{msg}")
       conn
-      |> put_flash(:info, "Succeess: emails sent")
-      |> redirect(to: event_path(conn, :show, event))
+      |> put_flash(:info, "Success: #{msg}")
+      |> redirect(to: rsvp_path(conn, :by_event, event.key))
     end
   end
 end
