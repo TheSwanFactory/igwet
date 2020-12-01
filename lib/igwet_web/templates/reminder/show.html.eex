@@ -3,6 +3,30 @@
 <span><%= link "Edit", to: reminder_path(@conn, :edit, @node) %></span>
 <span><%= link "Back", to: reminder_path(@conn, :index) %></span>
 
+
+<h4>Quantum Job</h4>
+<% job = Scheduler.get_job(@node) %>
+<ul>
+    <li>
+      <strong>Name:</strong>
+      <%= job.name %>
+    </li>
+    <li>
+      <strong>Schedule:</strong>
+      <%= inspect job.schedule %>
+    </li>
+    <li>
+      <strong>State:</strong>
+      <%= job.state %>
+    </li>
+    <li>
+      <strong>Timezone:</strong>
+      <%= job.timezone %>
+    </li>
+</ul>
+
+<h4>Reminder Node</h4>
+
 <ul>
 
   <li>
@@ -51,6 +75,10 @@
   </li>
 
   <%= if (@node.meta) do %>
+    <li>
+      <strong>Hidden:</strong>
+      <%= @node.meta.hidden %>
+    </li>
     <li>
       <strong>Duration:</strong>
       <%= @node.meta.duration %>
