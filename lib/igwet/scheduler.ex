@@ -19,7 +19,8 @@ defmodule Igwet.Scheduler do
     if (!is_nil(node.date) and recurrence == 7) do
       hour = node.date.hour
       minute = node.date.minute
-      %CronExpression{minute: [minute], hour: [hour]}
+      weekday = Date.day_of_week(node.date)
+      %CronExpression{minute: [minute], hour: [hour], weekday: [weekday]}
     end
   end
 
