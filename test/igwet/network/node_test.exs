@@ -246,7 +246,7 @@ defmodule Igwet.NetworkTest.Node do
     test "node_cron", %{event: event} do
       cron = Scheduler.node_cron(event)
       assert !is_nil cron
-      assert ~e[3 2 * * * *] == cron
+      assert ~e[3 2 * * 4 *] == cron
     end
 
     test "create_job_for_node", %{event: event} do
