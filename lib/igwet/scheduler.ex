@@ -1,6 +1,7 @@
 defmodule Igwet.Scheduler do
   use Quantum, otp_app: :igwet_app
   alias Crontab.CronExpression
+  alias IgwetWeb.RsvpController
   require Logger
 
   def create_job_for_node(node) do
