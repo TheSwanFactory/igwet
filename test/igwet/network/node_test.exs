@@ -242,7 +242,10 @@ defmodule Igwet.NetworkTest.Node do
       again = Network.upcoming_event!(upcoming)
       assert again == upcoming
     end
+  end
 
+  describe "reminder" do
+    setup [:create_event]
     test "node_cron", %{event: event} do
       cron = Scheduler.node_cron(event)
       assert !is_nil cron
