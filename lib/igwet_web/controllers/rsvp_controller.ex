@@ -34,6 +34,8 @@ defmodule IgwetWeb.RsvpController do
     redirect(conn, to: path)
   end
 
+
+
   def by_event(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     current = Network.count_attendance(event)
@@ -180,6 +182,15 @@ defmodule IgwetWeb.RsvpController do
       end
     end
     "#{Enum.count(result)} emails sent\n #{inspect result}"
+  end
+
+  def email_upcoming(node) do
+    %{name: pattern, about: action} = node
+    event = Network.last_event!(pattern)
+    upcoming =
+      Network.upcoming_event!(event.key)
+      |> Map.put(:about, action)
+    email_event(upcoming)
   end
 
   def perform_task(conn, %{"event_key" => event_key}) do
