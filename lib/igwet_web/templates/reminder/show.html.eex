@@ -2,7 +2,7 @@
 
 <span><%= link "Edit", to: reminder_path(@conn, :edit, @node) %></span>
 <span><%= link "Back", to: reminder_path(@conn, :index) %></span>
-
+<span><%= link "Run", to: rsvp_path(@conn, :perform_task, @node.key) %></span>
 
 <h4>Quantum Job</h4>
 <% job = Scheduler.get_job_for_node(@node) %>

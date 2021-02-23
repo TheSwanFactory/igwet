@@ -47,6 +47,7 @@ defmodule Igwet.Scheduler do
     rescue
       e ->
         Logger.warn("#{e.message}:perform_task:#{node.key}:about='#{node.about}'")
+      inspect(e)
     end
   end
 

@@ -8,6 +8,7 @@ defmodule IgwetWeb.RsvpController do
   alias Igwet.Network.Sendmail
   alias Igwet.Network.SMS
   alias Igwet.Admin.Mailer
+  alias Igwet.Scheduler
   @max_rsvp 6
   @server "https://www.igwet.com"
 
@@ -179,6 +180,14 @@ defmodule IgwetWeb.RsvpController do
       end
     end
     "#{Enum.count(result)} emails sent\n #{inspect result}"
+  end
+
+  def perform_task(conn, %{"event_key" => event_key}) do
+    event = Network.get_first_node!(:key, event_key)
+    msg = Scheduler.perform_task(event)
+    conn
+    |> put_flash(:info, "Task Result: #{msg}")
+    |> redirect(to: reminder_path(conn, :show, event))
   end
 
   def test(event) do
