@@ -180,4 +180,8 @@ defmodule IgwetWeb.RsvpController do
     end
     "#{Enum.count(result)} emails sent\n #{inspect result}"
   end
+
+  def test(event) do
+    Logger.warn("RSVP.test: #{inspect event}")
+  end
 end
