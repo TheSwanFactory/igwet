@@ -259,23 +259,22 @@ defmodule Igwet.NetworkTest.Node do
     end
 
     test "get_job_for_node", %{event: event} do
-      get_event = Map.put(event, :key, event.key <> ".status")
+      get_event = event
+      |>  Map.put(:key, event.key <> ".status")
+      #|> Map.put(:about, "test")
       job = Scheduler.get_job_for_node(get_event)
       assert !is_nil job
       job2 = Scheduler.get_job_for_node(get_event)
       assert job == job2
+      result = Scheduler.run_job_for_node(get_event)
+      Logger.warn("run_job_for_node #{inspect result}")
     end
 
     test "perform_task", %{event: event} do
       event
       |> Map.put(:name, "TEST:perform_task")
+      |> Map.put(:about, "test")
       |> Scheduler.perform_task()
-    end
-
-    test "run_job_for_node", %{event: event} do
-      event
-      |> Map.put(:name, "TEST:run_job_for_node")
-      |> Scheduler.run_job_for_node()
     end
 
     test "node_set_status", %{event: event} do

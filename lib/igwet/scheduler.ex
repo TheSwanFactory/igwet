@@ -43,10 +43,10 @@ defmodule Igwet.Scheduler do
     try do
       method = String.to_existing_atom(node.about)
       Logger.warn("perform_task '#{method}' for #{node.name}")
-      apply(RsvpController, :test, [node])
+      apply(RsvpController, method, [node])
     rescue
       e ->
-        Logger.warn("perform_task:node.about='#{node.about}' => #{inspect(e)}\n#{inspect(node)}")
+        Logger.warn("#{e.message}:perform_task:#{node.key}:about='#{node.about}'")
     end
   end
 
