@@ -59,7 +59,8 @@ defmodule Igwet.Mixfile do
       {:mint, "~> 1.0"},
       {:nimble_strftime, "~> 0.1.1"},
       {:tz, "~> 0.10.0"},
-      {:quantum, "~> 3.0"}
+      {:quantum, "~> 3.0"},
+      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false}
     ]
   end
 
