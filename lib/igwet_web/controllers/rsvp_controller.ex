@@ -5,10 +5,9 @@ defmodule IgwetWeb.RsvpController do
   require Logger
   alias Igwet.Network
   alias Igwet.Network.Node
-  alias Igwet.Network.Sendmail
   alias Igwet.Network.SMS
-  alias Igwet.Admin.Mailer
   alias Igwet.Scheduler
+  alias Igwet.Scheduler.Helper
   @max_rsvp 6
   @server "https://www.igwet.com"
 
@@ -33,8 +32,6 @@ defmodule IgwetWeb.RsvpController do
     path = rsvp_path(conn, method, upcoming.key)
     redirect(conn, to: path)
   end
-
-
 
   def by_event(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
@@ -139,58 +136,18 @@ defmodule IgwetWeb.RsvpController do
     end
   end
 
-  defp email_member(message, member, url) do
-    try do
-      Sendmail.to_member(message, member, url) |> Mailer.deliver_now()
-    rescue
-      e in Bamboo.ApiError -> Logger.error("failed.send_email.member\n#{inspect(member)}\n#{inspect(e)}")
-    end
-  end
-
-  defp sms_event_owner(message, event) do
-    if (event.phone) do
-      %{debug: true, to: event.phone, body: message}
-      |> Map.put(:from, System.get_env("PHONE_IGWET"))
-      |> SMS.send_message()
-    end
-  end
-
   def send_email(conn, %{"event_key" => event_key}) do
     event = Network.get_first_node!(:key, event_key)
     group = Network.get_node!(event.meta.parent_id)
     if (!group.email) do
       missing_group_email(conn, group)
     else
-      msg = email_event(event)
-      sms_event_owner(msg, event)
+      msg = Helper.email_event(event)
+      Helper.sms_event_owner(msg, event)
       conn
       |> put_flash(:info, "Success: #{msg}")
       |> redirect(to: rsvp_path(conn, :by_event, event.key))
     end
-  end
-
-  def email_event(event) do
-    group = Network.get_node!(event.meta.parent_id)
-    message = Sendmail.event_message(group, event)
-    result = for member <- Network.node_members(group) do
-      if (member.email && (member.email =~ "@")) do
-        # https://www.igwet.com/rsvp/for/us.kingsway.0kss_2021-02-21/ernest%40drernie.com
-        email = String.replace(member.email, "@", "%40")
-        url = @server <> "/rsvp/for/" <> event.key <> "/" <> email
-        email_member(message, member, url)
-        member.email
-      end
-    end
-    "#{Enum.count(result)} emails sent\n #{inspect result}"
-  end
-
-  def email_upcoming(node) do
-    %{name: pattern, about: action} = node
-    event = Network.last_event!(pattern)
-    upcoming =
-      Network.upcoming_event!(event.key)
-      |> Map.put(:about, action)
-    email_event(upcoming)
   end
 
   def perform_task(conn, %{"event_key" => event_key}) do
