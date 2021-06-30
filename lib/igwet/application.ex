@@ -18,6 +18,7 @@ defmodule Igwet.Application do
       # At scale, need to keep Timezones up to date
       # Commented out to avoid crashes when running offline during test
       # {Tz.UpdatePeriodically, []}
+      Igwet.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

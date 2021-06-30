@@ -4,6 +4,7 @@ defmodule IgwetWeb.ReminderController do
 
   alias Igwet.Network
   alias Igwet.Network.Node
+  alias Igwet.Scheduler
 
   plug(:require_admin)
 
@@ -21,9 +22,10 @@ defmodule IgwetWeb.ReminderController do
   def create(conn, %{"node" => node_params}) do
     case Network.create_node(node_params) do
       {:ok, node} ->
+        Scheduler.node_set_status(node, true)
         conn
-        |> put_flash(:info, "Node created successfully.")
-        |> redirect(to: node_path(conn, :show, node))
+        |> put_flash(:info, "Reminder scheduled.")
+        |> redirect(to: reminder_path(conn, :show, node))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -50,9 +52,11 @@ defmodule IgwetWeb.ReminderController do
 
     case Network.update_node(node, node_params) do
       {:ok, node} ->
+        active = if (node.meta && !node.meta.hidden), do: true, else: false
+        Scheduler.node_set_status(node, active)
         conn
-        |> put_flash(:info, "Node updated successfully.")
-        |> redirect(to: node_path(conn, :show, node))
+        |> put_flash(:info, "Reminder updated to active=#{active}")
+        |> redirect(to: reminder_path(conn, :show, node))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", node: node, changeset: changeset)
@@ -61,10 +65,19 @@ defmodule IgwetWeb.ReminderController do
 
   def delete(conn, %{"id" => id}) do
     node = Network.get_node!(id)
+    Scheduler.delete_job_for_node(node)
     {:ok, _node} = Network.delete_node(node)
 
     conn
-    |> put_flash(:info, "Node deleted successfully.")
-    |> redirect(to: node_path(conn, :index))
+    |> put_flash(:info, "Reminder deleted successfully.")
+    |> redirect(to: reminder_path(conn, :index))
+  end
+
+  def test(conn, %{"id" => id}) do
+    node = Network.get_node!(id)
+    Scheduler.run_job_for_node(node)
+    conn
+    |> put_flash(:info, node.about)
+    |> redirect(to: reminder_path(conn, :show, node))
   end
 end

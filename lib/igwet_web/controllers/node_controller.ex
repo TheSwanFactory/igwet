@@ -7,7 +7,7 @@ defmodule IgwetWeb.NodeController do
   plug(:require_admin)
 
   def index(conn, _params) do
-    nodes = Network.list_nodes()
+    nodes = Network.list_nodes() |> Enum.reverse()
     render(conn, "index.html", nodes: nodes)
   end
 

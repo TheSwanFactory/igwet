@@ -3,6 +3,9 @@ defmodule Igwet.NetworkTest.Node do
   use Igwet.DataCase
   alias Igwet.Network
   alias Igwet.Network.Node
+  alias Igwet.Scheduler
+  #alias Igwet.Scheduler.Helper
+  import Crontab.CronExpression
   doctest Igwet.Network.Node
 
   @valid_attrs %{
@@ -239,6 +242,50 @@ defmodule Igwet.NetworkTest.Node do
 
       again = Network.upcoming_event!(upcoming)
       assert again == upcoming
+    end
+  end
+
+  describe "reminder" do
+    setup [:create_event]
+    test "node_cron", %{event: event} do
+      cron = Scheduler.node_cron(event)
+      assert !is_nil cron
+      assert ~e[3 2 * * 4 *] == cron
+    end
+
+    test "create_job_for_node", %{event: event} do
+      job = Scheduler.create_job_for_node(event)
+      assert !is_nil job
+      assert job.state == :active
+    end
+
+    test "get_job_for_node", %{event: event} do
+      get_event = event
+      |>  Map.put(:key, event.key <> ".status")
+      #|> Map.put(:about, "test")
+      job = Scheduler.get_job_for_node(get_event)
+      assert !is_nil job
+      job2 = Scheduler.get_job_for_node(get_event)
+      assert job == job2
+      result = Scheduler.run_job_for_node(get_event)
+      Logger.warn("run_job_for_node #{inspect result}")
+    end
+
+    test "perform_task", %{event: event} do
+      event
+      |> Map.put(:name, "TEST:perform_task")
+      |> Map.put(:about, "test")
+      |> Scheduler.perform_task()
+    end
+
+    test "node_set_status", %{event: event} do
+      status_event = Map.put(event, :key, event.key <> ".status")
+      job = Scheduler.node_set_status(status_event, false)
+      assert !is_nil job
+      assert job.state == :inactive
+      job2 = Scheduler.node_set_status(status_event, true)
+      assert job2.name == job.name
+      assert job2.state == :active
     end
   end
 

@@ -6,8 +6,10 @@
       <th>Actions</th>
       <th>Name</th>
       <th>About</th>
+      <th>Phone</th>
       <th>Size</th>
       <th>Date</th>
+      <th>Key</th>
     </tr>
   </thead>
   <tbody>
@@ -22,8 +24,10 @@
       </td>
       <td><%= event.name %></td>
       <td style='white-space: pre-line;'><%= event.about %></td>
+      <td><%= event.phone %></td>
       <td><%= event.size %></td>
       <td><%= event.date %></td>
+      <td><%= event.key %></td>
     </tr>
   <% end %>
 <% end %>

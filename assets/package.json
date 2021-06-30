@@ -6,7 +6,7 @@
     "watch": "brunch watch --stdin"
   },
   "dependencies": {
-    "asciidoctor": "^2.2.0",
+    "asciidoctor": "^2.2.1",
     "braces": ">=3.0.2",
     "clean-css": ">=4.2.3",
     "minimist": ">=1.2.5",
@@ -17,6 +17,6 @@
     "babel-brunch": "^7.0.1",
     "brunch": "^3.0.0",
     "clean-css-brunch": "^3.0.0",
-    "npm-check-updates": "^7.0.2"
+    "npm-check-updates": "^11.1.0"
   }
 }

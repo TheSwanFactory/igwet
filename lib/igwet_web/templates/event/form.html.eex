@@ -20,6 +20,12 @@
   </div>
 
   <div class="form-group">
+    <%= label f, :phone, class: "control-label" %>
+    <%= telephone_input f, :phone, class: "form-control" %>
+    <%= error_tag f, :phone %>
+  </div>
+
+  <div class="form-group">
     <%= label f, "Size" %>
     <%= number_input f, :size %>
     <%= error_tag f, :size %>
