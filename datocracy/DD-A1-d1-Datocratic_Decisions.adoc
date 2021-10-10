@@ -1,0 +1,31 @@
+== DD-A1 Datocratic Decisions
+:Author:    Ernest Prabhakar
+:Email:     ernest.prabhakar@gmail.com
+:Date:      2021-10-08
+:Revision:  0.0.1-d1
+
+=== Problems to be Solved (PS)
+
+. We the Datocracy Committee seek to define, practice, and model Datocracy in a way that inspires and empowers others to do the same
+
+. The first step is to publicly document a simple process for how we ourselves make decisions, including decisions for improving that process
+
+. Documents need unique identifiers as well as versions so everyone is clear on which is the current operative decision
+
+. These documents should be intelligible to both humans and machines, so we can leverage automation to assist us
+
+=== We Should (WS)
+
+. Record decisions in a public GitHub repository using link:AsciiDoc[https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-lang] documents
+
+. Number documents with a "DD-" prefix followed by a letter plus one or more decimal digits.
+Each subsequent letter starts over with "1" and increments the number of digits (e.g., A1, B01, C001).
+
+. Use AsciiDoc conventions to track Author, Email, Date, Revision
+
+. Use semantic versioning for the Revision, with a "-d" suffix for draft proposals.
+When a decision is approved, that suffix is removed.
+
+. Begin the Filename with the DD number, followed by a dash and the human-readable name (replacing spaces with '_').
+The current version does not include an explicit version in the filename, so it is alphabetically first.
+Archived versions use a 'v'prefix before the revision.
