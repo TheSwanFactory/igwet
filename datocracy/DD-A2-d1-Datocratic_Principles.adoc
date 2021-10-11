@@ -1,0 +1,27 @@
+== DD-A2 Datocratic Principles
+:Author:    Ernest Prabhakar
+:Email:     ernest.prabhakar@gmail.com
+:Date:      2021-10-08
+:Revision:  0.0.1-d1
+
+=== Problems to be Solved (PS)
+
+. We the Datocracy Committee need to align around the 'Datocratic Principles' (DP) we intend to promote
+
+. The initial Principles should be simple enough it can be used to manually evaluate our initial decisions
+
+. The Principles should be complete and aspirational enough to guide and inspire future evolution
+
+=== We Should (WS)
+
+. Adopt the following Four Principles:
+
+.. Consider all Relevant Data
+.. Make Decisions Transparently and Inclusively
+.. Measure Impact Numerically
+.. Capture Learning for Future Improvement
+
+. Ask these two Yes/No questions before and after approving each Datocratic Decision:
+
+.. Do you feel your values were taken into consideration when this decision was made?
+.. Do you feel we have enough of a system in place to track the results of this decision and learn from them?
