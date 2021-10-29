@@ -9,15 +9,15 @@
 
 . We the Datocracy Committee seek to define, practice, and model Datocracy in a way that inspires and empowers others to do the same.
 
-. The first step is to publicly document a simple process for how we ourselves make decisions, including decisions for improving that process
+. The first step is to publicly document a simple process for how we make decisions, including decisions for improving that process.
 
-. This document embodies and defines what qualifies as a Datocratic Process for making decisions, as used by us right now
+. This document embodies and defines what qualifies as a Datocratic Process for making decisions, as used by us right now.
 
 == Measures of Success
 (A formal statement precisely defining the metrics to be collected.
-Also called "Value Objectives" in Planguage.)
+Also called "Value Objectives" in Planguage or “objectives” more generally)
 
-Each measure MUST include
+Each measure MUST include ??what does puttina a word in all caps mean??
 - Tag: a single word representing the measure (h3)
 - Aspiration: a short phrase characterizing how this measure impacts the world we are trying to create (h4)
 - Process: how we will perform that measurement
@@ -27,7 +27,7 @@ Each measure MUST include
 The initial measures of Success for Datocracy are being THIQ:
 
 === Transparent
-==== Publicly publishing both the documented process and live deliberations used to make Decisions
+==== Publicly publishing both the documented process and live deliberations used to make Decisions ??why is Decisions capitalized??
 - Process: Verifying that every approved Decision links to a recording of how the Decision was made
 - Metric: Boolean Yes/No
 - Objective: Yes
