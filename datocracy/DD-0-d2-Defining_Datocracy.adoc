@@ -1,0 +1,68 @@
+= DD-0 Defining Datocracy
+:Author:    Ernest Prabhakar
+:Email:     ernest.prabhakar@gmail.com
+:Date:      2021-10-28
+:Revision:  1.0.0-d2
+
+Q: Is this a Plan?
+
+== Problems to be Solved
+(May be: Long-Term Vision)
+(An informal statement scoping what this Decision is intended to address.)
+
+. We the Datocracy Committee seek to define, practice, and model Datocracy in a way that inspires and empowers others to do the same.
+
+. The first step is to publicly document a simple process for how we ourselves make decisions, including decisions for improving that process
+
+. This document embodies and defines what qualifies as a Datocratic Process for making decisions, as used by us right now
+
+== Measures of Success
+(A formal statement precisely defining the metrics to be collected.
+These are how we know we have fulfilled the vision in the time allotted.
+May be: "Top-Level (Fundamental -> Strategic -> Means) Value Objectives" in Planguage.)
+Q: Leading vs Trailing Metrics?
+Q: What is the criteria for recognizing a 'properly-defined' Measure of Success?
+
+Each measure MUST include
+- Tag: a (locally-unique) word or phrase representing the measure (h3)
+- Aspiration: a short phrase characterizing how this measure impacts the world we are trying to create (h4) [Ambition Level
+- Process: how we will perform that measurement
+- Metric: the numeric quantity resulting from that process [Scale]
+- Objective: the minimum value of that metric necessary for this Decision to be considered a success
+
+The initial measures of Success for Datocracy are being THIQ:
+
+=== Transparent
+==== Publicly publishing both the documented process and live deliberations used to make Decisions
+- Process: Verifying that every approved Decision links to a recording of how the Decision was made
+- Metric: Boolean Yes/No
+- Objective: Yes
+
+=== Historical
+==== All Decisions must be published in a tamper-resistant, immutable public record
+- Process: Verifying that every approved Decision links to a recording of the Decision being made
+- Metric: Boolean Yes/No
+- Objective: Yes
+
+=== Inclusive
+==== Does the Decision honor the Perspectives of everyone on the Committee?
+- Process: Poll the Committee on this question before approving any Decision
+- Metric: Percentage
+- Objective: 100%
+
+=== Quantified
+==== Every aspirational statement must be paired with a) a numerical quantity, b) how it will be measured, and c) what resulting value would justify this Decision
+- Process: Count Quantified Metrics, divide by Count of Aspirational Statements
+- Metric: Percentage
+- Objective: 100%
+
+==  Strategies We Should Attempt
+(A practical statement of actions we will take if this Decision is approved,
+which we believe are necessary and sufficient for achieving the Objectives under Measures of Success,
+and thus Solve the identified Problems.
+If not, we will need to revise or augment this Decision.)
+
+- Transparent: Publicly livestream all deliberation Calls, and add the resulting link to the Decision documentation
+- Historical: Store draft and final Decisions in GitHub (eg https://github.com/TheSwanFactory/igwet[TheSwanFactory/igwet])
+- Inclusive: Publish drafts at least 24 hours before the Call, and do not approve a Decision unless all Participants attend and agree
+- Quantified: Manually (and eventually automatically) verify that all Measures of Success are fully Quantified

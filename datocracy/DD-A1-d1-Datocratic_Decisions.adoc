@@ -16,7 +16,7 @@
 
 === We Should
 
-. Record "Datocratic Decisions" (DD) in a public GitHub repository using link:https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-lang[AsciiDoc] documents
+. Record "Datocratic Decisions" (DD) in a public GitHub repository using https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-lang[AsciiDoc] documents
 
 . Number documents with a "DD-" prefix followed by a letter plus one or more decimal digits.
 Each subsequent letter starts over with "1" and increments the number of digits (e.g., A1, B01, C001).
@@ -30,4 +30,4 @@ When a draft decision is approved, that suffix is removed.
 The current version does not include an explicit version in the filename, so it is alphabetically first.
 Archived versions use a 'v'prefix in the filename before the revision.
 
-. Make the intent of each DD explicit by including both the "Problems to be Solved" (PS) and "We Should" (WS) recommendations (as practiced by link:https://www.forwardparty.com/american-scorecard[The Forward Party]).
+. Make the intent of each DD explicit by including both the "Problems to be Solved" (PS) and "We Should" (WS) recommendations (as practiced by https://www.forwardparty.com/american-scorecard[The Forward Party]).

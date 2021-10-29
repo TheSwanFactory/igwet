@@ -1,0 +1,91 @@
+= DD-A1 Datocratic Decisions
+:Author:    Ernest Prabhakar
+:Email:     ernest.prabhakar@gmail.com
+:Date:      2021-10-22
+:Revision:  0.1
+
+== Problems to be Solved
+
+. We the Datocracy Committee seek to define, practice, and model Datocracy in a way that inspires and empowers others to do the same
+
+. The first step is to publicly document a simple process for how we ourselves make decisions, including decisions for improving that process
+
+. This document defines what qualifies as a Datocratic Process for making decisions, as used by us right now
+
+== Value Objectives
+
+Step 1. Using Nametags for High-Level Brainstorming of Potential Objectives (Process vs Outcomes)
+- <Transparency>
+- <Adaptivity>
+- <Flexibility>
+- <Responsibility>
+- <Comprehensiveness>
+- <Empowerment>
+- <Inclusivity>
+- <Intelligible>
+- <Preparation> (eg 24 hours in advance)
+
+Step 2. Ambition Level (informal description of what achieving that objective looks like)
+eg Transparency: Make everyone feels that the process is transparent
+
+Step 3. Definition of Scale of Measure (Quanteering)
+
+Step 4. Level: desired (and current)
+
+=== Potential Strategies
+
+#Measurability
+
+. Make Decisions Transparently and Inclusively
+. Consider all Relevant Data
+. Measure Impact Numerically
+. Capture Learning for Future Improvement
+
+
+
+=== Document Format
+
+. Documents need unique identifiers, as well as versions, so everyone is clear on which decision is being discussed
+
+. These documents should be intelligible to both humans and machines, so we can leverage automation to assist us
+
+#Agreement
+Scale: percentage of people on the call who agree
+- Current status: 30%
+- Desired level: 100%
+
+=== Required Content
+TODO: Link to Planguage Glossary
+cf. Vision Engineering
+
+. Define the scope of the Problems to be Solved by this Decision
+
+. Refine those Problems into numerically-measurable Objectives,
+
+. Identify Strategies that create progress towards those Objectives
+
+. Estimate Impact of Strategies toward completing those Objectives versus their expected resource cost
+
+== Value Objectives
+
+
+
+== We Should
+Strategies (aligned with but factored out from Objectives)
+vs Procedures, Action Items
+
+. Record "Datocratic Decisions" (DD) in a public GitHub repository using https://gitlab.eclipse.org/eclipse/asciidoc-lang/asciidoc-lang[AsciiDoc] documents
+
+. Number documents with a "DD-" prefix followed by a letter plus one or more decimal digits.
+Each subsequent letter starts over with "1" and increments the number of digits (e.g., A1, B01, C001).
+
+. Use AsciiDoc conventions to track Author, Email, Date, Revision
+
+. Use semantic versioning for each Revision to the master branch, with a "-d" suffix for draft proposals.
+When a draft decision is approved, that suffix is removed.
+
+. Begin the Filename with the DD number, followed by a dash and the human-readable name (replacing spaces with '_').
+The current version does not include an explicit version in the filename, so it is alphabetically first.
+Archived versions use a 'v'prefix in the filename before the revision.
+
+. Make the intent of each DD explicit by including both the "Problems to be Solved" (PS) and "We Should" (WS) recommendations (as practiced by https://www.forwardparty.com/american-scorecard[The Forward Party]).

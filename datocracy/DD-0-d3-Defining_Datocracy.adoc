@@ -1,0 +1,14 @@
+Tag: short phrase
+Ambition: sentence-level
+
+=== Inclusive
+ALT:
+ALT:
+
+Tag: Unanimous Committee Agreement
+Ambition Level: All Decisions shall honor the Perspectives of everyone on the Committee
+- Meter (how we measure): Poll the Committee on this question before approving any Decision
+- Scale: Percentage of Questions Unanimously Approved by Committee
+- Numeric Goal: 100%
+
+Q:
