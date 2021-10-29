@@ -2,9 +2,12 @@
 :Author:    Ernest Prabhakar
 :Email:     ernest.prabhakar@gmail.com
 :Date:      2021-10-28
-:Revision:  1.0-rc1
+:Revision:  1.0.0-d2
+
+Q: Is this a Plan?
 
 == Problems to be Solved
+(May be: Long-Term Vision)
 (An informal statement scoping what this Decision is intended to address.)
 
 . We the Datocracy Committee seek to define, practice, and model Datocracy in a way that inspires and empowers others to do the same.
@@ -15,13 +18,16 @@
 
 == Measures of Success
 (A formal statement precisely defining the metrics to be collected.
-Also called "Value Objectives" in Planguage.)
+These are how we know we have fulfilled the vision in the time allotted.
+May be: "Top-Level (Fundamental -> Strategic -> Means) Value Objectives" in Planguage.)
+Q: Leading vs Trailing Metrics?
+Q: What is the criteria for recognizing a 'properly-defined' Measure of Success?
 
 Each measure MUST include
-- Tag: a single word representing the measure (h3)
-- Aspiration: a short phrase characterizing how this measure impacts the world we are trying to create (h4)
+- Tag: a (locally-unique) word or phrase representing the measure (h3)
+- Aspiration: a short phrase characterizing how this measure impacts the world we are trying to create (h4) [Ambition Level
 - Process: how we will perform that measurement
-- Metric: the numeric quantity resulting from that process
+- Metric: the numeric quantity resulting from that process [Scale]
 - Objective: the minimum value of that metric necessary for this Decision to be considered a success
 
 The initial measures of Success for Datocracy are being THIQ:
