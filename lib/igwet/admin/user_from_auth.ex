@@ -1,5 +1,5 @@
 defmodule Igwet.Admin.User.FromAuth do
-  # @compile if Mix.env == :test, do: :export_all
+  # @compile if config_env == :test, do: :export_all
   require IEx
   require Logger
 

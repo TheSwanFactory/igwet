@@ -6,10 +6,10 @@ defmodule Igwet.Mixfile do
       app: :igwet,
       version: "0.3.9",
       elixir: "~> 1.10",
-      elixirc_paths: elixirc_paths(Mix.env()),
+      elixirc_paths: elixirc_paths(config_env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
-      start_permanent: Mix.env() == :prod,
-      consolidate_protocols: Mix.env() != :test,
+      start_permanent: config_env() == :prod,
+      consolidate_protocols: config_env() != :test,
       aliases: aliases(),
       deps: deps(),
       default_task: "phx.server"
