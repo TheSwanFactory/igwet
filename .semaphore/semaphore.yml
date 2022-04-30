@@ -1,9 +1,9 @@
-version: v1.0
-name: Test MyApp
+version: v1.1
+name: Test IGWET
 agent:
   machine:
     type: e1-standard-2
-    os_image: ubuntu1804
+    os_image: ubuntu2004
 auto_cancel:
   running:
     when: "true" # enable auto-cancel for branches, tags and pull-requests
@@ -12,15 +12,15 @@ blocks:
     task:
       env_vars:
         - name: DATABASE_URL
-          value: 'ecto://postgres:@0.0.0.0:5432/myapp_test'
+          value: 'ecto://postgres:@0.0.0.0:5432/igwet_test'
         - name: MIX_ENV
           value: test
       jobs:
         - name: mix test
           commands:
             - checkout
-            - sem-service start postgres 11
-            - sem-version elixir 1.10.3
+            - sem-service start postgres 14.2
+            - sem-version elixir 1.13.4
             - mix local.hex --force
             - mix local.rebar --force
             - cache restore
