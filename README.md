@@ -28,26 +28,27 @@ $ psql postgres -c "\du"
 To start your Phoenix server:
 ```
 $ brew upgrade npm # or install
-$ brew install elixir
+$ brew install elixir # or brew upgrade
 $ mix deps.get                          # Install dependencies
 $ mix compile
 $ mix ecto.create && mix ecto.migrate   # Create and migrate your database
 $ mix run priv/repo/seeds.exs           # Run seeds
 $ openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com" -keyout priv/server.key -out priv/server.pem
-$ cd assets && npm install && cd ..             # Install Node.js dependencies
-$ cp ./example.env .env && $(EDITOR) .env && source .env    # Configure secrets
+$ cd assets && npm install && npx browserslist@latest --update-db && cd ..  # Install Node stuff
+$ cp ./example.env .env && $(EDITOR) .env # Configure secrets (if never done before)
+$ source .env
 $ mix test
 $ mix phx.server                        # Run app via Cowboy web server
-$ open http://0.0.0.0:4000
+$ open https://localhost:4000           # Ignore warning about certificate
 ```
 
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Now you can visit [`localhost:4000`](https://localhost:4000) from your browser.
 
 You can test the webhook via:
 ```
-$ curl -d "@test-message.json" -H "Content-Type: application/json" -X POST http://localhost:4000/webhook
-$ open http://localhost:4000/sent_emails
+$ curl -d "@test-message.json" -H "Content-Type: application/json" -X POST https://localhost:4000/webhook
+$ open https://localhost:4000/sent_emails
 
 ```
 

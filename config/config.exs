@@ -1,9 +1,9 @@
 # This file is responsible for configuring your application
-# and its dependencies with the aid of the Mix.Config module.
+# and its dependencies with the aid of the Config module.
 #
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
-use Mix.Config
+import Config
 
 config :elixir, :time_zone_database, Tz.TimeZoneDatabase
 
@@ -12,7 +12,7 @@ config :igwet,
   ecto_repos: [Igwet.Repo],
   admin_key: "com.igwet",
   admin_user: "operator",
-  env: Mix.env()
+  env: config_env()
 
 # Configures the endpoint
 config :igwet, IgwetWeb.Endpoint,
@@ -55,4 +55,4 @@ config :ex_twilio, account_sid:   {:system, "TWILIO_ACCOUNT_SID"},
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env()}.exs"
+import_config "#{config_env()}.exs"

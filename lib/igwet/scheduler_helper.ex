@@ -49,6 +49,6 @@ defmodule Igwet.Scheduler.Helper do
   end
 
   def test(event) do
-    Logger.warn("RSVP.test: #{event.key}")
+    Logger.debug("RSVP.test: #{event.key}")
   end
 end

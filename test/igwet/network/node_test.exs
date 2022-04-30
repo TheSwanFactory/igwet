@@ -267,8 +267,8 @@ defmodule Igwet.NetworkTest.Node do
       assert !is_nil job
       job2 = Scheduler.get_job_for_node(get_event)
       assert job == job2
-      result = Scheduler.run_job_for_node(get_event)
-      Logger.warn("run_job_for_node #{inspect result}")
+      _result = Scheduler.run_job_for_node(get_event)
+      #Logger.warn("run_job_for_node #{inspect result}")
     end
 
     test "perform_task", %{event: event} do

@@ -1,5 +1,5 @@
 defmodule Igwet.Admin.User.FromAuth do
-  # @compile if Mix.env == :test, do: :export_all
+  # @compile if config_env == :test, do: :export_all
   require IEx
   require Logger
 
@@ -13,7 +13,7 @@ defmodule Igwet.Admin.User.FromAuth do
   #alias Igwet.Repo
 
   @doc """
-  Generates user from provider response if valid password
+  Generates user from provider response or anonymous auth data
   """
   def find_or_create(%Auth{provider: :identity} = auth) do
     case validate_pass(auth.credentials) do
@@ -22,9 +22,6 @@ defmodule Igwet.Admin.User.FromAuth do
     end
   end
 
-  @doc """
-  Generates user from anonymous auth data
-  """
   def find_or_create(%Auth{} = auth) do
     {:ok, auth_user(auth)}
   end
