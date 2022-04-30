@@ -370,7 +370,7 @@ defmodule Igwet.Network.Sendmail do
   ## Examples
       iex> node = %Igwet.Network.Node{name: "Test", email: "test@example.com"}
       iex> alias Igwet.Network.Sendmail
-      iex> result = Sendmail.test_email(node) |> Igwet.Admin.Mailer.deliver_now
+      iex> {:ok, result} = Sendmail.test_email(node) |> Igwet.Admin.Mailer.deliver_now
       iex> result.headers["sender"]
       "list@igwet.com"
       iex> result.text_body

@@ -42,7 +42,7 @@ defmodule Igwet.Scheduler do
   def perform_task(node) do
     try do
       method = String.to_existing_atom(node.about)
-      Logger.warn("perform_task '#{method}' for #{node.name}")
+      #Logger.warn("perform_task '#{method}' for #{node.name}")
       apply(RsvpController, method, [node])
     rescue
       e ->
