@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>IGWET: __MODULE__</title>
+    <title>IGWET: <%= title(assigns) %></title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <link rel="apple-touch-icon" href="/images/apple-touch-icon-precomposed.png"/>
   </head>
