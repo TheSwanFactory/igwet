@@ -128,7 +128,7 @@ defmodule Igwet.Network.SMS do
   ## Examples
       iex> alias Igwet.Network.SMS
       iex> params = SMS.test_params("to_nodes")
-      iex> %{sender: sender, receiver: receiver, text: text} = SMS.to_nodes params
+      iex> %{sender: sender, receiver: _receiver, text: _text} = SMS.to_nodes params
       iex> sender.name
       "from"
       iex> sender.phone

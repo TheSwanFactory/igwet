@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>IGWET: <%= Enum.at(Regex.run(~r/Elixir\.IgwetWeb\.(.*)View/, to_string(@view_module)),1) %></title>
+    <title>IGWET: __MODULE__</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
     <link rel="apple-touch-icon" href="/images/apple-touch-icon-precomposed.png"/>
   </head>
