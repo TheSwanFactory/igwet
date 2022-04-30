@@ -333,7 +333,7 @@ defmodule Igwet.Network.Sendmail do
     put_header(email, key, value)
   end
 
-  defp add_header(header, email) when is_tuple(header) do
+  defp add_header(header, email) when is_tuple(header) and tuple_size(header) == 2 do
     {key, value} = header
     put_header(email, as_string(key), value)
   end

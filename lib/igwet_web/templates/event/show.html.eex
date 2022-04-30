@@ -1,6 +1,6 @@
 <h1>Show Event</h1>
 
-<% if (@group) do %>
+<%= if (@group) do %>
   <h3>Group: <%= link(@group.name, to: group_path(@conn, :show, @group)) %></h3>
 <% end %>
 
