@@ -13,6 +13,7 @@ defmodule Igwet.Mixfile do
       aliases: aliases(),
       deps: deps(),
       default_task: "phx.server"
+      #releases: releases()
     ]
   end
 
@@ -42,7 +43,6 @@ defmodule Igwet.Mixfile do
       {:phoenix_html, ">= 2.10.0"},
       {:phoenix_live_reload, ">= 1.2.4", only: :dev},
       {:libcluster, ">= 3.2.1"},
-      {:distillery, ">= 2.1.1", runtime: false},
       {:gettext, ">= 0.11.0"},
       {:cowboy, ">= 2.8.0"},
       {:ueberauth, ">= 0.4.0"},
