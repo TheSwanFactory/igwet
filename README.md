@@ -21,6 +21,7 @@ $ createuser phx -s -P
 $ createuser runner -s -P
 # semaphoredb
 $ psql postgres -c "\du"
+$ psql postgres -c "\l"
 
 
 ```
@@ -34,9 +35,10 @@ $ mix compile
 $ mix ecto.create && mix ecto.migrate   # Create and migrate your database
 $ mix run priv/repo/seeds.exs           # Run seeds
 $ openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com" -keyout priv/server.key -out priv/server.pem
-$ cd assets && npm install && npx browserslist@latest --update-db && cd ..  # Install Node stuff
+$ cd assets && npm install &We & npm run deploy && npx browserslist@latest --update-db && cd ..  # Install Node stuff
 $ cp ./example.env .env && $(EDITOR) .env # Configure secrets (if never done before)
 $ source .env
+$ mix phx.digest
 $ mix test
 $ mix phx.server                        # Run app via Cowboy web server
 $ open https://localhost:4000           # Ignore warning about certificate
@@ -54,7 +56,7 @@ $ open https://localhost:4000/sent_emails
 
 ## Production
 
-We recommend Gigalixir.
+We recommend [Gigalixir](https://gigalixir.readthedocs.io/en/latest/modify-app/releases.html).
 ```
 $ brew tap gigalixir/brew && brew install gigalixir
 $ gigalixir --help
@@ -74,7 +76,16 @@ $ gigalixir account:ssh_keys:add "$(cat ~/.ssh/id_rsa.pub)"
 $ gigalixir ps:migrate
 ```
 
-### Seeds
+### Production Releases
+```
+$ export SECRET_KEY_BASE="$(mix phx.gen.secret)"
+$ export DATABASE_URL="postgresql://phx:elixir@localhost:5432/igwet_dev" # can put this in .env
+$ MIX_ENV=prod mix release
+$ MIX_ENV=prod _build/prod/rel/igwet/bin/igwet daemon
+$ curl open
+```
+
+### Overwrite Production Seeds
 To update the seeds in production use:
 ```
 $ source .env
