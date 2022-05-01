@@ -10,3 +10,8 @@ echo "what you need to do"
 echo "================="
 mix test && \
   mix version.tag
+MIX_ENV=prod mix release
+git push gigalixir master
+gigalixir open
+sleep 60
+gigalixir ps

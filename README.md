@@ -63,12 +63,12 @@ $ gigalixir --help
 $ gigalixir signup # if not already
 $ gigalixir login
 $ gigalixir account
-$ gigalixir create -n igwet
 $ gigalixir apps
-$ git remote -v
-$ gigalixir pg:create --free
+$ gigalixir create -n igwet # if not already
 $ gigalixir pg
+$ gigalixir pg:create --free # if not already
 $ gigalixir config
+$ git remote -v
 $ git push gigalixir master
 $ gigalixir open
 $ ssh-keygen -t rsa # if you have never done so before
@@ -77,6 +77,8 @@ $ gigalixir ps:migrate
 ```
 
 ### Production Releases
+If you have the githook installed, just do `mix version.up`
+Otherwise:
 ```
 $ export SECRET_KEY_BASE="$(mix phx.gen.secret)"
 $ export DATABASE_URL="postgresql://phx:elixir@localhost:5432/igwet_dev" # can put this in .env
