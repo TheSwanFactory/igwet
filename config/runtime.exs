@@ -2,6 +2,13 @@
 
 import Config
 
+# Shared Globals
+
+database_url = System.get_env("DATABASE_URL") || raise """
+    environment variable DATABASE_URL is missing.
+    For example: ecto://USER:PASS@HOST/DATABASE
+    """
+
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration
@@ -13,8 +20,6 @@ import Config
 #
 
 if config_env() == :dev do
-  database_url = System.get_env("DATABASE_URL")
-
   if database_url != nil do
     config :igwet, Igwet.Repo,
       url: database_url,
@@ -24,11 +29,12 @@ end
 
 # The block below contains prod specific runtime configuration.
 if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
+
+  app_name = System.get_env("APP_NAME") || raise "APP_NAME not available"
+
+  secret_key_base = System.get_env("SECRET_KEY_BASE") || raise """
+      environment variable SECRET_KEY_BASE is missing.
+      You can generate one by calling: mix phx.gen.secret
       """
 
   config :igwet, Igwet.Repo,
@@ -43,19 +49,9 @@ if config_env() == :prod do
   # want to use a different value for prod and you most likely don't want
   # to check this value into version control, so we use an environment
   # variable instead.
-  secret_key_base =
-    System.get_env("SECRET_KEY_BASE") ||
-      raise """
-      environment variable SECRET_KEY_BASE is missing.
-      You can generate one by calling: mix phx.gen.secret
-      """
-
-  app_name =
-    System.get_env("APP_NAME") ||
-      raise "APP_NAME not available"
 
   config :igwet, IgwetWeb.Endpoint,
-    url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443]
+    url: [host: app_name <> ".gigalixirapp.com", port: 443],
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
