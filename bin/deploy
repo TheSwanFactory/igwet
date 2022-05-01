@@ -1,17 +1,14 @@
 #!/bin/bash
 
 VERSION=$(MIX_QUIET=1 mix version.current)
+BRANCH=$(git branch --show-current)
 echo "================="
-echo "DEPLOYING $VERSION"
+echo "DEPLOYING $VERSION to gigalixir from $BRANCH"
 echo "Based on script in bin/deploy"
-echo "By default it does nothing but runs your tests"
-echo "and tags your release.  So please update with"
-echo "what you need to do"
 echo "================="
-mix test && \
-  mix version.tag
+mix test && mix version.tag
 MIX_ENV=prod mix release
-git push gigalixir master
+git push gigalixir $BRANCH:master
 gigalixir open
-sleep 60
+#sleep 60
 gigalixir ps
