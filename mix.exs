@@ -4,7 +4,7 @@ defmodule Igwet.Mixfile do
   def project do
     [
       app: :igwet,
-      version: "0.4.2",
+      version: "0.4.3",
       elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
