@@ -6,7 +6,7 @@ agent:
     os_image: ubuntu2004
 auto_cancel:
   running:
-    when: "true" # enable auto-cancel for branches, tags and pull-requests
+    when: 'true'
 blocks:
   - name: Test
     task:
@@ -15,6 +15,8 @@ blocks:
           value: 'ecto://postgres:@0.0.0.0:5432/igwet_test'
         - name: MIX_ENV
           value: test
+        - name: SECRET_KEY_BASE
+          value: UoqZ3F6GkLWcGkwhG2Jb152xa2/CjZByMLfCeQy1NrkxbrIX9cDCNaFfWq1y9ELi
       jobs:
         - name: mix test
           commands:
