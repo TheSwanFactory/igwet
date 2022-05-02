@@ -42,7 +42,6 @@ if config_env() == :prod do
   config :igwet, Igwet.Repo,
     # ssl: true,
     # IMPORTANT: Or it won't find the DB server
-    socket_options: [:inet6],
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
@@ -54,14 +53,6 @@ if config_env() == :prod do
 
   config :igwet, IgwetWeb.Endpoint,
     url: [host: app_name <> ".gigalixirapp.com", port: 443],
-    http: [
-      # Enable IPv6 and bind on all interfaces.
-      # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
-      # See the documentation on https://hexdocs.pm/plug_cowboy/Plug.Cowboy.html
-      # for details about using IPv6 vs IPv4 and loopback vs public addresses.
-      ip: {0, 0, 0, 0, 0, 0, 0, 0},
-      port: String.to_integer(System.get_env("PORT") || "4000")
-    ],
     secret_key_base: secret_key_base
 
   # ## Using releases
