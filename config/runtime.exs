@@ -9,6 +9,12 @@ database_url = System.get_env("DATABASE_URL") || raise """
     For example: ecto://USER:PASS@HOST/DATABASE
     """
 
+secret_key_base = System.get_env("SECRET_KEY_BASE") || raise """
+    environment variable SECRET_KEY_BASE is missing.
+    You can generate one by calling: mix phx.gen.secret
+    """
+
+
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration
@@ -20,22 +26,18 @@ database_url = System.get_env("DATABASE_URL") || raise """
 #
 
 if config_env() == :dev do
-  if database_url != nil do
-    config :igwet, Igwet.Repo,
-      url: database_url,
-      socket_options: [:inet6]
-  end
+  config :igwet, Igwet.Repo, url: database_url, socket_options: [:inet6]
+
+  config :igwet, IgwetWeb.Endpoint,
+    url: [host: "localhost", port: "4000"],
+    secret_key_base: secret_key_base
+  config :igwet, IgwetWeb.Endpoint, server: true
 end
 
 # The block below contains prod specific runtime configuration.
 if config_env() == :prod do
 
   app_name = System.get_env("APP_NAME") || raise "APP_NAME not available"
-
-  secret_key_base = System.get_env("SECRET_KEY_BASE") || raise """
-      environment variable SECRET_KEY_BASE is missing.
-      You can generate one by calling: mix phx.gen.secret
-      """
 
   config :igwet, Igwet.Repo,
     # ssl: true,
