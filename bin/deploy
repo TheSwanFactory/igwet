@@ -1,0 +1,14 @@
+#!/bin/bash
+
+VERSION=$(MIX_QUIET=1 mix version.current)
+BRANCH=$(git branch --show-current)
+echo "================="
+echo "DEPLOYING $VERSION to gigalixir from $BRANCH"
+echo "Based on script in bin/deploy"
+echo "================="
+mix test && mix version.tag
+MIX_ENV=prod mix release
+git push gigalixir $BRANCH:master
+gigalixir open
+#sleep 60
+gigalixir ps
