@@ -50,7 +50,10 @@ defmodule Igwet.AdminTest do
 
     test "list_users/0 returns all users" do
       user = user_fixture()
-      assert Admin.list_users() == [user]
+      users = Admin.list_users()
+      assert length(users) > 1
+      user2 = Enum.at(users,0)
+      assert user2 == user
     end
 
     test "get_user!/1 returns the user with given id" do

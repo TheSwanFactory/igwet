@@ -10,5 +10,5 @@ defmodule Igwet.NetworkTest.Fleep do
       assert data
     end
   end
-  
+
 end
