@@ -13,3 +13,7 @@ defmodule IgwetWeb.FleepController do
   end
 
 end
+
+#def conversation_sync(self,
+# conversation_id, from_message_nr = None, mk_direction = 'forward'):
+#    return self._webapi_call('api/conversation/sync', conversation_id,
