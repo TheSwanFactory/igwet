@@ -1,0 +1,22 @@
+<h1>Listing Fleet Conversations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Name</th>
+      <th>About</th>
+      <th>Size</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for fleep <- @fleeps do %>
+    <tr>
+      <td><%= fleep.date %></td>
+      <td><%= link fleep.name, to: "fleep/" <> fleep.key %></td>
+      <td style='white-space: pre-line;'><%= fleep.about %></td>
+      <td><%= fleep.size %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
