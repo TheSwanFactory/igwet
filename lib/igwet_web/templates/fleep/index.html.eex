@@ -10,12 +10,12 @@
     </tr>
   </thead>
   <tbody>
-<%= for fleep <- @fleeps do %>
+<%= for node <- @nodes do %>
     <tr>
-      <td><%= fleep.date %></td>
-      <td><%= link fleep.name, to: "fleep/" <> fleep.key %></td>
-      <td style='white-space: pre-line;'><%= fleep.about %></td>
-      <td><%= fleep.size %></td>
+      <td><%= node.date %></td>
+      <td><%= link node.name, to: "fleep/" <> node.key %></td>
+      <td style='white-space: pre-line;'><%= node.about %></td>
+      <td><%= node.size %></td>
     </tr>
 <% end %>
   </tbody>
