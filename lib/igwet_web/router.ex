@@ -30,11 +30,19 @@ defmodule IgwetWeb.Router do
     resources("/users", UserController)
   end
 
-  scope "/webhook", IgwetWeb do
-    post("/", WebhookController, :forward_email)
-    post("/status", WebhookController, :status)
-    post("/log_sms", WebhookController, :log_sms)
-    post("/twilio", WebhookController, :receive_sms)
+  scope "/auth", IgwetWeb do
+    pipe_through(:browser)
+
+    get("/:provider", AuthController, :request)
+    get("/:provider/callback", AuthController, :callback)
+    post("/:provider/callback", AuthController, :callback)
+  end
+
+
+  scope "/fleep", IgwetWeb do
+    pipe_through(:browser)
+
+    get("/", FleepController, :index)
   end
 
   scope "/rsvp", IgwetWeb do
@@ -52,12 +60,11 @@ defmodule IgwetWeb.Router do
     get("/next/:id", RsvpController, :next_event)
   end
 
-  scope "/auth", IgwetWeb do
-    pipe_through(:browser)
-
-    get("/:provider", AuthController, :request)
-    get("/:provider/callback", AuthController, :callback)
-    post("/:provider/callback", AuthController, :callback)
+  scope "/webhook", IgwetWeb do
+    post("/", WebhookController, :forward_email)
+    post("/status", WebhookController, :status)
+    post("/log_sms", WebhookController, :log_sms)
+    post("/twilio", WebhookController, :receive_sms)
   end
 
   if Application.get_env(:igwet, :env) == :dev do
