@@ -9,6 +9,15 @@ defmodule Igwet.NetworkTest.Fleep do
       data = Finch.build(:get, "https://hex.pm") |> Finch.request(MyFinch)
       assert data
     end
+
+    test "Finch post" do
+      {:ok, res} =
+        Finch.build(:post, "https://postman-echo.com/post", [], "raw")
+        |> Finch.request(MyFinch)
+      json = Jason.decode!(res.body)
+      assert json["data"] == "raw"
+    end
+
     test "Fleep config" do
       user = Application.get_env(:igwet, Igwet.Network.Fleep)[:username]
       assert user
