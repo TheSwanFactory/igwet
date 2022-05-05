@@ -21,8 +21,9 @@ defmodule Igwet.Network.Fleep do
     end)
   end
 
-  def post(path, body \\ nil) do
+  def post(path, params \\ %{}) do
     hdr = tranform_headers(@headers)
+    {:ok, body} = Jason.encode(params)
     {:ok, res} =
       Finch.build(:post, @host <> path, hdr, body)
       |> Finch.request(MyFinch)
@@ -34,8 +35,7 @@ defmodule Igwet.Network.Fleep do
     user = Application.get_env(:igwet, Igwet.Network.Fleep)[:username]
     pw = Application.get_env(:igwet, Igwet.Network.Fleep)[:password]
     params = %{email: user, password: pw}
-    {:ok, body} = Jason.encode(params)
-    result = post(@login, body)
+    result = post(@login, params)
     #Logger.warn("** login.result: " <> inspect(result))
     result
   end
