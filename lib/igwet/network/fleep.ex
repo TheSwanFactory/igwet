@@ -23,8 +23,12 @@ defmodule Igwet.Network.Fleep do
   end
 
   def post(path, params \\ %{}, header \\ @headers) do
-
-    hdr = tranform_headers(header)
+    hdr = if Cache.has(@fleep_cache, "set-cookie") do
+      header ++ ["Cookie": Cache.get(@fleep_cache, "set-cookie")]
+    else
+      header
+    end
+    |> tranform_headers
     {:ok, body} = Jason.encode(params)
     #Logger.warn("** post.body: " <> inspect(body))
     {:ok, res} =
@@ -50,9 +54,6 @@ defmodule Igwet.Network.Fleep do
 
     cache(result, "ticket")
     cache(result, "set-cookie")
-
-#...     cookies={"token_id": "dd737a29-7819-41dc-ad93-a38aab2c9409"},
-    #Logger.warn("** login.result: " <> inspect(result))
     result
   end
 
