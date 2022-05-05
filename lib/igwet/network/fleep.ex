@@ -24,11 +24,11 @@ defmodule Igwet.Network.Fleep do
   def post(path, params \\ %{}, header \\ @headers) do
     hdr = tranform_headers(header)
     {:ok, body} = Jason.encode(params)
-    Logger.warn("** post.body: " <> inspect(body))
+    #Logger.warn("** post.body: " <> inspect(body))
     {:ok, res} =
       Finch.build(:post, @host <> path, hdr, body)
       |> Finch.request(MyFinch)
-    Logger.warn("** post.res.headers: " <> inspect(res.headers))
+    #Logger.warn("** post.res.headers: " <> inspect(res.headers))
     {:ok, json} = Jason.decode(res.body)
     json
   end

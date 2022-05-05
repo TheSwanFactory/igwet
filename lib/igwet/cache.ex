@@ -1,6 +1,17 @@
 defmodule Igwet.Cache do
+
+  @doc """
+  Create a named ets table
+
+  ## Examples
+  iex> alias Igwet.Cache
+  iex> Cache.create(:test)
+  :test
+
+  """
+
   def create(name) do
-    1
+    :ets.new(name, [:set, :protected, :named_table])
   end
 
   def exists(name) do
