@@ -48,10 +48,10 @@ defmodule Igwet.Cache do
 
   ## Examples
   iex> alias Igwet.Cache
-  iex> Cache.set(:test, "a", "b")
+  iex> Cache.set("b", :test, "a")
   true
   """
-  def set(name, key, value) do
+  def set(value, name, key) do
     ensure(name)
     :ets.insert(name, {key, value})
   end
@@ -61,7 +61,7 @@ defmodule Igwet.Cache do
 
   ## Examples
   iex> alias Igwet.Cache
-  iex> Cache.set(:test, "a", "b")
+  iex> Cache.set("b", :test, "a")
   true
   iex> Cache.get(:test, "a")
   "b"
