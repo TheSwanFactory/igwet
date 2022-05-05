@@ -4,7 +4,7 @@ defmodule Igwet.Network.Fleep do
   """
   # require IEx; #IEx.pry
   require Logger
-  alias Igwet.Network
+  #alias Igwet.Network
 
   @host "https://fleep.io/"
   @login "api/account/login"
@@ -28,9 +28,10 @@ defmodule Igwet.Network.Fleep do
     {:ok, res} =
       Finch.build(:post, @host <> path, hdr, body)
       |> Finch.request(MyFinch)
-    #Logger.warn("** post.res.headers: " <> inspect(res.headers))
+    hmap = Enum.into(res.headers, %{})
+    #Logger.warn("** post.hmap: " <> inspect(hmap))
     {:ok, json} = Jason.decode(res.body)
-    json
+    Map.merge(hmap, json)
   end
 
   def login() do

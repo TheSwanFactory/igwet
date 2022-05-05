@@ -29,6 +29,7 @@ defmodule Igwet.NetworkTest.Fleep do
     test "login" do
       json = Fleep.login()
       assert Map.has_key?(json, "ticket")
+      assert Map.has_key?(json, "set-cookie")
     end
 
     test "ticket" do
