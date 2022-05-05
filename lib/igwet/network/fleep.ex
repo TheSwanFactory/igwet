@@ -9,18 +9,35 @@ defmodule Igwet.Network.Fleep do
   @host "https://fleep.io/"
   @login "api/account/login"
   @conv_sync "api/conversation/sync"
+  @headers ["Content-Type": "application/json; charset=utf-8", "Connection": "Keep-Alive"]
+
+# https://elixirforum.com/t/how-to-make-a-multipart-http-request-using-finch/36217
+
+  defp tranform_headers([]), do: []
+  defp tranform_headers(headers) do
+    headers
+    |> Enum.map(fn({k, v}) ->
+      {Atom.to_string(k), v}
+    end)
+  end
 
   def post(path, body \\ nil) do
+    hdr = tranform_headers(@headers)
     {:ok, res} =
-      Finch.build(:post, @host <> path, [], body)
+      Finch.build(:post, @host <> path, hdr, body)
       |> Finch.request(MyFinch)
     res.body
   end
 
   def login() do
-    params = {}
-    body = post(@login)
+    user = Application.get_env(:igwet, Igwet.Network.Fleep)[:username]
+    pw = Application.get_env(:igwet, Igwet.Network.Fleep)[:password]
+    params = %{email: user, password: pw}
+    Logger.warn("** login.params: " <> inspect(params))
+    {:ok, body} = Jason.encode(params)
     Logger.warn("** login.body: " <> inspect(body))
-    body
+    result = post(@login, body)
+    Logger.warn("** login.result: " <> inspect(result))
+    result
   end
 end

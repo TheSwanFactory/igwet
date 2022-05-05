@@ -27,7 +27,7 @@ defmodule Igwet.NetworkTest.Fleep do
 
     test "Fleep login" do
       body = Fleep.login()
-      assert body =~ "success"
+      assert body =~ "ticket"
     end
   end
 
