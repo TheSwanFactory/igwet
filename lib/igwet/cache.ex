@@ -69,8 +69,27 @@ defmodule Igwet.Cache do
   """
   def get(name, key) do
     ensure(name)
-    row = :ets.lookup(name, key)
-    tuple = Enum.at(row, 0)
+    rows = :ets.lookup(name, key)
+    tuple = Enum.at(rows, 0)
     Kernel.elem(tuple, 1)
   end
+
+  @doc """
+  Get value for key in name
+
+  ## Examples
+  iex> alias Igwet.Cache
+  iex> Cache.has(:test, "a")
+  false
+  iex> Cache.set("b", :test, "a")
+  iex> Cache.has(:test, "a")
+  true
+
+  """
+  def has(name, key) do
+    ensure(name)
+    rows = :ets.lookup(name, key)
+    Kernel.length(rows) > 0
+  end
+
 end
