@@ -36,15 +36,19 @@ defmodule Igwet.Network.Fleep do
     Map.merge(hmap, json)
   end
 
+  defp cache(source, key) do
+    source
+    |> Map.get(key)
+    |> Cache.set(@fleep_cache, key)
+  end
+
   def login() do
     user = Application.get_env(:igwet, Igwet.Network.Fleep)[:username]
     pw = Application.get_env(:igwet, Igwet.Network.Fleep)[:password]
     params = %{email: user, password: pw}
     result = post(@login, params)
 
-    Map.get(result, "ticket")
-    |> Cache.set(@fleep_cache, "ticket")
-
+    cache(result, "ticket")
 #...     cookies={"token_id": "dd737a29-7819-41dc-ad93-a38aab2c9409"},
     #Logger.warn("** login.result: " <> inspect(result))
     result
