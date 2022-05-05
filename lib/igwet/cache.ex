@@ -43,11 +43,34 @@ defmodule Igwet.Cache do
     if exists(name), do: name, else: create(name)
   end
 
+  @doc """
+  Set key to value in name
+
+  ## Examples
+  iex> alias Igwet.Cache
+  iex> Cache.set(:test, "a", "b")
+  true
+  """
   def set(name, key, value) do
-    value
+    ensure(name)
+    :ets.insert(name, {key, value})
   end
 
+  @doc """
+  Get value for key in name
+
+  ## Examples
+  iex> alias Igwet.Cache
+  iex> Cache.set(:test, "a", "b")
+  true
+  iex> Cache.get(:test, "a")
+  "b"
+
+  """
   def get(name, key) do
-    key
+    ensure(name)
+    row = :ets.lookup(name, key)
+    tuple = Enum.at(row, 0)
+    Kernel.elem(tuple, 1)
   end
 end
