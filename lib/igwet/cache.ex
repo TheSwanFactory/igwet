@@ -7,15 +7,24 @@ defmodule Igwet.Cache do
   iex> alias Igwet.Cache
   iex> Cache.create(:test)
   :test
-
   """
-
   def create(name) do
     :ets.new(name, [:set, :protected, :named_table])
   end
 
+  @doc """
+  Check if table already exists
+
+  ## Examples
+  iex> alias Igwet.Cache
+  iex> Cache.exists(:test)
+  false
+  iex> Cache.create(:test)
+  iex> Cache.exists(:test)
+  true
+  """
   def exists(name) do
-    False
+    :ets.whereis(name) != :undefined
   end
 
   def set(name, key, value) do
