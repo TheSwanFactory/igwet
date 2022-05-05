@@ -32,9 +32,9 @@ defmodule Igwet.NetworkTest.Fleep do
       assert Map.has_key?(json, "set-cookie")
     end
 
-    test "ticket" do
-      value = Fleep.ticket()
-      assert value
+    test "auth_params" do
+      params = Fleep.auth_params()
+      assert Map.has_key?(params, :ticket)
     end
 
     @tag :skip

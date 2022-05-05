@@ -49,19 +49,21 @@ defmodule Igwet.Network.Fleep do
     result = post(@login, params)
 
     cache(result, "ticket")
+    cache(result, "set-cookie")
+
 #...     cookies={"token_id": "dd737a29-7819-41dc-ad93-a38aab2c9409"},
     #Logger.warn("** login.result: " <> inspect(result))
     result
   end
 
-  def ticket() do
+  def auth_params() do
     login()
-    Cache.get(@fleep_cache, "ticket")
+    ticket = Cache.get(@fleep_cache, "ticket")
+    %{ticket: ticket, api_version: 4}
   end
 
   def sync(conv) do
-    params = %{ticket: ticket(), api_version: 4}
-    result = post(@conv_sync <> conv, params)
+    result = post(@conv_sync <> conv, auth_params())
     result
   end
 end
