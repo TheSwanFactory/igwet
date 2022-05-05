@@ -27,6 +27,22 @@ defmodule Igwet.Cache do
     :ets.whereis(name) != :undefined
   end
 
+  @doc """
+  Ensure table exists, creating if necessary
+
+  ## Examples
+  iex> alias Igwet.Cache
+  iex> Cache.exists(:test)
+  false
+  iex> Cache.ensure(:test)
+  :test
+  iex> Cache.exists(:test)
+  true
+  """
+  def ensure(name) do
+    if exists(name), do: name, else: create(name)
+  end
+
   def set(name, key, value) do
     value
   end
