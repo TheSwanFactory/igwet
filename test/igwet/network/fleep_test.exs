@@ -37,10 +37,9 @@ defmodule Igwet.NetworkTest.Fleep do
       assert Map.has_key?(params, :ticket)
     end
 
-    @tag :skip
     test "sync" do
       json = Fleep.sync(@test_conv)
-      assert Map.has_key?(json, "success")
+      assert Map.has_key?(json, "stream")
     end
   end
 

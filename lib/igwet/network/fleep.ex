@@ -14,21 +14,20 @@ defmodule Igwet.Network.Fleep do
 
 # https://elixirforum.com/t/how-to-make-a-multipart-http-request-using-finch/36217
 
-  defp tranform_headers([]), do: []
-  defp tranform_headers(headers) do
-    headers
-    |> Enum.map(fn({k, v}) ->
-      {Atom.to_string(k), v}
+  defp transform_headers([]), do: []
+  defp transform_headers(headers) do
+    if Cache.has(@fleep_cache, "set-cookie") do
+      headers ++ ["Cookie": Cache.get(@fleep_cache, "set-cookie")]
+    else
+      headers
+    end
+    |> Enum.map(
+      fn({k, v}) -> {Atom.to_string(k), v}
     end)
   end
 
-  def post(path, params \\ %{}, header \\ @headers) do
-    hdr = if Cache.has(@fleep_cache, "set-cookie") do
-      header ++ ["Cookie": Cache.get(@fleep_cache, "set-cookie")]
-    else
-      header
-    end
-    |> tranform_headers
+  def post(path, params \\ %{}, headers \\ @headers) do
+    hdr = transform_headers(headers)
     {:ok, body} = Jason.encode(params)
     #Logger.warn("** post.body: " <> inspect(body))
     {:ok, res} =
