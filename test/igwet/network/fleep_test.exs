@@ -27,8 +27,8 @@ defmodule Igwet.NetworkTest.Fleep do
     end
 
     test "login" do
-      map = Fleep.login()
-      assert Map.has_key?(map, "ticket")
+      json = Fleep.login()
+      assert Map.has_key?(json, "ticket")
     end
 
     test "ticket" do
@@ -37,11 +37,9 @@ defmodule Igwet.NetworkTest.Fleep do
     end
 
     test "sync" do
-      value = Fleep.sync(@test_conv)
-      assert value
+      json = Fleep.sync(@test_conv)
+      assert Map.has_key?(json, "success")
     end
-
-
   end
 
 end

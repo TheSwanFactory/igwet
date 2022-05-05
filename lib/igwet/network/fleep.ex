@@ -8,7 +8,7 @@ defmodule Igwet.Network.Fleep do
 
   @host "https://fleep.io/"
   @login "api/account/login"
-  @conv_sync "api/conversation/sync"
+  @conv_sync "api/conversation/sync/"
   @headers ["Content-Type": "application/json; charset=utf-8", "Connection": "Keep-Alive"]
 
 # https://elixirforum.com/t/how-to-make-a-multipart-http-request-using-finch/36217
@@ -21,12 +21,14 @@ defmodule Igwet.Network.Fleep do
     end)
   end
 
-  def post(path, params \\ %{}) do
-    hdr = tranform_headers(@headers)
+  def post(path, params \\ %{}, header \\ @headers) do
+    hdr = tranform_headers(header)
     {:ok, body} = Jason.encode(params)
+    Logger.warn("** post.body: " <> inspect(body))
     {:ok, res} =
       Finch.build(:post, @host <> path, hdr, body)
       |> Finch.request(MyFinch)
+    Logger.warn("** post.res.headers: " <> inspect(res.headers))
     {:ok, json} = Jason.decode(res.body)
     json
   end
@@ -36,6 +38,7 @@ defmodule Igwet.Network.Fleep do
     pw = Application.get_env(:igwet, Igwet.Network.Fleep)[:password]
     params = %{email: user, password: pw}
     result = post(@login, params)
+#...     cookies={"token_id": "dd737a29-7819-41dc-ad93-a38aab2c9409"},
     #Logger.warn("** login.result: " <> inspect(result))
     result
   end
@@ -45,7 +48,9 @@ defmodule Igwet.Network.Fleep do
     Map.get(result, "ticket")
   end
 
-  def sync(_conv) do
-    @conv_sync
+  def sync(conv) do
+    params = %{ticket: ticket(), api_version: 4}
+    result = post(@conv_sync <> conv, params)
+    result
   end
 end
