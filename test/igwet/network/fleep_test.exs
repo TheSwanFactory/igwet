@@ -24,6 +24,11 @@ defmodule Igwet.NetworkTest.Fleep do
       pw = Application.get_env(:igwet, Igwet.Network.Fleep)[:password]
       assert pw
     end
+
+    test "Fleep login" do
+      body = Fleep.login()
+      assert body =~ "success"
+    end
   end
 
 end
