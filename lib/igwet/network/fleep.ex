@@ -26,18 +26,26 @@ defmodule Igwet.Network.Fleep do
     {:ok, res} =
       Finch.build(:post, @host <> path, hdr, body)
       |> Finch.request(MyFinch)
-    res.body
+    {:ok, json} = Jason.decode(res.body)
+    json
   end
 
   def login() do
     user = Application.get_env(:igwet, Igwet.Network.Fleep)[:username]
     pw = Application.get_env(:igwet, Igwet.Network.Fleep)[:password]
     params = %{email: user, password: pw}
-    Logger.warn("** login.params: " <> inspect(params))
     {:ok, body} = Jason.encode(params)
-    Logger.warn("** login.body: " <> inspect(body))
     result = post(@login, body)
-    Logger.warn("** login.result: " <> inspect(result))
+    #Logger.warn("** login.result: " <> inspect(result))
     result
+  end
+
+  def ticket() do
+    result = login()
+    Map.get(result, "ticket")
+  end
+
+  def sync(_conv) do
+    @conv_sync
   end
 end

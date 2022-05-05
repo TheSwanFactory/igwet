@@ -3,6 +3,7 @@ defmodule Igwet.NetworkTest.Fleep do
   doctest Igwet.Network.Fleep
 
   alias Igwet.Network.Fleep
+  @test_conv "ab0b7436-05b0-4a0f-b414-3f5073757078"
 
   describe "Fleep" do
     test "Finch request" do
@@ -18,17 +19,29 @@ defmodule Igwet.NetworkTest.Fleep do
       assert json["data"] == "raw"
     end
 
-    test "Fleep config" do
+    test "config" do
       user = Application.get_env(:igwet, Igwet.Network.Fleep)[:username]
       assert user
       pw = Application.get_env(:igwet, Igwet.Network.Fleep)[:password]
       assert pw
     end
 
-    test "Fleep login" do
-      body = Fleep.login()
-      assert body =~ "ticket"
+    test "login" do
+      map = Fleep.login()
+      assert Map.has_key?(map, "ticket")
     end
+
+    test "ticket" do
+      value = Fleep.ticket()
+      assert value
+    end
+
+    test "sync" do
+      value = Fleep.sync(@test_conv)
+      assert value
+    end
+
+
   end
 
 end
