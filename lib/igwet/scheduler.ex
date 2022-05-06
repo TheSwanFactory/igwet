@@ -46,7 +46,7 @@ defmodule Igwet.Scheduler do
       apply(RsvpController, method, [node])
     rescue
       e ->
-        Logger.warn("#{e.message}:perform_task:#{node.key}:about='#{node.about}'")
+        Logger.debug("#{e.message}:perform_task:#{node.key}:about='#{node.about}'")
       inspect(e)
     end
   end

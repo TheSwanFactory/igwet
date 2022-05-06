@@ -9,6 +9,7 @@ defmodule Igwet.Application do
       {Igwet.Repo, []},
       {IgwetWeb.Endpoint, []},
       {Phoenix.PubSub, [name: Igwet.PubSub, adapter: Phoenix.PubSub.PG2]},
+      {Finch, name: MyFinch},
       Igwet.Scheduler
     ]
 

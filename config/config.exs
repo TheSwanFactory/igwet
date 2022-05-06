@@ -29,6 +29,11 @@ config :igwet, Igwet.Admin.Mailer,
   domain: System.get_env("MG_DOMAIN"),
   api_key: System.get_env("MG_API_KEY")
 
+# Configure Fleep Client
+config :igwet, Igwet.Network.Fleep,
+  username: System.get_env("FLEEP_USER"),
+  password: System.get_env("FLEEP_PASSWORD")
+
 # Configure Quantum Storage
 config :igwet, Igwet.Scheduler,
   storage: Quantum.Storage.Implementation

@@ -40,10 +40,10 @@ defmodule Igwet.Admin do
 
   ## Examples
 
-      iex> length(Igwet.Admin.list_users())
-      0
+      iex> n = length(Igwet.Admin.list_users())
       iex> Igwet.Admin.find_or_create_user(%{authid: "1", name: "I"})
-      iex> length(Igwet.Admin.list_users())
+      iex> m = length(Igwet.Admin.list_users())
+      iex> m - n
       1
 
   """

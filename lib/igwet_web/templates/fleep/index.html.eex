@@ -1,0 +1,22 @@
+<h1>Listing Fleep Conversations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Name</th>
+      <th>About</th>
+      <th>Size</th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for node <- @nodes do %>
+    <tr>
+      <td><%= node.date %></td>
+      <td><%= link node.name, to: "fleep/" <> node.id %></td>
+      <td style='white-space: pre-line;'><%= node.about %></td>
+      <td><%= node.size %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
