@@ -17,6 +17,10 @@ blocks:
           value: test
         - name: SECRET_KEY_BASE
           value: UoqZ3F6GkLWcGkwhG2Jb152xa2/CjZByMLfCeQy1NrkxbrIX9cDCNaFfWq1y9ELi
+        - name: FLEEP_USER
+          value: drernie@fleep.io
+        - name: FLEEP_PASSWORD
+          value: zUmjov-kytwyv-0gobza
       jobs:
         - name: mix test
           commands:
