@@ -4,6 +4,7 @@ defmodule IgwetWeb.FleepController do
   use IgwetWeb, :controller
   require Logger
   alias Igwet.Network
+  alias Igwet.Network.Fleep
 
   def index(conn, _params) do
     nodes = Network.get_nodes_of_type("fleep.conv")
@@ -20,7 +21,7 @@ defmodule IgwetWeb.FleepController do
 
   def show(conn, %{"id" => id}) do
     conv = Network.get_node!(id)
-    messages = Network.node_members(conv)
+    messages = Fleep.msg_sync(conv.about)
     conn
     |> assign(:messages, messages)
     |> assign(:current_user, nil)

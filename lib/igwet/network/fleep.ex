@@ -15,8 +15,8 @@ defmodule Igwet.Network.Fleep do
   @headers ["Content-Type": "application/json; charset=utf-8", "Connection": "Keep-Alive"]
   @fleep_cache :fleep
 
-  @fleep_conv "fleet.conv"
-  @fleep_msg "fleet.msg"
+  @fleep_conv "fleep.conv"
+  @fleep_msg "fleep.msg"
   @timezone "US/Pacific"
 
   #@msg_keys ["account_id", "conversation_id", "message_id", "message", "posted_time"]
