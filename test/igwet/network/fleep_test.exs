@@ -1,9 +1,16 @@
 defmodule Igwet.NetworkTest.Fleep do
+  require Logger
   use Igwet.DataCase
   doctest Igwet.Network.Fleep
 
   alias Igwet.Network.Fleep
   @test_conv "ab0b7436-05b0-4a0f-b414-3f5073757078"
+  @test_msg %{
+    "account_id" => "10d292e3-359d-431e-8ed2-72023ef1a186",
+    "conversation_id" => "ab0b7436-05b0-4a0f-b414-3f5073757078",
+    "message" => "<msg><p>i belive in that too<br/>",
+    "message_id" => "a5899301-4f47-40e2-bb8a-923c51757078"
+  }
 
   describe "Fleep" do
     test "Finch request" do
@@ -40,6 +47,18 @@ defmodule Igwet.NetworkTest.Fleep do
     test "sync" do
       json = Fleep.sync(@test_conv)
       assert Map.has_key?(json, "stream")
+    end
+
+    test "msg_sync" do
+      m = Fleep.msg_sync(@test_conv)
+      assert Kernel.length(m) > 0
+      first = Enum.at(m, 0)
+      Logger.warn(inspect(first))
+    end
+
+    test "msg_node" do
+      m = Fleep.msg_node(@test_msg)
+      assert m
     end
   end
 

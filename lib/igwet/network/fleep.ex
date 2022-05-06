@@ -11,6 +11,7 @@ defmodule Igwet.Network.Fleep do
   @conv_sync "api/conversation/sync/"
   @headers ["Content-Type": "application/json; charset=utf-8", "Connection": "Keep-Alive"]
   @fleep_cache :fleep
+  #@msg_keys ["account_id", "conversation_id", "message_id", "message"]
 
 # https://elixirforum.com/t/how-to-make-a-multipart-http-request-using-finch/36217
 
@@ -65,5 +66,15 @@ defmodule Igwet.Network.Fleep do
   def sync(conv) do
     result = post(@conv_sync <> conv, auth_params())
     result
+  end
+
+  def msg_sync(conv) do
+    sync(conv)
+    |> Map.get("stream")
+    |> Enum.filter(fn p -> Map.has_key?(p, "message_id") end)
+  end
+
+  def msg_node(message) do
+    message
   end
 end
