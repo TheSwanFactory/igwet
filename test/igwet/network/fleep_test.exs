@@ -14,6 +14,10 @@ defmodule Igwet.NetworkTest.Fleep do
     "posted_time" => 1629051100,
   }
 
+  def create_conv() do
+    Fleep.make_conv("Test Conv", @test_conv, @test_email)
+  end
+
   describe "Fleep" do
     test "Finch request" do
       data = Finch.build(:get, "https://hex.pm") |> Finch.request(MyFinch)
@@ -52,6 +56,7 @@ defmodule Igwet.NetworkTest.Fleep do
     end
 
     test "msg_sync" do
+      create_conv()
       m = Fleep.msg_sync(@test_conv)
       assert Kernel.length(m) > 0
       first = Enum.at(m, 0)
@@ -59,26 +64,25 @@ defmodule Igwet.NetworkTest.Fleep do
     end
 
     test "make_conv" do
-      c = Fleep.make_conv("Test Conv", @test_conv, @test_email)
+      c = create_conv()
       assert c
       assert @test_email == c.email
       assert c.key =~ @test_conv
     end
 
     test "msg_node" do
-      Fleep.make_conv("Test Conv", @test_conv, @test_email)
+      create_conv()
       m = Fleep.msg_node(@test_msg)
       assert m
       assert m.key =~ @test_msg["message_id"]
     end
 
     test "msg_obtain" do
-      Fleep.make_conv("Test Conv", @test_conv, @test_email)
+      create_conv()
       m = Fleep.msg_obtain(@test_msg)
       assert m
       n = Fleep.msg_obtain(@test_msg)
       assert m === n
     end
   end
-
 end

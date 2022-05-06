@@ -80,7 +80,7 @@ defmodule Igwet.Network.Fleep do
     sync(conv)
     |> Map.get("stream")
     |> Enum.filter(fn m -> Map.has_key?(m, "message_id") end)
-    #|> Enum.filter(fn m -> msg_obtain(m) end)
+    |> Enum.map(fn m -> msg_obtain(m) end)
   end
 
   def msg_node(msg) do
