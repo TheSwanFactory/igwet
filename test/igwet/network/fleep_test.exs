@@ -60,7 +60,7 @@ defmodule Igwet.NetworkTest.Fleep do
       stream = json["stream"]
       last = List.last(stream)
       assert last
-      Logger.warn(last)
+      #Logger.warn(last)
     end
 
     test "msg_sync" do
@@ -84,6 +84,13 @@ defmodule Igwet.NetworkTest.Fleep do
       assert m
       assert m.key =~ @test_msg["message_id"]
       assert m.name =~ "ernest"
+    end
+
+    test "msg_from" do
+      create_conv()
+      m = Fleep.msg_from(@test_msg)
+      assert m
+      assert m =~ "ernest"
     end
 
     test "msg_obtain" do

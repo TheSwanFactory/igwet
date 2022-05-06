@@ -80,22 +80,38 @@ defmodule Igwet.Network.Fleep do
     sync(conv)
     |> Map.get("stream")
     |> Enum.filter(fn m -> Map.has_key?(m, "message_id") end)
+    |> Enum.filter(fn m -> Map.get(m, "message") != "" end)
     |> Enum.map(fn m -> msg_obtain(m) end)
   end
 
   def msg_from(msg) do
-    "from"
+    try do
+      Map.get(msg, "mail_hdrs")
+      |> Enum.filter(fn m -> Map.get(m, "prefix") == "From" end)
+      |> Enum.at(0)
+      |> Map.get("addresses")
+      |> Enum.at(0)
+      |> Map.get("addr")
+    rescue
+      e ->
+        Logger.error("msg_from")
+        Logger.error(inspect(msg))
+        Logger.error(Exception.format(:error, e))
+        "N/A"
+    end
   end
+
   def msg_node(msg) do
     text = msg["message"]
     msg_key = @fleep_msg <> "+" <> msg["message_id"]
     conv_key = @fleep_conv <> "+" <> msg["conversation_id"]
+    from = msg_from(msg)
     {:ok, datetime} = DateTime.from_unix(msg["posted_time"], :millisecond)
     {:ok, message} = Network.create_node %{
       about: text,
       date: datetime,
       key: msg_key,
-      name: "#{datetime}: #{msg_from(msg)}",
+      name: "#{datetime}: #{from}",
       size: String.length(text),
       type: @fleep_msg
     }
