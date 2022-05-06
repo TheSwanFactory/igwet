@@ -28,6 +28,7 @@
             <li class="active"><a href="/logout">Logout</a></li>
           <% else %>
             <li><a href="/">Home</a></li>
+            <li><a href="/fleep">Fleep</a></li>
             <li><a href="/auth/auth0">Login</a></li>
           <% end %>
           </ul>
