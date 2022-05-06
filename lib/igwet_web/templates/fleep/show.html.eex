@@ -26,7 +26,7 @@
 <ul>
   <%= for message <- @messages do %>
     <li>
-      <%= message.about %>
+      <%= raw(message.about) %>
     </li>
   <% end %>
 </ul>

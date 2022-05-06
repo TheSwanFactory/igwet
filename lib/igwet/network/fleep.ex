@@ -83,6 +83,9 @@ defmodule Igwet.Network.Fleep do
     |> Enum.map(fn m -> msg_obtain(m) end)
   end
 
+  def msg_from(msg) do
+    "from"
+  end
   def msg_node(msg) do
     text = msg["message"]
     msg_key = @fleep_msg <> "+" <> msg["message_id"]
@@ -92,7 +95,7 @@ defmodule Igwet.Network.Fleep do
       about: text,
       date: datetime,
       key: msg_key,
-      name: "{datetime}: {msg_key}",
+      name: "#{datetime}: #{msg_from(msg)}",
       size: String.length(text),
       type: @fleep_msg
     }

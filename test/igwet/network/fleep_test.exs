@@ -12,6 +12,10 @@ defmodule Igwet.NetworkTest.Fleep do
     "message" => "<msg><p>i belive in that too<br/>",
     "message_id" => "a5899301-4f47-40e2-bb8a-923c51757078",
     "posted_time" => 1629051100,
+    "mail_hdrs" => [
+      %{ "prefix" => "From", "addresses" => [%{"addr" => "ernest.bruce@fleep.io"}]},
+      %{ "prefix" => "To", "addresses" => [%{"addr" => "drernie@fleep.io"}]}
+    ]
   }
 
   def create_conv() do
@@ -53,6 +57,10 @@ defmodule Igwet.NetworkTest.Fleep do
     test "sync" do
       json = Fleep.sync(@test_conv)
       assert Map.has_key?(json, "stream")
+      stream = json["stream"]
+      last = List.last(stream)
+      assert last
+      Logger.warn(last)
     end
 
     test "msg_sync" do
@@ -75,6 +83,7 @@ defmodule Igwet.NetworkTest.Fleep do
       m = Fleep.msg_node(@test_msg)
       assert m
       assert m.key =~ @test_msg["message_id"]
+      assert m.name =~ "ernest"
     end
 
     test "msg_obtain" do
