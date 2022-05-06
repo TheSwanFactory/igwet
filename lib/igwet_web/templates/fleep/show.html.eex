@@ -23,10 +23,9 @@
 </ul>
 <h3>Messages</h3>
 <h3><%= Enum.count @messages %> messages</h3>
-<table>
-  <tr><th>From</th><th>Message</th></tr>
+<dl>
   <%= for message <- @messages do %>
-    <tr><td>raw(message.name)</td><td>raw(message.about)</td></tr>
+    <dt><%= raw(message.name) %></dt><dd><%= raw(message.about) %></dd>
   <% end %>
-</table>
+</dl>
 </ul>

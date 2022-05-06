@@ -106,10 +106,11 @@ defmodule Igwet.Network.Fleep do
     msg_key = @fleep_msg <> "+" <> msg["message_id"]
     conv_key = @fleep_conv <> "+" <> msg["conversation_id"]
     from = msg_from(msg)
-    {:ok, datetime} = DateTime.from_unix(msg["posted_time"], :millisecond)
+    {:ok, datetime} = DateTime.from_unix(msg["posted_time"], :second)
     {:ok, message} = Network.create_node %{
       about: text,
       date: datetime,
+      email: from,
       key: msg_key,
       name: "#{datetime}: #{from}",
       size: String.length(text),
