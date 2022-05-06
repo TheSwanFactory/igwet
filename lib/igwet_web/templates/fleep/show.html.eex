@@ -1,0 +1,33 @@
+<h1>Show Fleep Conversation</h1>
+
+<div>
+  <span><%= link "Edit", to: fleep_path(@conn, :edit, @conv), class: "btn btn-default btn-xs" %></span>
+  <span><%= link "Back", to: fleep_path(@conn, :index), class: "btn btn-default btn-xs" %></span>
+</div>
+
+<ul>
+  <li>
+    <strong>Name:</strong> <%= @conv.name %>
+  </li>
+  <li style='white-space: pre-line;'>
+    <strong>About:</strong> <%= @conv.about %>
+  </li>
+  <li>
+    <strong>Date:</strong> <%= @conv.date %>
+  </li>
+  <li>
+    <strong>Size:</strong> <%= @conv.size %>
+  </li>
+  <li>
+    <strong>Key:</strong> <%= @conv.key %>
+  </li>
+</ul>
+<h3>Messages</h3>
+<h3><%= Enum.count @messages %> messages</h3>
+<ul>
+  <%= for message <- @messages do %>
+    <li>
+      <%= message.about %>
+    </li>
+  <% end %>
+</ul>

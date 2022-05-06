@@ -41,8 +41,8 @@ defmodule IgwetWeb.Router do
 
   scope "/fleep", IgwetWeb do
     pipe_through(:browser)
-
     get("/", FleepController, :index)
+    get("/:id", FleepController, :show)
   end
 
   scope "/rsvp", IgwetWeb do
