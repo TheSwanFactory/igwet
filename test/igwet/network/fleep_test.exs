@@ -65,8 +65,8 @@ defmodule Igwet.NetworkTest.Fleep do
       assert c.key =~ @test_conv
     end
 
-    @tag :skip
     test "msg_node" do
+      Fleep.make_conv("Test Conv", @test_conv, @test_email)
       m = Fleep.msg_node(@test_msg)
       assert m
     end
