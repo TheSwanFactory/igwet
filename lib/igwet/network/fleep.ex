@@ -5,13 +5,19 @@ defmodule Igwet.Network.Fleep do
   # require IEx; #IEx.pry
   require Logger
   alias Igwet.Cache
+  alias Igwet.Network
 
   @host "https://fleep.io/"
   @login "api/account/login"
   @conv_sync "api/conversation/sync/"
   @headers ["Content-Type": "application/json; charset=utf-8", "Connection": "Keep-Alive"]
   @fleep_cache :fleep
-  #@msg_keys ["account_id", "conversation_id", "message_id", "message"]
+
+  @fleep_conv "fleet.conv"
+  @fleep_msg "fleet.msg"
+  @timezone "US/Pacific"
+
+  #@msg_keys ["account_id", "conversation_id", "message_id", "message", "posted_time"]
 
 # https://elixirforum.com/t/how-to-make-a-multipart-http-request-using-finch/36217
 
@@ -74,7 +80,34 @@ defmodule Igwet.Network.Fleep do
     |> Enum.filter(fn p -> Map.has_key?(p, "message_id") end)
   end
 
-  def msg_node(message) do
-    message
+  def msg_node(msg) do
+    text = msg["message"]
+    msg_key = @fleep_msg <> "+" <> msg["message_id"]
+    conv_key = @fleep_conv <> "+" <> msg["conversation_id"]
+    {:ok, datetime} = DateTime.from_unix(msg["posted_time"], :millisecond)
+    {:ok, message} = Network.create_node %{
+      about: text,
+      date: datetime,
+      key: msg_key,
+      name: "{datetime}: {msg_key}",
+      size: String.length(text),
+      type: @fleep_msg
+    }
+    conv = Network.get_first_node!(:key, conv_key)
+    Network.set_node_in_group(message, conv)
+  end
+
+  def make_conv(title, conv_id, email) do
+    {:ok, datetime} = DateTime.now(@timezone)
+    {:ok, conv} = Network.create_node %{
+      about: "Conversation {conv_id} for {email}",
+      date: datetime,
+      email: email,
+      key: @fleep_conv <> "+" <> conv_id,
+      name: title,
+      timezone: @timezone,
+      type: @fleep_conv,
+    }
+    conv
   end
 end

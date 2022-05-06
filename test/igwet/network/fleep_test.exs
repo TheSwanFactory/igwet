@@ -5,11 +5,13 @@ defmodule Igwet.NetworkTest.Fleep do
 
   alias Igwet.Network.Fleep
   @test_conv "ab0b7436-05b0-4a0f-b414-3f5073757078"
+  @test_email "test@fleep.io"
   @test_msg %{
     "account_id" => "10d292e3-359d-431e-8ed2-72023ef1a186",
     "conversation_id" => "ab0b7436-05b0-4a0f-b414-3f5073757078",
     "message" => "<msg><p>i belive in that too<br/>",
-    "message_id" => "a5899301-4f47-40e2-bb8a-923c51757078"
+    "message_id" => "a5899301-4f47-40e2-bb8a-923c51757078",
+    "posted_time" => 1629051100,
   }
 
   describe "Fleep" do
@@ -53,9 +55,17 @@ defmodule Igwet.NetworkTest.Fleep do
       m = Fleep.msg_sync(@test_conv)
       assert Kernel.length(m) > 0
       first = Enum.at(m, 0)
-      Logger.warn(inspect(first))
+      assert first
     end
 
+    test "make_conv" do
+      c = Fleep.make_conv("Test Conv", @test_conv, @test_email)
+      assert c
+      assert @test_email == c.email
+      assert c.key =~ @test_conv
+    end
+
+    @tag :skip
     test "msg_node" do
       m = Fleep.msg_node(@test_msg)
       assert m
