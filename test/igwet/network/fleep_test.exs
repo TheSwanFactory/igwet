@@ -69,6 +69,15 @@ defmodule Igwet.NetworkTest.Fleep do
       Fleep.make_conv("Test Conv", @test_conv, @test_email)
       m = Fleep.msg_node(@test_msg)
       assert m
+      assert m.key =~ @test_msg["message_id"]
+    end
+
+    test "msg_obtain" do
+      Fleep.make_conv("Test Conv", @test_conv, @test_email)
+      m = Fleep.msg_obtain(@test_msg)
+      assert m
+      n = Fleep.msg_obtain(@test_msg)
+      assert m === n
     end
   end
 

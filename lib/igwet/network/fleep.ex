@@ -4,8 +4,10 @@ defmodule Igwet.Network.Fleep do
   """
   # require IEx; #IEx.pry
   require Logger
+  import Ecto.Query, warn: false
   alias Igwet.Cache
   alias Igwet.Network
+  alias Igwet.Repo
 
   @host "https://fleep.io/"
   @login "api/account/login"
@@ -77,7 +79,8 @@ defmodule Igwet.Network.Fleep do
   def msg_sync(conv) do
     sync(conv)
     |> Map.get("stream")
-    |> Enum.filter(fn p -> Map.has_key?(p, "message_id") end)
+    |> Enum.filter(fn m -> Map.has_key?(m, "message_id") end)
+    #|> Enum.filter(fn m -> msg_obtain(m) end)
   end
 
   def msg_node(msg) do
@@ -95,6 +98,14 @@ defmodule Igwet.Network.Fleep do
     }
     conv = Network.get_first_node!(:key, conv_key)
     Network.set_node_in_group(message, conv)
+    message
+  end
+
+  def msg_obtain(msg) do
+    msg_key = @fleep_msg <> "+" <> msg["message_id"]
+    query = Network.Node |> where([n], n.key == ^msg_key)
+    message = Repo.one(query)
+    if message, do: message, else: msg_node(msg)
   end
 
   def make_conv(title, conv_id, email) do
