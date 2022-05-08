@@ -129,8 +129,8 @@ defmodule Igwet.Network.Fleep do
     if message, do: message, else: msg_node(msg)
   end
 
-  def update_conv(msgs, conv_key) do
-    conv = Network.get_first_node!(:about, conv_key)
+  def update_conv(msgs, conv_id) do
+    conv = Network.get_first_node!(:about, conv_id)
     {:ok, date} = DateTime.now(@timezone)
     size = Enum.count(msgs)
     Network.update_node(conv, %{date: date, size: size})

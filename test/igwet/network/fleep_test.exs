@@ -89,6 +89,7 @@ defmodule Igwet.NetworkTest.Fleep do
       assert c.id
       assert @test_email == c.email
       assert c.key =~ @test_conv
+      assert c.about == @test_conv
 
       conv = Network.get_first_node!(:about, @test_conv)
       assert conv
