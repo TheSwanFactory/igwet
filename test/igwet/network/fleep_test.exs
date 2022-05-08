@@ -2,6 +2,7 @@ defmodule Igwet.NetworkTest.Fleep do
   require Logger
   use Igwet.DataCase
   doctest Igwet.Network.Fleep
+  alias Igwet.Network
   alias Igwet.Network.Fleep
 
   @timezone "US/Pacific"
@@ -20,7 +21,7 @@ defmodule Igwet.NetworkTest.Fleep do
   }
 
   def create_conv() do
-    Fleep.make_conv("Test Conv", @test_conv, @test_email)
+    Fleep.make_conv("fleep_test", @test_conv, @test_email)
   end
 
   describe "Fleep" do
@@ -64,6 +65,7 @@ defmodule Igwet.NetworkTest.Fleep do
       #Logger.warn(last)
     end
 
+    @tag :skip
     test "msg_sync" do
       c = create_conv()
       {:ok, now} = DateTime.now(@timezone)
@@ -84,8 +86,12 @@ defmodule Igwet.NetworkTest.Fleep do
     test "make_conv" do
       c = create_conv()
       assert c
+      assert c.id
       assert @test_email == c.email
       assert c.key =~ @test_conv
+
+      conv = Network.get_first_node!(:about, @test_conv)
+      assert conv
     end
 
     test "msg_node" do
