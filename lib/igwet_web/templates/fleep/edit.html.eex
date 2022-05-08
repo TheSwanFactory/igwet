@@ -1,5 +1,0 @@
-<h1>Edit Fleep Conversation</h1>
-
-<%= render "form.html", Map.put(assigns, :action, event_path(@conn, :update, @conv)) %>
-
-<span><%= link "Back", to: event_path(@conn, :index) %></span>

@@ -82,6 +82,7 @@ defmodule Igwet.Network.Fleep do
     |> Enum.filter(fn m -> Map.has_key?(m, "message_id") end)
     |> Enum.filter(fn m -> Map.get(m, "message") != "" end)
     |> Enum.map(fn m -> msg_obtain(m) end)
+    |> update_conv(conv)
   end
 
   def msg_from(msg) do
@@ -128,14 +129,23 @@ defmodule Igwet.Network.Fleep do
     if message, do: message, else: msg_node(msg)
   end
 
+  def update_conv(msgs, conv_id) do
+    conv = Network.get_first_node!(:about, conv_id)
+    {:ok, date} = DateTime.now(@timezone)
+    size = Enum.count(msgs)
+    Network.update_node(conv, %{date: date, size: size})
+    msgs
+  end
+
   def make_conv(title, conv_id, email) do
     {:ok, datetime} = DateTime.now(@timezone)
     {:ok, conv} = Network.create_node %{
-      about: "Conversation {conv_id} for {email}",
+      about: conv_id,
       date: datetime,
       email: email,
       key: @fleep_conv <> "+" <> conv_id,
       name: title,
+      size: 0,
       timezone: @timezone,
       type: @fleep_conv,
     }

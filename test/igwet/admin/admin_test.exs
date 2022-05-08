@@ -49,7 +49,7 @@ defmodule Igwet.AdminTest do
     end
 
     test "list_users/0 returns all users" do
-      assert user = Admin.find_or_create_user(@valid_attrs)
+      assert Admin.find_or_create_user(@valid_attrs)
       users = Admin.list_users()
       assert length(users) > 0
       user2 = Enum.at(users,0)

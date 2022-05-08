@@ -32,17 +32,12 @@ defmodule Igwet.Network do
         email = String.downcase(value)
         where(first, email: ^email)
 
-      :key ->
-        where(first, key: ^value)
-
-      :name ->
-        where(first, name: ^value)
-
-      :phone ->
-        where(first, phone: ^value)
-
-      _ ->
-        raise "get_first_node!: Unknown field `#{field}`"
+      :about -> where(first, about: ^value)
+      :initials -> where(first, initials: ^value)
+      :key -> where(first, key: ^value)
+      :name -> where(first, name: ^value)
+      :phone -> where(first, phone: ^value)
+      _ -> raise "get_first_node! can not search on field `#{field}`"
     end
     |> Repo.one!()
   end

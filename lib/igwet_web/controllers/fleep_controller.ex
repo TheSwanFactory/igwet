@@ -13,14 +13,8 @@ defmodule IgwetWeb.FleepController do
     |> render("index.html", nodes: nodes)
   end
 
-  def edit(conn, %{"id" => id}) do
-    conv = Network.get_node!(id)
-    changeset = Network.change_node(conv)
-    render(conn, "edit.html", conv: conv, changeset: changeset)
-  end
-
   def show(conn, %{"id" => id}) do
-    conv = Network.get_node!(id)
+    conv = Network.get_first_node!(:initials, id)
     messages = Fleep.msg_sync(conv.about)
     conn
     |> assign(:messages, messages)

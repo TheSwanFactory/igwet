@@ -1,31 +1,19 @@
-<h1>Show Fleep Conversation</h1>
-
+<h1>Fleep Conversation: <%= @conv.name %> (<%= @conv.initials %>) </h1>
+<ul>
+  <li><strong>Date:</strong> <%= @conv.date %></li>
+  <li><strong>Size:</strong> <%= @conv.size %></li>
+  <li><strong>Key:</strong> <%= @conv.key %></li>
+</ul>
 <div>
   <span><%= link "Back", to: fleep_path(@conn, :index), class: "btn btn-default btn-xs" %></span>
 </div>
 
-<ul>
-  <li>
-    <strong>Name:</strong> <%= @conv.name %>
-  </li>
-  <li style='white-space: pre-line;'>
-    <strong>About:</strong> <%= @conv.about %>
-  </li>
-  <li>
-    <strong>Date:</strong> <%= @conv.date %>
-  </li>
-  <li>
-    <strong>Size:</strong> <%= @conv.size %>
-  </li>
-  <li>
-    <strong>Key:</strong> <%= @conv.key %>
-  </li>
-</ul>
-<h3>Messages</h3>
-<h3><%= Enum.count @messages %> messages</h3>
-<dl>
+<h3><%= Enum.count @messages %> Messages</h3>
+<table>
   <%= for message <- @messages do %>
-    <dt><%= raw(message.name) %></dt><dd><%= raw(message.about) %></dd>
+  <tr>
+    <td style="vertical-align: top"><h4><%= raw(message.name) %></h4></td>
+    <td><%= raw(message.about) %></td>
+  </tr>
   <% end %>
-</dl>
-</ul>
+</table>
