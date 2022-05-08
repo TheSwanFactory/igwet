@@ -32,6 +32,9 @@ defmodule Igwet.Network do
         email = String.downcase(value)
         where(first, email: ^email)
 
+      :initials ->
+          where(first, initials: ^value)
+
       :key ->
         where(first, key: ^value)
 

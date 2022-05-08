@@ -14,8 +14,8 @@
 <%= for node <- @nodes do %>
     <tr>
       <td><%= node.date %></td>
-      <td><%= link node.initial, to: "fleep/" <> node.initial %></td>
-      <td><%= link node.name%></td>
+      <td><%= link node.initials, to: "fleep/" <> node.initials %></td>
+      <td><%= node.name%></td>
       <td><%= node.about %></td>
       <td><%= node.size %></td>
     </tr>

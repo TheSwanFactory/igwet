@@ -1,6 +1,9 @@
-<h1>Fleep Conversation: <%= @conv.name %> </h1>
-<h2><strong>Date:</strong> <%= @conv.date %>&nbsp;<strong>Size:</strong> <%= @conv.size %> </h2>
-<h3><strong>Key:</strong> <%= @conv.key %></h3>
+<h1>Fleep Conversation: <%= @conv.name %> (<%= @conv.initials %>) </h1>
+<ul>
+  <li><strong>Date:</strong> <%= @conv.date %></li>
+  <li><strong>Size:</strong> <%= @conv.size %></li>
+  <li><strong>Key:</strong> <%= @conv.key %></li>
+</ul>
 <div>
   <span><%= link "Back", to: fleep_path(@conn, :index), class: "btn btn-default btn-xs" %></span>
 </div>
@@ -9,7 +12,7 @@
 <table>
   <%= for message <- @messages do %>
   <tr>
-    <td><%= raw(message.name) %></td>
+    <td style="vertical-align: top"><h4><%= raw(message.name) %></h4></td>
     <td><%= raw(message.about) %></td>
   </tr>
   <% end %>
