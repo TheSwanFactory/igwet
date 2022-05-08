@@ -136,6 +136,7 @@ defmodule Igwet.Network.Fleep do
       email: email,
       key: @fleep_conv <> "+" <> conv_id,
       name: title,
+      size: 0,
       timezone: @timezone,
       type: @fleep_conv,
     }

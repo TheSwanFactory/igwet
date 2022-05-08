@@ -2,8 +2,9 @@ defmodule Igwet.NetworkTest.Fleep do
   require Logger
   use Igwet.DataCase
   doctest Igwet.Network.Fleep
-
   alias Igwet.Network.Fleep
+
+  @timezone "US/Pacific"
   @test_conv "ab0b7436-05b0-4a0f-b414-3f5073757078"
   @test_email "test@fleep.io"
   @test_msg %{
@@ -64,8 +65,17 @@ defmodule Igwet.NetworkTest.Fleep do
     end
 
     test "msg_sync" do
-      create_conv()
+      c = create_conv()
+      {:ok, now} = DateTime.now(@timezone)
+      assert c.date < now
+      assert c.size == 0
+      n = c.size
+
       m = Fleep.msg_sync(@test_conv)
+      assert c.date > now
+      assert c.size > 1
+      assert c.size >= n
+
       assert Kernel.length(m) > 0
       first = Enum.at(m, 0)
       assert first
