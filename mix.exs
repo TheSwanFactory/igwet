@@ -50,6 +50,7 @@ defmodule Igwet.Mixfile do
       {:mint, "~> 1.0"},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:nimble_strftime, "~> 0.1.1"},
+      {:parallel_stream, ">= 1.1.0", override: true},
       {:phoenix, ">= 1.5.3"},
       {:phoenix_ecto, ">= 4.1.0"},
       {:phoenix_html, ">= 2.10.0"},
