@@ -17,6 +17,6 @@
     "babel-brunch": "^7.0.1",
     "brunch": "^3.0.0",
     "clean-css-brunch": "^3.0.0",
-    "npm-check-updates": "^11.1.0"
+    "npm-check-updates": "^16.7.4"
   }
 }
